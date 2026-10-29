@@ -31,7 +31,7 @@ Buckets: `engineering`, `productivity`, `research`, `analysis`, `build`, `creati
 - Host-specific material stays out of the shared instructions: Codex goes in `agents/openai.yaml`, anything else in `hosts/<host>/NOTES.md` inside the skill. Do not invent a host's config format; if it cannot be confirmed from that host's documentation, list it as a task instead.
 - Invocation: see `.agents/invocation.md`. User-invoked means `disable-model-invocation: true` plus `policy.allow_implicit_invocation: false` in `agents/openai.yaml`.
 - Every skill that dispatches a subagent says to start it with a fresh context window. Some harnesses fork the parent by default, and a fork inherits the context the subagent was meant to escape.
-- Repo-level prose (this file, README, docs, ADRs) uses no em dashes. Imported skill bodies keep their original text.
+- Repo-level prose (this file, README, docs, ADRs) uses no em dashes. Imported skill bodies keep their original text until rewritten; rewrites follow `.agents/rewrite-standard.md`, which also bans them.
 
 ## Syncing hosts
 

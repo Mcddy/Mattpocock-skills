@@ -1,72 +1,73 @@
 ---
 name: learning-visualiser
-description: >
-  Create interactive learning visualisations that make complex concepts click instantly.
-  Use when the user asks to "visualise how [concept] works", "make me a learning tool for [topic]",
-  "interactive explainer for [subject]", "teach me [thing] visually", "show me how [process] works",
-  or any request to turn knowledge into an interactive visual experience.
-metadata:
-  version: "0.1.0"
-  author: "Shaun"
+description: "Builds one interactive visual explainer for a single concept or process so the learner builds the right mental model: an animated step-through, parametric playground, zoomable system diagram, timeline, side-by-side comparison, 3D model or expandable hierarchy. Use when the user says 'visualise how [concept] works', 'make me a learning tool for [topic]', 'interactive explainer for [subject]', 'teach me [thing] visually' or 'show me how [process] works'. Not for multi-lesson animated courses (percept), courses with quizzes and spaced review (preceptor), a standalone quiz (elicitor), numerical simulations with calibrated engines (simforge), explorable maps of a whole domain (atlas), or auditing an existing educational visual (heirloom-audit-learning-visualisation)."
 ---
 
-# Learning Visualiser
+# learning-visualiser
 
-Create interactive, visually stunning learning tools that transform complex concepts into intuitive visual experiences. Every output should make the user say "now I get it."
+Builds a single-file interactive explainer for one concept, designed so that using it corrects the learner's intuition. Intended for Shaun's own study (networking, security, AI) and for explaining to others.
 
-## Activation Protocol
+## Use when
 
-When triggered, immediately determine:
+- One concept, mechanism or process needs to be understood through interaction, not text.
+- The learner can be reached with sliders, toggles, step buttons or click-to-reveal.
 
-1. **What concept** needs to be visualised
-2. **What type of learner** is the audience (visual, kinetic, analytical)
-3. **What format** best serves the concept (see Format Selection below)
+## Not this skill
 
-## Format Selection Matrix
+| The request | Goes to |
+|---|---|
+| Multi-lesson animated course | percept |
+| Full course with prerequisites, practice and spaced review | preceptor |
+| Quiz or self-test only | elicitor |
+| Simulation with calibrated numerical engine and regimes | simforge |
+| Explorable map of a whole domain's connections | atlas |
+| Check an existing educational visual for accuracy and accessibility | heirloom-audit-learning-visualisation |
+| Static infographic or illustration | generative-content |
+| Explain it in conversation, no build | teach |
 
-Choose the highest-impact format for the concept:
+## Inputs
 
-| Concept Type | Best Format | Technology |
+- The concept, and the learner's current level (default: capable beginner who knows the neighbouring basics).
+- The misconception or sticking point, if known. This is the most useful input.
+- Source facts or equations if precision matters (protocol steps, formulas).
+
+## Procedure
+
+1. **Name the target understanding** in one sentence: after using this, the learner can say or predict what? Name the likely misconception it must fix.
+2. **Verify the content.** Get the mechanism right before drawing it: check protocol fields, formulas and sequences against a reliable source or the supplied material. If unsure, say so on screen or ask. A beautiful wrong explainer is worse than none.
+3. **Decompose** into three to five ideas that build on each other.
+4. **Choose the format** from the table and decide what the learner controls (slider, toggle, step, click-to-reveal, drag).
+5. **Design for progressive disclosure**: simple at first load, depth on demand. Every interaction produces a visible change, and the most important idea is visually dominant.
+6. **Build** as one self-contained file with labels and short annotations that teach as the learner explores. Use colour to encode meaning only.
+7. **Test the mental model**: walk through it as the learner. Predict-then-reveal prompts ("what happens if you double the window size?") are the strongest device when the concept allows.
+8. **Deliver** with one line on how to use it and the one misconception it addresses.
+
+| Concept type | Format | Technology |
 |---|---|---|
-| Processes / flows | Animated step-through | React + Framer Motion |
-| Data relationships | Interactive graph/network | React + D3.js |
-| Mathematical concepts | Parametric playground | React + recharts/canvas |
-| Systems / architecture | Zoomable diagram | React + SVG |
-| Timelines / history | Scrollable timeline | React + scroll events |
-| Comparisons | Side-by-side interactive | React + Tailwind |
-| Physical/spatial | 3D interactive model | Three.js |
-| Hierarchies | Expandable tree | React + D3.js |
+| Process or flow | Animated step-through | React with an animation library, or SVG and CSS |
+| Data relationships | Interactive graph | SVG or a graph library |
+| Mathematical idea | Parametric playground | Canvas or a chart library |
+| System or architecture | Zoomable diagram | SVG |
+| Timeline or history | Scrollable timeline | Scroll events |
+| Comparison | Side-by-side with controls | Grid layout |
+| Physical or spatial | 3D model | Three.js |
+| Hierarchy | Expandable tree | SVG or a tree layout |
 
-## Design Principles
+## Output
 
-1. **Progressive disclosure** — start simple, let the user drill deeper
-2. **Immediate feedback** — every interaction produces visible change
-3. **Beautiful defaults** — looks stunning before the user touches anything
-4. **Annotations matter** — label everything, explain everything on hover
-5. **Colour with purpose** — use colour to encode meaning, not decoration
+- One self-contained file: `.jsx` with a default export if the host renders React, otherwise one `.html` file. No network calls.
+- Responsive, dark by default with high contrast, keyboard operable where possible, smooth animation, a visible state for anything computed.
+- A short note: the target understanding, what the controls do, and any simplification made (for example, timings not to scale).
 
-## Build Protocol
+## Quality bar
 
-1. **Concept decomposition** — break the topic into 3-5 core ideas that build on each other
-2. **Interaction design** — decide what the user controls (sliders, toggles, click-to-reveal, drag)
-3. **Visual hierarchy** — most important concept is visually dominant
-4. **Build as single-file React** — use Tailwind for styling, inline everything
-5. **Add explanatory text** — short, punchy annotations that teach as you explore
-6. **Test mental model** — does interacting with this build correct intuition?
+- A newcomer can state the core idea after one minute.
+- Every control teaches something; remove controls that only decorate.
+- Simplifications are labelled where the learner might take them literally.
+- Interaction beats the best static diagram of the same topic; if it does not, say a diagram would do.
 
-## Output Standards
+## Rules that always hold
 
-- Single .jsx file, self-contained with all dependencies imported
-- Responsive design (works on any screen size)
-- Dark mode by default with high-contrast colours
-- Smooth animations (60fps, no jank)
-- Loading states for any computed elements
-- Keyboard accessible where possible
-
-## Quality Bar
-
-Before delivering, verify:
-- Does a 12-year-old understand the core concept from this visualisation?
-- Is it beautiful enough to screenshot and share?
-- Does every interactive element teach something?
-- Would this be better than the top Google result for learning this topic?
+- Accuracy over polish. Label illustrative values as illustrative.
+- Do not imply causation the model does not support; keep modelled behaviour distinct from measured data.
+- For a heavily quantitative or consequential topic, recommend running the audit skill before sharing.

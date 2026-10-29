@@ -1,408 +1,122 @@
 ---
 name: vector
-description: >
-  VECTOR — the complete doctrine of force, strategy, and personal dominance. Integrates mission command, campaign planning, battlefield ISR, logistics doctrine, psychological operations, pattern of life, dominance protocol, strategic patience, negotiation operations, power mapping, and strategic communications. Use when Shaun needs to plan any major operation, establish authority, navigate power dynamics, negotiate, understand terrain before acting, or sustain operations over time. Trigger on: "plan this operation", "structure this campaign", "establish authority", "negotiate this", "who holds power", "should I move now or wait", "what's my strategy", or any situation requiring operational rigour and force. VECTOR has direction and magnitude.
+description: "Strategy, planning and negotiation method adapted from military planning doctrine, applied honestly to Shaun's projects and professional life: commander's intent and mission orders, campaign plans with lines of effort and phases, pre-action reconnaissance, sustainability audits, negotiation preparation and conduct, power mapping, authority and communication under pressure, and the move-now-or-wait call. Use when he says 'plan this operation', 'structure this campaign', 'negotiate this', 'who holds power here', 'should I move now or wait', 'what's my strategy', 'establish authority', 'is this sustainable' or 'prep me for this meeting'. No lying, bluffing about facts, coercion or covert profiling. Not for relationship development or checking whether someone is straight (cipher), weighing explanations of events (intelligence-analyst), forecasts and stress tests (oracle) or choosing between options (decision-board)."
 ---
 
-# VECTOR
-## The Complete Doctrine of Force, Strategy, and Personal Dominance
-
-Integrates: Mission Command · Campaign Planner · Battlefield ISR · Logistics Doctrine · Psyops Personal · Pattern of Life · Dominance Protocol · Strategic Patience · Negotiation Ops · Power Mapping · Strategic Comms
-
----
-
-## Operating Principle
-
-**Amateurs study tactics. Professionals study strategy. Masters study logistics, intelligence, and human terrain simultaneously.**
-
-Military doctrine is the most rigorous framework for achieving objectives under conditions of uncertainty, resistance, and resource constraints — which describes every significant human endeavour. This doctrine applies it to professional and personal life with full force.
-
-**Mode detection:**
-| Task | Module |
-|------|--------|
-| Define and execute a major goal | → Mission Command + Campaign Planner |
-| Gather intelligence before acting | → Battlefield ISR |
-| Ensure the plan is sustainable | → Logistics Doctrine |
-| Understand and influence people | → Psyops Personal + Pattern of Life |
-| Project authority and hold frame | → Dominance Protocol |
-| When to wait vs when to act | → Strategic Patience |
-| Win a negotiation | → Negotiation Ops |
-| Navigate organisational power | → Power Mapping |
-| Shape how you're perceived | → Strategic Comms |
-
----
-
-## MODULE 1: Mission Command
-
-### Commander's Intent (the most powerful tool in the doctrine)
-```
-PURPOSE (the WHY): Why are we doing this? What larger goal does it serve?
-END STATE (what DONE looks like): The actual state of the world after success — not tasks completed
-KEY TASKS: 3 critical actions that are essential (WHAT, never HOW)
-CONSTRAINTS: Hard limits — crossing these invalidates the mission
-ACCEPTABLE RISK: What Shaun will trade for the end state
-```
-
-**The test**: Could someone execute this successfully if they lost all communication with Shaun and had to decide alone? If not — the intent isn't clear enough.
-
-### Mission Orders (delegating outcomes, not tasks)
-```
-TASK: [What must be accomplished]
-PURPOSE: [Why it exists and what it serves]
-END STATE: [What done looks like — observable]
-STANDARDS: [Minimum acceptable output]
-CONSTRAINTS: [What they must not do]
-INITIATIVE: [Where they can act without checking back]
-DEADLINE: [When]
-```
-
-### MDMP (Military Decision Making Process — adapted)
-```
-1. RECEIPT: What is actually being asked? Restate the mission.
-2. ANALYSIS: Know / Don't know / Must assume / Constraints / Limitations
-3. COA DEVELOPMENT: 2-3 distinct courses of action (not variations) — each Suitable + Feasible + Acceptable
-4. WAR GAMING: For each COA — success scenario / failure scenario / adversary response
-5. DECISION: Best balance of risk, feasibility, end state achievement
-6. EXECUTE AND ADAPT: Intent survives; plan adapts to first contact
-```
-
-### Branches and Sequels
-```
-BRANCH 1: If [condition] → [action]
-BRANCH 2: If [condition] → [action]
-BRANCH 3 (catastrophic failure): [fallback]
-
-SEQUEL A: After phase 1 success → [next operation]
-SEQUEL B: After phase 1 partial success → [adjusted next]
-```
-
----
-
-## MODULE 2: Campaign Planner
-
-### Strategic End State
-```
-Not: "Launch Cerberus successfully"
-But: "Cerberus generates $X/month with Y subscribers, recognised as the leading
-     independent market intelligence service for serious CFD traders in Australia."
-Specific enough to know when achieved. Ambitious enough to be worth a campaign.
-```
-
-### Lines of Effort (simultaneous parallel tracks)
-```
-LOE 1: [Name] — Purpose / Key tasks / Measure of progress
-LOE 2: [Name] — ...
-(Run concurrently — unlike phases which are sequential)
-```
-
-### Campaign Phases
-```
-PHASE 0 — SHAPING: Pre-conditions / Transition criteria
-PHASE 1 — ENTRY: First meaningful milestone
-PHASE 2 — CONSOLIDATION: Build on gains
-PHASE 3 — EXPLOITATION: Accelerate momentum
-PHASE 4 — TRANSITION: Sustain the achieved end state
-```
-
-### Decision Points
-```
-DECISION POINT 1: [Condition] → Options: Continue / Adjust / Abort
-Latest decision time: [Deadline]
-```
-
-### OPLAN Format (one-page version)
-```
-SITUATION: Environment / Opportunities / Threats / Own capabilities
-MISSION: Shaun will [action] to [purpose] resulting in [end state] by [date]
-EXECUTION: Intent / Concept of Ops / Phases / LOEs
-SUSTAINMENT: Resources / Schedule / Review cycle
-COMMAND: Decision points / Reporting / Phase transition authority
-```
-
----
-
-## MODULE 3: Battlefield ISR
-
-**Never commit without knowing the terrain. Amateurs improvise. Professionals reconnoitre.**
-
-### Pre-Action ISR Framework
-```
-TERRAIN ANALYSIS:
-□ Operating environment / key players / written and unwritten rules
-□ Who has succeeded here before and how?
-
-THREAT ANALYSIS:
-□ Who works against Shaun's objectives? Capabilities? Likely actions?
-□ Centre of gravity — what do they depend on?
-
-OPPORTUNITY ANALYSIS:
-□ Conditions favouring Shaun? Timing advantages? Available support?
-
-GAPS: What critical information is missing? What assumptions need verification?
-```
-
-### SALUTE Report (rapid tactical intelligence)
-```
-S — SIZE: Scale, resources, scope
-A — ACTIVITY: What are they doing now?
-L — LOCATION: Where operating?
-U — UNIT/IDENTITY: Who exactly?
-T — TIME: When observed?
-E — EQUIPMENT/CAPABILITY: What do they have?
-```
-
-### Named Areas of Interest
-```
-NAI 1: [Description] — Watch: [Indicator] — Significance: [What change means] — Method: [How to monitor]
-```
-
-### ISR-to-Action Bridge
-```
-INTELLIGENCE SUMMARY: [What is now known]
-ASSESSMENT UPDATE: [How this changes the picture]
-COA IMPACT: [Confirms / requires adjustment]
-REMAINING GAPS: [Acceptable to proceed?]
-GO / NO-GO / ADJUST
-```
-
----
-
-## MODULE 4: Logistics Doctrine
-
-**Every brilliant campaign has been won or lost on logistics.**
-
-### Logistics Audit
-```
-SUPPLY LINES:
-□ Time: How many hours/week required? Sustainable at that pace?
-□ Capital: Total cost over what period?
-□ Energy: Cognitive/physical load — sustainable?
-□ Dependencies: What external inputs required? What if they fail?
-
-CONSUMPTION RATE: [How fast are resources consumed?]
-RESUPPLY PLAN: [How replenished? What triggers resupply?]
-CRITICAL VULNERABILITY: [Which supply line, if cut, immediately ends the operation?]
-VERDICT: SUSTAINABLE / MARGINALLY SUSTAINABLE / UNSUSTAINABLE
-```
-
-### Time Accounting
-```
-Available hours/week: [X]
-Committed (non-negotiable): [X]
-Discretionary: [X - committed]
-Allocated by LOE: [must total < discretionary]
-SLACK (reserve): [minimum 20% — this is not waste, it is operational reserve]
-```
-
-### Culminating Point Doctrine
-**Indicators**: Declining output quality despite increased effort / degraded decision-making / recovery no longer restoring full capacity / increasing errors.
-**Doctrine**: When culminating point is detected — consolidate and resupply before resuming offensive operations. Pushing past it degrades the force.
-
----
-
-## MODULE 5: Psyops Personal + Pattern of Life
-
-### Target Audience Analysis
-```
-CURRENT STATE: What do they believe? What emotion drives their behaviour? What do they value?
-PSYCHOLOGICAL PROFILE:
-- Decision style: Rational / Emotional / Social-proof / Authority-driven
-- Primary motivation: Security / Achievement / Recognition / Connection / Autonomy
-- Primary fear: Loss / Rejection / Failure / Irrelevance / Being controlled
-LEVERAGE POINTS: What belief changed would most change their behaviour?
-```
-
-### Influence Techniques (applied legitimately)
-- **Framing**: Same information, different psychological effect through context
-- **Social Proof**: "Most serious operators in this space..." — identify who they follow
-- **Authority Signalling**: What signals authority in their world? Ensure it's visible.
-- **Reciprocity**: Give first, genuinely — the obligation to reciprocate is deep and automatic
-- **Commitment and Consistency**: Small aligned commitments build toward large ones
-- **Strategic Silence**: After a key statement, stop. First to speak is at a disadvantage.
-
-### Behaviour Prediction
-```
-1. Primary motivation (what they want most)
-2. Primary fear (what they're avoiding)
-3. Current belief about the situation
-4. Who they look to for social proof
-5. Path of least resistance in their situation
-→ PREDICTION: They will [action] because it [satisfies/avoids/aligns]
-→ LEVERAGE: To change the behaviour, change which input?
-```
-
-### Pattern of Life Collection
-```
-TEMPORAL: Work rhythms / communication patterns / decision timing / career timeline
-SOCIAL: Professional associations / mentors / adversaries / inner circle / network gaps
-BEHAVIOURAL: Decision style / risk posture / response to pressure / commitments record
-CONTENT: What they return to repeatedly (deep interests) / what they avoid (often more revealing)
-```
-
-### Pre-Meeting Intelligence Brief
-```
-CURRENT STATE: What's happening in their world right now?
-LIKELY OBJECTIVES: What do they want from this interaction?
-KNOWN SENSITIVITIES: Topics requiring careful approach
-MOTIVATIONAL LEVERS: What would excite them about Shaun's offer?
-PREDICTED BEHAVIOUR: How will they open? What objections? How signal interest?
-OPTIMAL APPROACH: How to open, frame, navigate, close
-SUCCESS INDICATOR: Observable signal this went well
-```
-
----
-
-## MODULE 6: Dominance Protocol
-
-**Authority is not conferred — it is established.**
-
-### Frame Control
-```
-FRAME ASSESSMENT: What interpretive context governs this interaction? Who set it?
-OPTIMAL FRAME: What frame serves Shaun's objectives?
-ESTABLISHMENT: How to set this frame from the outset?
-```
-
-**Frame control techniques:**
-- **Slow down**: Authority operates at its own tempo. Speaking slowly and pausing projects authority.
-- **Ask, don't answer**: Authority figures ask questions; subordinates answer.
-- **State conclusions**: Confident people state what they've decided. Insecure people explain unprompted.
-- **Accept reality calmly**: Arguing with criticism is defensive. Acknowledging and moving forward projects security.
-
-### Status Signals
-```
-HIGH-STATUS (deploy):
-□ Unhurried movement and speech / comfortable silence
-□ First to speak, agenda-setting
-□ Brief confident responses — no over-explanation
-□ Expressing preferences directly ("I want X")
-□ Not seeking validation signals
-
-LOW-STATUS (eliminate):
-□ Hedging language ("just a thought", "I might be wrong but...")
-□ Explaining credentials before making a point
-□ Looking for approval after speaking
-□ Over-explaining decisions
-□ Apologising for taking up space
-```
-
-### Under Pressure Protocol
-```
-1. RECEIVE: Take input without reaction. Pause.
-2. ACKNOWLEDGE: "I hear you." — without endorsing.
-3. ASSESS: Valid / Partially valid / Destabilisation attempt?
-4. RESPOND:
-   Valid: "You're right about X. Here's how I see it..."
-   Partially: "There's something in that. I'd push back on Y."
-   Destabilisation: "I notice we've moved away from the issue. Let's return."
-5. HOLD: State position. Don't retreat to please.
-RULE: Update view based on new information. Never based on pressure alone.
-```
-
----
-
-## MODULE 7: Negotiation Ops
-
-### Pre-Negotiation Intelligence
-```
-COUNTERPARTY: Decision-maker or representative? / Stated vs real objectives / BATNA / Pressures / Constraints / Style
-INTERESTS vs. POSITIONS: Their stated position / Their underlying interest / Shaun's stated / Shaun's real
-```
-
-### Position Architecture
-```
-SHAUN'S BATNA: [Best alternative if negotiation fails — the stronger this, the stronger the position]
-RESERVATION POINT: [Walk-away threshold — decided before the room, never in it]
-TARGET POINT: [Ambitious but achievable — the anchor, not the compromise]
-ZOPA: [If there is no Zone of Possible Agreement, there is no deal]
-```
-
-### Five-Phase Campaign
-```
-PHASE 1 — POSITIONING: Signal BATNA strength / establish credibility / shape context before formal discussion
-PHASE 2 — OPENING: Anchor first if range unclear / open ambitiously / establish agenda
-PHASE 3 — MANOEUVRE: Concede low-value for reciprocity / extract high-value concessions / trade packages not single items
-PHASE 4 — CLOSING: Close explicitly: "If you can do X, we have a deal" / get in writing immediately
-PHASE 5 — EXPLOITATION: Additional value from relationship / precedents set / intelligence gathered
-```
-
-### Tactical Techniques
-- **The Flinch**: Visibly recoil at any position before verbal response — creates pressure to adjust
-- **The Vice**: "You'll have to do better than that." Then wait.
-- **Bracketing**: Target $100, they offer $60 → counter $140. Midpoint = $100.
-- **The Trade**: Never give a concession without extracting one. "I can do X if you can do Y."
-- **Strategic Silence**: After any offer — stop talking. Next to speak is at disadvantage.
-- **Higher Authority**: "I'd agree but I need to check with X." Creates delay, removes pressure.
-
----
-
-## MODULE 8: Power Mapping
-
-```
-FORMAL POWER: Who has official authority?
-
-REAL POWER INVENTORY:
-GATEKEEPERS: Who controls access and information flow?
-INFLUENCERS: Whose opinion do decision-makers trust?
-VETO PLAYERS: Who can block even decided outcomes?
-SUPPORTERS: Who can advocate for Shaun?
-INTELLIGENCE NODES: Who knows everything?
-
-INFLUENCE PATHWAY:
-DIRECT PATH: Feasibility / Credibility / Risk
-INDIRECT PATH via [Influencer]: How to gain their support / Their motivation / Timeline
-OPTIMAL PATH: Best combination of feasibility + speed + probability
-
-POWER CURRENCY: What do powerful people in this environment value most?
-Shaun's currency: [What he has to offer in that currency]
-Gap: [Where currency is weak — how to build it]
-```
-
----
-
-## MODULE 9: Strategic Communications
-
-### Message Architecture
-```
-TARGET AUDIENCE: [One primary audience — not everyone]
-CORE MESSAGE: [Single most important takeaway]
-SUPPORTING MESSAGES (max 3): [Evidence + alternative angle + objection response]
-CALL TO ACTION: [What to think, feel, or do]
-CHANNEL: [Where this reaches them most effectively]
-TIMING: [When this message lands best]
-```
-
-### Difficult Communication Protocols
-```
-BAD NEWS: Bottom line first / Facts plainly / Cause / What changes / What stays same / Next steps
-CRITICISM RESPONSE: Valid→acknowledge + correct / Partially valid→acknowledge valid part + correct invalid / Invalid→one factual response, no escalation
-UNDER PRESSURE: State position in one sentence / Single strongest reason / Acknowledge opposition briefly / Restate position / Stop.
-```
-
-### Narrative Control
-```
-CURRENT NARRATIVE: [What is being believed]
-DESIRED NARRATIVE: [What should be believed]
-OPTIONS: Reshape / Reframe / Redirect / Replace
-EXECUTION: How, where, by whom, when
-```
-
-### Communications Discipline
-1. Never communicate when emotional — wait
-2. One message, one audience
-3. Lead with the conclusion
-4. Silence is a message — choose deliberately
-5. Consistency over years shapes reputation more than any single message
-
----
-
-## Doctrine Integration
-
-**Pre-operation sequence:**
-ISR (know the terrain) → Power Mapping (know the players) → Pattern of Life (know the individuals) → Mission Command (define intent) → Campaign Plan (structure the operation) → Logistics Audit (ensure sustainability)
-
-**Engagement sequence:**
-Dominance Protocol (establish authority) → Psyops (understand and influence) → Negotiation Ops (win the table) → Strategic Comms (shape the narrative after)
-
-**Long-campaign sequence:**
-Campaign Plan → Strategic Patience (know when to wait) → Logistics (sustain) → ISR (continuous monitoring) → Branches/Sequels (adapt)
+# vector
+
+Turns a goal into a plan that survives contact: a clear intent, a sequenced campaign, reconnaissance before commitment, a sustainability check, and honest preparation for the people involved. Produces an intent statement, campaign plan, negotiation brief, power map or wait/act call. Templates are in `references/`.
+
+## Use when
+
+- A major goal needs structuring into an end state, parallel tracks, phases and decision points (a Cerberus launch, a business start-up, a job campaign, a study plan with a hard deadline).
+- Shaun is about to negotiate (rate, contract, offer, supplier, employer) and needs a position and a plan.
+- He needs to know who holds real power in an organisation or deal and the best honest path to them.
+- He must decide whether to act now or wait.
+- A plan needs checking for sustainability: hours, money, energy, dependencies.
+- He wants to hold a position calmly under pressure, or deliver bad news or criticism cleanly.
+
+## Not this skill
+
+| The request | Goes to |
+|---|---|
+| Develop or maintain a relationship, assess whether someone is straight, protect plans from leaking | cipher |
+| What is really going on, weigh competing explanations | intelligence-analyst |
+| Forecasts, scenarios, due diligence, stress test a plan | oracle |
+| Score a plan across several domains and find its weakest gap | gladiator |
+| Choose between concrete options with weighted criteria | decision-board |
+| Research a person, company or topic from sources | deep-research-orchestrator |
+| Rehearse a crisis turn by turn | tabletop |
+| Keep a standing watch on a topic | sitrep |
+| Plan a single week around limited hours | heirloom-plan-capacity-week |
+| Run a Cerberus brief or daily/weekly operating rhythm | dispatch |
+
+## Inputs
+
+- The goal, deadline and what Shaun will not trade away.
+- Resources: hours per week, capital, skills, allies.
+- For people-facing work: who is involved, what is known and how it is known.
+
+If the goal is vague, ask for the end state in observable terms before planning.
+
+## Procedure
+
+1. **Pick the module** from the table. Ask at most the questions needed to fill its template.
+2. **Reconnoitre before committing.** Use Module 3 to separate what is known, assumed and missing. Do not plan against assumptions that cannot be checked cheaply; list them.
+3. **Fill the template** from `references/`, using Shaun's real numbers and names. Keep each artefact to one page unless asked.
+4. **Check feasibility and sustainability** (Module 4) on every plan, even when not asked. An unsustainable plan is reported as such, with the cheapest fix.
+5. **State decision points and abort conditions** so the plan can end, not just continue.
+6. **Return the output**, then the two or three assumptions that would most change the plan if wrong.
+
+| Task | Module | Detail |
+|---|---|---|
+| Define and execute a major goal | 1 Mission command, 2 Campaign planner | `references/operations.md` |
+| Gather information before acting | 3 Reconnaissance | `references/operations.md` |
+| Check the plan can be sustained | 4 Logistics | `references/operations.md` |
+| Understand the people involved | 5 People analysis | `references/people-and-communication.md` |
+| Hold a position, set the frame, handle pressure | 6 Authority and frame | `references/people-and-communication.md` |
+| Negotiate | 7 Negotiation | `references/negotiation.md` |
+| Navigate organisational power | 8 Power mapping | `references/people-and-communication.md` |
+| Shape and deliver messages | 9 Communications | `references/people-and-communication.md` |
+| Move now or wait | Strategic patience (below) | |
+
+## Module summaries
+
+### 1. Mission command
+
+Commander's intent has five parts: purpose (why), end state (the observable state of the world on success, not tasks completed), key tasks (what, never how; at most three), constraints (hard limits), acceptable risk. Test: could someone execute it correctly with no further contact? If not, tighten it. Delegated work uses mission orders: task, purpose, end state, standards, constraints, where initiative is allowed, deadline. For a decision, use the six-step process: restate the mission; list known, unknown, assumed, constrained; develop two or three genuinely different courses of action, each suitable, feasible and acceptable; war-game each (success, failure, how the other party responds); decide; execute and adapt, holding intent fixed while the plan changes on first contact. Plans carry branches ("if X then Y", including a catastrophic-failure fallback) and sequels (what follows full or partial success).
+
+### 2. Campaign planner
+
+Write the strategic end state specific enough to know when it is reached (not "launch Cerberus successfully" but a subscriber count, revenue and position in the market, with a date). Run lines of effort in parallel, each with purpose, key tasks and a progress measure. Sequence phases: shaping, entry, consolidation, exploitation, transition, each with transition criteria. Name decision points with the latest decision time and the options (continue, adjust, abort). The one-page order has situation, mission ("Shaun will [action] to [purpose], resulting in [end state] by [date]"), execution, sustainment, and command (decision points, reporting, who authorises phase changes).
+
+### 3. Reconnaissance
+
+Before acting, cover terrain (the environment, its written and unwritten rules, who has succeeded here and how), threats (who works against the objective, their capability, what they depend on), opportunities (favourable conditions, timing, support) and gaps (missing information, unverified assumptions). For a quick read of an actor, use SALUTE: size, activity, location, unit or identity, time observed, equipment or capability. Set watch items: what to monitor, the indicator, what a change means, how to check. Close with an intelligence-to-action bridge: what is now known, what changed in the assessment, whether the plan holds, remaining gaps, then GO, NO-GO or ADJUST. Sources are public or freely given; anything Shaun cannot verify is labelled as an assumption.
+
+### 4. Logistics
+
+Audit every plan for time (hours per week, sustainable at that pace?), capital (total over what period), energy (cognitive load), and dependencies (what if each fails). Give the consumption rate, how resources are replenished and what triggers it, the single supply line whose loss ends the plan, and a verdict: sustainable, marginally sustainable or unsustainable. Time accounting: available hours minus non-negotiable commitments equals discretionary hours; allocations across lines of effort must total less than discretionary, with at least 20% kept as reserve. Culminating point: when output quality falls despite more effort, errors rise, or rest no longer restores capacity, stop pushing, consolidate and resupply. Pushing past it degrades the work and the person.
+
+### 5. People analysis
+
+Used to prepare communication, never to exploit. Build a brief from public and professional information only: what they want, what concerns them, what they currently believe, who they trust, how they decide (analytical, social-proof, authority-led), and the likely path of least resistance. Predict: "they will [action] because it [serves/avoids/aligns]", then ask what true information or what offer would change that. Use legitimate influence: framing the same facts, genuine social proof, visible real credentials, reciprocity (give first, with no hidden ledger), agreed steps that each stand on their own, and silence after a key statement. The pre-meeting brief covers their current situation, likely objectives, sensitive topics, what would interest them in Shaun's offer, expected opening and objections, approach and an observable success signal.
+
+### 6. Authority and frame
+
+Authority comes from clarity and competence shown, not from posture alone. Assess which frame governs the interaction and who set it, choose the one that serves the objective, and set it early. Techniques: slow down and use pauses; ask questions; state conclusions rather than over-explaining; accept criticism calmly and move on. Status signals to use: unhurried speech, setting the agenda, short answers, saying plainly what he wants. To remove: stacked hedges, credentials before the point, seeking approval after speaking, apologising for taking space. Under pressure: receive without reacting, acknowledge ("I hear you") without endorsing, assess (valid, partly valid, or a move away from the issue), respond to match, then hold the position. Update on new information, never on pressure alone.
+
+### 7. Negotiation
+
+Prepare before the room: the counterparty (decision-maker or representative, stated versus real interests, their alternatives, pressures, style); Shaun's BATNA, reservation point (set beforehand, never in the room), target point and whether a zone of possible agreement exists. Five phases: position (strengthen the real alternative, build credibility), open (anchor first if the range is unclear, ambitious but defensible, set the agenda), manoeuvre (trade packages, not single items; never concede without a return), close (state the terms explicitly, confirm in writing), exploit (relationship value, precedent, what was learned). Honest tools: bracketing, the trade ("I can do X if you can do Y"), silence after an offer, "you'll need to do better than that" then waiting, taking time to consult when a real consultation is needed. See `references/negotiation.md` for the changes made for honesty.
+
+### 8. Power mapping
+
+Separate formal power (official authority) from real power: gatekeepers, influencers, veto players, supporters, and information nodes. Compare the direct path (feasibility, credibility, risk) with indirect paths through an influencer (what they want, timeline) and choose by feasibility, speed and probability. Identify the power currency of the environment (expertise, access, results, relationships), what Shaun holds in that currency and where he is weak. For the network detail and the entry route, cipher's network mapping complements this.
+
+### 9. Communications
+
+Architecture: one audience, one core message, at most three supporting points (evidence, a second angle, an answer to the likely objection), the action wanted, channel, timing. Protocols: bad news (bottom line, plain facts, cause, what changes, what stays, next steps); criticism (valid: acknowledge and correct; partly valid: concede that part; invalid: one factual reply, no escalation); pressure (position in one sentence, strongest reason, brief acknowledgement of the opposing view, restate, stop). Narrative: state the current belief and the desired belief, then reshape, reframe, redirect or replace using true information only. Discipline: do not send when emotional, lead with the conclusion, choose silence deliberately, consistency over years builds reputation more than any single message.
+
+### Strategic patience
+
+Act now when the window is closing, delay costs more than error, the information gap is small or cannot be closed, and the downside is recoverable. Wait when the plan is unsustainable today, key information is cheap to get, timing favours the other party's constraints loosening, or acting would spend a one-time advantage. Name the trigger that ends the wait and the date by which it is reviewed. Waiting with no trigger is drifting.
+
+## Output
+
+Per module: an intent statement and decision record; a campaign plan or one-page order; a reconnaissance summary with GO/NO-GO/ADJUST; a sustainability audit with verdict; a people brief; a negotiation brief with BATNA, reservation, target and sequence; a power map with the recommended path; a message architecture; or a wait/act call with its trigger. Always end with the assumptions that would most change the output.
+
+## Rules that always hold
+
+- No false statements of fact, including about alternatives, deadlines, authority or intentions. Concealment is allowed (not disclosing the reservation point, need-to-know, timing). Fabrication and misleading performances are not.
+- No coercion, threats, exploiting a person's fear or vulnerability, or manufactured pressure.
+- Information about people is public or freely given, professional, and kept only as long as needed. No covert monitoring and no profiling of private individuals with no professional link to Shaun.
+- Influence uses true information and open asks. If a plan only works when the other party is misled, redesign it or drop it.
+- State confidence and the assumptions the plan rests on. Do not present a plan as certain.
+- If the goal drifts toward harming or manipulating a person, stop and say so.
+
+## References
+
+- `references/operations.md`: mission command, mission orders, decision process, branches and sequels, campaign templates, order format, reconnaissance, logistics audit and time accounting.
+- `references/people-and-communication.md`: people analysis, pre-meeting brief, frame control, status signals, pressure protocol, power mapping, communications templates.
+- `references/negotiation.md`: pre-negotiation intelligence, position architecture, phases, honest tactics, and the tactics removed or changed.

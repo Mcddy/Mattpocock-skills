@@ -1,76 +1,77 @@
 ---
 name: generative-content
-description: >
-  Generate creative and generative content — SVG illustrations, data art, infographics,
-  animated diagrams, visual storytelling, and rich media outputs that go beyond text.
-  Use when the user asks to "generate something visual", "create an infographic about [topic]",
-  "make something cool", "visual for [concept]", "illustration of [idea]",
-  "animated diagram of [process]", or any request for creative visual output.
-metadata:
-  version: "0.1.0"
-  author: "Shaun"
+description: "Produces a single-file visual piece that explains or presents something: an SVG illustration, infographic, animated diagram, visual one-pager, comparison, flow diagram, or scroll-driven visual story, delivered as .svg, .html or .jsx. Use when the user asks to 'generate something visual', 'create an infographic about [topic]', 'make something cool', 'visual for [concept]', 'illustration of [idea]' or 'animated diagram of [process]'. Not for a full page or portfolio (showpiece), code-driven art with seeded randomness (algorithmic-art), a static poster or PDF (canvas-design), data-bound deterministic SVG/PNG frames (media-compiler), a clickable concept map (atlas), or a teaching tool for one concept (learning-visualiser)."
 ---
 
-# Generative Content Engine
+# generative-content
 
-Create visual and generative content that makes people stop scrolling. Infographics, data art, animated diagrams, SVG illustrations, and visual storytelling — all generated from natural language.
+Produces one self-contained visual piece: it picks the format that fits the goal, builds it in one pass, and checks it against a short quality bar. Palettes and format notes are in `references/palettes-and-formats.md`.
 
-## Activation Protocol
+## Use when
 
-1. Determine the **content goal** — inform, persuade, delight, or explain?
-2. Select the **output format** — see Format Matrix below
-3. Determine the **visual style** — modern/minimal, bold/dramatic, technical/precise, organic/flowing
-4. Generate in one shot — complete, polished, shareable
+- Someone wants an infographic, illustration, animated diagram, visual one-pager, comparison or flow diagram from a topic or a set of facts.
+- The request is open ("make something cool", "a visual for X") and the right form is not yet chosen.
+- A short visual story with a scroll or step sequence is needed.
 
-## Format Matrix
+## Not this skill
 
-| Goal | Best Format | Technology |
+| The request | Goes to |
+|---|---|
+| Ambitious full page, portfolio or showcase site | showpiece |
+| Generative art from code, flow fields, particles, seeded variations | algorithmic-art |
+| Static poster, print piece, .png or .pdf artwork | canvas-design |
+| Programmed, data-bound, deterministic SVG or PNG frames | media-compiler |
+| Motion design, logo animation, loops, UI transitions | animation-studio |
+| Explorable map of a domain's connections | atlas |
+| Interactive explainer that teaches one concept | learning-visualiser |
+| Animated multi-lesson course | percept |
+| Slide deck | deck-builder |
+| Chart of real data for analysis | data-intelligence |
+
+## Inputs
+
+- The subject and the facts to show (supplied, or to be drawn from the conversation; ask if none and the content matters).
+- The goal: inform, persuade, delight or explain.
+- The destination (social post, document, web page, slide) and any brand colours.
+
+## Procedure
+
+1. **Settle the goal and the one message.** Write the single takeaway in a sentence. If it needs two, make two pieces or ask.
+2. **Check the facts.** Use only numbers and claims the user supplied or that are verifiable; mark estimates as estimates. Do not invent statistics to fill a layout.
+3. **Choose the format** from the table.
+4. **Choose the style and palette**: minimal, bold, technical or organic. Use at most five colours, each with a purpose (see the reference for presets). Respect brand colours if given.
+5. **Compose.** Decide hierarchy first (what pops, what recedes), then spacing, then type. Build each element, then assemble.
+6. **Add motion only where it carries meaning** (drawing attention to the step or change that matters). Respect reduced-motion preferences.
+7. **Check against the quality bar**, fix, and deliver.
+
+| Goal | Format | Technology |
 |---|---|---|
-| Explain a concept | Animated diagram | React + SVG + CSS animations |
-| Present data | Infographic | React + recharts + Tailwind |
-| Tell a story | Visual narrative | React + scroll-driven |
-| Impress / delight | Generative art | p5.js or Three.js |
-| Summarise information | Visual one-pager | React + Tailwind |
-| Compare options | Visual comparison | React + grid layout |
-| Show a process | Flow diagram | React + SVG paths |
-| Brand / identity | Logo / icon design | SVG hand-crafted |
+| Explain a concept | Animated diagram | SVG with CSS animation, or React |
+| Present data | Infographic | HTML or React with an SVG chart library |
+| Tell a story | Visual narrative | Scroll-driven HTML or React |
+| Delight | Generative piece | p5.js or canvas (route heavy art to algorithmic-art) |
+| Summarise | Visual one-pager | HTML or React with a grid |
+| Compare options | Comparison | Grid layout |
+| Show a process | Flow diagram | SVG paths |
+| Brand mark or icon | Logo or icon | Hand-written SVG |
 
-## Visual Design Principles
+If the host cannot render React, deliver plain HTML with inline SVG and CSS.
 
-1. **Contrast creates hierarchy** — the most important element pops
-2. **White space is a feature** — never crowd the canvas
-3. **Typography carries weight** — font choice communicates before words do
-4. **Colour palette is intentional** — 3-5 colours max, each with a purpose
-5. **Animation serves meaning** — movement draws attention to what matters
+## Output
 
-## Colour Palettes (Presets)
+- One self-contained file: `.svg` for static work, `.html` for animation or interaction, `.jsx` when the host renders React. Say which file and how to open it.
+- Retina-safe (vector preferred), dark and light variants where useful, a print-friendly version for infographics, WCAG AA contrast, alt text or a title and description on SVG.
+- One line stating the message the piece carries and any figure that is an estimate.
 
-- **Midnight Command**: #0f172a, #1e293b, #3b82f6, #60a5fa, #f8fafc
-- **Ember**: #0c0a09, #292524, #ef4444, #f97316, #fef3c7
-- **Arctic**: #0f172a, #e2e8f0, #06b6d4, #22d3ee, #ffffff
-- **Neon Ops**: #000000, #111111, #00ff88, #00ccff, #ff00ff
-- **Earth Intel**: #1a1a2e, #16213e, #0f3460, #e94560, #f5f5f5
+## Quality bar
 
-## Build Protocol
+- The core message reads in about five seconds.
+- Every element earns its place; remove decoration that carries no meaning.
+- Text is legible at the smallest intended size and does not rely on colour alone.
+- Numbers shown match the numbers supplied.
 
-1. **Content analysis** — what information must be communicated?
-2. **Layout sketch** — mental model of spatial arrangement
-3. **Element generation** — build each visual component
-4. **Composition** — arrange elements with visual hierarchy
-5. **Polish** — shadows, gradients, animations, micro-interactions
-6. **Export** — deliver as .jsx, .svg, .html, or .mermaid depending on complexity
+## Rules that always hold
 
-## Output Standards
-
-- Self-contained single file
-- Retina-ready (SVG preferred over raster)
-- Dark and light variants where appropriate
-- Print-friendly option for infographics
-- Accessible colour contrast (WCAG AA minimum)
-
-## Quality Bar
-
-- Would this get engagement if posted on LinkedIn?
-- Does it communicate the core message in under 5 seconds?
-- Is every visual element earning its place?
-- Would a professional designer respect this output?
+- No invented data presented as fact; label illustrative figures as illustrative.
+- Do not imitate a living artist's or a brand's distinctive work, or use real logos without the owner's permission.
+- Build in one pass and deliver; do not ask about style when the request gives enough to choose.

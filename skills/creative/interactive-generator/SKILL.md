@@ -1,68 +1,74 @@
 ---
 name: interactive-generator
-description: >
-  Generate interactive tools, apps, calculators, dashboards, and utilities on the fly from a single description.
-  Use when the user asks to "build me a quick [tool]", "make an interactive [thing]",
-  "create a calculator for [purpose]", "generate a [utility] app", "I need a tool that [does X]",
-  "quick app for [task]", or any request for an instant functional interactive tool.
-metadata:
-  version: "0.1.0"
-  author: "Shaun"
+description: "Builds a quick single-file interactive tool from a one-line description: a calculator, converter, tracker, planner board, wizard, form, small dashboard, simulator or puzzle, working with zero configuration. Use when the user says 'build me a quick [tool]', 'make an interactive [thing]', 'create a calculator for [purpose]', 'generate a [utility] app', 'I need a tool that [does X]' or 'quick app for [task]'. Not for tools that must save data between sessions (pocket-app), weighted option comparison (decision-board), physics or system simulations with calibrated engines (simforge), apps with a back end (forge), or courses and quizzes (preceptor, elicitor)."
 ---
 
-# Interactive Generator
+# interactive-generator
 
-Build functional interactive tools, apps, and utilities instantly from natural language descriptions. Every tool should feel polished enough to ship.
+Builds a small working tool in one pass, from a plain description, as a single file that runs without setup.
 
-## Activation Protocol
+## Use when
 
-1. Parse what the user needs — what problem does this tool solve?
-2. Determine the minimum viable interaction model
-3. Select the optimal format (see below)
-4. Build it in one shot — working, polished, complete
+- The user wants a one-off utility they can use immediately: a calculator, converter, checklist, tracker, planner, wizard, form or simple dashboard.
+- The need is clear enough to build without a design phase.
 
-## Format Selection
+## Not this skill
 
-| Tool Type | Format | Stack |
+| The request | Goes to |
+|---|---|
+| Tool whose data must persist, with import/export and undo | pocket-app |
+| Compare concrete options with weighted criteria and sensitivity | decision-board |
+| Simulate a system with parameters and regimes | simforge |
+| Needs a server, accounts, shared data or sync | forge |
+| Repair or restyle an existing interface | anti-vibecoded-ui |
+| Quiz, survey instrument or questionnaire | elicitor |
+| Course or study app | preceptor |
+| Teach one concept interactively | learning-visualiser |
+| Ambitious showcase page | showpiece |
+
+## Inputs
+
+- What the tool must do, in the user's words.
+- Who uses it and on what device, if stated. Default: Shaun, desktop and phone.
+- Any real formulas, rates or rules involved. Do not guess a formula that has a correct form; look it up or ask.
+
+## Procedure
+
+1. **Parse the job.** State in one line what the tool does and the minimum interaction that does it. Ask a question only if a wrong guess would make the tool useless (for example an unknown formula or currency).
+2. **Define the data model**: what state the tool holds, what the user inputs, what it shows.
+3. **Pick the form** from the table.
+4. **Build the layout**, then wire the logic (calculations, transformations, validation), then handle edge cases: empty, zero, negative, very large, invalid input.
+5. **Polish**: sensible defaults so it works on first load, helpful empty states, visible focus and hover states, keyboard shortcuts where natural, responsive layout.
+6. **Test the logic** with at least two worked examples where the answer is known, and state them. If the tool computes money, tax or units, show the formula used.
+7. **Deliver** the file with one line on how to open it and what it does not do (for example, state is lost on reload).
+
+| Tool type | Form | Typical stack |
 |---|---|---|
-| Calculator / converter | Single-page app | React + Tailwind |
-| Dashboard / monitor | Data-rich layout | React + recharts |
-| Planning tool | Interactive board/grid | React + drag-and-drop |
-| Decision tool | Wizard / flow | React + state machine |
-| Tracker | List with state | React + local state |
-| Simulator | Canvas-based | React + HTML5 Canvas |
-| Form / survey | Multi-step form | React + validation |
-| Game / puzzle | Interactive canvas | React + game loop |
+| Calculator, converter | Single page | React and Tailwind, or plain HTML and JS |
+| Dashboard, monitor | Data-rich layout | A chart library |
+| Planning tool | Board or grid | Drag and drop |
+| Decision aid | Step-through wizard | State machine |
+| Tracker | List with state | Local component state |
+| Simulator (simple) | Canvas | Canvas and a game loop |
+| Form, survey | Multi-step | Validation |
+| Game, puzzle | Interactive canvas | Game loop |
 
-## Design Standards
+## Output
 
-1. **Professional by default** — dark theme, clean typography, generous spacing
-2. **Instant usability** — zero learning curve, the UI explains itself
-3. **Responsive** — works on desktop and mobile
-4. **Delightful details** — subtle animations, hover states, transitions
-5. **Data persistence in state** — use React useState/useReducer (no localStorage)
+- One self-contained file: `.jsx` with a default export when the host renders React, otherwise one `.html` file with inline script and style. Props or options all have defaults.
+- No network calls, accounts or external data unless the user asked.
+- A short note: what it does, the worked examples tested, and its limits.
 
-## Build Protocol
+## Design standards
 
-1. **Define the data model** — what state does this tool manage?
-2. **Design the interaction** — what does the user input, see, and control?
-3. **Build the layout** — component structure with Tailwind
-4. **Wire the logic** — calculations, transformations, validations
-5. **Polish the output** — animations, empty states, edge cases
-6. **Deliver as single .jsx** — self-contained, importable, ready to use
+- Clean, dark-friendly theme with generous spacing; readable on a phone.
+- The interface explains itself; labels and units are visible.
+- State lives in memory only (no browser storage) unless the user asks for persistence, in which case hand the job to pocket-app.
+- An error boundary or guarded input handling so bad input never produces a blank screen.
+- Contrast and focus states meet basic accessibility (AA contrast, keyboard operable).
 
-## Output Standards
+## Rules that always hold
 
-- Single .jsx file with default export
-- All props have defaults (works with zero configuration)
-- Tailwind utility classes only (no custom CSS)
-- Error boundaries for graceful failures
-- Helpful empty states (never a blank screen)
-- Keyboard shortcuts where appropriate
-
-## Quality Bar
-
-- Does it solve the problem in under 3 clicks?
-- Would you be embarrassed to show this to a designer? (Answer should be no)
-- Does it handle edge cases gracefully?
-- Is it faster than Googling for an existing tool?
+- Never present a computed result without being sure of the formula; flag assumptions on screen (rates, rounding, tax year).
+- Do not collect or send personal data. Nothing leaves the page.
+- If the tool is faster to replace with a spreadsheet formula or an existing standard tool, say so briefly and still build it if asked.
