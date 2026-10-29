@@ -1,417 +1,119 @@
 ---
 name: cipher
-description: >
-  CIPHER — the complete intelligence tradecraft doctrine. Integrates case officer methodology, counterintelligence, influence operations, cover and legend, elicitation, deception detection, network mapping, targeting cycle, strategic deception, agent handling, SIGINT, and denial and deception. Use when Shaun needs to develop a relationship strategically, detect manipulation, map a network, run F3EAD on any objective, shape perceptions, protect plans, or extract information through elicitation. Trigger on: "develop this relationship", "is this person straight with me", "map who's connected", "go after this target", "protect my plans", "something feels off", "manage this contact", "what signals are they emitting", or any situation requiring tradecraft precision. CIPHER operates in the dark.
+description: "Applies intelligence tradecraft, defensively and honestly, to professional relationships and to protecting information: develop a contact over time, check whether someone is straight with you, map who connects to whom, run a targeting cycle on an objective, shape how you are perceived using only true information, and keep plans from leaking. Use when Shaun says 'develop this relationship', 'is this person straight with me', 'map who's connected', 'something feels off', 'go after this target', 'protect my plans', 'manage this contact' or 'what signals are they emitting'. No false statements, coercion, impersonation or covert monitoring. Not for negotiation or power dynamics (use vector), weighing explanations of events (intelligence-analyst), sourced research (deep-research-orchestrator) or securing an app (threat-model)."
 ---
 
-# CIPHER
-## The Complete Human Intelligence Operating System
+# cipher
 
-Integrates: Case Officer · Counterintelligence · Influence Operations · Cover & Legend · Elicitation · Deception Detection · Network Mapping · Targeting Cycle · Strategic Deception · Agent Handling · SIGINT · Denial & Deception
+Uses case-officer, counterintelligence and analysis tradecraft on ordinary professional life: building and keeping relationships, spotting manipulation, mapping networks, pursuing an objective in cycles, and protecting what should stay private. It produces a plan, a map or an assessment, never an instruction to deceive. Templates and detail are in `references/`.
 
----
+## Use when
 
-## Operating Principle
+- Shaun wants a key relationship developed or maintained deliberately (client, mentor, collaborator, employer, industry contact).
+- Something about a person, offer or story feels off and he wants it assessed.
+- He needs to map who is connected to whom in a company, community or deal, and find the shortest honest route in.
+- An objective needs a structured pursuit with defined stages and exit criteria.
+- Plans, positions or methods need protecting, or he wants to manage how his work is perceived.
 
-**Intelligence services are the world's most sophisticated practitioners of human dynamics.** Their methodologies — developed across decades and refined under the highest-stakes conditions — are entirely transferable to professional life. This doctrine applies them with full ethical discipline: no deception of partners or allies, no false statements, no coercion. Only the tradecraft, applied legitimately.
+## Not this skill
 
-**Mode detection:**
+| The request | Goes to |
+|---|---|
+| Negotiate, establish authority, navigate power dynamics, plan a campaign | vector |
+| What is really going on in a situation, weigh competing explanations | intelligence-analyst |
+| Research a person, company or topic from sources | deep-research-orchestrator |
+| Due diligence, forecasts, stress test a plan | oracle |
+| Check whether a claim or story is true | fact-check |
+| Threat model for an app or system | threat-model |
+| Check a third-party skill or plugin before install | airlock |
+| Write a message or post | autonomous-writer |
+
+## Inputs
+
+- The situation and the person, organisation or objective, in the user's own words.
+- What he already knows and how he knows it (met, heard, read).
+- What he is trying to achieve, and what he will not do.
+
+## Procedure
+
+1. **Boundary check first.** Confirm the request is legitimate: the person or group is a professional contact or counterparty, information used is public or freely given, and the aim is honest. If any part involves lying to a partner, client or ally, coercion or pressure, impersonation or pretexting, covertly monitoring someone's private communications or accounts, targeting a private individual with no professional link, or extracting information the person owes a duty to protect, decline that part, say why in one line, and offer the honest version of the goal.
+2. **Pick the module** from the table. Work from facts the user can verify, not impressions.
+3. **Apply it** using the summaries below and the templates in `references/`.
+4. **Separate evidence from inference.** For every conclusion say what it rests on and how it could be wrong. A feeling is a lead to check, not a finding.
+5. **Recommend the least intrusive next step**: verify through documents or a mutual contact, ask directly, or disengage. Direct and open is the default.
+6. **Return the output** in the shape for that module, with confidence and what would change it.
+
 | Task | Module |
-|------|--------|
-| Build a key relationship | → Case Officer + Agent Handling |
-| Detect manipulation/lies | → Counterintelligence + Deception Detection |
-| Shape how you're perceived | → Influence Ops + Cover Legend |
-| Extract information naturally | → Elicitation Engine |
-| Map who connects to whom | → Network Mapping |
-| Pursue a specific objective | → Targeting Cycle |
-| Misdirect competitors | → Strategic Deception |
-| Protect your plans | → Denial & Deception |
-| Read signals and patterns | → SIGINT Analyst |
-
----
-
-## MODULE 1: Case Officer — Relationship Development
-
-### The Recruitment Cycle
-
-**SPOT** — Who is worth developing?
-```
-TARGET PROFILE:
-- Access: What intelligence, opportunity, or influence do they hold?
-- Reachability: Can Shaun access them given current position?
-- Value trajectory: Will this relationship compound over time?
-TIERS: Tier 1 (direct critical access) / Tier 2 (indirect high value) / Tier 3 (ambient network)
-```
-
-**ASSESS** — Understand before approaching
-```
-Motivations (MICE):
-M — Money/resources: Career-focused, financially-driven
-I — Ideology/mission: Values-led, purpose-driven
-C — Coercion (rare): Under pressure (alleviate, don't exploit)
-E — Ego/recognition: Status-conscious, recognition-hungry
-
-Most professional relationships: Ideology + Ego
-Misread motivation = destroyed relationship. Correctly read = every interaction lands.
-```
-
-**DEVELOP** — Engineer the arc
-- First contact: Low commitment, high value to them. Give before taking.
-- Rapport: Genuine over tactical. Remember specifics. Consistency.
-- Investment: Each interaction slightly more invested than the last.
-- Operational: Relationship strong enough to make asks. Natural, not transactional.
-
-**HANDLE** — Ongoing management (see Agent Handling module)
-
-### Handling Note (after every significant interaction)
-```
-CONTACT / DATE / METHOD / DURATION
-INTELLIGENCE GATHERED:
-RELATIONSHIP INDICATORS: [Warmer/cooler?]
-ACTIONS PROMISED: [Must be delivered — no exceptions]
-NEXT CONTACT: [When / occasion / what to bring them]
-```
-
----
-
-## MODULE 2: Agent Handling — Long-Term Relationship Management
-
-### Relationship States
-- **Development**: Active cultivation, increasing depth, building trust
-- **Active**: Performing at value, mutual trust established
-- **Dormant**: Intact but inactive — reactivation pathway maintained
-- **Terminated**: Ended — lessons documented
-
-### Contact Cadence
-| Tier | Frequency | Maximum Gap |
-|------|-----------|-------------|
-| 1 (inner circle) | Weekly | 3 weeks |
-| 2 (high-value professional) | Monthly | 6 weeks |
-| 3 (network maintenance) | Quarterly | Annually |
-
-**Rule: Maintaining is always easier than re-establishing.**
-
-### Relationship Health Indicators
-```
-HEALTHY: They initiate / share voluntarily / make introductions / advocate in absentia
-STRESSED: Slowing responses / shorter / declining meetings / reduced sharing
-TROUBLED: No initiation / pro forma only / closer to competitor
-TRIAGE: Healthy→maintain / Stressed→increase frequency + value / Troubled→direct conversation or reclassify
-```
-
-### Motivation Maintenance
-Motivations drift. Audit quarterly: Is the original motivation still active? What do they now value? What would reinvigorate their side of the relationship?
-
-### The Handling File
-```
-SUBJECT / TIER / CURRENT STATE
-MOTIVATION PROFILE: [MICE assessment]
-ACTIVE COMMITMENTS: [What Shaun has promised and when]
-NEXT CONTACT: [Date / occasion / value Shaun brings]
-INTELLIGENCE VALUE: [What access this relationship provides]
-RELATIONSHIP RISK: [What threatens it]
-```
-
----
-
-## MODULE 3: Elicitation Engine
-
-**Goal: Extract specific information through natural conversation without the source realising they're being debriefed.**
-
-### The Seven Techniques
-
-**1. Acknowledge Expertise** — "You obviously know this space better than most... what's the real picture?"
-*Mechanism: Flattery + open question → target demonstrates expertise → information flows*
-
-**2. Deliberate False Statement** — State something incorrect. Correcting errors bypasses information-protection instincts.
-*Mechanism: Correction impulse is socially compulsive*
-
-**3. Naïve Question** — Present as less informed than you are. People share freely with someone they're educating.
-*Pattern: Easy questions → sharing mode established → escalate toward target*
+|---|---|
+| Build or keep a relationship | Relationships (`references/relationships.md`) |
+| Learn something through conversation | Honest elicitation (`references/elicitation-and-detection.md`) |
+| Assess whether someone is straight with you | Deception check and counterintelligence |
+| Map who connects to whom | Network mapping (`references/mapping-and-signals.md`) |
+| Read patterns in behaviour and communication | Signals (`references/mapping-and-signals.md`) |
+| Pursue a defined objective | Targeting cycle |
+| Protect plans and information | Protection (`references/protection-and-influence.md`) |
+| Shape how you are perceived | Influence and positioning (`references/protection-and-influence.md`) |
 
-**4. Mutual Sharing** — Provide genuine value first. Then ask for their read.
-*Mechanism: Reciprocity. You shared → they're prompted to reciprocate*
+## Module summaries
 
-**5. Assumed Knowledge** — "I heard that [vague version]... is that the full picture?"
-*Mechanism: Target either confirms or corrects. Either way, intelligence flows.*
+### Relationships
 
-**6. Provocative Statement** — State something they'll want to challenge.
-*Mechanism: Desire to correct a wrong view triggers disclosure*
+Spot who is worth developing (access to knowledge or opportunity, reachability, whether it compounds), assess what they want before approaching, develop in an arc (give before asking, genuine rapport, small increasing investment, then natural asks), then maintain.
 
-**7. Direct Question Buried in Context** — Never lead with the direct question. Build rapport, ask it in the middle of a flow, continue past it immediately.
+Motivation check, MICE: money or resources, ideology or mission, coercion (a pressure to relieve, never to exploit), ego or recognition. Most professional relationships are mission and recognition. A misread motive damages the relationship.
 
-### Elicitation Plan
-```
-INTELLIGENCE OBJECTIVE: [What specific information is wanted?]
-PRIMARY TECHNIQUE: [Which fits this target and context?]
-COVER: [Natural reason for this conversation]
-OPENING → TRANSITION → COLLECTION MOMENT → EXFILTRATION
-CONTINGENCY: [Backup if primary fails]
-```
+Tiers and cadence: tier 1 inner circle weekly, gap no more than 3 weeks; tier 2 high-value professional monthly, 6 weeks; tier 3 network quarterly, annually at most. Maintaining is easier than re-establishing. Deliver every commitment made. Audit motivation each quarter, since it drifts.
 
----
+Health: healthy when they initiate, share, introduce and advocate when you are absent; stressed when replies slow and meetings are declined (raise frequency and value); troubled when there is no initiation and only formal contact (have a direct conversation or reclassify). After each significant contact write a note. Keep contact files to professional facts you would be comfortable showing the person.
 
-## MODULE 4: Deception Detection
+### Honest elicitation
 
-**The shift: Stop looking for "lying tells." Look for cognitive load indicators and consistency failures.**
+Goal: learn what people are willing to share through ordinary conversation. Use acknowledgement of expertise, plain questions, mutual sharing of real value, a tentative stated view that invites correction, and a direct question placed mid-flow. Stay on topics they are free to discuss. If they deflect, stop. Never pursue confidential employer or client information or private personal details. Full list and plan template in the reference.
 
-### DIRTS Framework
-```
-D — DISCREPANCY: Internal inconsistencies / contradicts known facts / words vs. actions
-I — INCONGRUENCY: Emotional response doesn't fit content / detail level mismatch / body-language conflict
-R — REACTION: Defensiveness without cause / qualification inflation / subject-changing
-T — TIMING: Unusual delays on specific questions / over-prepared answers / pace changes
-S — SCOPE: Unexplained gaps / avoidance of time periods / resistance to elaboration
-```
+### Deception check and counterintelligence
 
-### High-Confidence Verbal Indicators
-```
-□ Distancing language ("that person" instead of name)
-□ Qualified denials ("I don't think I would ever..." vs "I didn't")
-□ Spontaneous over-emphasis ("I was ABSOLUTELY NOT there")
-□ Answering question with question ("Why would you ask that?")
-□ Passive construction on deceptive content ("mistakes were made")
-□ Invoking reputation in lieu of evidence ("I'm an honest person")
-□ Rich detail everywhere except the key claim
-```
+Stop looking for lying tells and look for cognitive load and consistency failures. Use DIRTS: discrepancy, incongruence, reaction, timing, scope. Compare against the person's baseline and against facts you can verify. Deviations are indicators, not proof; stress is not deception. Triangulate with documents and independent sources before concluding anything, and do not accuse on indicators alone.
 
-### Baseline-Deviation Method
-1. Establish natural baseline in non-sensitive conversation
-2. Note: pace, eye contact, gesture patterns, detail level, emotional range
-3. Introduce topic — monitor for changes from baseline
-4. Ask calibration questions (answers you know) on the same topic
-5. Ask target questions — compare to baseline and calibration
+Hostile-interest indicators: questions that keep probing the same topic in different forms, flattery paired with information-seeking, interest in your routines, plans, finances or decision process, a story that is too perfectly aligned with what you want or that changes between tellings. Assess with: anomaly inventory, does the stated reason make sense, what would they gain from deceiving you, verdict (GENUINE, SUSPICIOUS, HIGH RISK) and action (proceed, verify, disengage, monitor).
 
-**Deviations = indicators, not proof. Stress ≠ deception. Triangulate.**
+### Network mapping
 
----
+Nodes in three tiers (core, secondary, peripheral). Edges typed (authority, influence, information, resource, trust, historical, adversarial), with strength and direction. Look for brokers between clusters (highest strategic value), single points of failure, trusted advisers to decision-makers, and quiet influencers. Name the shortest honest route from Shaun's current position to the objective node: an introduction, a shared project, a public contribution.
 
-## MODULE 5: Network Mapping
+### Targeting cycle (find, fix, finish, exploit, analyse, disseminate)
 
-### Collection Framework
-```
-NODES — identify all actors:
-Tier 1: Core (central figures, formal leaders)
-Tier 2: Secondary (supporting players with access or capability)
-Tier 3: Peripheral (edges of the network)
+Use it as a loop for any defined objective.
+- Find: define the objective precisely, plan collection, state the observable criteria for "found".
+- Fix: confirm it is genuine and establish access; criteria are verified and reachable.
+- Finish: act, with timing, approach and contingencies; complete when the outcome is known.
+- Exploit: take the secondary benefits immediately (relationships opened, proof of capability).
+- Analyse: what worked, what failed, what is now known.
+- Disseminate: who needs the lesson, what to record, whether to start the next cycle.
 
-EDGES — map all relationships:
-Type: Authority / Influence / Information / Resource / Trust / Historical / Adversarial
-Strength: Strong / Moderate / Weak / Unknown
-Direction: A→B / B→A / Bidirectional
-```
+### Protection
 
-### Centrality Analysis
-- **Degree**: Most connections — broad reach, not always deep influence
-- **Betweenness**: Between clusters — brokers who control information flow ← highest strategic value
-- **Closeness**: Reaches everyone fastest — information spreaders
-- **Influence**: Whose opinion changes decisions — often underestimated quiet nodes
+Classify information (protect absolutely: future positions, unreleased products, strategy, financial parameters, methods; protect significantly: competitive findings, targets, capability gaps; manage carefully: direction, priorities; managed public: published work). For each critical item ask how someone could learn it (people, digital traces, inference, third parties), apply a denial measure and note the residual risk. Every person with access is another route out, and the commonest leak is casual conversation, not hostile collection. Apply need-to-know. OPSEC loop: identify critical information, threats, vulnerabilities, risk (probability times impact), countermeasures.
 
-### Vulnerability and Leverage
-```
-VULNERABILITIES:
-□ Single points of failure (removal fragments network)
-□ Bridge nodes (defection separates clusters)
-□ Weak edges (can be severed or exploited)
+### Influence and positioning
 
-LEVERAGE POINTS:
-□ Betweenness broker — access them = access to all clusters
-□ Trusted advisor to decision-maker — influence them = influence the decision
-□ Information node — who everyone tells things to
+Only true information: selective emphasis and framing, never fabrication. Define the audience, what they believe now and trust, the belief or action wanted and how to see it change. Build a core narrative with three factual proof points, the likely objections and who is a credible messenger. Close the gap between current and desired perception with a sequence of true proof points. Positioning: one sentence that places Shaun correctly, backed by track record and demonstrated skill, and check what someone finds when they research him. Different audiences get different emphasis of the same authentic person (markets and Cerberus; AI and prompt engineering; client delivery). Share information at a level suited to the audience.
 
-ENTRY PATH: Minimum steps from Shaun's current position to objective node
-```
+## Output
 
----
+Per module: a relationship plan and contact note; an elicitation plan; a CI assessment with verdict, evidence and recommended action; a network map with brokers, risks and entry route; a stage-by-stage cycle with exit criteria; a protection table; or a positioning statement with proof points. Always include confidence and "what would change this".
 
-## MODULE 6: Targeting Cycle (F3EAD)
+## Rules that always hold
 
-**The most rigorous objective prosecution framework ever built — applied to any high-value target.**
+- No false statements to partners, clients or allies. No coercion. No impersonation or pretexting. No covert monitoring of private communications or accounts.
+- Use public or freely given information. Do not dig into the private life of someone with no professional link to Shaun, and stop if a person appears vulnerable.
+- Concealment is allowed (not disclosing, need-to-know, timing). Planting false impressions is not. Do not run feints, false indicators or managed leaks.
+- Indicators are not proof. Verify before acting on a suspicion, and prefer asking directly.
+- Information about people stays factual and professional, and is kept only as long as the relationship needs it.
+- Everything is defensive or open relationship-building. If the goal drifts toward harming or manipulating a person, stop and say so.
 
-```
-FIND: Define target precisely / Collection plan / Find complete when: [observable criteria]
+## References
 
-FIX: Confirm target is genuine / Maintain contact so it doesn't escape / Fix complete when: [verified + access established]
-
-FINISH: Execute / Timing conditions / Approach / Contingencies / Complete when: [outcome known]
-
-EXPLOIT: Intelligence gathered / Relationships accessed / Proof of capability / Secondary opportunities
-(Exploit immediately after Finish — delay costs value)
-
-ANALYSE: What worked / What failed / Intelligence collected / Updated target picture
-
-DISSEMINATE: Who needs this learning / Knowledge captured / Cycle improvement / Next cycle initiated?
-```
-
-**The power: each cycle feeds the next. Intelligence compounds. Targeting improves continuously.**
-
----
-
-## MODULE 7: Counterintelligence
-
-### Hostile Interest Indicators
-```
-ELICITATION: Questions consistently probing specific topics / flattery + info-seeking / artificial intimacy / returning to same topics in different forms
-
-TARGETING: Interest in routines, plans, future actions / network and relationships / financial situation / decision-making process
-
-DECEPTION: Information too perfectly aligned with what you want to hear / story changes between tellings / reluctance to provide verifiable details
-```
-
-### CI Assessment
-```
-ANOMALY INVENTORY: [List everything that feels wrong]
-COVER STORY ANALYSIS: Does the stated reason make logical sense? Alternative explanations?
-INTELLIGENCE INTEREST: What would this person gain from deceiving you?
-VERDICT: GENUINE / SUSPICIOUS / HIGH RISK
-ACTION: Proceed / Verify / Disengage / Monitor
-```
-
-### OPSEC Process
-1. Identify critical information (what, if known, damages interests)
-2. Analyse threats (who benefits from knowing it)
-3. Analyse vulnerabilities (how could they collect it)
-4. Assess risk (probability × impact)
-5. Apply countermeasures (specific actions)
-
----
-
-## MODULE 8: Influence Operations
-
-### IOCM Framework
-```
-IDENTIFY: Target audience / current beliefs / values / trusted sources / what must be true for them to believe what you want
-
-OBJECTIVES: Specific belief, decision, or action / measurable indicator / timeline
-
-CAMPAIGN: Narrative / proof points / channels / messengers / sequencing (what must be believed before the next belief is possible)
-
-MEASURE: Indicators of belief change / indicators of resistance
-```
-
-### Narrative Architecture
-```
-CORE NARRATIVE: [One paragraph — if believed, produces desired outcome]
-PILLARS: [3 factual proof points that support it]
-ENEMIES: [What could undermine it + pre-emption strategy]
-MESSENGER STRATEGY: [Who carries this / why they're credible to target audience]
-```
-
-### Perception Gap Analysis
-```
-CURRENT PERCEPTION: [What they actually believe — be honest]
-DESIRED PERCEPTION: [Specific and achievable]
-GAP: [The distance]
-BRIDGING STRATEGY: [Sequence of exposures and proof points / timeline]
-```
-
-**Ethical constraint: Only true information. Selective disclosure and framing, not fabrication.**
-
----
-
-## MODULE 9: Cover and Legend
-
-### Core Legend Design
-```
-IDENTITY STATEMENT: [One sentence that immediately positions Shaun correctly]
-SUPPORTING ELEMENTS: Track record / Credentials (demonstrated, not certified) / Social proof / Origin story
-VERIFICATION LAYER: What does someone find when they research Shaun? Does it match?
-```
-
-### Context-Specific Positioning
-Different audiences receive different presentations of the same authentic person:
-- Financial/trading: Cerberus, market operator, analytical rigour
-- AI/tech: Prompt engineer, agent architect, commercial AI developer
-- Commercial/clients: Results-focused expert who delivers
-
-### Compartmentalisation
-```
-FULL ACCESS (max 2-3): Plans, resources, vulnerabilities, real positions
-PROFESSIONAL ACCESS: Capabilities, general direction, track record
-PUBLIC LEGEND: Core identity only — controlled narrative
-RULE: Information shared at level X should only be appropriate for level X+1
-```
-
----
-
-## MODULE 10: SIGINT Analysis
-
-### Signal Types
-- **COMINT**: What is said + what is conspicuously NOT said / absence of expected denials
-- **ELINT**: Digital behaviour — posting frequency, response times, platform migration, connection patterns
-- **MASINT**: Behavioural signatures — hiring patterns, partnership moves, product evolution, departure patterns
-
-### Traffic Analysis
-```
-VOLUME: Sudden increase = urgency/new initiative/stress / Decrease = silence or disruption
-TIMING: When communications happen — late-night = urgency/stress / pattern shifts = situation changed
-DIRECTION: New channels forming = new relationships / old channels quiet = relationship degradation
-FREQUENCY: Increasing topic frequency = growing concern or opportunity
-```
-
-### Intelligence Picture (Synthesis)
-```
-SIGNAL INVENTORY: [All collected signals with dates and sources]
-PATTERNS: [What emerges across multiple signals?]
-HYPOTHESES: H1 / H2 [Most vs alternative consistent picture]
-SIGNAL-TO-HYPOTHESIS MAPPING: [Which signals support each?]
-ASSESSMENT: [Most likely picture / confidence / what additional signals to watch]
-```
-
----
-
-## MODULE 11: Strategic Deception
-
-**Legitimate competitive misdirection — applied to adversaries and competitors only, never partners or clients.**
-
-### The Story
-The coherent false/misleading picture you want adversaries to hold:
-- Consistent with what they can verify
-- Internally coherent
-- Supported by observable indicators
-- More compelling than the true picture
-
-### Techniques
-- **Feint**: Visible preparations toward secondary objective → draw attention from real objective
-- **False Indicator**: Visible activity signalling a capability or intention you don't have/plan
-- **Cover Story**: Plausible explanation for real activity that obscures true purpose
-- **Managed Leak**: "Confidential" information reaching adversary through an apparently accidental channel
-- **Silence as Signal**: Conspicuous absence of expected signals — let adversaries over-interpret
-
-### Story Integrity Audit
-```
-□ All visible indicators consistent with the story?
-□ Any real-world activity creating contradicting signals?
-□ Timeline still consistent?
-COMPROMISE INDICATOR: Adversary behaviour suggests they're on the true picture
-```
-
----
-
-## MODULE 12: Denial and Deception
-
-### Information Classification
-```
-TIER 1 — PROTECT ABSOLUTELY: Future positions, unreleased products, strategic plans, financial parameters, analytical frameworks
-TIER 2 — PROTECT SIGNIFICANTLY: Competitive intelligence gathered, methodology, BD targets, capability gaps
-TIER 3 — MANAGE CAREFULLY: General direction, current priorities, key relationships
-TIER 4 — MANAGED PUBLIC: Published work, demonstrated capabilities, general philosophy
-```
-
-### Collection Vector Analysis
-For each critical asset: How could adversary learn this? (Human sources / digital traces / inference / third-party disclosure) → Denial measure → Residual vulnerability
-
-### Compartmentalisation Discipline
-Every person with access creates a new collection vector. Apply need-to-know strictly. The most common source of leaks is inadvertent disclosure through casual conversation, not hostile collection.
-
----
-
-## Doctrine Integration
-
-The most powerful applications combine modules:
-
-**Pre-engagement package**: OSINT (Sovereign Mind) → Pattern of Life → Network Mapping → Elicitation plan → Influence Ops positioning
-
-**Relationship campaign**: Case Officer (spot/assess/develop) → Agent Handling (maintain) → SIGINT (monitor signals) → Counterintel (detect threats)
-
-**Competitive operation**: Corporate Intel (Sovereign Mind) → Network Mapping → Strategic Deception → Denial & Deception → F3EAD targeting
+- `references/relationships.md`: SPOT, ASSESS, DEVELOP, maintain; contact note and file templates; tiers and cadence.
+- `references/elicitation-and-detection.md`: honest elicitation techniques and plan, DIRTS indicators, baseline method.
+- `references/mapping-and-signals.md`: network mapping and centrality, signal and traffic analysis, intelligence picture template.
+- `references/protection-and-influence.md`: information tiers, collection vectors, influence campaign, narrative and perception-gap templates, positioning.
