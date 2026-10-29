@@ -1,154 +1,60 @@
 ---
 name: deck-builder
-description: >
-  Expert skill for building actual PowerPoint presentation files (.pptx) with real narrative structure, coherent slide architecture, and professional layout logic — not just bullet-point dumps. Use this skill whenever the user wants to create a slide deck, pitch deck, presentation, briefing, workshop slides, investor deck, training materials, or any .pptx deliverable. Trigger on: "build me a deck on...", "create a presentation about...", "make slides for...", "I need a pitch deck for...", "design a briefing deck about...", "create a PowerPoint on...", "make investor slides for...", "build a workshop deck for...", or any request where the output is a slide presentation file. Also trigger when the user has a report or document and wants it converted into presentation format. Never summarise content as chat bullets when a proper .pptx file is the right deliverable.
+description: "Builds a real PowerPoint file (.pptx) with a narrative spine, one claim per slide and consistent layout, or converts a report or notes into a deck. Use when he says 'build me a deck on', 'create a presentation about', 'make slides for', 'pitch deck', 'investor deck', 'briefing deck', 'workshop slides', 'training materials', 'create a PowerPoint', or hands over a document to turn into slides. Not for slides as a web page (use showpiece), posters or static art (canvas-design), a written report (folio or autonomous-writer), or editing a deck's wording only (deslop)."
 ---
 
-# Deck Builder
+# deck-builder
 
-Builds narrative-driven PowerPoint files with real slide logic — not bullet lists with a .pptx extension.
+Produces a .pptx file whose slides follow a story and each make one point, plus a one-line-per-slide summary. Narrative templates and the python-pptx recipe are in `references/`.
 
----
+## Use when
 
-## Core Principle
+- A slide deck, pitch, briefing or training pack is wanted as a file.
+- A report, notes or an outline needs converting to slides.
 
-A great deck tells a story. Every slide has **one job**. The narrative pulls the audience through to a conclusion. This skill produces actual .pptx files, not chat outlines.
+## Not this skill
 
----
+| The request | Goes to |
+|---|---|
+| An interactive or web-based presentation page | showpiece |
+| A poster or single static visual | canvas-design |
+| An evidence-led written report or poster with citations | folio |
+| Write the narrative copy or speaker script as prose | autonomous-writer |
+| Fix wording on existing slides without rebuilding | deslop |
 
-## Phase 1: Intake
+## Inputs
 
-Before building:
+1. Purpose: inform, persuade, sell, teach or brief.
+2. Audience: investors, executives, clients, class, team, public.
+3. Delivery: presented live, or read alone (read-alone decks need more text per slide).
+4. Length: slide count; default 10 to 15.
+5. Source material: notes, report or bullets. If none, ask for it or state that content is drafted from stated assumptions.
+6. Tone and branding: colours, fonts, logo. Defaults in `references/build.md`.
 
-1. **Purpose** — What is this deck supposed to achieve? (Inform, persuade, sell, teach, brief?)
-2. **Audience** — Who's in the room? (Investors, executives, clients, team, general public?)
-3. **Context** — Presented live (speaker-led) or sent as a read-alone deck?
-4. **Length** — Approximate slide count? (Default: 10–15 for most decks)
-5. **Content** — Does the user have material to work from? Ask them to paste notes, a report, or bullet points.
-6. **Tone** — Corporate formal, startup energy, academic, analytical?
-7. **Branding** — Any specific colours, fonts, logo to include?
+Ask only for what is missing and changes the deck.
 
----
+## Procedure
 
-## Phase 2: Narrative Architecture
+1. **Choose the narrative spine** from `references/narratives.md` (pitch, executive briefing, educational, investor) and write the slide list as one claim-headline per slide before building anything.
+2. **Design each slide to the rules:** one idea per slide; the headline states a claim ("Market growing 40% a year with no dominant player", not "Market analysis"); at most 5 bullets of at most 7 words each, otherwise split the slide; one chart per slide with a conclusion as its title, labelled axes and a source; hierarchy of title, body, callout, footnote. Slide types to draw on: title, section divider, statement, three-up, data, quote, timeline, comparison.
+3. **Build the file.** If the host has a pptx file skill, use it for file mechanics. Otherwise use python-pptx as set out in `references/build.md`. Use real layouts and placeholders, a consistent font stack, 16:9.
+4. **Check the file.** Reopen it, confirm the slide count, that no placeholder or lorem text remains, and that no text overflows a box. Render to images if a renderer is available and look at them; if not, say the visual check was not done.
+5. **Deliver** the file with a one-line-per-slide summary, a list of slides that need real images, client data or live charts, and an offer to revise structure, depth or design.
 
-Every deck needs a narrative spine before a single slide is designed. Choose the right structure:
+## Output
 
-### Pitch / Persuasion Deck
-```
-1. Hook (the problem or opportunity)
-2. Why Now (urgency / context)
-3. The Solution
-4. How It Works (mechanism)
-5. Proof / Evidence
-6. Business Model / Value Proposition
-7. Traction / Social Proof
-8. The Ask / Call to Action
-```
+- The .pptx file at a stated path.
+- Slide-by-slide summary, one line each.
+- Open items: images, data and facts that are placeholders.
 
-### Executive Briefing
-```
-1. Situation (what's happening)
-2. Complication (why it matters)
-3. Key Question (what we need to answer)
-4. Analysis (3–5 key findings)
-5. Recommendation
-6. Next Steps
-```
+## Rules that always hold
 
-### Informational / Educational
-```
-1. Title & Agenda
-2. Context / Why This Matters
-3. Core Content (3–5 thematic sections)
-4. Key Takeaways
-5. Q&A / Resources
-```
+- A deck is a file, not chat bullets, unless he asks for an outline only.
+- Numbers on slides come from his material or a source seen in this session; otherwise mark them as placeholders on the slide and in the open items. Do not invent traction, market sizes, customers or testimonials.
+- Each slide connects to the next; if the story breaks between two slides, fix the spine, not the wording.
+- Data is attributed on the slide.
 
-### Investor Deck (Sequoia-style)
-```
-1. Company Purpose (one sentence)
-2. Problem
-3. Solution
-4. Why Now
-5. Market Size
-6. Product
-7. Business Model
-8. Traction
-9. Team
-10. The Ask
-```
+## References
 
----
-
-## Phase 3: Slide Design Principles
-
-### One Idea Per Slide
-- Every slide has a **headline that makes a claim**, not just names a topic
-- Bad: "Market Analysis" → Good: "Market Growing 40% YoY With No Dominant Player"
-
-### Visual Hierarchy
-- Title: largest, boldest
-- Supporting content: secondary
-- Data / callout: emphasised differently
-- Source / footnote: smallest
-
-### Bullet Point Rules
-- Maximum 5 bullets per slide
-- Maximum 7 words per bullet
-- If you need more, it's two slides
-
-### Data Slides
-- One chart per slide
-- Chart title states the conclusion: "Revenue Doubled in 12 Months" not "Revenue Chart"
-- Always label axes and include a data source
-
-### Slide Types to Use
-- **Title slide** — Company/topic + presenter + date
-- **Section divider** — Full-bleed colour with section title
-- **Statement slide** — Single large claim, no bullets
-- **Three-up** — Three parallel points with icons/headers
-- **Data slide** — Chart + interpretive headline
-- **Quote slide** — Large pull quote + attribution
-- **Timeline** — Horizontal progression
-- **Comparison** — Two-column contrast
-
----
-
-## Phase 4: File Generation
-
-→ Read `/mnt/skills/public/pptx/SKILL.md` before generating. Build with python-pptx:
-- Set slide dimensions (16:9 default: 13.33" × 7.5")
-- Apply consistent font stack (Calibri or Arial for safe cross-platform rendering)
-- Use slide layouts properly (Title Slide, Title+Content, Blank, Section Header)
-- Consistent colour palette (pull from brief or use professional defaults)
-- Placeholder text never left in final output
-
-**Default professional palette (if no branding specified):**
-- Primary: `#1B2A4A` (dark navy)
-- Accent: `#2E86AB` (blue)
-- Highlight: `#F5A623` (amber)
-- Background: `#FFFFFF`
-- Body text: `#333333`
-
----
-
-## Phase 5: Delivery
-
-1. Generate to `/mnt/user-data/outputs/filename.pptx`
-2. Use `present_files` to deliver
-3. Provide slide-by-slide summary (one line each)
-4. Note any slides that need real images, client data, or live charts
-5. Offer to revise narrative structure, expand sections, or adjust design
-
----
-
-## Quality Checklist
-
-- [ ] Every slide has a headline that makes a claim or sets up the content
-- [ ] No slide has more than 5 bullets
-- [ ] Narrative flows — each slide connects to the next
-- [ ] Data is attributed
-- [ ] Title slide includes all required information
-- [ ] File opens in PowerPoint without layout errors
-- [ ] No Lorem Ipsum or template placeholder text remaining
+- `references/narratives.md`: the four story structures.
+- `references/build.md`: python-pptx settings, default palette, fallback checks.

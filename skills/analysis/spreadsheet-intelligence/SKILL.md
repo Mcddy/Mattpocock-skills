@@ -1,129 +1,60 @@
 ---
 name: spreadsheet-intelligence
-description: >
-  Expert skill for building intelligent, functional Excel/spreadsheet files (.xlsx) — not just tables, but working tools with formulas, named ranges, conditional formatting, charts, and structured data models. Use whenever the user wants a spreadsheet that does something: financial models, trackers, calculators, dashboards, budget tools, trading journals, KPI trackers, P&L sheets, or any .xlsx that needs to be more than static data. Trigger on: "build me a spreadsheet for...", "create an Excel file that...", "make a tracker for...", "I need a financial model...", "build a budget spreadsheet...", "create a trading journal in Excel...", "make a calculator for...", "I need a dashboard in Excel...", or any request for a functional .xlsx deliverable. Also trigger when the user uploads a broken spreadsheet and wants it fixed or enhanced. Never produce a table in chat when an actual working spreadsheet file is the right deliverable.
+description: "Builds working Excel files (.xlsx) that calculate, not just store: financial models, trackers, calculators, dashboards, budgets, trading journals, KPI and P&L sheets, with formulas, validation, conditional formatting, charts and protected cells. Also repairs or extends a broken or messy spreadsheet. Use when he says 'build me a spreadsheet for', 'create an Excel file that', 'make a tracker', 'financial model', 'budget spreadsheet', 'trading journal in Excel', 'make a calculator', 'dashboard in Excel', or uploads a spreadsheet to fix. Not for analysing the data inside a file (use data-intelligence), forecasting (series-lab), charts for a report (folio), or a web dashboard (showpiece)."
 ---
 
-# Spreadsheet Intelligence
+# spreadsheet-intelligence
 
-Builds functional, intelligent Excel files — tools that calculate, track, visualise, and model, not just store data.
+Produces an .xlsx that is a tool: inputs in marked cells, logic in formulas, outputs on a summary sheet. Formula, validation and layout details are in `references/`.
 
----
+## Use when
 
-## Core Principle
+- A tracker, model, calculator, budget, journal or dashboard is wanted as a spreadsheet file.
+- An existing workbook is broken, hard-coded or needs new logic.
 
-A spreadsheet is not a table with a file extension. It is a **computational tool**. Every .xlsx this skill produces should contain logic, not just layout.
+## Not this skill
 
----
+| The request | Goes to |
+|---|---|
+| Analyse, clean or find patterns in a dataset | data-intelligence |
+| Forecast a time series | series-lab |
+| Fit a predictive model | model-lab |
+| Write up findings as a report | folio |
+| Interactive web dashboard | showpiece |
 
-## Phase 1: Intake
+## Inputs
 
-Establish before building:
+1. Purpose: track, calculate, model, compare or visualise.
+2. Inputs: manual entry, imported data, links between sheets.
+3. Outputs wanted: totals, charts, flags, summaries.
+4. Scale and use: rows, sheets, users, daily or one-off.
+5. Who edits it: formulas, or only the highlighted cells.
+6. Existing data or workbook to load, if any.
+7. Where it will be opened (Excel, Sheets, LibreOffice), because dynamic array functions are not universal.
 
-1. **Purpose** — What should this spreadsheet *do*? (Track, calculate, model, compare, visualise?)
-2. **Data inputs** — What goes *in*? (Manual entry, imported data, formulas from other sheets?)
-3. **Outputs required** — What should the user *see* or *get out*? (Totals, charts, summaries, flags?)
-4. **Scale** — How many rows/sheets/users? Daily use or one-off?
-5. **Skill level of the end user** — Will they edit formulas or just fill in highlighted cells?
-6. **Any existing data** — Do they have data to load in, or starting from scratch?
+## Procedure
 
----
+1. **Design the layout before building.** Simple tracker: frozen header, table, summary. Complex file: separate Dashboard, Inputs, Calculations, Data and Lookup sheets. Financial model: Assumptions, then Calculations, then Outputs. Write the sheet list and the main formulas in a few lines.
+2. **Pick the functional elements the file needs** from `references/elements.md`: formulas, validation, conditional formatting, charts, named ranges, protection. Include only what serves the purpose.
+3. **Build the file.** If the host has an xlsx file skill, use it for file mechanics. Otherwise use openpyxl, with frozen headers, tables for data ranges, proper number formats and the colour convention in `references/elements.md`.
+4. **Test it.** Reopen the file and recalculate if a spreadsheet engine is available (LibreOffice headless works); check no cell shows #REF!, #DIV/0!, #N/A or #NAME?. Enter two or three known cases and compare results with hand calculation. If recalculation is not possible, say the file was not recalculated and that openpyxl does not compute values.
+5. **Repair mode.** For a broken workbook, copy it first and never overwrite the original. List the faults found (broken references, hard-coded values where a formula belongs, inconsistent formulas down a column, mixed types, volatile or circular logic) before fixing them, then fix and record each change on a Notes sheet.
+6. **Deliver** with a short guide: what to enter, what calculates, how to read the outputs, and any manual steps or limits.
 
-## Phase 2: Architecture Design
+## Output
 
-### Sheet Structure Patterns
+- The .xlsx at a stated path.
+- A short how-to (entry cells, automatic cells, reading the results).
+- A change list when an existing workbook was repaired.
 
-**Model-View-Data separation (recommended for complex files):**
-```
-Sheet 1: DASHBOARD     — Summary view, charts, KPIs (read-only cells)
-Sheet 2: INPUTS        — User-entry cells only (clearly highlighted)
-Sheet 3: CALCULATIONS  — All formula logic (can be hidden)
-Sheet 4: DATA          — Raw data tables (structured as Excel Tables)
-Sheet 5: LOOKUP        — Reference tables, drop-down sources
-```
+## Rules that always hold
 
-**Simple tracker (single-sheet):**
-```
-Header row (frozen)
-Data rows (Table format)
-Summary section (top or bottom)
-```
+- Every file contains logic, not just layout. A table with a file extension is not the deliverable.
+- No hard-coded numbers inside formulas; use input cells or named ranges.
+- Input cells are marked, formula cells are locked, errors are handled cleanly.
+- For trading journals and P&L sheets, state the formula assumptions (fees, currency, position sizing basis) on the sheet. They are record-keeping tools, not advice.
+- Do not overwrite the user's original file.
 
-**Financial model:**
-```
-Assumptions sheet → Calculations sheet → Outputs/Reports sheet
-```
+## References
 
----
-
-## Phase 3: Functional Elements to Include
-
-Always consider which of these the file needs:
-
-### Formulas
-- SUM, AVERAGE, COUNT for aggregation
-- IF, IFS, SWITCH for logic
-- VLOOKUP / INDEX-MATCH / XLOOKUP for lookups
-- DATE, YEAR, MONTH, EDATE for date logic
-- IFERROR for clean error handling
-- Dynamic arrays (FILTER, SORT, UNIQUE) for modern Excel
-
-### Data Validation
-- Drop-down lists for controlled input fields
-- Number/date range restrictions
-- Input messages and error alerts
-
-### Conditional Formatting
-- Traffic light (red/amber/green) for KPIs
-- Data bars for visual comparison
-- Highlight rules for over-budget, overdue, flagged rows
-
-### Charts
-- Select chart type based on data: Line (trend), Bar (comparison), Pie (composition — use sparingly), Scatter (correlation)
-- Always title charts and label axes
-- Place on dashboard sheet or adjacent to data
-
-### Named Ranges
-- Use for key inputs and assumption cells
-- Makes formulas readable: `=Revenue - COGS` not `=B12 - B23`
-
-### Protection
-- Lock formula cells, leave input cells editable
-- Add sheet protection with clear instructions
-
----
-
-## Phase 4: File Generation
-
-→ Read `/mnt/skills/public/xlsx/SKILL.md` before generating. Use openpyxl with proper:
-- Column width auto-sizing
-- Freeze panes on header rows
-- Table formatting (ListObject) for data ranges
-- Proper number formats (#,##0.00 for currency, 0.0% for percentages)
-- Colour scheme: professional, not garish
-
-**Input cell colour convention:**
-- **Light blue (#DDEEFF)** — user input cells
-- **White** — calculated cells (locked)
-- **Light grey (#F5F5F5)** — headers and labels
-
----
-
-## Phase 5: Delivery
-
-1. Generate to `/mnt/user-data/outputs/filename.xlsx`
-2. Use `present_files` to deliver
-3. Explain: what to enter, what calculates automatically, and how to read the outputs
-4. Note any limitations or manual steps required
-
----
-
-## Quality Checklist
-
-- [ ] All input cells are clearly identifiable (coloured or labelled)
-- [ ] Formula cells are locked / protected
-- [ ] No hardcoded values in formulas (use named ranges or input cells)
-- [ ] IFERROR wraps any formula that could show #N/A or #DIV/0!
-- [ ] Headers are frozen
-- [ ] File opens without errors
-- [ ] If charts exist, they update when data changes
+- `references/elements.md`: formulas, validation, conditional formatting, charts, named ranges, protection, number formats, colour convention, final checklist.

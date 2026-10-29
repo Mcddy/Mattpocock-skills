@@ -1,130 +1,63 @@
 ---
 name: autonomous-writer
-description: >
-  Activates professional-grade writing and content production mode — long-form articles, reports, 
-  newsletters, sales copy, proposals, scripts, emails, social content, and any written deliverable 
-  at expert level. Use this skill whenever Shaun needs written output that will be published, sent, 
-  or presented. Trigger on: "write a...", "draft...", "create content for...", "write my newsletter", 
-  "sales copy for...", "proposal for...", "write a report on...", "script for...", "LinkedIn post", 
-  "Substack article", "email to...", "blog post", "press release", "pitch deck narrative", 
-  "executive summary", "white paper", "case study", or any request for written output 
-  beyond a conversational reply. Also trigger proactively when Shaun is building something 
-  that needs accompanying copy — product launches, service offers, intelligence reports. 
-  Never produce generic AI-flavoured filler. Every word must earn its place.
+description: "Writes finished long-form and professional copy for Shaun: articles, reports, Cerberus newsletter and Substack issues, sales copy, proposals, scripts, emails, LinkedIn posts, press releases, white papers, case studies and executive summaries. Use when he says 'write a', 'draft', 'write my newsletter', 'sales copy for', 'proposal for', 'write a report on', 'script for', 'LinkedIn post', 'Substack article', 'blog post', 'executive summary', or when a launch, offer or intelligence report needs accompanying copy. Not for editing or de-padding an existing draft (use deslop), evidence-led reports with citations and value bindings (folio), slide decks (deck-builder), UX microcopy, or the Cerberus analysis itself (dispatch)."
 ---
 
-# Autonomous Writer
+# autonomous-writer
 
-Professional content and writing production system. When activated, function as an expert 
-writer with full command of strategy, structure, and style.
+Produces a finished piece of writing in the right voice for its reader: structured, specific and ready to publish or send. Format guides and voices are in `references/`.
 
----
+## Use when
 
-## Core Principles
+- The output is writing that will be published, sent or presented, beyond a conversational reply.
+- A product, offer or Cerberus issue needs its copy written.
+- A document is wanted at length: article, report, proposal, script, white paper, case study.
 
-**Voice first.** Before writing a word, understand who is speaking, to whom, and why. 
-Every piece has a voice — find it and maintain it throughout.
+## Not this skill
 
-**Structure is argument.** The order of ideas is as important as the ideas themselves. 
-Plan the architecture before writing.
+| The request | Goes to |
+|---|---|
+| Tighten, de-pad or fix the voice of a draft that exists | deslop |
+| Report built from results with citations, figures and update checks | folio |
+| Slides or a pitch deck | deck-builder |
+| Run the Cerberus three-lens analysis or score a trade | dispatch |
+| Verify the factual claims in a piece | fact-check |
 
-**Earn every sentence.** No filler, no padding, no throat-clearing. Every sentence either 
-advances the argument or it gets cut.
+## Inputs
 
-**The reader is sovereign.** Write for the reader's needs, not the writer's comfort. 
-Clarity beats impressiveness every time.
+Establish these, inferring from context where possible and asking only the one question that most changes the draft:
 
----
+1. Audience: who reads it, what they know, what they care about.
+2. Goal: what they should think or do afterwards.
+3. Voice: pick from `references/voices.md`; default is Shaun's business voice.
+4. Format and length: see `references/formats.md` for the shape of each.
+5. Constraints: platform, word limit, keywords, source material to use.
 
-## Pre-Writing Protocol
+## Procedure
 
-Before drafting, establish:
-1. **Audience** — Who is reading? What do they know? What do they care about?
-2. **Goal** — What should the reader think, feel, or do after reading?
-3. **Voice** — Formal/casual? Expert/accessible? First person/third?
-4. **Format** — What's the container? (article, email, report, post, script)
-5. **Length** — What's appropriate for this context?
-6. **Constraints** — Platform, word limit, SEO keywords, tone guidelines?
+1. **Settle the inputs** above. If the source material is supplied, use it; do not substitute invented detail.
+2. **Plan the structure before drafting.** Order is the argument: lead with the conclusion or the sharpest insight, then support it. Write the outline in one line per section.
+3. **Draft in the format's shape** (`references/formats.md`). Prose rules: one idea per sentence, active voice, specific over general ("$47 a month", not "affordable"), short paragraphs with varied sentence length, no throat-clearing. Cut the first paragraph of a first draft and see if it still works.
+4. **Run the four tests.** Skim (structure carries the message), cut (every paragraph and sentence is needed), reader (they know what to do or think at the end), voice (sounds like the intended voice, not generic AI output). Fix and repeat.
+5. **Check claims.** Every number, name, quote and outcome comes from the supplied material or a source seen in this session. Where it does not, mark it `[needs source]` or `[placeholder]` rather than inventing it.
+6. **Deliver.** Offer a headline or subject line, and one alternative angle or hook.
 
-If Shaun hasn't specified these, use context to infer them — or ask the one most critical 
-question before proceeding.
+## Output
 
----
+- Under about 500 words: inline in the reply.
+- 500 to 2,000 words: a Markdown file, with the path given.
+- Longer, or if he asks for it: a Markdown file, or a document file via the host's docx skill when available (fallback: Markdown).
+- Always include the headline or subject line options and the alternative angle.
 
-## Writing Modes
+## Rules that always hold
 
-### Long-Form Articles & Reports
-- Lead with the most important insight (inverted pyramid or hook)
-- Structure with clear hierarchy: sections, subsections, logical flow
-- Use evidence, examples, and specifics — never vague assertions
-- End with a clear payoff: conclusion, call to action, or open question
-- Optimise for readability: short paragraphs, varied sentence length, active voice
+- Write for the reader's needs, not the writer's comfort. Clarity beats impressiveness.
+- No invented statistics, testimonials, case results or quotes. Use placeholders and say so.
+- Cerberus pieces are analysis, not personal advice: state assumptions, give no position sizing for the reader, and keep the disclaimer line from `references/voices.md`. Publishing market commentary to the public may carry licensing obligations in Australia; that is Shaun's call to confirm.
+- Australian spelling unless the audience is elsewhere.
+- Ghost-written pieces for his name go out as his; flag anything that states a personal claim he has not confirmed.
 
-### Newsletter / Substack (Cerberus Intelligence)
-- Match the three-lens analytical voice (macro, technical, sentiment)
-- Lead with the market question of the week
-- Build analysis through each lens systematically
-- Close with a clear positioning stance or trade thesis
-- Tone: authoritative, direct, institutional — not casual
+## References
 
-### Sales Copy
-- Lead with the problem, not the product
-- Amplify the pain before presenting the solution
-- Use specific proof (numbers, outcomes, testimonials) not vague claims
-- Address objections directly
-- Clear, single call to action
-- Test multiple headlines/hooks
-
-### Emails
-- Subject line is everything — write 3, pick the best
-- First sentence must compel continued reading
-- One clear ask per email
-- Respect the reader's time: say it in half the words you think you need
-
-### Scripts (Video/Audio/Podcast)
-- Write for the ear, not the eye — shorter sentences, natural rhythm
-- Build in breathing room and emphasis
-- Hook in the first 15 seconds
-- Structure: hook → context → content → close
-- Include delivery notes where critical
-
-### Proposals & Pitches
-- Open with the client's world, not your credentials
-- State the problem with precision
-- Present the solution with confidence
-- Back it with evidence of capability
-- Make the ask clear and the next step obvious
-
----
-
-## Voice Library
-
-**Shaun's business voice (default):** Direct, analytical, high-signal, no filler.  
-Authority without arrogance. Precision without jargon. Urgency without hype.
-
-**Cerberus Intelligence voice:** Institutional-grade analytical rigour with commercial edge.  
-Think: well-briefed intelligence officer meets sophisticated trader.
-
-**Cold outreach voice:** Warm but direct. Leads with their world. Earns the ask.
-
-**Technical documentation voice:** Clear, sequential, exhaustive. Assumes nothing.
-
----
-
-## Quality Standards
-
-Every written output must pass:
-- **The skim test:** Does the structure communicate the key message even skimmed?
-- **The cut test:** Is every paragraph necessary? Every sentence?
-- **The reader test:** Does the reader know exactly what to do or think at the end?
-- **The voice test:** Does this sound like Shaun (or the intended voice) — not generic AI?
-
----
-
-## Output Protocol
-
-- For short copy (<500 words): inline in conversation
-- For medium pieces (500–2000 words): create as `.md` file, present via `present_files`
-- For long reports/documents: create as `.docx` or `.md`, present via `present_files`
-- Always offer a headline/subject line with every piece
-- Always offer one alternative angle or hook as a variant
+- `references/formats.md`: structure for each format (article, newsletter, sales copy, email, script, proposal).
+- `references/voices.md`: Shaun's business voice, Cerberus voice, cold outreach, technical documentation.
