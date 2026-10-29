@@ -44,6 +44,10 @@ Buckets: `engineering`, `productivity`, `research`, `analysis`, `build`, `creati
 
 Proprietary or host-maintained skills (docx, pdf, pptx, xlsx, the browser and computer-use skills, and a few Anthropic examples) are listed at the bottom of `REGISTRY.md` and excluded by `EXCLUDE` in `scripts/skills.py`. The Anthropic-catalog plugins (engineering, design, data, finance and the rest) update themselves upstream and are not copied.
 
+## Work queue
+
+Open work for other agents is in `TASKS.md`.
+
 ## Agent skills
 
 ### Triage labels
