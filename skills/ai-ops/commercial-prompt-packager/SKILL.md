@@ -1,214 +1,73 @@
 ---
 name: commercial-prompt-packager
-description: >
-  Transforms a finished AI prompt into a fully packaged, market-ready commercial asset. Use this skill whenever the user wants to sell, license, or productise a prompt — including when they say "package this prompt", "make this commercial", "I want to sell this", "create a product listing for this prompt", "write sales copy for my prompt", "what should I charge for this", or any variation. Also trigger when the user is building a prompt library, launching a prompt product line, or preparing prompts for Gumroad, Promptbase, Substack, or direct client sales. Outputs a full commercial asset pack: tiered pricing, licensing terms, sales copy, technical documentation, and channel-specific formatting. Cerberus branding is optional per run. Never skip the packaging steps — a half-packaged prompt is a missed revenue opportunity.
+description: "Turns a finished prompt into a sellable asset pack: tiered pricing, licence terms, sales copy adapted per channel, technical documentation and a packaging checklist, with optional Cerberus branding. Use when he says 'package this prompt', 'make this commercial', 'I want to sell this', 'create a product listing for this prompt', 'write sales copy for my prompt', 'what should I charge for this', or is building a prompt library or product line for Gumroad, Promptbase, Substack or direct client sales. Not for writing or improving the prompt itself (use meta-prompt-engineer), tuning it against tests (prompt-bench), choosing an AI tool (nexus), or packaging a skill or app rather than a prompt (use skill-creator or web-to-store)."
 ---
 
-# Commercial Prompt Packager
+# commercial-prompt-packager
 
-Transforms production-ready prompts into fully packaged, sellable commercial assets. Covers pricing, licensing, sales copy, technical docs, and channel formatting.
+Takes a finished prompt and produces everything needed to sell it: price tiers, licence per tier, sales copy per channel, technical documentation and a checklist. Detail lives in `references/`.
 
----
+## Use when
 
-## Phase 1: Asset Intake
+- Shaun wants to sell, license or productise a prompt or prompt set.
+- He asks what to charge or how to list it on a marketplace, Substack or to a direct client.
+- He is building a prompt library or product line.
 
-Before packaging, assess the prompt:
+## Not this skill
 
-1. **What does the prompt do?** — Core function in one sentence.
-2. **Who is the target buyer?** — Solopreneur? Enterprise team? Specific industry vertical?
-3. **What problem does it solve?** — Frame in buyer language, not technical language.
-4. **What's the complexity/uniqueness?** — Simple utility vs. sophisticated system prompt vs. full agent architecture?
-5. **Branding preference** — Cerberus-branded or white-label/generic?
-6. **Primary channel(s)** — Direct/private clients, marketplace (Gumroad/Promptbase), Substack, or all?
+| The request | Goes to |
+|---|---|
+| Write or improve the prompt itself | meta-prompt-engineer |
+| Test variants against examples | prompt-bench |
+| Pick the right AI tool or platform for the prompt | nexus |
+| Package a skill for other hosts | rosetta |
+| Turn a web app into a mobile app | web-to-store |
 
-If the prompt itself hasn't been reviewed, do a quick quality check — a poorly engineered prompt should not be packaged until it's solid. Flag this to the user if relevant.
+## Inputs
 
----
+- The finished prompt (paste it) or the prompt set.
+- Target buyer, channel or channels, and Cerberus-branded or white-label. Ask for whichever is missing.
 
-## Phase 2: Pricing Architecture
+## Procedure
 
-### Pricing Framework
+1. **Assess the asset.** Answer: what it does in one sentence; who buys it; the problem in the buyer's words; complexity (utility, sophisticated system prompt, full agent architecture); branding; primary channel. Run a quick quality check on the prompt. If it is poorly engineered, say so and send it to meta-prompt-engineer before packaging.
+2. **Price in tiers**, by value to the buyer, not time spent. Always at least three tiers (entry, standard, premium), plus a bespoke option where adaptation is plausible. Adjust by sophistication, specificity of niche, proof, audience (business over hobbyist) and exclusivity. Ranges and tier contents: `references/pricing-and-licensing.md`. State the currency and mark ranges as starting points to verify against comparable listings.
+3. **Assign a licence per tier** (personal, commercial, extended commercial, white-label) and adapt the standard protection wording. Use `references/pricing-and-licensing.md`.
+4. **Write the sales copy**: headline, subheadline, pain, solution, what is included, who it is for, social proof, call to action. Then adapt for each chosen channel (marketplace, Substack, direct pitch). Use `references/sales-copy.md`.
+5. **Write the technical documentation**, shorter for the entry tier, full for premium. Template in `references/tech-doc.md`.
+6. **Apply branding.** Cerberus-branded: use `references/cerberus-branding.md`. White-label: strip every Cerberus reference and use neutral professional language the buyer can rebrand.
+7. **Assemble the pack** in the format below and tick the checklist against what was actually produced.
 
-Use value-based pricing, not cost-based. The question is not "how long did this take to make?" but "what is this worth to the buyer?"
-
-#### Tier Structure Template
-
-| Tier | Name | Price Range | What's Included |
-|------|------|-------------|-----------------|
-| **Entry** | Starter / Solo | $9–$29 | The prompt file + basic usage guide |
-| **Standard** | Pro / Professional | $49–$149 | Prompt + docs + example outputs + setup guide |
-| **Premium** | Enterprise / Full Kit | $197–$497 | Everything + customisation guide + commercial use licence + priority support option |
-| **Bespoke** | Custom / Done-For-You | $500–$2,500+ | White-glove adaptation for client's specific use case |
-
-#### Pricing Signals (adjust based on these factors)
-- **Sophistication**: Simple prompt → lower end. Full system prompt architecture → higher end.
-- **Specificity**: Generic utility → lower. Niche industry vertical → higher (less competition, higher buyer pain).
-- **Proof**: No track record → lower. Demonstrated results → justify premium.
-- **Audience**: Consumer / hobbyist → lower. Business / professional → higher.
-- **Exclusivity**: Unlimited licences → lower per unit. Limited seats or exclusive → much higher.
-
-Always recommend at least a 3-tier structure. Single-price products leave money on the table.
-
----
-
-## Phase 3: Licensing & IP Framing
-
-### Licence Types
-
-| Licence | Use Case | Key Terms |
-|---------|----------|-----------|
-| **Personal Use** | Entry tier | Use for own projects only. No resale, no sharing, no client use. |
-| **Commercial Use** | Standard/Pro tier | Use in client work and business. No resale of the prompt itself. |
-| **Extended Commercial** | Premium tier | Full commercial use including building products on top. No redistribution. |
-| **White-Label / OEM** | Bespoke tier | Buyer can rebrand and resell as their own. Highest price point. |
-
-### Standard IP Protection Language (adapt as needed)
-
-> *This prompt is proprietary intellectual property. Purchase grants a non-transferable licence to use this prompt under the terms of the selected tier. Reverse engineering, redistribution, resale, or derivative commercial works are prohibited without written permission. All rights reserved.*
-
-### For Cerberus-Branded Assets
-
-When Cerberus branding is selected, include:
-- "A Cerberus Market Intelligence Asset" designation
-- Reference to the three-lens framework where relevant (macro / technical / sentiment)
-- Cerberus quality standard note: *"Engineered to institutional-grade specifications."*
-
----
-
-## Phase 4: Sales Copy
-
-### Copy Architecture
-
-For each prompt product, produce:
-
-**1. Headline** (8–12 words)
-Lead with the outcome, not the mechanism. "Stop wasting hours on X — let AI do it in minutes."
-
-**2. Subheadline** (1–2 sentences)
-Expand the promise. Who it's for, what it does, why it's different.
-
-**3. Problem/Pain Block** (2–3 sentences)
-Name the pain the buyer is feeling before they found this. Make them feel seen.
-
-**4. Solution Block** (3–5 sentences)
-Introduce the prompt as the solution. What it does, how it works at a high level, what changes for the buyer.
-
-**5. What's Included** (bullet list)
-Specific deliverables per tier. Be concrete — buyers want to know exactly what they're getting.
-
-**6. Who This Is For** (3–5 bullet points)
-Specific buyer profiles. "This is for you if…"
-
-**7. Social Proof Hook** (placeholder if no testimonials yet)
-"Used by [type of professional] to [result]." Or a placeholder: *[Add testimonial / result here when available]*
-
-**8. Call to Action**
-Direct and specific. "Get the Pro Kit — $97" not just "Buy Now."
-
-### Channel Adaptations
-
-**Gumroad / Promptbase listing:**
-- Lead with headline + subheadline
-- Keep problem/solution tight (buyers scroll fast)
-- Include "What's Included" prominently
-- Price anchoring: show higher tier first
-
-**Substack offer:**
-- More conversational tone — you're writing to your audience, not cold strangers
-- Lead with context ("I've been using this in my own workflow for X months…")
-- Frame as insider access / early release where possible
-- Include a teaser example output
-
-**Direct / private client pitch:**
-- Skip the marketing copy entirely
-- Lead with the problem you're solving for *their* specific situation
-- Include a 1-paragraph capability summary
-- Attach technical documentation as credibility signal
-
----
-
-## Phase 5: Technical Documentation
-
-### Standard Tech Doc Structure
+## Output
 
 ```
-# [Prompt Name] — Technical Documentation
-
-## Overview
-[1–2 sentence description of what the prompt does]
-
-## Recommended Model
-[Claude Sonnet / GPT-4o / etc.] — and why
-
-## Deployment Context
-[System prompt / task prompt / API / chat interface]
-
-## Required Inputs
-[What the user needs to provide for the prompt to work]
-
-## Output Description
-[What the prompt returns — format, length, structure]
-
-## Configuration Options
-[Any variables, placeholders, or settings the buyer can adjust]
-
-## Usage Examples
-[2–3 example inputs and expected outputs]
-
-## Known Limitations
-[Honest edge cases or failure modes to be aware of]
-
-## Version
-[v1.0 — date]
-```
-
-Tailor depth to tier — Entry gets a simplified version, Premium gets the full doc.
-
----
-
-## Phase 6: Final Asset Pack Delivery
-
-Deliver a complete packaged output:
-
-```
-## [Prompt Name] — Commercial Asset Pack
-
-### Pricing Tiers
-[Tier table with names, prices, inclusions]
-
-### Licence Terms
-[Licence type per tier]
-
-### Sales Copy
-[Full copy block, channel-adapted versions]
-
+## <Prompt name>: Commercial Asset Pack
+### Pricing Tiers        (names, prices, inclusions)
+### Licence Terms        (licence per tier)
+### Sales Copy           (primary channel in full, others adapted)
 ### Technical Documentation
-[Full tech doc]
-
 ### Packaging Checklist
-- [ ] Prompt file (clean, final version)
+- [ ] Prompt file (clean, final)
 - [ ] Technical documentation
-- [ ] Sales copy (primary channel)
-- [ ] Sales copy (secondary channels)
+- [ ] Sales copy, primary channel
+- [ ] Sales copy, secondary channels
 - [ ] Licence terms
 - [ ] Pricing page copy
-- [ ] Example outputs (recommended: 2–3)
+- [ ] Example outputs (2 to 3)
 ```
 
----
+## Rules that always hold
 
-## Cerberus Branding Reference
+- Never invent testimonials, results, sales numbers or user counts. Use a visible placeholder until real ones exist.
+- Do not claim the prompt does more than it was tested to do; list known limitations honestly in the documentation.
+- Licence wording is a starting template, not legal advice. Tell Shaun to have it reviewed before relying on it, and to check tax and registration obligations for sales (he is an Australian sole trader) with an accountant.
+- Marketplace fees, rules and audience change. Do not state them as current; mark them verify before use.
+- Direct client pitches skip marketing copy: lead with the client's own problem, add a one-paragraph capability summary, attach the documentation.
+- Keep Shaun's tone: direct, authoritative, no filler.
 
-When Cerberus branding is requested:
+## References
 
-- **Brand name**: Cerberus Market Intelligence
-- **Brand positioning**: Institutional-grade intelligence and AI tooling for serious operators
-- **Tone**: Direct, authoritative, zero filler — speaks to professionals who don't need hand-holding
-- **Quality mark**: *"Engineered to institutional-grade specifications"*
-- **Three-lens framework**: Where relevant, reference the macro / technical / sentiment framework as a credibility signal
-- **Asset naming convention**: `[Function] — A Cerberus Intelligence Asset`
-
-When white-label/generic is requested:
-- Strip all Cerberus references
-- Use neutral professional language
-- Buyer can apply their own brand
+- `references/pricing-and-licensing.md`: tier table, pricing signals, licence types, protection wording (dated).
+- `references/sales-copy.md`: copy architecture and channel adaptations.
+- `references/tech-doc.md`: technical documentation template.
+- `references/cerberus-branding.md`: Cerberus brand details and white-label rules.
