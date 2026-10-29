@@ -1,0 +1,17 @@
+{
+ "title": "REPLACE: what was asked, and of whom",
+ "collection": {
+  "reached": "REPLACE: how respondents were reached (emailed link to all members, paper form at the door, asked in person by the organiser)",
+  "invited": 40,
+  "missing": "REPLACE: who was not reached or did not respond, and how they may differ"
+ },
+ "questions": [
+  {"id": "q1", "text": "A single-choice question", "type": "single", "options": ["Yes", "No"], "section": "Optional section name"},
+  {"id": "q2", "text": "A scale, options in order from low to high", "type": "scale", "options": ["Strongly disagree", "Disagree", "Agree", "Strongly agree"]},
+  {"id": "q3", "text": "Choose any that apply (a cell holds the choices separated by ;)", "type": "multi", "options": ["First", "Second", "Third"]},
+  {"id": "q4", "text": "A number", "type": "number"},
+  {"id": "q5", "text": "Free text", "type": "text"},
+  {"id": "q6", "text": "A quiz item: single choice with the keyed answer", "type": "single", "options": ["A", "B", "C", "D"], "correct": "B"},
+  {"id": "q7", "text": "Shown only to people who answered Yes to q1", "type": "single", "options": ["Often", "Rarely"], "shown_if": {"question": "q1", "in": ["Yes"]}}
+ ]
+}

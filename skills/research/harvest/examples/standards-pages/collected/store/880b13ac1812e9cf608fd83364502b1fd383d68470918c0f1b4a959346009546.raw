@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+<title>Harbour Lighting Standards Board: notices (SYNTHETIC)</title>
+<link>https://standards.example/index.html</link>
+<description>Invented feed for the harvest skill's example.</description>
+<item><title>HL-103 edition 2 approved</title><link>https://standards.example/standards/hl-103.html</link><pubDate>Wed, 23 Sep 2026 06:30:00 GMT</pubDate></item>
+<item><title>Minutes of meeting 42 published</title><link>https://standards.example/committee/minutes-42.html</link><pubDate>Fri, 25 Sep 2026 02:00:00 GMT</pubDate></item>
+<item><title>Minutes of meeting 41 published</title><link>https://standards.example/committee/minutes-41.html</link><pubDate>Fri, 14 Aug 2026 02:00:00 GMT</pubDate></item>
+</channel>
+</rss>

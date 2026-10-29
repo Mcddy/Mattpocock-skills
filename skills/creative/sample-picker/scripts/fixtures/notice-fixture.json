@@ -1,0 +1,21 @@
+{
+ "id": "water-notice-fixture",
+ "title": "Wording for the water shut-off notice (test fixture)",
+ "question": "Which wording should the notice at the top of the ledger use?",
+ "kind": "copy",
+ "recommended": {"id": "what-and-when", "reason": "it gives the day and the hours in the heading, which is what a plot holder needs first."},
+ "options": [
+  {"id": "what-and-when", "name": "What and when", "note": "Puts the day and the hours in the heading; the longest heading of the three.",
+   "sample": {"heading": "Water off on Saturday, 8 am to noon", "sub": "The mains pipe by the north gate is being replaced. Fill your butts on Friday.", "action": "Add to my calendar"}},
+  {"id": "what-to-do", "name": "What to do", "note": "Leads with the action a plot holder should take; the dates move to the second line.",
+   "sample": {"heading": "Fill your water butts by Friday", "sub": "The water will be off on Saturday from 8 am to noon while the north gate pipe is replaced.", "action": "Add to my calendar"}},
+  {"id": "short-label", "name": "Short label", "note": "A two word heading with everything else below it; the quickest to skim and the easiest to ignore.",
+   "sample": {"heading": "Water shut-off", "sub": "Saturday, 8 am to noon. The mains pipe by the north gate is being replaced.", "action": "See the details"}}
+ ],
+ "controls": [
+  {"id": "action", "label": "Show the buttons", "type": "toggle", "default": true},
+  {"id": "heading-size", "label": "Heading size", "type": "range", "min": 16, "max": 24, "step": 1, "unit": "px", "default": 19}
+ ],
+ "context": {"component": "notice", "secondary": "Dismiss",
+             "tokens": {"bg": "#f7f2e6", "surface": "#fffbf2", "text": "#27231d", "muted": "#665c4f", "line": "#dbd0bc", "accent": "#2f6a3c", "on-accent": "#fbfff9"}}
+}

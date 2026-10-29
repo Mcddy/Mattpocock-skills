@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "kind": "organiser",
+  "unit": "mm",
+  "width": 160,
+  "depth": 100,
+  "height": 35,
+  "wall": 3,
+  "minimum_wall": 2,
+  "minimum_slot_width": 20,
+  "slots": 4,
+  "accent": "#b6603c"
+}

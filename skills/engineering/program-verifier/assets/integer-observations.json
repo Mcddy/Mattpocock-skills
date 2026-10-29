@@ -1,0 +1,1 @@
+{"contract":"integer-range","lower":0,"upper":3,"observations":[{"value":0,"accepted":true},{"value":3,"accepted":false},{"value":true,"accepted":true},{"value":2.0,"accepted":true},{"value":-1,"accepted":false},{"value":"2","accepted":false}]}

@@ -1,33 +1,51 @@
-Skills are organized into bucket folders under `skills/`:
+# Shaun skills
 
-- `engineering/`: daily code work
-- `productivity/`: daily non-code workflow tools
-- `misc/`: kept around but rarely used, not promoted
-- `in-progress/`: beta: public on purpose, feedback wanted, not shipped in the plugin
-- `deprecated/`: no longer used
+One repo, one copy of every skill. Claude, Codex and ChatGPT all read from here. Nothing is edited in an installed location.
 
-Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must have a reference in the top-level `README.md` and an entry in `.claude-plugin/plugin.json`'s `skills` array (the Claude Code plugin ships exactly the promoted set). Skills in `misc/`, `in-progress/`, and `deprecated/` must not appear in either.
+## Layout
 
-Install commands are copied verbatim from [.agents/install-block.md](./.agents/install-block.md). `.claude-plugin/marketplace.json` is the repo's own marketplace. Every agent except Claude Code installs from it to get automatic updates, and Claude Code uses `claude-plugins-official`. Run `claude plugin validate . --strict` after touching either manifest. [ADR 0002](./.agents/adr/0002-ship-as-a-claude-code-plugin.md) records why.
+```
+skills/<bucket>/<skill>/SKILL.md   the skill (plus references/, scripts/, assets/, agents/openai.yaml as needed)
+REGISTRY.md                        generated index of every skill; read this to route
+.claude-plugin/                    generated; lets Claude Code install the repo as a plugin
+scripts/skills.py                  the only tool: check, registry, manifests, install, import, package, sync
+scripts/skill_lint.py              the linter skills.py calls (Agent Skills spec)
+.agents/                           conventions: invocation.md, adr/
+docs/agents/                       per-repo config templates the engineering skills read
+```
 
-Each skill entry in the top-level `README.md` must link the skill name to its `SKILL.md`.
+Buckets: `engineering`, `productivity`, `research`, `analysis`, `build`, `creative`, `ai-ops` are installed. `incubating` (unfinished) and `inbox` (imported, not yet filed) are skipped by `install` unless `--all`.
 
-Each bucket folder has a `README.md` that lists every skill in the bucket with a one-line description, with the skill name linked to its `SKILL.md`. The promoted buckets' `README.md`s and the top-level `README.md` group entries into **User-invoked** and **Model-invoked**; non-promoted bucket `README.md`s (`misc/`, `in-progress/`) use a flat list.
+## Picking a skill
 
-Skills in `engineering/` and `productivity/` also have a human-facing docs page at `docs/<bucket>/<skill-name>.md` (the docs tree mirrors those two bucket folders under `skills/`). The published URL is `https://aihero.dev/skills-<skill-name>` regardless of bucket: the docs path is repo organisation only. When you add, rename, or change the behaviour of a skill in `engineering/` or `productivity/`, create or re-sync its docs page following [.agents/writing-docs.md](./.agents/writing-docs.md). A finished page carries four sections: **What it does**, **When to reach for it**, **Common questions**, and **It's working if**. `writing-docs.md` holds the template, the section order, and where to hunt for the questions. Skills in the non-promoted buckets (`misc/`, `in-progress/`, `deprecated/`) get **no** docs page. The one exception is a promoted skill removed outright: its page stays, marked archived (see `writing-docs.md`).
+1. Read `REGISTRY.md`. Match on the one-line description and the invocation column.
+2. Read the candidate's `SKILL.md` before relying on the summary.
+3. For the engineering flows (idea to ship), use `skills/engineering/ask-shaun`.
 
-Every `SKILL.md` is either user-invoked (`disable-model-invocation: true` plus `policy.allow_implicit_invocation: false` in `agents/openai.yaml`, reachable only by the human) or model-invoked (model- or user-reachable). See [.agents/invocation.md](./.agents/invocation.md).
+## Changing things
 
-[`ask-matt`](./skills/engineering/ask-matt/SKILL.md) is the router that maps every user-reachable skill and how they relate. The same trigger that re-syncs a docs page applies to it: whenever you add, rename, remove, or change how a user-reachable skill fits the flows, re-read `ask-matt`'s `SKILL.md` and update it so the map stays accurate: a new skill it never mentions, or a stale one it still routes to, is a router that lies.
+- Edit the skill in `skills/`. Never edit the installed copy, the zip, or `.claude-plugin/`.
+- Folder name equals `name:` in the frontmatter. Lowercase, digits and single hyphens.
+- Run `python scripts/skills.py sync` before every commit. It regenerates `REGISTRY.md` and the manifests, then lints. CI runs `check`.
+- Adding or renaming a user-reachable engineering skill: re-read `ask-shaun/SKILL.md` and update it so the router does not lie.
+- Host-specific material stays out of the shared instructions: Codex goes in `agents/openai.yaml`, anything else in `hosts/<host>/NOTES.md` inside the skill. Do not invent a host's config format; if it cannot be confirmed from that host's documentation, list it as a task instead.
+- Invocation: see `.agents/invocation.md`. User-invoked means `disable-model-invocation: true` plus `policy.allow_implicit_invocation: false` in `agents/openai.yaml`.
+- Every skill that dispatches a subagent says to start it with a fresh context window. Some harnesses fork the parent by default, and a fork inherits the context the subagent was meant to escape.
+- Repo-level prose (this file, README, docs, ADRs) uses no em dashes. Imported skill bodies keep their original text.
 
-To (re)link every skill outside `deprecated/` and `misc/` into the local harness skill directories (`~/.claude/skills`, `~/.agents/skills`), run `scripts/link-skills.sh`. Each entry is a symlink into this repo, so a `git pull` keeps installed skills current; re-run the script after adding, removing, or renaming a skill.
+## Syncing hosts
 
-No em-dashes anywhere in this repo's prose (`SKILL.md` files, docs, `README.md`, `CHANGELOG.md`, ADRs, changesets, code comments). Where a sentence reaches for one, rewrite it instead with a comma, colon, period, parentheses, or a conjunction, whichever the sentence actually wants; never do a blind character substitution.
+- Claude Code and Codex on this machine: `python scripts/skills.py install` (symlinks; `--copy` on Windows without developer mode). Re-run after adding or renaming a skill.
+- Claude Code as a plugin (no `version` on purpose, so every commit is an update; `claude plugin validate .` warns about it, ignore): `/plugin marketplace add mcddy/shaun-skills` then `/plugin install shaun-skills@shaun`.
+- Claude.ai and ChatGPT upload: `python scripts/skills.py package` writes `dist/<skill>.zip`, one top-level folder each.
+- Pulling in skills you built inside a host: `python scripts/skills.py import --source <folder of skill folders>`, then `sync`. Unknown names land in `skills/inbox/`; file them and add them to `BUCKETS` in `scripts/skills.py`.
 
-Every skill that dispatches a subagent says to start it with a fresh context window. Some harnesses (Codex, for one) fork the parent conversation by default, and a fork inherits the parent's context, which is what the subagent was meant to escape.
+## Not vendored
+
+Proprietary or host-maintained skills (docx, pdf, pptx, xlsx, the browser and computer-use skills, and a few Anthropic examples) are listed at the bottom of `REGISTRY.md` and excluded by `EXCLUDE` in `scripts/skills.py`. The Anthropic-catalog plugins (engineering, design, data, finance and the rest) update themselves upstream and are not copied.
 
 ## Agent skills
 
 ### Triage labels
 
-Canonical names, unchanged. See `docs/agents/triage-labels.md`. Issues are judged against [`SCOPE.md`](./SCOPE.md).
+Canonical names, unchanged. See `docs/agents/triage-labels.md`.

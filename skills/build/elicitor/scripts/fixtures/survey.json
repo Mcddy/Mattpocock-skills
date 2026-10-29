@@ -1,0 +1,24 @@
+{
+  "id": "fixture-survey",
+  "version": 1,
+  "mode": "survey",
+  "title": "Fixture survey: after the session (SYNTHETIC)",
+  "purpose": "Test input for the engine.",
+  "disclosure": {
+    "who": "The organiser of the test session",
+    "purpose": "To decide what to change before the session runs again.",
+    "handling": "Answers are read by the organiser only, kept in one file with no names, and deleted after the next session.",
+    "contact": "Reply to the message that carried this file."
+  },
+  "questions": [
+    {"id": "useful", "type": "likert", "text": "The session was a good use of my time.", "labels": ["Strongly disagree", "Disagree", "Neither", "Agree", "Strongly agree"], "tags": ["rating"]},
+    {"id": "pace", "type": "single", "text": "How was the pace?", "options": ["Too slow", "About right", "Too fast"]},
+    {"id": "pace-where", "type": "text", "text": "Where did the pace go wrong?", "show_if": {"q": "pace", "equals": "Too fast"}},
+    {"id": "kept", "type": "multi", "text": "Which parts should be kept?", "options": ["The worked example", "The group exercise", "The handout", "The questions at the end"]},
+    {"id": "recommend", "type": "scale", "text": "How likely are you to suggest the session to a colleague?", "min": 0, "max": 10, "min_label": "Not at all likely", "max_label": "Certain to", "tags": ["rating"]},
+    {"id": "one-change", "type": "text", "long": true, "text": "What one change would improve it most?"}
+  ],
+  "tallies": [
+    {"id": "rated-high", "label": "Ratings given at 4 or above", "tag": "rating", "when": {"at_least": 4}}
+  ]
+}

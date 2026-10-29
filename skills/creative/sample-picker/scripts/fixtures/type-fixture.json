@@ -1,0 +1,24 @@
+{
+ "id": "newsletter-type-fixture",
+ "title": "Type for the allotment newsletter (test fixture)",
+ "question": "Which typeface and size should the newsletter body use?",
+ "kind": "type",
+ "recommended": {"id": "book-serif", "reason": "a long read on paper-coloured pages suits a bookish serif at a generous size."},
+ "options": [
+  {"id": "book-serif", "name": "Book serif", "note": "An old-style serif at 18 px with open leading; reads like a printed page.",
+   "sample": {"stack": "\"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif", "size": 18, "leading": 1.6, "measure": 62, "weight": 400}},
+  {"id": "system-sans", "name": "System sans", "note": "The device's own interface font at 16 px; neutral and compact.",
+   "sample": {"stack": "system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif", "size": 16, "leading": 1.5, "measure": 70, "weight": 400}},
+  {"id": "typewriter", "name": "Typewriter", "note": "A fixed-width face at 15 px; looks like a seed list typed on a card.",
+   "sample": {"stack": "\"Courier New\", Courier, monospace", "size": 15, "leading": 1.55, "measure": 66, "weight": 400}}
+ ],
+ "controls": [
+  {"id": "scale", "label": "Size, percent of each option's own", "type": "range", "min": 85, "max": 125, "step": 5, "default": 100},
+  {"id": "measure", "label": "Line length", "type": "range", "min": 40, "max": 80, "step": 2, "unit": "ch", "default": 64}
+ ],
+ "context": {
+  "heading": "Saving your own broad bean seed",
+  "text": ["Leave a few of the earliest, fattest pods on the two strongest plants and let them dry on the stem until they turn black and rattle. Bring them in before the first long wet spell, or they will rot where they hang.",
+           "Shell the beans into a paper bag, write the variety and the year on it, and keep the bag somewhere cool and dry. A jar is fine once the beans are hard enough that a thumbnail leaves no mark."]
+ }
+}

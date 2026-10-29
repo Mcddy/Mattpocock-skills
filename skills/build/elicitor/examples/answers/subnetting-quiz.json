@@ -1,0 +1,15 @@
+{
+  "_about": "SYNTHETIC attempt by an invented learner, written by the authoring session: six right, four wrong, two skipped.",
+  "mask-26": {"v": "255.255.255.192"},
+  "hosts-27": {"v": "32"},
+  "network-of-host": {"v": "192.168.10.64"},
+  "broadcast-of-host": {"v": "172.16.5.127"},
+  "first-usable": {"v": "10.20.30.97"},
+  "last-usable": {"v": "192.168.7.255"},
+  "prefix-for-hosts": {"v": "/26"},
+  "same-subnet": {"v": ["192.168.1.97"]},
+  "subnets-from-24": {"v": "16"},
+  "wildcard": {"skip": true},
+  "containing-subnet": {"v": "10.1.8.0/21"},
+  "summary-route": {"skip": true}
+}

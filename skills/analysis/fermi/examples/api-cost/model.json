@@ -1,0 +1,36 @@
+{
+ "quantity": "Usage charges for the metered text-processing service",
+ "unit": "dollars",
+ "timeframe": "the next twelve months",
+ "scope": "SYNTHETIC example. One internal tool after rollout; usage charges only, no staff time or fixed fees",
+ "inputs": {
+  "requests_per_workday": {
+   "dist": "lognormal", "low": 400, "high": 6000,
+   "why": "SYNTHETIC. The pilot logged 900 to 1,400 requests a day from 6 users. Rollout to 20 to 40 users could multiply that by 3 to 6, or adoption could stall. Surprised below 400 or above 6,000."
+  },
+  "workdays": {
+   "dist": "fixed", "value": 230, "source": "SYNTHETIC: organisation calendar for the period"
+  },
+  "thousand_units_per_request": {
+   "dist": "normal", "low": 2.0, "high": 5.0,
+   "why": "SYNTHETIC. The pilot averaged 3.4 thousand billable units a request; document length varies about equally either side, so normal."
+  },
+  "price_per_thousand_units": {
+   "dist": "fixed", "value": 0.012, "as_of": "2026-09-01", "source": "SYNTHETIC price sheet dated 2026-09-01"
+  },
+  "cached_share": {
+   "dist": "uniform", "low": 0.1, "high": 0.5, "kind": "probability",
+   "why": "SYNTHETIC. Repeated requests are answered from a cache at no charge. Only the pilot's worst and best weeks are known, so bounds only."
+  },
+  "retry_overhead": {
+   "dist": "triangular", "low": 1.0, "mode": 1.05, "high": 1.3,
+   "why": "SYNTHETIC. Failed calls are retried and billed again: usually 5 per cent extra, never less than none, 30 per cent in a bad month."
+  }
+ },
+ "formula": "requests_per_workday * workdays * (1 - cached_share) * thousand_units_per_request * price_per_thousand_units * retry_overhead",
+ "anchors": [
+  {"name": "approved budget for the year (SYNTHETIC; a threshold, not a hard limit)", "max": 25000}
+ ],
+ "runs": 20000,
+ "seed": 1
+}

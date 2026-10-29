@@ -1,0 +1,4 @@
+run_id,arm,cache_mode,elapsed_ms,exit_code,output_id,pair_id
+b1,baseline,cold,20,0,ok,pair-1
+b2,baseline,cold,21,0,ok,pair-1
+c1,candidate,cold,10,0,ok,

@@ -1,0 +1,15 @@
+=== sample-picker choice v1 ===
+picker: invoice-list-layout@1
+kind: layout
+status: final
+chosen: compact-list
+chosen-name: "Compact list"
+control: density = "compact"
+control: stripes = false
+shortlist: cards, compact-list
+rejected: (none)
+note: compact-list = "Like the colour, not the weight. \"Calmer\" would suit; caf\u00e9 menu test\nsecond line"
+fact: "on a phone, 360 wide" = "597 px tall (0.9 times a 640 px screen), no sideways scrolling"
+fact: "on a wide screen, 960 wide" = "338 px tall, no sideways scrolling"
+saved: 2026-10-08T21:16:42Z
+=== end ===

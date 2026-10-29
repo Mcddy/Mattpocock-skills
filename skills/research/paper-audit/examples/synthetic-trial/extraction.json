@@ -1,0 +1,83 @@
+{
+ "audit_of": {
+  "title": "SYNTHETIC: A daily fermented oat drink and winter colds in working adults: a randomised trial",
+  "source": "The FOD-7 Trial Writing Group (invented)",
+  "date": "2026-03-16",
+  "locator": "paper.md in this folder",
+  "material": "full_text"
+ },
+ "claim": {
+  "quote": "FOD-7 reduced colds by 40 percent (p = 0.03). [...] A daily fermented oat drink reduces colds in adults and can be recommended as a simple preventive measure.",
+  "locator": "Abstract, Results and Conclusion"
+ },
+ "supporting_result": {
+  "quote": "A week with three or more days of cold symptoms (diary): 24 (2.9%) of 816 against 53 (4.9%) of 1,080, p = 0.03. The relative reduction in outcome 1 was 40 percent.",
+  "locator": "Table 2, row 1, and the line under the table"
+ },
+ "design": {
+  "type": "randomised_trial",
+  "locator": "Methods, Randomisation and allocation",
+  "ceiling": "A randomised trial can show that the drink caused a difference among the people analysed, if allocation was concealed, the groups stayed comparable and the outcome was measured the same way in both. It cannot show an effect in people unlike those enrolled, or beyond 12 weeks."
+ },
+ "groups": [
+  {"name": "FOD-7", "n_start": {"value": 1200, "locator": "Figure 1"}, "n_analysed": {"value": 816, "locator": "Figure 1"}},
+  {"name": "Usual diet", "n_start": {"value": 1200, "locator": "Figure 1"}, "n_analysed": {"value": 1080, "locator": "Figure 1"}}
+ ],
+ "outcomes": [
+  {
+   "name": "A week with three or more days of cold symptoms",
+   "definition": "At least one week with three or more days of cold symptoms, recorded by the participant in a weekly online diary",
+   "time_frame": "12 weeks",
+   "locator": "Methods, Outcomes; Table 2, row 1",
+   "status": "reported_primary",
+   "results": [
+    {"group": "FOD-7", "events": {"value": 24, "locator": "Table 2, row 1"}, "total": {"value": 816, "locator": "Table 2, header"}, "reported_percent": {"value": "2.9", "locator": "Table 2, row 1"}},
+    {"group": "Usual diet", "events": {"value": 53, "locator": "Table 2, row 1"}, "total": {"value": 1080, "locator": "Table 2, header"}, "reported_percent": {"value": "4.9", "locator": "Table 2, row 1"}}
+   ]
+  },
+  {
+   "name": "Respiratory infection confirmed by a general practitioner",
+   "definition": "A respiratory infection confirmed by a general practitioner within 12 weeks",
+   "time_frame": "12 weeks",
+   "locator": "Methods, Outcomes; Table 2, row 2",
+   "status": "registered_primary",
+   "results": [
+    {"group": "FOD-7", "events": {"value": 31, "locator": "Table 2, row 2"}, "total": {"value": 816, "locator": "Table 2, header"}, "reported_percent": {"value": "3.8", "locator": "Table 2, row 2"}},
+    {"group": "Usual diet", "events": {"value": 44, "locator": "Table 2, row 2"}, "total": {"value": 1080, "locator": "Table 2, header"}, "reported_percent": {"value": "4.1", "locator": "Table 2, row 2"}}
+   ]
+  },
+  {
+   "name": "Days off work",
+   "definition": "Days off work over the 12 weeks; how they were recorded is not stated",
+   "time_frame": "12 weeks",
+   "locator": "Table 2, row 3",
+   "status": "secondary",
+   "results": [
+    {"group": "FOD-7", "mean": {"value": 1.9, "locator": "Table 2, row 3"}, "sd": {"value": 3.1, "locator": "Table 2, row 3"}, "n": {"value": 816, "locator": "Table 2, header"}},
+    {"group": "Usual diet", "mean": {"value": 2.1, "locator": "Table 2, row 3"}, "sd": {"value": 3.4, "locator": "Table 2, row 3"}, "n": {"value": 1080, "locator": "Table 2, header"}}
+   ]
+  }
+ ],
+ "other_percentages": [
+  {"label": "completed 12 weeks, FOD-7", "count": {"value": 816, "locator": "Figure 1"}, "total": {"value": 1200, "locator": "Figure 1"}, "reported_percent": {"value": "68", "locator": "Abstract, Results"}},
+  {"label": "completed 12 weeks, usual diet", "count": {"value": 1080, "locator": "Figure 1"}, "total": {"value": 1200, "locator": "Figure 1"}, "reported_percent": {"value": "90", "locator": "Abstract, Results"}},
+  {"label": "stomach upset leading to stopping the drink", "count": {"value": 139, "locator": "Table 3, row 1; also Figure 1"}, "total": {"value": 1200, "locator": "Table 3, header"}, "reported_percent": {"value": "9.6", "locator": "Table 3, row 1"}},
+  {"label": "disliked the taste and stopped", "count": {"value": 112, "locator": "Table 3, row 2; also Figure 1"}, "total": {"value": 1200, "locator": "Table 3, header"}, "reported_percent": {"value": "9.3", "locator": "Table 3, row 2"}},
+  {"label": "women, FOD-7 analysed", "count": {"value": 359, "locator": "Table 1"}, "total": {"value": 816, "locator": "Table 1"}, "reported_percent": {"value": "44.0", "locator": "Table 1"}},
+  {"label": "women, usual diet analysed", "count": {"value": 486, "locator": "Table 1"}, "total": {"value": 1080, "locator": "Table 1"}, "reported_percent": {"value": "45.0", "locator": "Table 1"}}
+ ],
+ "reporting": [
+  {"item": "registration", "text": "Registered before recruitment. The registered primary outcome was GP-confirmed respiratory infection. The analysis plan was amended in February 2026, after follow-up had ended, to make symptom days the primary outcome.", "locator": "Methods, Outcomes"},
+  {"item": "allocation_method", "text": "A computer-generated list. How the list was kept from the people enrolling participants is not described.", "locator": "Methods, Randomisation and allocation"},
+  {"item": "blinding", "text": "None. The usual diet group received no drink and no placebo; participants and site staff knew the allocation.", "locator": "Methods, Randomisation and allocation"},
+  {"item": "analysis_population", "text": "Completers only. Participants who stopped the drink were withdrawn and not followed further.", "locator": "Methods, Analysis"},
+  {"item": "reasons_for_loss", "text": "FOD-7: 251 withdrawn after stopping the drink (112 taste, 139 stomach upset), 133 not contactable. Usual diet: 120 not contactable.", "locator": "Figure 1"},
+  {"item": "funding", "text": "Funded by the manufacturer of FOD-7, which supplied the drink, took part in the design and approved the decision to publish.", "locator": "Funding and interests"},
+  {"item": "author_affiliations", "text": "Two of five authors are employed by the manufacturer; three by the contract research organisation that ran the trial.", "locator": "Funding and interests"},
+  {"item": "data_availability", "not_reported": true},
+  {"item": "replication", "not_reported": true},
+  {"item": "baseline_of_everyone_randomised", "not_reported": true},
+  {"item": "who_made_the_february_amendment_and_what_they_had_seen", "not_reported": true},
+  {"item": "how_days_off_work_were_recorded", "not_reported": true}
+ ]
+}

@@ -1,0 +1,65 @@
+# Plants: one flow through the page, the API and SQLite. Start from an empty data file.
+expect:#empty-h=No plants yet
+expect-count:#right .slot=0
+# An interval the server rejects: its reason sits beside the field, focus moves there, nothing is added.
+fill:#f-name=Boston fern
+fill:#f-room=Bathroom
+fill:#f-every=lots
+check:#k-fern
+click:#add-go
+expect:#e-every=must be a whole number of days from 1 to 60
+expect-attr:#f-every@aria-invalid=true
+expect-focus:#f-every
+expect-count:#right .slot=0
+# Fix it and add with the Enter key: the row comes back from the server.
+fill:#f-every=3
+press:#f-every=Enter
+expect:#add-ok=Added Boston fern
+expect-count:#needs .slot=1
+expect:#left=1
+expect:[data-id="1"] .last=No watering logged yet
+# The same name again (different case) is refused by the server, beside Name.
+fill:#f-name=boston fern
+click:[data-every="7"]
+check:#k-fern
+click:#add-go
+expect:#e-name=is already used by another plant
+expect:#add-msg=You already have a plant called Boston fern (Bathroom)
+expect-attr:#f-name@aria-invalid=true
+expect-count:#needs .slot=1
+# A second plant, picked from the shape buttons and the 14-day chip.
+fill:#f-name=Snake plant
+fill:#f-room=Bedroom
+click:[data-every="14"]
+check:#k-upright
+click:#add-go
+expect:#add-ok=Added Snake plant
+expect-count:#needs .slot=2
+expect:#left=2
+click:#add-close
+expect-focus:#add-open
+# Tick the fern: the row says when, the count drops, focus moves to Undo in the same row.
+click:[data-id="1"] [data-act="water"]
+expect:[data-id="1"] .last=Watered today at
+expect:#left=1
+expect:#needs-n=1
+expect:#status=Boston fern watered at
+expect-focus:[data-id="1"] [data-act="undo"]
+# It is on the server, not in the page: after a reload it is under Watered today.
+reload:
+expect:#watered [data-id="1"] .last=Watered today at
+expect:#left=1
+# Undo by keyboard: back to Needs water, focus on its Watered button.
+press:[data-id="1"] [data-act="undo"]=Enter
+expect:#left=2
+expect:[data-id="1"] .last=No watering logged yet
+expect-focus:[data-id="1"] [data-act="water"]
+# Water both: the round is done.
+press:[data-id="1"] [data-act="water"]=Enter
+expect:#left=1
+click:[data-id="2"] [data-act="water"]
+expect:#left=All watered
+expect:#left-meta=2 of 2 watered today
+reload:
+expect:#left=All watered
+expect-count:#watered .slot=2

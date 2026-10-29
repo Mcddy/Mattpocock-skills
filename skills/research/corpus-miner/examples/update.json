@@ -1,0 +1,1 @@
+[{"id":"report-a","url":"https://example.invalid/a","published":"2026-01-01","revision_note":"Corrected twelve to ten","text":"The pilot grew from zero to ten participants. The baseline count was zero.","entities":[{"id":"person-a","name":"Alex Grey","attributes":{"organisation":"North","role":"researcher"}}]}]

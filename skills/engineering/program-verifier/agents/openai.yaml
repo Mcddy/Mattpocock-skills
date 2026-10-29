@@ -1,0 +1,6 @@
+interface:
+  display_name: "Program Verifier"
+  short_description: "Generate, minimise and replay software counterexamples"
+  default_prompt: "Use $program-verifier for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

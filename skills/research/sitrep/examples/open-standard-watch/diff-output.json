@@ -1,0 +1,165 @@
+{
+ "watch_id": "en-301-549-citation-status",
+ "title": "EN 301 549 and the European Accessibility Act: citation status",
+ "purpose": "Know when conformity with EN 301 549 starts to carry a presumption of conformity under Directive (EU) 2019/882, so that guidance which describes WCAG 2.2 criteria can say correctly whether they are EU legal requirements.",
+ "matching": "Items are matched by id only. Text is never compared to guess that two ids are the same item.",
+ "old_run": "2026-10-09",
+ "new_run": "2026-10-16",
+ "days_between": 7,
+ "compared": true,
+ "state": {
+  "new": [
+   {
+    "id": "F11",
+    "requirement": "R1",
+    "priority": "high",
+    "statement": "SYNTHETIC: The Commission's Have Your Say portal lists a draft implementing decision on harmonised standards for Directive (EU) 2019/882, open for feedback until 13 November 2026.",
+    "status": "FACT",
+    "source_ids": [
+     "S10"
+    ],
+    "sources": [
+     "S10 primary"
+    ],
+    "as_of": "2026-10-16"
+   }
+  ],
+  "changed": [
+   {
+    "id": "F9",
+    "requirement": "R4",
+    "priority": "low",
+    "fields": [
+     "statement"
+    ],
+    "old": {
+     "id": "F9",
+     "requirement": "R4",
+     "priority": "low",
+     "statement": "W3C states that WCAG 2.2 was published on 5 October 2023 and updated on 12 December 2024, that it is approved as ISO/IEC 40500:2025, and that it expects the December 2024 version to be available as ISO/IEC 40500:2026 by late 2026.",
+     "status": "FACT",
+     "source_ids": [
+      "S5"
+     ],
+     "sources": [
+      "S5 primary"
+     ],
+     "as_of": "2026-10-09"
+    },
+    "new": {
+     "id": "F9",
+     "requirement": "R4",
+     "priority": "low",
+     "statement": "SYNTHETIC: W3C states that WCAG 2.2 was published on 5 October 2023 and updated on 12 December 2024, that it is approved as ISO/IEC 40500:2025, and that the December 2024 version is now available as ISO/IEC 40500:2026.",
+     "status": "FACT",
+     "source_ids": [
+      "S5"
+     ],
+     "sources": [
+      "S5 primary"
+     ],
+     "as_of": "2026-10-16"
+    }
+   }
+  ],
+  "withdrawn": [
+   {
+    "id": "F1",
+    "requirement": "R1",
+    "priority": "high",
+    "statement": "A law firm note dated 18 September 2026 says EN 301 549 V4.1.1 is an official European standard whose main legal effect will not occur until it is cited in the Official Journal. On that account it had not been cited by that date.",
+    "status": "REPORTED",
+    "source_ids": [
+     "S6"
+    ],
+    "sources": [
+     "S6 secondary"
+    ],
+    "as_of": "2026-10-09",
+    "reason": "SYNTHETIC: the revised note no longer carries the sentence. It does not say the standard has been cited."
+   }
+  ],
+  "dropped": [],
+  "unchanged_rechecked": [
+   "F3",
+   "F4",
+   "F5",
+   "F7",
+   "F10"
+  ],
+  "unchanged_carried_forward": [
+   {
+    "id": "F2",
+    "as_of": "2026-10-08"
+   },
+   {
+    "id": "F6",
+    "as_of": "2026-10-09"
+   },
+   {
+    "id": "F8",
+    "as_of": "2026-10-09"
+   }
+  ],
+  "total_now": 10,
+  "total_before": 10
+ },
+ "stale": [],
+ "indicators": {
+  "status_changed": [
+   {
+    "id": "I5",
+    "requirement": "R4",
+    "priority": "low",
+    "old": "not seen",
+    "new": "seen",
+    "seen_on": "2026-10-16",
+    "watch_for": "W3C's WCAG overview states that ISO/IEC 40500:2026 is published or available.",
+    "would_mean": "The ISO edition has caught up with the December 2024 text of WCAG 2.2.",
+    "evidence": [
+     "S5 (primary): SYNTHETIC: the overview page now reads that the December 2024 version is available as ISO/IEC 40500:2026."
+    ]
+   }
+  ],
+  "added": [],
+  "removed": [],
+  "reworded": [],
+  "unchanged": 4,
+  "total_now": 5
+ },
+ "sources": {
+  "unreachable": [
+   {
+    "id": "S3",
+    "title": "ETSI delivery directory for EN 301 549",
+    "tier": "primary",
+    "check": "each run",
+    "last_checked": "2026-10-16",
+    "note": "SYNTHETIC: two requests on 2026-10-16 timed out.",
+    "items": [
+     "F6"
+    ]
+   }
+  ],
+  "not_checked": [],
+  "reached": 6,
+  "due": 7,
+  "monthly_not_due": 3,
+  "total": 10,
+  "added": [
+   "S10"
+  ],
+  "removed": []
+ },
+ "definition": {
+  "requirements_added": [],
+  "requirements_removed": [],
+  "requirements_edited": []
+ },
+ "change_count": 4,
+ "no_change": false,
+ "errors": [],
+ "advisories": [
+  "requirement R1 has both a removed item (F1) and a new item (F11). They were not compared by text. If the new one is the old one reworded, give it back its id so it is reported as changed"
+ ]
+}

@@ -1,0 +1,1157 @@
+{
+ "tool": "state_gallery",
+ "schema": 1,
+ "title": "Parcel shelf: every state (planted defects)",
+ "page": "parcel-shelf.html",
+ "states_file": "parcel-shelf.states.json",
+ "built_at": "2026-10-08T20:36:30Z",
+ "widths": [
+  {
+   "width": 390,
+   "height": 844
+  },
+  {
+   "width": 1280,
+   "height": 800
+  }
+ ],
+ "themes": [
+  "paper",
+  "dusk"
+ ],
+ "states": [
+  {
+   "name": "empty",
+   "shows": "a sentence saying nothing is waiting, and how to log the first parcel",
+   "page": "parcel-shelf.html"
+  },
+  {
+   "name": "populated",
+   "shows": "four parcels, each with its unit, reference and how long it has waited",
+   "page": "parcel-shelf.html"
+  },
+  {
+   "name": "validation error",
+   "shows": "the reason beside each empty field, and nothing added to the shelf",
+   "page": "parcel-shelf.html"
+  },
+  {
+   "name": "long reference",
+   "shows": "a 51 character carrier reference that stays inside its row",
+   "page": "parcel-shelf.html"
+  },
+  {
+   "name": "collected parcels",
+   "shows": "parcels already collected, behind a control that this page does not have",
+   "page": "parcel-shelf.html"
+  }
+ ],
+ "thresholds": {
+  "contrast_normal": 4.5,
+  "contrast_large": 3,
+  "target_px": 24
+ },
+ "summary": {
+  "frames": 20,
+  "with_measured_problem": 9,
+  "not_reached": 4,
+  "states_not_reached": [
+   "collected parcels"
+  ]
+ },
+ "frames": [
+  {
+   "state": "empty",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 8,
+    "contrast_lowest": 6.77,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "01-empty--paper--390.png",
+   "index": 1
+  },
+  {
+   "state": "empty",
+   "theme": "dusk",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 8,
+    "contrast_lowest": 8.23,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "01-empty--dusk--390.png",
+   "index": 2
+  },
+  {
+   "state": "empty",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 8,
+    "contrast_lowest": 6.77,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "01-empty--paper--1280.png",
+   "index": 3
+  },
+  {
+   "state": "empty",
+   "theme": "dusk",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 8,
+    "contrast_lowest": 8.23,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "01-empty--dusk--1280.png",
+   "index": 4
+  },
+  {
+   "state": "populated",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#load-sample",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-populated--paper--390.png",
+   "index": 5
+  },
+  {
+   "state": "populated",
+   "theme": "dusk",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#load-sample",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 2.31,
+    "contrast_below": 5,
+    "contrast_below_list": [
+     {
+      "el": "#tally",
+      "text": "4 parcels waiting.",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Monday 9:10 am",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Monday 2:45 pm",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Tuesday 8:30 am",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Tuesday 11:05 am",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     }
+    ],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [
+    "5 text elements below contrast (lowest 2.31)"
+   ],
+   "png": "02-populated--dusk--390.png",
+   "index": 6
+  },
+  {
+   "state": "populated",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#load-sample",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-populated--paper--1280.png",
+   "index": 7
+  },
+  {
+   "state": "populated",
+   "theme": "dusk",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#load-sample",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 2.31,
+    "contrast_below": 5,
+    "contrast_below_list": [
+     {
+      "el": "#tally",
+      "text": "4 parcels waiting.",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Monday 9:10 am",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Monday 2:45 pm",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Tuesday 8:30 am",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since Tuesday 11:05 am",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     }
+    ],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [
+    "5 text elements below contrast (lowest 2.31)"
+   ],
+   "png": "02-populated--dusk--1280.png",
+   "index": 8
+  },
+  {
+   "state": "validation error",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-unit=Enter the unit",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 11,
+    "contrast_lowest": 6.77,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-validation-error--paper--390.png",
+   "index": 9
+  },
+  {
+   "state": "validation error",
+   "theme": "dusk",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-unit=Enter the unit",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 11,
+    "contrast_lowest": 7.97,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-validation-error--dusk--390.png",
+   "index": 10
+  },
+  {
+   "state": "validation error",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-unit=Enter the unit",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 11,
+    "contrast_lowest": 6.77,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-validation-error--paper--1280.png",
+   "index": 11
+  },
+  {
+   "state": "validation error",
+   "theme": "dusk",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-unit=Enter the unit",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=0",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 11,
+    "contrast_lowest": 7.97,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-validation-error--dusk--1280.png",
+   "index": 12
+  },
+  {
+   "state": "long reference",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-unit=Unit 12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-ref=JD014600009876543210AU-RETURN-TO-SENDER-0000042-B",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=1",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 65,
+    "overflow_from": [
+     "span.ref (65 px past the edge)",
+     "span.since (65 px past the edge)"
+    ],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 12,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [
+    "Overflows sideways by 65 px"
+   ],
+   "png": "04-long-reference--paper--390.png",
+   "index": 13
+  },
+  {
+   "state": "long reference",
+   "theme": "dusk",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-unit=Unit 12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-ref=JD014600009876543210AU-RETURN-TO-SENDER-0000042-B",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=1",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 65,
+    "overflow_from": [
+     "span.ref (65 px past the edge)",
+     "span.since (65 px past the edge)"
+    ],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 12,
+    "contrast_lowest": 2.31,
+    "contrast_below": 2,
+    "contrast_below_list": [
+     {
+      "el": "#tally",
+      "text": "1 parcel waiting.",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since just now",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     }
+    ],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [
+    "Overflows sideways by 65 px",
+    "2 text elements below contrast (lowest 2.31)"
+   ],
+   "png": "04-long-reference--dusk--390.png",
+   "index": 14
+  },
+  {
+   "state": "long reference",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-unit=Unit 12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-ref=JD014600009876543210AU-RETURN-TO-SENDER-0000042-B",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=1",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 13,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-long-reference--paper--1280.png",
+   "index": 15
+  },
+  {
+   "state": "long reference",
+   "theme": "dusk",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-unit=Unit 12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-ref=JD014600009876543210AU-RETURN-TO-SENDER-0000042-B",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#shelf li=1",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 13,
+    "contrast_lowest": 2.31,
+    "contrast_below": 2,
+    "contrast_below_list": [
+     {
+      "el": "#tally",
+      "text": "1 parcel waiting.",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     },
+     {
+      "el": "span.since",
+      "text": "Waiting since just now",
+      "ratio": 2.31,
+      "need": 4.5,
+      "fg": "#5f5872",
+      "bg": "#262230"
+     }
+    ],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 0,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [
+    "2 text elements below contrast (lowest 2.31)"
+   ],
+   "png": "04-long-reference--dusk--1280.png",
+   "index": 16
+  },
+  {
+   "state": "collected parcels",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": false,
+   "why_not": "step 2 failed: click:#show-collected (nothing matches the selector)",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#show-collected",
+     "ok": false,
+     "detail": "nothing matches the selector"
+    }
+   ],
+   "facts": null,
+   "problems": [
+    "step 2 failed: click:#show-collected (nothing matches the selector)"
+   ],
+   "png": "05-collected-parcels--paper--390.png",
+   "index": 17
+  },
+  {
+   "state": "collected parcels",
+   "theme": "dusk",
+   "width": 390,
+   "height": 844,
+   "reached": false,
+   "why_not": "step 2 failed: click:#show-collected (nothing matches the selector)",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#show-collected",
+     "ok": false,
+     "detail": "nothing matches the selector"
+    }
+   ],
+   "facts": null,
+   "problems": [
+    "step 2 failed: click:#show-collected (nothing matches the selector)"
+   ],
+   "png": "05-collected-parcels--dusk--390.png",
+   "index": 18
+  },
+  {
+   "state": "collected parcels",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": false,
+   "why_not": "step 2 failed: click:#show-collected (nothing matches the selector)",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"paper\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#show-collected",
+     "ok": false,
+     "detail": "nothing matches the selector"
+    }
+   ],
+   "facts": null,
+   "problems": [
+    "step 2 failed: click:#show-collected (nothing matches the selector)"
+   ],
+   "png": "05-collected-parcels--paper--1280.png",
+   "index": 19
+  },
+  {
+   "state": "collected parcels",
+   "theme": "dusk",
+   "width": 1280,
+   "height": 800,
+   "reached": false,
+   "why_not": "step 2 failed: click:#show-collected (nothing matches the selector)",
+   "steps": [
+    {
+     "step": "click:[data-theme-choice=\"dusk\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#show-collected",
+     "ok": false,
+     "detail": "nothing matches the selector"
+    }
+   ],
+   "facts": null,
+   "problems": [
+    "step 2 failed: click:#show-collected (nothing matches the selector)"
+   ],
+   "png": "05-collected-parcels--dusk--1280.png",
+   "index": 20
+  }
+ ]
+}

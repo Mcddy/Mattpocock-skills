@@ -1,0 +1,33 @@
+# Primary journey for workshop-feedback.html: the disclosure, a rating with a note, an answer that
+# opens the conditional question, the rest skipped, then the response block.
+expect:#main=The workshop organiser
+expect:#main=deleted once the next workshop has run
+expect:#main=It sends nothing.
+expect-gone:#btn-next
+click:#btn-start
+check:#in-worthwhile-3
+fill:#note-worthwhile=The second half was better.
+click:#btn-next
+check:#in-pace-2
+click:#btn-next
+expect:#qt-rushed-part=Which part went too fast?
+fill:#in-rushed-part=The worked example
+click:#btn-next
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-finish
+expect:#main=Nothing has been sent.
+expect:#export-text=worthwhile = 4
+expect:#export-text=worthwhile.note = "The second half was better."
+expect:#export-text=rushed-part = "The worked example"
+expect:#export-text=level = SKIPPED
+expect:#export-text=end elicitor response: 13 questions, 1 note
+expect:#tally-caveat=They are not a validated measure of anything.

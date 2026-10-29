@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-text="regular" data-cards="grid">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heading for the Stallbook product page</title>
+<!--
+  Sample picker engine. One file, no outside requests, no dependencies.
+  It shows a few RENDERED options for a visual or wording choice on the user's real content.
+  The person shortlists, compares, tweaks, chooses, and copies a compact result back.
+
+  To make a picker: replace the PICKER object between the PICKER-DATA markers with strict JSON
+  (scripts/build_picker.py does this and validates first). For kind "custom", put one function per
+  option id in RENDERERS, between the PICKER-RENDERERS markers.
+
+  Delivery notes:
+  - No form element, no submit event, no alert, confirm or prompt.
+  - Storage is optional: host storage if present, then localStorage, then memory. The page says which.
+  - The result is always offered in a text box as well as by copy and download, because a sandboxed
+    frame can refuse both.
+  - Text is always set as text. Nothing from the data is assembled as markup.
+  - Everything inside a sample is inert display: specimen "buttons" and "inputs" are spans, so the
+    only controls on the page are the picker's own.
+  - picker.html#solo=OPTION-ID shows that option's sample alone, for measuring and screenshots.
+-->
+<style>
+:root{
+  --c-bg:#f4eee3;--c-surface:#fffaf1;--c-raised:#faf3e5;--c-ink:#2a2320;--c-muted:#655a50;--c-line:#d8ccba;
+  --c-accent:#8f4319;--c-on-accent:#fffaf1;--c-warn:#8e2a1c;--c-ok:#2c6446;--c-focus:#1f5c8a;
+  --target:44px;--bar:64px;--fs:16px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="slate"]{--c-bg:#eef1f3;--c-surface:#fbfcfd;--c-raised:#f3f6f8;--c-ink:#1f2a30;--c-muted:#51606a;--c-line:#c8d2d8;--c-accent:#245a7a;--c-on-accent:#fbfcfd;--c-warn:#8a2a22;--c-ok:#27634a;--c-focus:#7a3c12}
+:root[data-theme="ember"]{--c-bg:#231c18;--c-surface:#2d2520;--c-raised:#372d27;--c-ink:#f3e9dc;--c-muted:#c2b3a2;--c-line:#54463c;--c-accent:#f0a36b;--c-on-accent:#231c18;--c-warn:#ffac99;--c-ok:#9ed6b3;--c-focus:#9fd0f2}
+:root[data-theme="night"]{--c-bg:#12171c;--c-surface:#1a2128;--c-raised:#222b33;--c-ink:#e8eef2;--c-muted:#a9b8c2;--c-line:#3a4853;--c-accent:#8cc4e8;--c-on-accent:#12171c;--c-warn:#ffb0a3;--c-ok:#9bd8b6;--c-focus:#f2c08a}
+:root[data-text="large"]{--fs:18px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+[hidden]{display:none !important}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font:var(--fs)/1.5 var(--sans);padding-bottom:calc(var(--bar) + 16px)}
+.wrap{max-width:1240px;margin:0 auto;padding:16px 16px 24px}
+header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font:600 1.35rem/1.25 var(--serif);margin:0;overflow-wrap:anywhere}
+.question{margin:2px 0 0;color:var(--c-muted);font-size:.95rem}
+h2{font:600 1.15rem/1.3 var(--serif);margin:0;overflow-wrap:anywhere}
+h2:focus{outline:none}
+#main>h2{margin-bottom:8px}
+button,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer}
+.btn,.seg{min-height:var(--target);min-width:var(--target);padding:0 14px;border:1px solid var(--c-line);background:var(--c-surface);border-radius:6px}
+.btn:hover,.seg:hover{border-color:var(--c-ink)}
+.btn.primary{background:var(--c-accent);border-color:var(--c-accent);color:var(--c-on-accent);font-weight:600}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--c-muted);text-decoration:underline;text-underline-offset:3px}
+.btn.danger{border-color:var(--c-warn);color:var(--c-warn)}
+.btn[aria-disabled="true"]{opacity:.55;cursor:default}
+.seg[aria-pressed="true"],.btn[aria-pressed="true"]{border-color:var(--c-ink);box-shadow:inset 0 -3px 0 var(--c-accent);font-weight:600}
+:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
+.status{min-height:1.5em;margin:8px 0;color:var(--c-muted);font-size:.9rem}
+.lead{margin:0 0 12px;color:var(--c-muted);font-size:.95rem;max-width:70ch}
+.muted{color:var(--c-muted)}
+.warn{color:var(--c-warn);font-weight:600}
+
+/* the three views live behind one bar: at the thumb on a phone, under the title on a wide screen */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:var(--c-raised);border-top:2px solid var(--c-ink)}
+.bar .seg{min-height:48px;padding:0 6px;overflow-wrap:anywhere}
+.bar .seg[aria-current="page"]{border-color:var(--c-ink);box-shadow:inset 0 -3px 0 var(--c-accent);font-weight:600}
+/* a control that takes keyboard focus is scrolled clear of the fixed bar (and of the compare tabs above it) */
+html{scroll-padding-bottom:calc(var(--bar) + 20px)}
+html:has(body.comparing){scroll-padding-bottom:calc(var(--bar) + 88px)}
+@media (min-width:760px){
+  html,html:has(body.comparing){scroll-padding-bottom:0}
+  body{padding-bottom:24px}
+  .bar{position:static;border-top:0;background:transparent;padding:12px 0 0;max-width:520px}
+}
+
+/* option cards */
+.cards{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:760px){:root[data-cards="grid"] .cards.multi{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}}
+.card{min-width:0;border-top:3px solid transparent;padding-top:8px}
+.card.short{border-top-color:var(--c-ink)}
+.card.out{border-top:3px dashed var(--c-muted)}
+.card h3,.cmp-col h3,.meta h3{font:600 1.05rem/1.3 var(--serif);margin:0}
+#rig{height:0;overflow:hidden;visibility:hidden}
+.mat{border:1px solid var(--c-line);border-radius:4px;overflow:hidden;background:var(--c-surface)}
+.meta{padding:10px 2px 0}
+.card-head{padding:0 2px 8px}
+.name-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.tag{font-size:.8rem;font-weight:700;letter-spacing:.02em}
+.tag.rec{color:var(--c-accent)}
+.tag.out{color:var(--c-muted)}
+.note{margin:2px 0 0}
+.why{margin:2px 0 0;color:var(--c-muted);font-size:.9rem}
+.facts{margin:6px 0 0;color:var(--c-muted);font-size:.85rem}
+.facts .warn{font-size:inherit}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.acts .btn,.acts .seg{flex:1 1 120px}
+.mynote{margin:6px 0 0;font-size:.9rem;font-style:normal;border-left:3px solid var(--c-line);padding-left:8px;overflow-wrap:anywhere}
+
+.blank{padding:28px 4px;border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
+.blank p{margin:6px 0 14px;color:var(--c-muted);max-width:56ch}
+
+/* detail */
+.d-top{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:10px}
+.d-top h2{flex:1 1 200px}
+.panel{margin-top:16px;border-top:1px solid var(--c-line);padding-top:12px}
+.d-side>.acts:first-of-type{margin-top:10px}
+@media (min-width:980px){
+  .detail.split{display:grid;grid-template-columns:minmax(0,3fr) minmax(320px,2fr);gap:0 32px;align-items:start}
+  .detail.split .d-main{position:sticky;top:12px}
+}
+.panel h3{font:600 1rem var(--sans);margin:0 0 4px}
+.ctl{display:grid;gap:6px;margin-top:12px;max-width:560px}
+.ctl .lab{font-size:.9rem;color:var(--c-muted)}
+.ctl .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl input[type=range]{flex:1 1 200px;min-height:var(--target);accent-color:var(--c-accent)}
+.ctl output{min-width:5ch;font-family:var(--mono);font-size:.9rem}
+label.lab{display:block;font-size:.9rem;color:var(--c-muted);margin-bottom:4px}
+textarea{width:100%;min-height:88px;padding:10px 12px;border:1px solid var(--c-line);border-radius:6px;background:var(--c-surface);line-height:1.4}
+textarea[readonly]{font-family:var(--mono);font-size:.82rem;min-height:240px}
+.factlist{margin:6px 0 0;padding:0;list-style:none;font-size:.9rem;display:grid;gap:2px}
+.factlist li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--c-line);padding:2px 0}
+.factlist b{font-family:var(--mono);font-weight:600}
+
+/* compare */
+.cmp-pick{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.cmp{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+.cmp-col{min-width:0}
+.cmp-col .name-row{margin-bottom:6px}
+.cmp-tabs{position:fixed;left:0;right:0;bottom:var(--bar);z-index:4;display:flex;gap:6px;padding:8px 12px;background:var(--c-bg);border-top:1px solid var(--c-line)}
+.cmp-tabs .seg{flex:1 1 0;min-height:48px;padding:0 6px;overflow-wrap:anywhere}
+body.comparing{padding-bottom:calc(var(--bar) + 84px)}
+@media (min-width:760px){
+  .cmp.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cmp.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cmp-tabs{display:none}
+  .cmp-col[hidden]{display:block !important}
+  body.comparing{padding-bottom:24px}
+}
+
+/* page and session */
+.choice{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.choice .lab{min-width:84px;color:var(--c-muted);font-size:.9rem}
+.confirm{margin-top:10px;padding:12px;border:2px solid var(--c-warn);border-radius:6px;display:grid;gap:10px}
+.confirm p{margin:0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input[type=file]{min-height:var(--target);max-width:100%}
+
+/* ------------------------------------------------------------------------------------------
+   Samples. Everything below draws an OPTION, not the picker. Colours come only from the option's
+   own tokens (--o-*), never from the page chrome above.
+   ------------------------------------------------------------------------------------------ */
+.smp{--d:1;background:var(--o-bg);color:var(--o-text);font-family:var(--sans);font-size:var(--ctl-text-size,16px);line-height:1.5;padding:calc(16px * var(--d));overflow-wrap:anywhere}
+.smp[data-ctl-density="compact"]{--d:.6}
+.smp[data-ctl-density="roomy"]{--d:1.45}
+.smp h3{margin:0;font:600 1.25em/1.25 var(--serif)}
+.smp p{margin:0}
+
+.smp-theme .t-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px}
+.smp-theme .t-status{color:var(--o-ok);font-size:.85em;font-weight:600}
+.smp-theme .t-body{margin-top:calc(8px * var(--d))}
+.smp-theme .t-link{color:var(--o-accent);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+.smp-theme .t-panel{margin-top:calc(14px * var(--d));background:var(--o-surface);border:1px solid var(--o-line);border-radius:var(--ctl-radius,6px);padding:calc(12px * var(--d))}
+.smp-theme .t-label{display:block;font-size:.85em;color:var(--o-muted)}
+.smp-theme .t-input{display:block;margin-top:4px;background:var(--o-field);border:2px solid var(--o-danger);border-radius:var(--ctl-radius,6px);padding:calc(9px * var(--d)) 12px;min-height:calc(18px + 26px * var(--d))}
+.smp-theme .t-err{display:block;margin-top:4px;color:var(--o-danger);font-size:.85em;font-weight:600}
+.smp-theme table{width:100%;border-collapse:collapse;margin-top:calc(12px * var(--d));font-size:.9em}
+.smp-theme th{text-align:left;font-weight:600;color:var(--o-muted);font-size:.85em;padding:calc(6px * var(--d)) 8px calc(6px * var(--d)) 0;border-bottom:1px solid var(--o-line)}
+.smp-theme td{padding:calc(8px * var(--d)) 8px calc(8px * var(--d)) 0;border-bottom:1px solid var(--o-line)}
+.smp-theme th:last-child,.smp-theme td:last-child{text-align:right;padding-right:0;font-variant-numeric:tabular-nums}
+.smp-theme .t-btns{display:flex;flex-wrap:wrap;gap:calc(10px * var(--d)) 10px;margin-top:calc(14px * var(--d));align-items:flex-start}
+.smp-theme .t-b{display:grid;gap:3px;justify-items:start}
+.smp-theme .t-cap{font-size:.72em;color:var(--o-muted)}
+.sb-btn{display:inline-block;background:var(--o-accent);color:var(--o-on-accent);border:1px solid var(--o-accent);border-radius:var(--ctl-radius,6px);padding:calc(9px * var(--d)) 14px;font-weight:600;line-height:1.3}
+.sb-btn.hov{background:var(--o-accent-strong);border-color:var(--o-accent-strong);text-decoration:underline;text-underline-offset:3px}
+.sb-btn.foc{outline:3px solid var(--o-focus);outline-offset:2px}
+.sb-btn.dis{opacity:.5}
+.sb-btn.sec{background:var(--o-surface);color:var(--o-text);border-color:var(--o-line)}
+
+.smp-type .y-h{font-family:var(--y-hstack);font-weight:var(--y-hweight);font-size:calc(var(--y-hsize) * var(--ctl-scale-n,100) / 100);line-height:1.2;max-width:var(--ctl-measure,var(--y-measure))}
+.smp-type .y-p{font-family:var(--y-stack);font-weight:var(--y-weight);font-size:calc(var(--y-size) * var(--ctl-scale-n,100) / 100);line-height:var(--y-leading);max-width:var(--ctl-measure,var(--y-measure));margin-top:.7em}
+
+.frames{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;background:var(--c-surface);padding:12px}
+.fr{min-width:0}
+.fr.phone{flex:0 1 360px}
+.fr.wide{flex:1 1 320px}
+.fr-cap{font:600 .78rem var(--mono);color:var(--c-muted);margin:0 0 4px}
+.fr-box{border:1px solid var(--c-line);overflow:hidden;position:relative}
+.fr-box.cut{border-bottom:2px dashed var(--c-muted)}
+.fr-in{transform-origin:top left;container-type:inline-size}
+.smp-layout{padding:calc(14px * var(--d))}
+.smp-layout .l-title{font:600 1.1em/1.3 var(--serif);margin:0 0 calc(10px * var(--d))}
+.smp-layout .l-scroll{overflow-x:auto}
+.smp-layout table{border-collapse:collapse;width:max-content;min-width:100%;font-size:.92em;overflow-wrap:normal}
+.smp-layout td.ttl{min-width:16ch;max-width:30ch}
+.smp-layout th{text-align:left;color:var(--o-muted);font-weight:600;font-size:.85em;padding:calc(7px * var(--d)) 10px;border-bottom:2px solid var(--o-line);white-space:nowrap}
+.smp-layout td{padding:calc(9px * var(--d)) 10px;border-bottom:1px solid var(--o-line);vertical-align:top}
+.smp-layout .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.smp-layout .l-st{font-weight:600;white-space:nowrap}
+.smp-layout .l-st.alert{color:var(--o-danger)}
+.smp-layout[data-ctl-stripes="on"] tbody tr:nth-child(even),.smp-layout[data-ctl-stripes="on"] .l-row:nth-child(even){background:var(--o-surface)}
+.smp-layout .l-cards{display:grid;gap:calc(12px * var(--d));grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.smp-layout .l-card{background:var(--o-surface);border:1px solid var(--o-line);border-radius:6px;padding:calc(12px * var(--d))}
+.smp-layout .l-card .l-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.smp-layout .l-card .l-name{font-weight:600}
+.smp-layout .l-card .l-val{font:600 1.15em var(--mono);white-space:nowrap}
+.smp-layout .l-card dl{margin:calc(8px * var(--d)) 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.88em}
+.smp-layout .l-card dt{color:var(--o-muted)}
+.smp-layout .l-card dd{margin:0;text-align:right}
+.smp-layout .l-list{border-top:1px solid var(--o-line)}
+.smp-layout .l-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 12px;padding:calc(7px * var(--d)) 4px;border-bottom:1px solid var(--o-line)}
+.smp-layout .l-row .l-name{font-weight:600}
+.smp-layout .l-row .l-val{font-family:var(--mono);font-weight:600;white-space:nowrap}
+.smp-layout .l-row .l-meta{grid-column:1/-1;color:var(--o-muted);font-size:.85em}
+@container (min-width:700px){
+  .smp-layout .l-row{grid-template-columns:minmax(0,2fr) minmax(0,3fr) auto}
+  .smp-layout .l-row .l-meta{grid-column:auto;grid-row:1;align-self:center}
+  .smp-layout .l-row .l-name{grid-row:1}
+  .smp-layout .l-row .l-val{grid-row:1;grid-column:3}
+}
+
+.smp-copy{padding:0}
+.smp-copy .cp-nav{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding:calc(10px * var(--d)) 16px;border-bottom:1px solid var(--o-line);font-size:.9em}
+.smp-copy .cp-brand{font:600 1.05em var(--serif);margin-right:auto}
+.smp-copy .cp-item{color:var(--o-muted)}
+.smp-copy .cp-hero{padding:calc(28px * var(--d)) 16px calc(26px * var(--d));display:grid;gap:calc(12px * var(--d));justify-items:start;text-align:left}
+.smp-copy[data-ctl-align="centre"] .cp-hero{justify-items:center;text-align:center}
+.smp-copy .cp-h{font:600 var(--ctl-heading-size,30px)/1.15 var(--serif);letter-spacing:-.01em;margin:0;max-width:22ch}
+.smp-copy .cp-sub{font-size:1.05em;color:var(--o-muted);max-width:46ch}
+.smp-copy .cp-foot{font-size:.82em;color:var(--o-muted)}
+.smp-copy[data-ctl-action="off"] .cp-acts{display:none}
+.smp-copy .cp-acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.smp-copy .cp-notice{margin:16px;padding:calc(14px * var(--d));background:var(--o-surface);border:1px solid var(--o-line);border-left:4px solid var(--o-accent);border-radius:6px;display:grid;gap:8px;justify-items:start}
+.smp-copy .cp-notice .cp-h{font-size:var(--ctl-heading-size,19px);max-width:none}
+
+.smp-comp .k-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:calc(16px * var(--d)) 14px;align-items:start}
+.smp-comp .k-cell{display:grid;gap:5px;justify-items:start}
+.smp-comp .k-cap{font-size:.75em;color:var(--o-muted)}
+.kb{display:inline-block;border-radius:var(--ctl-radius,var(--k-radius));padding:calc(var(--k-pad-y) * var(--d)) var(--k-pad-x);font-weight:var(--k-weight);line-height:1.3;border:var(--k-border) solid var(--o-accent);background:var(--o-accent);color:var(--o-on-accent)}
+.kb.outline{background:transparent;color:var(--o-accent)}
+.kb.soft{background:var(--o-surface);color:var(--o-text);border-color:var(--o-line)}
+.kb.hov{text-decoration:underline;text-underline-offset:3px;background:var(--o-accent-strong);border-color:var(--o-accent-strong)}
+.kb.outline.hov,.kb.soft.hov{background:var(--o-surface)}
+.kb.foc{outline:3px solid var(--o-focus);outline-offset:2px}
+.kb.prs{transform:translateY(1px);box-shadow:inset 0 2px 0 var(--o-text)}
+.kb.dis{opacity:.5}
+.kf{display:grid;gap:4px;width:100%}
+.kf .kf-l{font-size:.85em;color:var(--o-muted)}
+.kf .kf-i{display:block;background:var(--o-field);border:var(--k-border) solid var(--o-line);border-radius:var(--ctl-radius,var(--k-radius));padding:calc(var(--k-pad-y) * var(--d)) var(--k-pad-x);min-height:calc(1.5em + 2 * var(--k-pad-y) * var(--d))}
+.kf .kf-i.ph{color:var(--o-muted)}
+.kf.foc .kf-i{outline:3px solid var(--o-focus);outline-offset:1px}
+.kf.err .kf-i{border-color:var(--o-danger);border-width:2px}
+.kf .kf-e{color:var(--o-danger);font-size:.85em;font-weight:600}
+.kf.dis{opacity:.5}
+
+.smp-custom p{margin:0 0 6px}
+body.solo{padding:0}
+body.solo .wrap{max-width:none;padding:0}
+@media (prefers-reduced-motion:no-preference){.btn,.seg{transition:border-color .12s ease}}
+</style>
+</head>
+<body>
+<div class="wrap" id="chrome">
+  <header class="top">
+    <div>
+      <h1 id="title">Sample picker</h1>
+      <p class="question" id="question"></p>
+    </div>
+    <button type="button" class="btn" id="page-toggle" aria-pressed="false">Page</button>
+  </header>
+  <nav class="bar" aria-label="Views">
+    <button type="button" class="seg" id="nav-options">Options</button>
+    <button type="button" class="seg" id="nav-compare">Compare</button>
+    <button type="button" class="seg" id="nav-result">Result</button>
+  </nav>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <main id="main"></main>
+  <div id="rig" aria-hidden="true"></div>
+</div>
+<div id="solo"></div>
+
+<script>
+/* PICKER-DATA:START */
+const PICKER = {
+ "id": "stallbook-heading",
+ "version": 1,
+ "title": "Heading for the Stallbook product page",
+ "question": "Which heading and sub-line should open the product page?",
+ "kind": "copy",
+ "recommended": {
+  "id": "outcome-first",
+  "reason": "it is the only one that tells a stallholder what they get, in their own terms, before it says how."
+ },
+ "options": [
+  {
+   "id": "plain-description",
+   "name": "Says what it is",
+   "note": "A plain label for the product; the shortest heading, and the least to react to.",
+   "sample": {
+    "heading": "Bookkeeping for market stalls",
+    "sub": "Record each sale as you make it, and see what every market day earned after stall fees and stock."
+   }
+  },
+  {
+   "id": "outcome-first",
+   "name": "Leads with the result",
+   "note": "Opens on the moment the product pays off: knowing the day's profit at closing time.",
+   "sample": {
+    "heading": "Know what Saturday earned before you pack up",
+    "sub": "Stallbook adds up sales, stall fees and stock as you go, so the day's profit is on your phone at closing time."
+   }
+  },
+  {
+   "id": "problem-first",
+   "name": "Names the pain",
+   "note": "Starts from the mess it replaces; warmer and more casual, and vaguer about what the product does.",
+   "sample": {
+    "heading": "No more shoebox of receipts",
+    "sub": "Photograph a receipt, tap a sale, and Stallbook keeps the books a market stall needs."
+   }
+  },
+  {
+   "id": "speed-claim",
+   "name": "One concrete claim",
+   "note": "Commits to a single measurable promise about speed and signal; the longest heading.",
+   "sample": {
+    "heading": "Record a sale in two taps, with or without signal",
+    "sub": "Built for a busy stall: large buttons, works offline, and a total for each market day."
+   }
+  }
+ ],
+ "controls": [
+  {
+   "id": "align",
+   "label": "Alignment",
+   "type": "choice",
+   "options": [
+    {
+     "value": "left",
+     "label": "Left"
+    },
+    {
+     "value": "centre",
+     "label": "Centred"
+    }
+   ],
+   "default": "left"
+  },
+  {
+   "id": "heading-size",
+   "label": "Heading size",
+   "type": "range",
+   "min": 24,
+   "max": 40,
+   "step": 2,
+   "unit": "px",
+   "default": 30
+  },
+  {
+   "id": "action",
+   "label": "Show the buttons",
+   "type": "toggle",
+   "default": true
+  }
+ ],
+ "context": {
+  "component": "header",
+  "brand": "Stallbook",
+  "nav": [
+   "How it works",
+   "Pricing",
+   "Sign in"
+  ],
+  "action": "Start a free month",
+  "secondary": "See a sample market day",
+  "footnote": "No card needed. Works offline at the stall.",
+  "tokens": {
+   "bg": "#fbf7ef",
+   "surface": "#ffffff",
+   "text": "#26211c",
+   "muted": "#5f554a",
+   "line": "#d9cfbf",
+   "accent": "#1f5f4a",
+   "on-accent": "#f8fbf8"
+  }
+ }
+};
+/* PICKER-DATA:END */
+/* PICKER-RENDERERS:START */
+const RENDERERS = {};
+/* PICKER-RENDERERS:END */
+</script>
+<script>
+(function () {
+  'use strict';
+  var P = PICKER;
+  var APP = 'sample-picker', SCHEMA = 1;
+  var BS = String.fromCharCode(92);
+  var $ = function (id) { return document.getElementById(id); };
+  var BASE = {bg: '#fbf7ef', surface: '#ffffff', text: '#26211c', muted: '#5f554a', line: '#d9cfbf', accent: '#8f4319', 'on-accent': '#fffaf1', danger: '#8e2a1c', ok: '#2c6446'};
+
+  // what the person has done. This is the whole of the saved session.
+  var S = {shortlist: [], rejected: [], chosen: null, notes: {}, controls: {}};
+  // where the page is. Not saved.
+  var V = {view: 'options', detail: null, tab: null, picked: null, mode: 'text', importing: null, confirming: false, undo: null, copyNote: '', importNote: '', importBad: false};
+  var PAGE_DEFAULTS = {theme: 'paper', text: 'regular', cards: 'grid'};
+  var page = {theme: 'paper', text: 'regular', cards: 'grid'};
+
+  // ---------- helpers ----------
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'on') Object.keys(attrs.on).forEach(function (ev) { n.addEventListener(ev, attrs.on[ev]); });
+      else if (attrs[k] !== false && attrs[k] != null) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function say(text) { $('status').textContent = text; }
+  function opt(id) { for (var i = 0; i < P.options.length; i++) if (P.options[i].id === id) return P.options[i]; return null; }
+  function has(list, id) { return list.indexOf(id) >= 0; }
+  function contentId() { return P.id + '@' + (P.version || 1); }
+  function clone(v) { return JSON.parse(JSON.stringify(v)); }
+  function nowIso() { return new Date().toISOString().replace(/\.\d+Z$/, 'Z'); }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function asciiJson(v, indent) {
+    var s = JSON.stringify(v, null, indent), out = '';
+    for (var i = 0; i < s.length; i++) { var c = s.charCodeAt(i); out += c > 126 ? BS + 'u' + ('0000' + c.toString(16)).slice(-4) : s.charAt(i); }
+    return out;
+  }
+  function controlDefaults() { var d = {}; (P.controls || []).forEach(function (c) { d[c.id] = c.default; }); return d; }
+  function controlLabel(c, v) {
+    if (c.type === 'toggle') return v ? 'on' : 'off';
+    if (c.type === 'choice') { var o = choiceOptions(c).filter(function (x) { return x.value === v; })[0]; return o ? o.label : String(v); }
+    return String(v) + (c.unit || '');
+  }
+  function choiceOptions(c) { return (c.options || []).map(function (o) { return typeof o === 'string' ? {value: o, label: o} : o; }); }
+
+  // ---------- storage: host storage, then localStorage, then memory ----------
+  var store = {
+    kind: 'memory', mem: {},
+    key: function () { return APP + ':' + contentId(); },
+    init: function () {
+      var self = this;
+      try { if (window.storage && typeof window.storage.get === 'function' && typeof window.storage.set === 'function') { self.kind = 'host'; return; } } catch (e) {}
+      try { localStorage.setItem(APP + ':probe', '1'); localStorage.removeItem(APP + ':probe'); self.kind = 'local'; } catch (e) { self.kind = 'memory'; }
+    },
+    read: function (key) {
+      var self = this;
+      if (self.kind === 'host') {
+        try {
+          return Promise.resolve(window.storage.get(key)).then(function (v) { return v && typeof v === 'object' && 'value' in v ? v.value : v; })
+            .catch(function () { self.fallBack(); return self.read(key); });
+        } catch (e) { self.fallBack(); return self.read(key); }
+      }
+      if (self.kind === 'local') { try { return Promise.resolve(localStorage.getItem(key)); } catch (e) { self.kind = 'memory'; } }
+      return Promise.resolve(self.mem[key] || null);
+    },
+    write: function (key, text) {
+      var self = this;
+      self.mem[key] = text;
+      if (self.kind === 'host') {
+        try { Promise.resolve(window.storage.set(key, text)).catch(function () { self.fallBack(); self.write(key, text); noteStorage(); }); } catch (e) { self.fallBack(); self.write(key, text); }
+        return;
+      }
+      if (self.kind === 'local') { try { localStorage.setItem(key, text); } catch (e) { self.kind = 'memory'; noteStorage(); } }
+    },
+    fallBack: function () { try { localStorage.setItem(APP + ':probe', '1'); localStorage.removeItem(APP + ':probe'); this.kind = 'local'; } catch (e) { this.kind = 'memory'; } },
+    words: function () {
+      if (this.kind === 'host') return 'Saved by the app showing this page.';
+      if (this.kind === 'local') return 'Saved in this browser.';
+      return 'Not saved: this page cannot store data here. Copy the result or the session to keep your work.';
+    }
+  };
+  function noteStorage() { var n = $('storage-note'); if (n) n.textContent = store.words(); }
+  function envelope() {
+    var chosen = S.chosen ? opt(S.chosen) : null;
+    return {app: APP, schema: SCHEMA, content_id: contentId(), saved_at: nowIso(), data: {
+      kind: P.kind, status: chosen ? 'final' : 'in progress', chosen: chosen ? chosen.id : null, chosen_name: chosen ? chosen.name : null,
+      controls: clone(S.controls), shortlist: S.shortlist.slice(), rejected: S.rejected.slice(), notes: clone(S.notes),
+      facts: chosen ? resultFacts(chosen.id) : []
+    }};
+  }
+  function save() { store.write(store.key(), JSON.stringify(envelope())); }
+  function changed() { save(); syncNav(); }
+
+  // ---------- reading a saved or pasted session ----------
+  // Returns {ok, why, state, dropped, differs}. Never touches S.
+  function readSession(text) {
+    if (!text || !text.trim()) return {ok: false, why: 'Nothing was pasted. Paste a saved session, or choose a file.'};
+    var d;
+    try { d = JSON.parse(text); } catch (e) { return {ok: false, why: 'That is not valid JSON, so nothing was loaded. A saved session starts with { and ends with }.'}; }
+    if (!d || typeof d !== 'object' || Array.isArray(d)) return {ok: false, why: 'That is JSON, but not a saved session. Nothing was loaded.'};
+    if (d.app !== APP) return {ok: false, why: 'That file was saved by "' + String(d.app) + '", not by a sample picker. Nothing was loaded.'};
+    if (typeof d.schema !== 'number' || d.schema % 1 !== 0 || d.schema < 1) return {ok: false, why: 'The file has no usable schema number. Nothing was loaded.'};
+    if (d.schema > SCHEMA) return {ok: false, why: 'The file was saved by a newer picker (schema ' + d.schema + '; this page reads up to ' + SCHEMA + '). Nothing was loaded.'};
+    // Older schemas would be migrated here, one explicit step per version. Schema 1 is the first, so there are none yet.
+    var x = d.data;
+    if (!x || typeof x !== 'object' || !Array.isArray(x.shortlist) || !Array.isArray(x.rejected) || !x.notes || typeof x.notes !== 'object' || !x.controls || typeof x.controls !== 'object')
+      return {ok: false, why: 'The file is missing its shortlist, rejected list, notes or controls. Nothing was loaded.'};
+    var dropped = [], st = {shortlist: [], rejected: [], chosen: null, notes: {}, controls: controlDefaults()};
+    var keep = function (id) { if (typeof id === 'string' && opt(id)) return true; if (dropped.indexOf(String(id)) < 0) dropped.push(String(id)); return false; };
+    x.shortlist.forEach(function (id) { if (keep(id) && !has(st.shortlist, id)) st.shortlist.push(id); });
+    x.rejected.forEach(function (id) { if (keep(id) && !has(st.rejected, id) && !has(st.shortlist, id)) st.rejected.push(id); });
+    if (x.chosen != null && keep(x.chosen)) st.chosen = x.chosen;
+    Object.keys(x.notes).forEach(function (id) { if (keep(id) && typeof x.notes[id] === 'string' && x.notes[id]) st.notes[id] = x.notes[id]; });
+    (P.controls || []).forEach(function (c) { if (Object.prototype.hasOwnProperty.call(x.controls, c.id) && validControl(c, x.controls[c.id])) st.controls[c.id] = x.controls[c.id]; });
+    return {ok: true, state: st, dropped: dropped, differs: d.content_id !== contentId() ? String(d.content_id) : null};
+  }
+  function validControl(c, v) {
+    if (c.type === 'toggle') return v === true || v === false;
+    if (c.type === 'choice') return choiceOptions(c).some(function (o) { return o.value === v; });
+    return typeof v === 'number' && isFinite(v) && v >= c.min && v <= c.max;
+  }
+  function adopt(st) { S = st; applyControlsEverywhere(); save(); }
+
+  // ---------- samples ----------
+  function tokensFor(o) {
+    var t = {}, k, ctx = (P.context && P.context.tokens) || {};
+    for (k in BASE) t[k] = BASE[k];
+    for (k in ctx) t[k] = ctx[k];
+    for (k in (o.tokens || {})) t[k] = o.tokens[k];
+    if (!t['accent-strong']) t['accent-strong'] = t.accent;
+    if (!t.focus) t.focus = t.accent;
+    if (!t.field) t.field = t.surface;
+    return t;
+  }
+  function smp(cls, o) {
+    var root = el('div', {class: 'smp ' + cls, 'data-sample': o.id, role: 'group', 'aria-label': 'Sample of ' + o.name});
+    var t = tokensFor(o);
+    Object.keys(t).forEach(function (k) { if (/^[a-z][a-z0-9-]*$/.test(k)) root.style.setProperty('--o-' + k, String(t[k])); });
+    applyControls(root);
+    return root;
+  }
+  function applyControls(root) {
+    (P.controls || []).forEach(function (c) {
+      var v = S.controls[c.id];
+      if (c.type === 'toggle') root.setAttribute('data-ctl-' + c.id, v ? 'on' : 'off');
+      else if (c.type === 'choice') root.setAttribute('data-ctl-' + c.id, String(v));
+      else { root.style.setProperty('--ctl-' + c.id, String(v) + (c.unit || '')); root.style.setProperty('--ctl-' + c.id + '-n', String(v)); }
+    });
+  }
+  function applyControlsEverywhere() {
+    document.querySelectorAll('.smp').forEach(function (r) { applyControls(r); if (r._redraw) r._redraw(); });
+    fitFrames();
+    refreshFacts();
+  }
+  function span(cls, role, text) { return el('span', {class: cls, 'data-role': role, text: text}); }
+
+  var RENDER = {
+    theme: function (o) {
+      var c = P.context, root = smp('smp-theme', o);
+      root.appendChild(el('div', {class: 't-head'}, [el('h3', {'data-role': 'heading', text: c.title}), c.status ? span('t-status', 'status message', c.status) : null]));
+      var body = el('p', {class: 't-body', 'data-role': 'body text', text: c.body});
+      if (c.link) { body.appendChild(document.createTextNode(' ')); body.appendChild(span('t-link', 'link', c.link)); }
+      root.appendChild(body);
+      var panel = el('div', {class: 't-panel'});
+      if (c.field) {
+        panel.appendChild(span('t-label', 'label on surface', c.field.label));
+        panel.appendChild(span('t-input', 'input text', c.field.value));
+        panel.appendChild(span('t-err', 'error text', c.field.error));
+      }
+      if (c.rows && c.rows.length) {
+        var head = el('tr', {}, (c.columns || []).map(function (h) { return el('th', {scope: 'col', 'data-role': 'muted text on surface', text: h}); }));
+        var rows = c.rows.map(function (r) { return el('tr', {}, r.map(function (v) { return el('td', {'data-role': 'text on surface', text: String(v)}); })); });
+        panel.appendChild(el('table', {}, [el('thead', {}, [head]), el('tbody', {}, rows)]));
+      }
+      root.appendChild(panel);
+      var states = [['', 'rest'], [' hov', 'hover'], [' foc', 'keyboard focus'], [' dis', 'disabled']];
+      var btns = el('div', {class: 't-btns'}, states.map(function (s) {
+        return el('span', {class: 't-b'}, [el('span', {class: 'sb-btn' + s[0], 'data-role': s[1] === 'disabled' ? null : (s[1] === 'hover' ? 'button label on hover' : 'button label'), 'aria-disabled': s[1] === 'disabled' ? 'true' : null, text: c.primary}), span('t-cap', 'muted text', s[1])]);
+      }));
+      if (c.secondary) btns.appendChild(el('span', {class: 't-b'}, [el('span', {class: 'sb-btn sec', 'data-role': 'secondary button label', text: c.secondary}), span('t-cap', 'muted text', 'secondary')]));
+      root.appendChild(btns);
+      root._facts = function () { return contrastFacts(root); };
+      return root;
+    },
+    type: function (o) {
+      var c = P.context, s = o.sample || {}, root = smp('smp-type', o);
+      var set = function (k, v) { root.style.setProperty(k, String(v)); };
+      set('--y-stack', s.stack); set('--y-size', (s.size || 17) + 'px'); set('--y-weight', s.weight || 400);
+      set('--y-leading', s.leading || 1.55); set('--y-measure', (s.measure || 64) + 'ch');
+      set('--y-hstack', s.heading_stack || s.stack); set('--y-hweight', s.heading_weight || 700); set('--y-hsize', (s.heading_size || Math.round((s.size || 17) * 1.6)) + 'px');
+      if (c.heading) root.appendChild(el('h3', {class: 'y-h', text: c.heading}));
+      var paras = Array.isArray(c.text) ? c.text : [c.text];
+      paras.forEach(function (t) { root.appendChild(el('p', {class: 'y-p', text: t})); });
+      root._facts = function () {
+        var f = fontReport(s.stack), p = root.querySelector('.y-p'), out = [{label: 'font in use here', value: f.used}];
+        if (f.missing.length) out.push({label: 'named but not installed here', value: f.missing.join(', ')});
+        if (p) {
+          var lh = parseFloat(getComputedStyle(p).lineHeight), lines = lh ? Math.max(1, Math.round(p.getBoundingClientRect().height / lh)) : 0;
+          if (lines) out.push({label: 'characters per line, first paragraph', value: Math.round(p.textContent.length / lines)});
+          out.push({label: 'text size in px', value: Math.round(parseFloat(getComputedStyle(p).fontSize) * 10) / 10});
+        }
+        return out;
+      };
+      return root;
+    },
+    layout: function (o) {
+      var wrap = el('div', {class: 'frames', 'data-sample-wrap': o.id});
+      var boxes = [];
+      wrap._clip = V.view !== 'detail';
+      [['phone', 360, 'Phone, 360 wide', 640], ['wide', 960, 'Wide, 960 wide', 600]].forEach(function (f) {
+        var inner = layoutSample(o);
+        var hold = el('div', {class: 'fr-in'}, [inner]);
+        hold.style.width = f[1] + 'px';
+        var cap = el('p', {class: 'fr-cap', text: f[2]});
+        var box = el('div', {class: 'fr-box', 'data-frame-width': String(f[1])}, [hold]);
+        wrap.appendChild(el('div', {class: 'fr ' + f[0]}, [cap, box]));
+        boxes.push({kind: f[0], w: f[1], inner: inner, hold: hold, cap: cap, label: f[2], screen: f[3]});
+      });
+      wrap._boxes = boxes;
+      wrap._facts = function () {
+        return boxes.map(function (b) {
+          var sc = b.inner.querySelector('.l-scroll'), over = sc ? sc.scrollWidth - sc.clientWidth : 0, tall = b.hold.offsetHeight;
+          return {label: (b.kind === 'phone' ? 'on a phone, ' : 'on a wide screen, ') + b.w + ' wide',
+            value: tall + ' px tall' + (b.kind === 'phone' ? ' (' + (tall / b.screen).toFixed(1) + ' times a ' + b.screen + ' px screen)' : '') +
+              (over > 1 ? ', scrolls sideways (' + sc.scrollWidth + ' px of content)' : ', no sideways scrolling')};
+        });
+      };
+      return wrap;
+    },
+    copy: function (o) {
+      var c = P.context, s = o.sample || {}, root = smp('smp-copy', o);
+      var acts = function (label) {
+        var a = el('div', {class: 'cp-acts'});
+        if (label) a.appendChild(el('span', {class: 'sb-btn', 'data-slot': 'action', text: label}));
+        if (c.secondary) a.appendChild(el('span', {class: 'sb-btn sec', text: c.secondary}));
+        return a.childNodes.length ? a : null;
+      };
+      if (c.component === 'notice') {
+        root.appendChild(el('div', {class: 'cp-notice'}, [
+          el('h3', {class: 'cp-h', 'data-slot': 'heading', text: s.heading}),
+          s.sub ? el('p', {class: 'cp-sub', 'data-slot': 'sub', text: s.sub}) : null,
+          acts(s.action || c.action)
+        ]));
+      } else {
+        var nav = el('div', {class: 'cp-nav'}, [el('span', {class: 'cp-brand', text: c.brand || ''})]);
+        (c.nav || []).forEach(function (n) { nav.appendChild(el('span', {class: 'cp-item', text: n})); });
+        root.appendChild(nav);
+        root.appendChild(el('div', {class: 'cp-hero'}, [
+          el('h3', {class: 'cp-h', 'data-slot': 'heading', text: s.heading}),
+          s.sub ? el('p', {class: 'cp-sub', 'data-slot': 'sub', text: s.sub}) : null,
+          acts(s.action || c.action),
+          c.footnote ? el('p', {class: 'cp-foot', text: c.footnote}) : null
+        ]));
+      }
+      root._facts = function () {
+        var out = [];
+        ['heading', 'sub', 'action'].forEach(function (slot) {
+          var t = s[slot]; if (!t) return;
+          out.push({label: slot + ' length', value: t.length + ' characters, ' + plural(t.trim().split(/\s+/).length, 'word', 'words')});
+        });
+        var h = root.querySelector('.cp-h');
+        if (h) { var lh = parseFloat(getComputedStyle(h).lineHeight); if (lh) out.push({label: 'heading lines at this width', value: Math.max(1, Math.round(h.getBoundingClientRect().height / lh))}); }
+        return out;
+      };
+      return root;
+    },
+    component: function (o) {
+      var c = P.context, s = o.sample || {}, t = o.tokens || {}, root = smp('smp-comp', o);
+      var set = function (k, v) { root.style.setProperty(k, String(v)); };
+      set('--k-radius', (s.radius != null ? s.radius : 6) + 'px'); set('--k-border', (s.border != null ? s.border : 1) + 'px');
+      set('--k-weight', s.weight || 600); set('--k-pad-y', (s.pad_y != null ? s.pad_y : 10) + 'px'); set('--k-pad-x', (s.pad_x != null ? s.pad_x : 16) + 'px');
+      var grid = el('div', {class: 'k-grid'}), rest = null;
+      var cell = function (node, cap) { grid.appendChild(el('div', {class: 'k-cell'}, [node, el('span', {class: 'k-cap', text: cap})])); return node; };
+      if (c.component === 'field') {
+        var field = function (cls, value, isPh, err) {
+          return el('div', {class: 'kf' + cls, 'aria-disabled': cls === ' dis' ? 'true' : null}, [el('span', {class: 'kf-l', text: c.label}), el('span', {class: 'kf-i' + (isPh ? ' ph' : ''), text: value}), err ? el('span', {class: 'kf-e', text: err}) : null]);
+        };
+        rest = cell(field('', c.placeholder || '', true), 'empty');
+        cell(field('', c.value, false), 'filled');
+        cell(field(' foc', c.value, false), 'keyboard focus');
+        cell(field(' err', c.value, false, c.error), 'error');
+        cell(field(' dis', c.value, false), 'disabled');
+      } else {
+        var v = s.variant && s.variant !== 'solid' ? ' ' + s.variant : '';
+        rest = cell(el('span', {class: 'kb' + v, text: c.label}), 'rest');
+        cell(el('span', {class: 'kb hov' + v, text: c.label}), 'hover');
+        cell(el('span', {class: 'kb foc' + v, text: c.label}), 'keyboard focus');
+        cell(el('span', {class: 'kb prs' + v, text: c.label}), 'pressed');
+        cell(el('span', {class: 'kb' + v, text: c.busy_label || c.label}), 'busy');
+        cell(el('span', {class: 'kb dis' + v, 'aria-disabled': 'true', text: c.label}), 'disabled');
+      }
+      root.appendChild(grid);
+      root._facts = function () {
+        var node = c.component === 'field' ? rest.querySelector('.kf-i') : rest, r = node.getBoundingClientRect(), k = measure(node);
+        var out = [{label: 'size at rest', value: Math.round(r.width) + ' by ' + Math.round(r.height) + ' px' + (r.height < 44 ? ', under the 44 px touch height' : '')}];
+        if (k) out.push({label: 'text contrast at rest', value: k.ratio});
+        return out;
+      };
+      return root;
+    },
+    custom: function (o) {
+      var root = smp('smp-custom', o), fn = RENDERERS && RENDERERS[o.id], facts = null;
+      // a custom renderer is given the current tweak values, so it is run again when one changes
+      var draw = function () {
+        root.textContent = ''; facts = null;
+        if (typeof fn !== 'function') { root.appendChild(el('p', {text: 'No renderer was supplied for "' + o.id + '". Add a function for it to RENDERERS.'})); return; }
+        try { facts = fn(root, {option: o, context: P.context, controls: clone(S.controls), el: el}); }
+        catch (e) { root.textContent = ''; root.appendChild(el('p', {text: 'The renderer for "' + o.id + '" stopped: ' + String(e && e.message || e)})); }
+      };
+      draw();
+      root._redraw = draw;
+      root._facts = function () { return Array.isArray(facts) ? facts : []; };
+      return root;
+    }
+  };
+  function layoutSample(o) {
+    var c = P.context, s = o.sample || {}, cols = c.columns || [], root = smp('smp-layout', o);
+    var by = function (role) { return cols.filter(function (k) { return k.role === role; })[0]; };
+    var title = by('title') || cols[0], value = by('value'), status = by('status');
+    var meta = cols.filter(function (k) { return k !== title && k !== value && k !== status; });
+    var st = function (row, tag) { var v = String(row[status.key]); return el(tag, {class: 'l-st' + ((status.alert || []).indexOf(v) >= 0 ? ' alert' : ''), text: v}); };
+    if (c.title) root.appendChild(el('p', {class: 'l-title', text: c.title}));
+    if (s.layout === 'cards') {
+      root.appendChild(el('div', {class: 'l-cards'}, c.rows.map(function (r) {
+        var dl = el('dl');
+        meta.forEach(function (k) { dl.appendChild(el('dt', {text: k.label})); dl.appendChild(el('dd', {text: String(r[k.key])})); });
+        if (status) { dl.appendChild(el('dt', {text: status.label})); dl.appendChild(st(r, 'dd')); }
+        return el('div', {class: 'l-card'}, [el('div', {class: 'l-top'}, [el('span', {class: 'l-name', text: String(r[title.key])}), value ? el('span', {class: 'l-val', text: String(r[value.key])}) : null]), dl]);
+      })));
+    } else if (s.layout === 'list') {
+      root.appendChild(el('div', {class: 'l-list'}, c.rows.map(function (r) {
+        var m = el('span', {class: 'l-meta'});
+        meta.forEach(function (k, i) { m.appendChild(document.createTextNode((i ? ', ' : '') + String(r[k.key]))); });
+        if (status) { m.appendChild(document.createTextNode(meta.length ? ', ' : '')); m.appendChild(st(r, 'span')); }
+        return el('div', {class: 'l-row'}, [el('span', {class: 'l-name', text: String(r[title.key])}), value ? el('span', {class: 'l-val', text: String(r[value.key])}) : el('span'), m]);
+      })));
+    } else {
+      var head = el('tr', {}, cols.map(function (k) { return el('th', {scope: 'col', class: k === value ? 'num' : null, text: k.label}); }));
+      var rows = c.rows.map(function (r) { return el('tr', {}, cols.map(function (k) { return k === status ? el('td', {}, [st(r, 'span')]) : el('td', {class: k === value ? 'num' : (k === title ? 'ttl' : null), text: String(r[k.key])}); })); });
+      root.appendChild(el('div', {class: 'l-scroll'}, [el('table', {}, [el('thead', {}, [head]), el('tbody', {}, rows)])]));
+    }
+    return root;
+  }
+  function sample(o) { return (RENDER[P.kind] || RENDER.custom)(o); }
+  // scale each layout frame to the room it has, and say so
+  function fitFrames() {
+    document.querySelectorAll('.frames').forEach(function (wrap) {
+      (wrap._boxes || []).forEach(function (b) {
+        var box = b.hold.parentNode, avail = box.clientWidth;
+        if (!avail) return;
+        var k = Math.min(1, avail / b.w), tall = b.hold.offsetHeight, cut = wrap._clip && tall > b.screen;
+        b.hold.style.transform = k < 1 ? 'scale(' + k + ')' : 'none';
+        box.style.height = Math.ceil((cut ? b.screen : tall) * k) + 'px';
+        box.classList.toggle('cut', !!cut);
+        b.cap.textContent = b.label + (cut ? ': the first ' + b.screen + ' of ' + tall + ' px' : '') + (k < 0.995 ? ', shown at ' + Math.round(k * 100) + ' percent' : '');
+      });
+    });
+  }
+
+  // ---------- measured facts ----------
+  // Same method as contrast_check.py: the computed text colour against the nearest solid background.
+  function measure(e) {
+    var parse = function (s) { var m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null; var p = m[1].split(/[,\s\/]+/).filter(Boolean).map(Number); return {r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1}; };
+    var over = function (t, u) { return {r: t.r * t.a + u.r * (1 - t.a), g: t.g * t.a + u.g * (1 - t.a), b: t.b * t.a + u.b * (1 - t.a), a: 1}; };
+    var lin = function (v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    var lum = function (c) { return 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b); };
+    var cs = getComputedStyle(e), stack = [], cur = e, opacity = 1;
+    while (cur && cur.nodeType === 1) {
+      var s = getComputedStyle(cur); opacity *= Number(s.opacity);
+      if (s.backgroundImage && s.backgroundImage !== 'none') return null;
+      var bg = parse(s.backgroundColor);
+      if (bg && bg.a > 0) { stack.push(bg); if (bg.a >= 1) break; }
+      cur = cur.parentElement;
+    }
+    var back = {r: 255, g: 255, b: 255, a: 1};
+    for (var i = stack.length - 1; i >= 0; i--) back = over(stack[i], back);
+    var fg = parse(cs.color); if (!fg) return null;
+    fg = over({r: fg.r, g: fg.g, b: fg.b, a: fg.a * opacity}, back);
+    var x = lum(fg), y = lum(back), ratio = (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    var size = parseFloat(cs.fontSize), weight = parseInt(cs.fontWeight, 10) || 400;
+    var hex = function (c) { return '#' + [c.r, c.g, c.b].map(function (v) { return ('0' + Math.round(v).toString(16)).slice(-2); }).join(''); };
+    return {ratio: Math.round(ratio * 100) / 100, need: (size >= 24 || (size >= 18.66 && weight >= 700)) ? 3 : 4.5, fg: hex(fg), bg: hex(back)};
+  }
+  function contrastFacts(root) {
+    // one fact per distinct pair of colours, named for every part of the specimen that uses it
+    var by = {}, order = [];
+    root.querySelectorAll('[data-role]').forEach(function (e) {
+      var m = measure(e), role = e.getAttribute('data-role');
+      if (!m) return;
+      var key = m.fg + ' on ' + m.bg;
+      if (!(key in by)) { by[key] = {ratio: m.ratio, roles: []}; order.push(key); }
+      if (by[key].roles.indexOf(role) < 0) by[key].roles.push(role);
+    });
+    return order.map(function (key) { return {label: by[key].roles.join(', ') + ' contrast', value: by[key].ratio}; });
+  }
+  var GENERIC = ['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy'];
+  function fontReport(stack) {
+    var ctx = fontReport.ctx || (fontReport.ctx = document.createElement('canvas').getContext('2d'));
+    var probe = 'mmmmmmmmmmlliWQ@1234567890';
+    var present = function (name) {
+      return ['monospace', 'serif', 'sans-serif'].some(function (b) {
+        ctx.font = '72px ' + b; var w0 = ctx.measureText(probe).width;
+        ctx.font = '72px "' + name.replace(/"/g, '') + '",' + b; return Math.abs(ctx.measureText(probe).width - w0) > 0.01;
+      });
+    };
+    var names = String(stack || '').split(',').map(function (s) { return s.trim().replace(/^["']|["']$/g, ''); }).filter(Boolean);
+    var missing = [], used = '';
+    for (var i = 0; i < names.length && !used; i++) {
+      if (GENERIC.indexOf(names[i].toLowerCase()) >= 0) used = names[i] + " (the browser's default " + names[i] + ')';
+      else if (present(names[i])) used = names[i];
+      else missing.push(names[i]);
+    }
+    return {used: used || "the browser's default font", missing: missing};
+  }
+  function sampleNode(id) {
+    var nodes = document.querySelectorAll('[data-sample="' + id + '"], [data-sample-wrap="' + id + '"]');
+    for (var i = 0; i < nodes.length; i++) if (nodes[i]._facts && nodes[i].getBoundingClientRect().width > 0) return nodes[i];
+    return null;
+  }
+  var factCache = {};
+  function factsFor(id) {
+    var n = sampleNode(id);
+    if (n) { try { factCache[id] = n._facts(); } catch (e) { factCache[id] = []; } }
+    return clone(factCache[id] || []);
+  }
+  // The facts that go into the result come from one rendering only: the option drawn alone, at the width
+  // the detail view gives it, with the current tweaks. A card in the grid is narrower, so the same option
+  // measures differently there, and the result must not depend on which view happened to be open.
+  // The option is drawn in #rig (laid out, never shown), measured, and removed again at once.
+  function resultFacts(id) {
+    var o = opt(id), rig = $('rig'), out = [], was = V.view;
+    if (!o || !rig) return out;
+    V.view = 'detail';
+    try {
+      var node = sample(o);
+      rig.appendChild(el('div', {class: 'detail' + (P.kind === 'layout' || P.kind === 'copy' ? '' : ' split')}, [el('div', {class: 'd-main'}, [el('div', {class: 'mat'}, [node])]), el('div', {class: 'd-side'})]));
+      if (node._facts) out = node._facts();
+    } catch (e) { out = []; }
+    V.view = was;
+    rig.textContent = '';
+    return Array.isArray(out) ? clone(out) : [];
+  }
+  function factSummary(id) {
+    var f = factsFor(id), box = el('span');
+    if (!f.length) return box;
+    if (P.kind === 'theme') {
+      var low = f.filter(function (x) { return typeof x.value === 'number' && x.value < 4.5; });
+      var min = f.reduce(function (a, x) { return typeof x.value === 'number' && (a === null || x.value < a.value) ? x : a; }, null);
+      box.appendChild(document.createTextNode(plural(f.length, 'text pair', 'text pairs') + ' measured, lowest ' + (min ? min.value.toFixed(2) + ' (' + min.label.replace(' contrast', '') + ')' : 'not measured') + '. '));
+      if (low.length) box.appendChild(el('span', {class: 'warn', text: 'Under 4.5: ' + low.map(function (x) { return x.label.replace(' contrast', '') + ' ' + x.value.toFixed(2); }).join(', ') + '.'}));
+      else box.appendChild(document.createTextNode('None under 4.5.'));
+    } else {
+      box.textContent = f.map(function (x) { return x.label + ': ' + x.value; }).join('. ') + '.';
+    }
+    return box;
+  }
+  function refreshFacts() {
+    document.querySelectorAll('[data-facts-for]').forEach(function (n) { n.textContent = ''; n.appendChild(factSummary(n.getAttribute('data-facts-for'))); });
+    document.querySelectorAll('[data-factlist-for]').forEach(function (n) { fillFactList(n, n.getAttribute('data-factlist-for')); });
+  }
+  function fillFactList(ul, id) {
+    ul.textContent = '';
+    factsFor(id).forEach(function (x) {
+      var bad = P.kind === 'theme' && typeof x.value === 'number' && x.value < 4.5;
+      ul.appendChild(el('li', {class: bad ? 'warn' : null}, [el('span', {text: x.label + (bad ? ' (under 4.5)' : '')}), el('b', {text: typeof x.value === 'number' ? (P.kind === 'theme' || /contrast/.test(x.label) ? x.value.toFixed(2) : String(x.value)) : String(x.value)})]));
+    });
+  }
+
+  // ---------- actions ----------
+  function toggleShortlist(id) {
+    var i = S.shortlist.indexOf(id);
+    if (i >= 0) S.shortlist.splice(i, 1);
+    else { S.shortlist.push(id); var r = S.rejected.indexOf(id); if (r >= 0) S.rejected.splice(r, 1); }
+    say(i >= 0 ? opt(id).name + ' taken off the shortlist.' : opt(id).name + ' shortlisted. ' + plural(S.shortlist.length, 'option', 'options') + ' on the shortlist.');
+    changed(); render();
+  }
+  function toggleReject(id) {
+    var i = S.rejected.indexOf(id);
+    if (i >= 0) S.rejected.splice(i, 1);
+    else { S.rejected.push(id); var s = S.shortlist.indexOf(id); if (s >= 0) S.shortlist.splice(s, 1); if (S.chosen === id) S.chosen = null; }
+    say(i >= 0 ? opt(id).name + ' is back in the running.' : opt(id).name + ' ruled out.');
+    changed(); render();
+  }
+  function choose(id) {
+    if (S.chosen === id) { S.chosen = null; say('No final choice now.'); }
+    else { S.chosen = id; var r = S.rejected.indexOf(id); if (r >= 0) S.rejected.splice(r, 1); say(opt(id).name + ' is the choice. Open Result to copy it back.'); }
+    changed(); render();
+  }
+  function setControl(c, v) {
+    S.controls[c.id] = v;
+    applyControlsEverywhere();
+    syncControls();
+    changed();
+  }
+  function go(view, id) {
+    V.view = view; if (view === 'detail') V.detail = id;
+    V.confirming = false;
+    render();
+    var h = document.querySelector('#main h2'); if (h) h.focus();
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- drawing ----------
+  function tags(o) {
+    var out = [];
+    if (S.chosen === o.id) out.push(el('span', {class: 'tag', text: 'Chosen'}));
+    if (has(S.shortlist, o.id)) out.push(el('span', {class: 'tag', text: 'Shortlisted'}));
+    if (has(S.rejected, o.id)) out.push(el('span', {class: 'tag out', text: 'Ruled out'}));
+    if (P.recommended && P.recommended.id === o.id) out.push(el('span', {class: 'tag rec', text: 'Recommended'}));
+    return out;
+  }
+  function meta(o, level) {
+    var kids = [el('div', {class: 'name-row'}, [el(level, {text: o.name})].concat(tags(o))), el('p', {class: 'note', text: o.note})];
+    if (P.recommended && P.recommended.id === o.id && P.recommended.reason) kids.push(el('p', {class: 'why', text: 'Recommended because ' + P.recommended.reason}));
+    return kids;
+  }
+  function controlsPanel() {
+    if (!(P.controls || []).length) return null;
+    var box = el('section', {class: 'panel', 'aria-label': 'Tweaks'}, [el('h3', {text: 'Tweaks'}), el('p', {class: 'muted', text: 'A tweak applies to every option, so the comparison stays like for like.'})]);
+    P.controls.forEach(function (c) {
+      var row = el('div', {class: 'row'});
+      if (c.type === 'range') {
+        row.appendChild(el('input', {type: 'range', id: 'ctl-' + c.id, 'data-control': c.id, 'data-fk': 'ctl-' + c.id, min: c.min, max: c.max, step: c.step || 1, value: S.controls[c.id],
+          on: {input: function () { setControl(c, Number(this.value)); }}}));
+        row.appendChild(el('output', {for: 'ctl-' + c.id, 'data-output': c.id, text: controlLabel(c, S.controls[c.id])}));
+        box.appendChild(el('div', {class: 'ctl'}, [el('label', {class: 'lab', for: 'ctl-' + c.id, text: c.label}), row]));
+      } else if (c.type === 'toggle') {
+        row.appendChild(el('button', {type: 'button', class: 'seg', 'data-control': c.id, 'data-fk': 'ctl-' + c.id, 'aria-pressed': String(!!S.controls[c.id]), text: c.label,
+          on: {click: function () { setControl(c, !S.controls[c.id]); }}}));
+        row.appendChild(el('span', {class: 'muted', 'data-output': c.id, text: controlLabel(c, S.controls[c.id])}));
+        box.appendChild(el('div', {class: 'ctl'}, [row]));
+      } else {
+        choiceOptions(c).forEach(function (o) {
+          row.appendChild(el('button', {type: 'button', class: 'seg', 'data-control': c.id, 'data-value': String(o.value), 'data-fk': 'ctl-' + c.id + '-' + o.value, 'aria-pressed': String(S.controls[c.id] === o.value), text: o.label,
+            on: {click: function () { setControl(c, o.value); }}}));
+        });
+        box.appendChild(el('div', {class: 'ctl', role: 'group', 'aria-label': c.label}, [el('span', {class: 'lab', text: c.label}), row]));
+      }
+    });
+    box.appendChild(el('div', {class: 'acts'}, [el('button', {type: 'button', class: 'btn quiet', id: 'ctl-reset', 'data-fk': 'ctl-reset', text: 'Reset tweaks', on: {click: function () { S.controls = controlDefaults(); applyControlsEverywhere(); syncControls(); changed(); say('Tweaks are back to how the picker was made.'); }}})]));
+    return box;
+  }
+  function syncControls() {
+    (P.controls || []).forEach(function (c) {
+      document.querySelectorAll('[data-control="' + c.id + '"]').forEach(function (n) {
+        if (c.type === 'range') { if (Number(n.value) !== S.controls[c.id]) n.value = S.controls[c.id]; }
+        else if (c.type === 'toggle') n.setAttribute('aria-pressed', String(!!S.controls[c.id]));
+        else n.setAttribute('aria-pressed', String(n.getAttribute('data-value') === String(S.controls[c.id])));
+      });
+      document.querySelectorAll('[data-output="' + c.id + '"]').forEach(function (n) { n.textContent = controlLabel(c, S.controls[c.id]); });
+    });
+  }
+  function syncNav() {
+    $('nav-compare').textContent = 'Compare (' + S.shortlist.length + ')';
+    $('nav-result').setAttribute('aria-label', S.chosen ? 'Result: ' + opt(S.chosen).name + ' chosen' : 'Result: no final choice yet');
+    [['options', 'nav-options'], ['compare', 'nav-compare'], ['result', 'nav-result']].forEach(function (p) {
+      var on = V.view === p[0] || (p[0] === 'options' && V.view === 'detail');
+      if (on) $(p[1]).setAttribute('aria-current', 'page'); else $(p[1]).removeAttribute('aria-current');
+    });
+    $('page-toggle').setAttribute('aria-pressed', String(V.view === 'page'));
+  }
+  var VIEWS = {
+    options: function (main) {
+      main.appendChild(el('h2', {tabindex: '-1', text: plural(P.options.length, 'option', 'options')}));
+      main.appendChild(el('p', {class: 'lead', text: 'Each is drawn on your own content. Shortlist the ones worth a second look, compare them, then choose.'}));
+      var order = P.options.filter(function (o) { return !has(S.rejected, o.id); }).concat(P.options.filter(function (o) { return has(S.rejected, o.id); }));
+      main.appendChild(el('div', {class: 'cards' + (P.kind === 'layout' ? '' : ' multi')}, order.map(function (o) {
+        // the name sits above the sample, so it is clear which option is on screen before any scrolling
+        var m = meta(o, 'h3');
+        var kids = [el('div', {class: 'card-head'}, [m[0]]), el('div', {class: 'mat'}, [sample(o)]), el('div', {class: 'meta'}, m.slice(1).concat([
+          S.notes[o.id] ? el('p', {class: 'mynote', text: 'Your note: ' + S.notes[o.id]}) : null,
+          el('p', {class: 'facts', 'data-facts-for': o.id}),
+          el('div', {class: 'acts'}, [
+            el('button', {type: 'button', class: 'seg', 'data-shortlist': o.id, 'data-fk': 'short-' + o.id, 'aria-pressed': String(has(S.shortlist, o.id)), text: has(S.shortlist, o.id) ? 'Shortlisted' : 'Shortlist', on: {click: function () { toggleShortlist(o.id); }}}),
+            el('button', {type: 'button', class: 'btn', 'data-open': o.id, 'data-fk': 'open-' + o.id, text: 'Open', 'aria-label': 'Open ' + o.name, on: {click: function () { go('detail', o.id); }}})
+          ])
+        ]))];
+        return el('article', {class: 'card' + (has(S.shortlist, o.id) ? ' short' : '') + (has(S.rejected, o.id) ? ' out' : ''), 'data-card': o.id}, kids);
+      })));
+    },
+    detail: function (main) {
+      var o = opt(V.detail) || P.options[0], i = P.options.indexOf(o);
+      main.appendChild(el('div', {class: 'd-top'}, [
+        el('button', {type: 'button', class: 'btn quiet', id: 'd-back', 'data-fk': 'd-back', text: 'All options', on: {click: function () { go('options'); }}}),
+        el('h2', {tabindex: '-1', text: o.name}),
+        el('span', {class: 'muted', text: (i + 1) + ' of ' + P.options.length})
+      ]));
+      var side = el('div', {class: 'd-side'});
+      main.appendChild(el('div', {class: 'detail' + (P.kind === 'layout' || P.kind === 'copy' ? '' : ' split')}, [el('div', {class: 'd-main'}, [el('div', {class: 'mat'}, [sample(o)])]), side]));
+      side.appendChild(el('div', {class: 'meta'}, meta(o, 'h3').map(function (n, k) { return k === 0 ? el('div', {class: 'name-row'}, tags(o)) : n; })));
+      side.appendChild(el('div', {class: 'acts'}, [
+        el('button', {type: 'button', class: 'btn primary', id: 'd-choose', 'data-fk': 'd-choose', 'aria-pressed': String(S.chosen === o.id), text: S.chosen === o.id ? 'Chosen. Press to undo' : 'Choose this', on: {click: function () { choose(o.id); }}}),
+        el('button', {type: 'button', class: 'seg', id: 'd-shortlist', 'data-fk': 'd-shortlist', 'aria-pressed': String(has(S.shortlist, o.id)), text: has(S.shortlist, o.id) ? 'Shortlisted' : 'Shortlist', on: {click: function () { toggleShortlist(o.id); }}}),
+        el('button', {type: 'button', class: 'seg', id: 'd-reject', 'data-fk': 'd-reject', 'aria-pressed': String(has(S.rejected, o.id)), text: has(S.rejected, o.id) ? 'Ruled out' : 'Rule out', on: {click: function () { toggleReject(o.id); }}})
+      ]));
+      var cp = controlsPanel(); if (cp) side.appendChild(cp);
+      side.appendChild(el('section', {class: 'panel'}, [
+        el('label', {class: 'lab', for: 'd-note', text: 'Your note on this option (it goes into the result)'}),
+        el('textarea', {id: 'd-note', 'data-fk': 'd-note', rows: '3', spellcheck: 'true', on: {input: function () { if (this.value.trim()) S.notes[o.id] = this.value; else delete S.notes[o.id]; save(); }}})
+      ]));
+      side.querySelector('#d-note').value = S.notes[o.id] || '';
+      side.appendChild(el('section', {class: 'panel'}, [el('h3', {text: 'Measured on this page'}), el('ul', {class: 'factlist', 'data-factlist-for': o.id})]));
+      side.appendChild(el('div', {class: 'acts'}, [
+        el('button', {type: 'button', class: 'btn', id: 'd-prev', 'data-fk': 'd-prev', 'aria-disabled': String(i === 0), text: 'Previous option', on: {click: function () { if (i > 0) go('detail', P.options[i - 1].id); }}}),
+        el('button', {type: 'button', class: 'btn', id: 'd-next', 'data-fk': 'd-next', 'aria-disabled': String(i === P.options.length - 1), text: 'Next option', on: {click: function () { if (i < P.options.length - 1) go('detail', P.options[i + 1].id); }}})
+      ]));
+    },
+    compare: function (main) {
+      main.appendChild(el('h2', {tabindex: '-1', text: 'Compare'}));
+      var list = S.shortlist.filter(function (id) { return opt(id); });
+      if (list.length < 2) {
+        main.appendChild(el('div', {class: 'blank'}, [
+          el('p', {text: list.length === 0 ? 'Nothing is shortlisted yet. Shortlist two or three options to see them side by side on the same content.' : 'Only ' + opt(list[0]).name + ' is shortlisted. Shortlist one or two more to compare.'}),
+          el('button', {type: 'button', class: 'btn', id: 'cmp-back', 'data-fk': 'cmp-back', text: 'Back to the options', on: {click: function () { go('options'); }}})
+        ]));
+        return;
+      }
+      if (!V.picked) V.picked = [];
+      V.picked = V.picked.filter(function (id) { return has(list, id); });
+      list.forEach(function (id) { if (V.picked.length < Math.min(3, list.length) && !has(V.picked, id)) V.picked.push(id); });
+      if (list.length > 3) {
+        main.appendChild(el('p', {class: 'lead', text: 'Three fit side by side. ' + list.length + ' are shortlisted: switch one off to bring another in.'}));
+        main.appendChild(el('div', {class: 'cmp-pick', role: 'group', 'aria-label': 'Which shortlisted options to compare'}, list.map(function (id) {
+          return el('button', {type: 'button', class: 'seg', 'data-cmp-pick': id, 'data-fk': 'pick-' + id, 'aria-pressed': String(has(V.picked, id)), text: opt(id).name, on: {click: function () {
+            var k = V.picked.indexOf(id);
+            if (k >= 0) { if (V.picked.length > 2) V.picked.splice(k, 1); else say('Two is the fewest that can be compared.'); }
+            else if (V.picked.length < 3) V.picked.push(id); else say('Three are showing. Switch one off first.');
+            render();
+          }}});
+        })));
+      }
+      var shown = list.filter(function (id) { return has(V.picked, id); });
+      if (!has(shown, V.tab)) V.tab = shown[0];
+      main.appendChild(el('div', {class: 'cmp n' + shown.length}, shown.map(function (id) {
+        var o = opt(id);
+        return el('section', {class: 'cmp-col', 'data-cmp-col': id, hidden: V.tab !== id, 'aria-label': o.name}, [
+          el('div', {class: 'name-row'}, [el('h3', {text: o.name})].concat(tags(o))),
+          el('div', {class: 'mat'}, [sample(o)]),
+          el('p', {class: 'note', text: o.note}),
+          el('p', {class: 'facts', 'data-facts-for': id}),
+          el('div', {class: 'acts'}, [
+            el('button', {type: 'button', class: 'btn primary', 'data-cmp-choose': id, 'data-fk': 'cmp-choose-' + id, 'aria-pressed': String(S.chosen === id), text: S.chosen === id ? 'Chosen. Press to undo' : 'Choose this', on: {click: function () { choose(id); }}}),
+            el('button', {type: 'button', class: 'btn', 'data-open': id, 'data-fk': 'cmp-open-' + id, text: 'Open', 'aria-label': 'Open ' + o.name, on: {click: function () { go('detail', id); }}})
+          ])
+        ]);
+      })));
+      var cp = controlsPanel(); if (cp) main.appendChild(cp);
+      // on a phone: one option at a time, switched with large tabs just above the bar
+      main.appendChild(el('div', {class: 'cmp-tabs', role: 'group', 'aria-label': 'Show which option'}, shown.map(function (id) {
+        return el('button', {type: 'button', class: 'seg', 'data-cmp-tab': id, 'data-fk': 'tab-' + id, 'aria-pressed': String(V.tab === id), text: opt(id).name, on: {click: function () { V.tab = id; render(); }}});
+      })));
+    },
+    result: function (main) {
+      main.appendChild(el('h2', {tabindex: '-1', text: 'Result'}));
+      var env = envelope(), chosen = S.chosen ? opt(S.chosen) : null;
+      var tweaks = (P.controls || []).map(function (c) { return c.label.toLowerCase() + ' ' + controlLabel(c, S.controls[c.id]); }).join(', ');
+      main.appendChild(el('p', {id: 'r-summary', text: chosen ? 'Chosen: ' + chosen.name + (tweaks ? ', with ' + tweaks : '') + '.' :
+        'No final choice yet. ' + (S.shortlist.length ? 'Shortlisted: ' + S.shortlist.map(function (id) { return opt(id).name; }).join(', ') + '.' : 'Nothing is shortlisted.') + ' You can still copy this back as work in progress.'}));
+      main.appendChild(el('div', {class: 'choice', role: 'group', 'aria-label': 'Form of the result'}, [
+        el('button', {type: 'button', class: 'seg', id: 'r-mode-text', 'data-fk': 'r-mode-text', 'aria-pressed': String(V.mode === 'text'), text: 'Short text', on: {click: function () { V.mode = 'text'; V.copyNote = ''; render(); }}}),
+        el('button', {type: 'button', class: 'seg', id: 'r-mode-json', 'data-fk': 'r-mode-json', 'aria-pressed': String(V.mode === 'json'), text: 'JSON', on: {click: function () { V.mode = 'json'; V.copyNote = ''; render(); }}})
+      ]));
+      main.appendChild(el('label', {class: 'lab', for: 'r-text', text: 'Paste this back to the assistant'}));
+      var box = el('textarea', {id: 'r-text', 'data-fk': 'r-text', readonly: true, spellcheck: 'false', rows: '12'});
+      box.value = V.mode === 'json' ? asciiJson(env, 1) : choiceBlock(env);
+      main.appendChild(box);
+      main.appendChild(el('div', {class: 'acts'}, [
+        el('button', {type: 'button', class: 'btn primary', id: 'r-copy', 'data-fk': 'r-copy', text: 'Copy', on: {click: function () { copyOut(box); }}}),
+        el('button', {type: 'button', class: 'btn', id: 'r-download', 'data-fk': 'r-download', text: 'Download as a file', on: {click: function () { download(asciiJson(envelope(), 1)); }}})
+      ]));
+      main.appendChild(el('p', {class: 'status', id: 'r-status', role: 'status', text: V.copyNote}));
+      main.appendChild(el('p', {class: 'muted', text: store.words()}));
+    },
+    page: function (main) {
+      main.appendChild(el('h2', {tabindex: '-1', text: 'Page and session'}));
+      var seg = function (group, attr, value, label) {
+        return el('button', {type: 'button', class: 'seg', 'data-fk': attr + '-' + value, 'aria-pressed': String(page[group] === value), text: label, on: {click: function () { page[group] = value; pageStore.write(); applyPage(); render(); }}}, []);
+      };
+      var mk = function (group, label, pairs) {
+        var row = el('div', {class: 'choice', role: 'group', 'aria-label': label}, [el('span', {class: 'lab', text: label})]);
+        pairs.forEach(function (p) { var b = seg(group, 'page-' + group, p[0], p[1]); b.setAttribute('data-page-' + group, p[0]); row.appendChild(b); });
+        return row;
+      };
+      main.appendChild(el('section', {class: 'panel'}, [
+        el('h3', {text: 'How this page looks'}),
+        el('p', {class: 'muted', text: 'These change the page around the samples, never the samples.'}),
+        mk('theme', 'Page theme', [['paper', 'Paper'], ['slate', 'Slate'], ['ember', 'Ember'], ['night', 'Night']]),
+        mk('text', 'Page text', [['regular', 'Regular'], ['large', 'Large']]),
+        mk('cards', 'Options', [['grid', 'Side by side'], ['single', 'One per row']]),
+        el('div', {class: 'choice'}, [el('button', {type: 'button', class: 'btn quiet', id: 'page-reset', 'data-fk': 'page-reset', text: 'Reset page settings', on: {click: function () { page = clone(PAGE_DEFAULTS); pageStore.clear(); applyPage(); render(); }}})])
+      ]));
+      var imp = el('section', {class: 'panel'}, [
+        el('h3', {text: 'Session'}),
+        el('p', {id: 'storage-note', text: store.words()}),
+        el('p', {class: 'muted', text: 'Your shortlist, notes, tweaks and choice are the session. The Result view holds it as JSON to copy or download. To carry on somewhere else, paste that JSON here.'}),
+        el('label', {class: 'lab', for: 'i-text', text: 'Paste a saved session'}),
+        el('textarea', {id: 'i-text', 'data-fk': 'i-text', rows: '4', spellcheck: 'false'}),
+        el('label', {class: 'lab', for: 'i-file', text: 'Or choose a saved session file'}),
+        el('input', {type: 'file', id: 'i-file', 'data-fk': 'i-file', accept: '.json,application/json,text/plain', on: {change: function () {
+          var f = this.files && this.files[0]; if (!f) return;
+          var r = new FileReader();
+          r.onload = function () { $('i-text').value = String(r.result || ''); tryImport(); };
+          r.onerror = function () { V.importNote = 'That file could not be read. Nothing was loaded.'; V.importBad = true; render(); };
+          r.readAsText(f);
+        }}}),
+        el('div', {class: 'acts'}, [el('button', {type: 'button', class: 'btn', id: 'i-load', 'data-fk': 'i-load', text: 'Load the pasted session', on: {click: tryImport}})]),
+        el('p', {class: 'status' + (V.importBad ? ' warn' : ''), id: 'i-status', role: 'status', text: V.importNote})
+      ]);
+      if (V.importing) {
+        var d = V.importing;
+        imp.appendChild(el('div', {class: 'confirm', id: 'i-confirm'}, [
+          el('p', {text: (d.differs ? 'This session was saved for "' + d.differs + '". This page is "' + contentId() + '". ' : '') +
+            (d.dropped.length ? 'It mentions ' + plural(d.dropped.length, 'option', 'options') + ' this page does not have (' + d.dropped.join(', ') + '), which would be left out. ' : '') + 'Load it anyway? It replaces the current session.'}),
+          el('div', {class: 'row'}, [
+            el('button', {type: 'button', class: 'btn', id: 'i-cancel', 'data-fk': 'i-cancel', text: 'Keep the current session', on: {click: function () { V.importing = null; V.importNote = 'Nothing was loaded. The current session is unchanged.'; V.importBad = false; render(); }}}),
+            el('button', {type: 'button', class: 'btn danger', id: 'i-continue', 'data-fk': 'i-continue', text: 'Load it anyway', on: {click: function () { finishImport(V.importing); }}})
+          ])
+        ]));
+      }
+      main.appendChild(imp);
+      var n = S.shortlist.length + S.rejected.length + Object.keys(S.notes).length + (S.chosen ? 1 : 0);
+      var reset = el('section', {class: 'panel'}, [el('h3', {text: 'Start again'})]);
+      if (V.confirming) {
+        reset.appendChild(el('div', {class: 'confirm', id: 's-confirm'}, [
+          el('p', {text: 'This clears ' + plural(S.shortlist.length, 'shortlisted option', 'shortlisted options') + ', ' + plural(S.rejected.length, 'ruled out option', 'ruled out options') + ', ' + plural(Object.keys(S.notes).length, 'note', 'notes') + (S.chosen ? ', the choice of ' + opt(S.chosen).name : '') + ' and the tweaks. Copy the result first if you want to keep it.'}),
+          el('div', {class: 'row'}, [
+            el('button', {type: 'button', class: 'btn', id: 's-reset-no', 'data-fk': 's-reset-no', text: 'Keep everything', on: {click: function () { V.confirming = false; render(); var b = $('s-reset'); if (b) b.focus(); }}}),
+            el('button', {type: 'button', class: 'btn', id: 's-reset-export', 'data-fk': 's-reset-export', text: 'Open Result to copy it first', on: {click: function () { go('result'); }}}),
+            el('button', {type: 'button', class: 'btn danger', id: 's-reset-yes', 'data-fk': 's-reset-yes', text: 'Clear the session', on: {click: function () {
+              V.undo = clone(S); V.confirming = false;
+              adopt({shortlist: [], rejected: [], chosen: null, notes: {}, controls: controlDefaults()});
+              say('The session was cleared. Undo is on the Page view until you change something else.');
+              render(); var u = $('s-undo'); if (u) u.focus();
+            }}})
+          ])
+        ]));
+      } else {
+        reset.appendChild(el('div', {class: 'acts'}, [
+          el('button', {type: 'button', class: 'btn', id: 's-reset', 'data-fk': 's-reset', 'aria-disabled': String(n === 0 && !tweaked()), text: 'Clear the session', on: {click: function () { if (n === 0 && !tweaked()) { say('There is nothing to clear.'); return; } V.confirming = true; render(); var k = $('s-reset-no'); if (k) k.focus(); }}}),
+          V.undo ? el('button', {type: 'button', class: 'btn', id: 's-undo', 'data-fk': 's-undo', text: 'Undo: bring the last session back', on: {click: function () { var back = V.undo; V.undo = null; adopt(back); say('The earlier session is back.'); render(); }}}) : null
+        ]));
+      }
+      main.appendChild(reset);
+    }
+  };
+  function tweaked() { var d = controlDefaults(); return Object.keys(d).some(function (k) { return d[k] !== S.controls[k]; }); }
+  function render() {
+    var keep = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-fk');
+    var main = $('main');
+    main.textContent = '';
+    document.body.classList.toggle('comparing', V.view === 'compare' && S.shortlist.length >= 2);
+    (VIEWS[V.view] || VIEWS.options)(main);
+    syncNav();
+    fitFrames();
+    refreshFacts();
+    if (keep) { var again = document.querySelector('[data-fk="' + keep + '"]'); if (again) again.focus(); }
+  }
+
+  // ---------- the result that is pasted back ----------
+  function choiceBlock(env) {
+    var d = env.data, L = ['=== sample-picker choice v1 ===', 'picker: ' + env.content_id, 'kind: ' + d.kind, 'status: ' + d.status, 'chosen: ' + (d.chosen || '(none)')];
+    if (d.chosen) L.push('chosen-name: ' + asciiJson(d.chosen_name));
+    Object.keys(d.controls).forEach(function (k) { L.push('control: ' + k + ' = ' + asciiJson(d.controls[k])); });
+    L.push('shortlist: ' + (d.shortlist.length ? d.shortlist.join(', ') : '(none)'));
+    L.push('rejected: ' + (d.rejected.length ? d.rejected.join(', ') : '(none)'));
+    Object.keys(d.notes).forEach(function (k) { L.push('note: ' + k + ' = ' + asciiJson(d.notes[k])); });
+    d.facts.forEach(function (f) { L.push('fact: ' + asciiJson(f.label) + ' = ' + asciiJson(f.value)); });
+    L.push('saved: ' + env.saved_at);
+    L.push('=== end ===');
+    return L.join('\n');
+  }
+  function copyOut(box) {
+    var done = function (ok) {
+      V.copyNote = ok ? 'Copied. Paste it into the chat.' : 'Copying was refused here. The text above is selected: copy it with your device, then paste it into the chat.';
+      var n = $('r-status'); if (n) n.textContent = V.copyNote;
+      if (!ok) { box.focus(); box.select(); }
+    };
+    // In a frame that was not given clipboard-write, asking only makes the browser log an error before it
+    // refuses. Where the policy can be read, read it first and go straight to the text box.
+    var allowed = !!(navigator.clipboard && navigator.clipboard.writeText);
+    try { var pol = document.permissionsPolicy || document.featurePolicy; if (pol && typeof pol.allowsFeature === 'function' && !pol.allowsFeature('clipboard-write')) allowed = false; } catch (e) {}
+    try {
+      if (allowed) navigator.clipboard.writeText(box.value).then(function () { done(true); }, function () { done(false); });
+      else done(false);
+    } catch (e) { done(false); }
+  }
+  function download(text) {
+    var note = 'A download was asked for. If no file arrives, this page is not allowed to download here: switch to JSON above and copy it.';
+    try {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text], {type: 'application/json'}));
+      a.download = P.id + '-choice.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 2000);
+    } catch (e) { note = 'This page cannot download here. Switch to JSON above and copy it.'; }
+    V.copyNote = note; var n = $('r-status'); if (n) n.textContent = note;
+  }
+  function tryImport() {
+    var r = readSession($('i-text').value);
+    V.importing = null;
+    if (!r.ok) { V.importNote = r.why; V.importBad = true; render(); return; }
+    if (r.differs || r.dropped.length) { V.importing = r; V.importNote = ''; V.importBad = false; render(); var c = $('i-cancel'); if (c) c.focus(); return; }
+    finishImport(r);
+  }
+  function finishImport(r) {
+    V.undo = clone(S); V.importing = null;
+    adopt(r.state);
+    V.importNote = 'Loaded: ' + plural(r.state.shortlist.length, 'shortlisted option', 'shortlisted options') + ', ' + plural(Object.keys(r.state.notes).length, 'note', 'notes') + (r.state.chosen ? ', choice ' + opt(r.state.chosen).name : ', no final choice') + '. Undo is below.';
+    V.importBad = false;
+    render();
+  }
+
+  // ---------- page settings ----------
+  var pageStore = {
+    read: function () { try { return JSON.parse(localStorage.getItem(APP + ':page') || 'null'); } catch (e) { return null; } },
+    write: function () { try { localStorage.setItem(APP + ':page', JSON.stringify(page)); } catch (e) {} },
+    clear: function () { try { localStorage.removeItem(APP + ':page'); } catch (e) {} }
+  };
+  function applyPage() { ['theme', 'text', 'cards'].forEach(function (k) { document.documentElement.setAttribute('data-' + k, page[k]); }); }
+
+  // ---------- start ----------
+  function problem(title, text) {
+    $('main').appendChild(el('div', {class: 'blank', role: 'alert'}, [el('h2', {text: title}), el('p', {text: text})]));
+    document.querySelector('.bar').hidden = true; $('page-toggle').hidden = true;
+  }
+  function start() {
+    var v = pageStore.read();
+    if (v && ['paper', 'slate', 'ember', 'night'].indexOf(v.theme) >= 0) page.theme = v.theme;
+    if (v && ['regular', 'large'].indexOf(v.text) >= 0) page.text = v.text;
+    if (v && ['grid', 'single'].indexOf(v.cards) >= 0) page.cards = v.cards;
+    applyPage();
+    if (!P || !Array.isArray(P.options)) { problem('No picker in this file', 'This is the empty engine. Put the options and the real content between the PICKER-DATA markers, or run scripts/build_picker.py.'); return; }
+    if (!P.options.length) { problem('The picker has no options', 'Nothing can be shown or chosen. Add at least two options that differ in a way you can name.'); return; }
+    S.controls = controlDefaults();
+    document.title = P.title;
+    var solo = /[#&]solo=([^&]+)/.exec(location.hash || '');
+    if (solo && opt(decodeURIComponent(solo[1]))) {
+      document.body.classList.add('solo'); $('chrome').hidden = true;
+      $('solo').appendChild(sample(opt(decodeURIComponent(solo[1])))); fitFrames();
+      return;
+    }
+    $('title').textContent = P.title; $('question').textContent = P.question;
+    store.init();
+    render();
+    store.read(store.key()).then(function (text) {
+      if (!text) return;
+      var r = readSession(String(text));
+      if (r.ok && !r.differs) { S = r.state; applyControlsEverywhere(); render(); say('Your earlier session on this page is back: ' + plural(S.shortlist.length, 'shortlisted option', 'shortlisted options') + (S.chosen ? ', choice ' + opt(S.chosen).name : '') + '.'); }
+    });
+  }
+  $('nav-options').addEventListener('click', function () { go('options'); });
+  $('nav-compare').addEventListener('click', function () { go('compare'); });
+  $('nav-result').addEventListener('click', function () { go('result'); });
+  $('page-toggle').addEventListener('click', function () { go(V.view === 'page' ? 'options' : 'page'); });
+  var resizeTimer = null;
+  window.addEventListener('resize', function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(function () { fitFrames(); refreshFacts(); }, 150); });
+  start();
+})();
+</script>
+</body>
+</html>

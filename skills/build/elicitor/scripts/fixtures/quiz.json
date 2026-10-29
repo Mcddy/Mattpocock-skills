@@ -1,0 +1,39 @@
+{
+  "id": "fixture-quiz",
+  "version": 1,
+  "mode": "quiz",
+  "title": "Fixture quiz: units and time (SYNTHETIC)",
+  "purpose": "Test input for the engine. Six items with one certain answer each.",
+  "feedback": "immediate",
+  "questions": [
+    {"id": "minutes-in-day", "type": "single", "text": "How many minutes are there in one day?", "options": [
+      {"text": "1,440", "correct": true, "explain": "24 hours times 60 minutes is 1,440."},
+      {"text": "1,240", "explain": "This is 200 short. 24 times 60 is 1,440."},
+      {"text": "3,600", "explain": "3,600 is the number of seconds in one hour."},
+      {"text": "86,400", "explain": "86,400 is the number of seconds in one day."}]},
+    {"id": "metres-in-km", "type": "single", "text": "How many metres are there in 2.5 kilometres?", "options": [
+      {"text": "250", "explain": "That treats a kilometre as 100 metres. A kilometre is 1,000 metres."},
+      {"text": "2,500", "correct": true, "explain": "2.5 times 1,000 metres is 2,500 metres."},
+      {"text": "25,000", "explain": "That is 25 kilometres, ten times too many."},
+      {"text": "2,050", "explain": "The half kilometre is 500 metres, not 50."}]},
+    {"id": "leap-february", "type": "single", "text": "How many days does February have in a leap year?", "options": [
+      {"text": "28", "explain": "28 is February in an ordinary year."},
+      {"text": "30", "explain": "February never has 30 days."},
+      {"text": "29", "correct": true, "explain": "A leap year adds one day to February, making 29."}]},
+    {"id": "even-numbers", "type": "multi", "text": "Which of these numbers are even?", "options": [
+      {"text": "14", "correct": true, "explain": "14 is 2 times 7, so it is even."},
+      {"text": "21", "explain": "21 is 3 times 7 and leaves a remainder of 1 when halved."},
+      {"text": "36", "correct": true, "explain": "36 is 2 times 18, so it is even."},
+      {"text": "49", "explain": "49 is 7 times 7 and is odd."}]},
+    {"id": "multiples-of-three", "type": "multi", "text": "Which of these are multiples of 3?", "options": [
+      {"text": "12", "correct": true, "explain": "12 is 3 times 4."},
+      {"text": "20", "explain": "20 divided by 3 leaves a remainder of 2."},
+      {"text": "27", "correct": true, "explain": "27 is 3 times 9."},
+      {"text": "33", "correct": true, "explain": "33 is 3 times 11."}]},
+    {"id": "hours-in-week", "type": "single", "text": "How many hours are there in one week?", "options": [
+      {"text": "148", "explain": "148 is 20 short. 7 times 24 is 168."},
+      {"text": "168", "correct": true, "explain": "7 days times 24 hours is 168."},
+      {"text": "178", "explain": "178 is 10 too many. 7 times 24 is 168."},
+      {"text": "240", "explain": "240 hours is ten days."}]}
+  ]
+}

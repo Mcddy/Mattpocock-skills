@@ -1,0 +1,6 @@
+interface:
+  display_name: "Discrete Lab"
+  short_description: "Solve bounded schedules with independent certificates"
+  default_prompt: "Use $discrete-lab for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,109 @@
+{
+  "id": "subnetting-quiz",
+  "version": 1,
+  "mode": "quiz",
+  "title": "IPv4 subnetting: twelve questions",
+  "purpose": "A check on prefix lengths, masks, network and broadcast addresses, usable ranges and summary routes.",
+  "intro": "Work each one out on paper or in your head. Usable host counts follow the usual rule for subnets of /30 and shorter: every address in the block except the network address and the broadcast address.",
+  "minutes": 15,
+  "feedback": "immediate",
+  "questions": [
+    {"id": "mask-26", "type": "single",
+     "text": "What is the subnet mask for a /26 prefix, in dotted decimal?",
+     "options": [
+       {"text": "255.255.192.0", "explain": "That is /18. The 192 sits in the third octet, which gives 18 network bits, not 26."},
+       {"text": "255.255.255.128", "explain": "That is /25: one bit set in the last octet, worth 128."},
+       {"text": "255.255.255.192", "correct": true, "explain": "26 network bits leave 6 host bits. The last octet has its top two bits set: 128 + 64 = 192."},
+       {"text": "255.255.255.224", "explain": "That is /27: three bits set in the last octet, 128 + 64 + 32."}
+     ]},
+    {"id": "hosts-27", "type": "single",
+     "text": "How many usable host addresses does a /27 subnet have?",
+     "options": [
+       {"text": "14", "explain": "14 is the usable count for a /28, which has 4 host bits."},
+       {"text": "30", "correct": true, "explain": "5 host bits give 32 addresses. Taking away the network address and the broadcast address leaves 30."},
+       {"text": "32", "explain": "32 is the total number of addresses in a /27. The network and broadcast addresses cannot be given to hosts."},
+       {"text": "62", "explain": "62 is the usable count for a /26, which has 6 host bits."}
+     ]},
+    {"id": "network-of-host", "type": "single",
+     "text": "A host has the address 192.168.10.77/26. What is the network address of its subnet?",
+     "options": [
+       {"text": "192.168.10.0", "explain": "That would be the network if the prefix were /24. A /26 splits the last octet into blocks of 64."},
+       {"text": "192.168.10.64", "correct": true, "explain": "A /26 has blocks of 64 in the last octet: 0, 64, 128, 192. 77 falls in the block that starts at 64."},
+       {"text": "192.168.10.76", "explain": "76 is not a block boundary for /26. The boundaries are multiples of 64."},
+       {"text": "192.168.10.128", "explain": "128 starts the next block, which holds 128 to 191. 77 is below it."}
+     ]},
+    {"id": "broadcast-of-host", "type": "single",
+     "text": "What is the broadcast address of the subnet that contains 172.16.5.130/25?",
+     "options": [
+       {"text": "172.16.5.127", "explain": "127 is the broadcast address of the lower /25, which holds 0 to 127. 130 is in the upper half."},
+       {"text": "172.16.5.128", "explain": "128 is the network address of the upper /25: the first address in the block, not the last."},
+       {"text": "172.16.5.255", "correct": true, "explain": "A /25 splits the last octet into 0 to 127 and 128 to 255. 130 is in the upper block, whose last address is 255."},
+       {"text": "172.16.255.255", "explain": "That is the broadcast address of 172.16.0.0/16. The prefix here is /25."}
+     ]},
+    {"id": "first-usable", "type": "single",
+     "text": "What is the first usable host address in 10.20.30.96/28?",
+     "options": [
+       {"text": "10.20.30.96", "explain": "96 is the network address itself. It names the subnet and is not given to a host."},
+       {"text": "10.20.30.97", "correct": true, "explain": "The first usable address is one above the network address: 96 + 1 = 97."},
+       {"text": "10.20.30.110", "explain": "110 is the last usable address in this /28, one below the broadcast address."},
+       {"text": "10.20.30.111", "explain": "111 is the broadcast address. The block runs from 96 to 111."}
+     ]},
+    {"id": "last-usable", "type": "single",
+     "text": "What is the last usable host address in 192.168.4.0/22?",
+     "options": [
+       {"text": "192.168.4.254", "explain": "That would be right for 192.168.4.0/24. A /22 spans four /24 blocks, from 192.168.4.0 to 192.168.7.255."},
+       {"text": "192.168.5.254", "explain": "A /23 starting at 192.168.4.0 would end there. A /22 is twice that size."},
+       {"text": "192.168.7.254", "correct": true, "explain": "A /22 covers 192.168.4.0 to 192.168.7.255. The last usable address is one below the broadcast address."},
+       {"text": "192.168.7.255", "explain": "That is the broadcast address of the /22: the last address in the block, which is not given to a host."}
+     ]},
+    {"id": "prefix-for-hosts", "type": "single",
+     "text": "A subnet must hold 50 hosts. Which is the longest prefix, meaning the smallest subnet, that fits them?",
+     "options": [
+       {"text": "/24", "explain": "A /24 has 254 usable addresses. It fits, but it is four times the size of the smallest block that does."},
+       {"text": "/25", "explain": "A /25 has 126 usable addresses. It fits, but a /26 also fits and is smaller."},
+       {"text": "/26", "correct": true, "explain": "A /26 has 62 usable addresses, the smallest block that holds 50. The next size down, /27, has only 30."},
+       {"text": "/27", "explain": "A /27 has 30 usable addresses, which is too few for 50 hosts."}
+     ]},
+    {"id": "same-subnet", "type": "multi",
+     "text": "Which of these addresses are in the same /27 subnet as 192.168.1.100?",
+     "help": "Tick every one that applies. The item is correct only with every right address and no wrong one.",
+     "options": [
+       {"text": "192.168.1.95", "explain": "95 is the broadcast address of the block before, which holds 64 to 95. The block holding 100 starts at 96."},
+       {"text": "192.168.1.97", "correct": true, "explain": "The /27 that holds 100 runs from 96 to 127, so 97 is inside it."},
+       {"text": "192.168.1.126", "correct": true, "explain": "126 is the last usable address of the block 96 to 127, so it is inside."},
+       {"text": "192.168.1.128", "explain": "128 is the network address of the next block, which holds 128 to 159."}
+     ]},
+    {"id": "subnets-from-24", "type": "single",
+     "text": "A /24 network is divided into /28 subnets. How many subnets does that give?",
+     "options": [
+       {"text": "4", "explain": "4 is the number of bits borrowed, 28 minus 24. The number of subnets is 2 to the power of that."},
+       {"text": "8", "explain": "8 would be the count for /27 subnets, with 3 bits borrowed."},
+       {"text": "14", "explain": "14 is the number of usable hosts in each /28, not the number of subnets."},
+       {"text": "16", "correct": true, "explain": "Four bits are borrowed, and 2 to the power of 4 is 16 subnets, each with 16 addresses."}
+     ]},
+    {"id": "wildcard", "type": "single",
+     "text": "Which wildcard mask is the inverse of the subnet mask 255.255.240.0?",
+     "options": [
+       {"text": "0.0.15.255", "correct": true, "explain": "Subtract each octet from 255: 255 minus 240 is 15, and 255 minus 0 is 255."},
+       {"text": "0.0.15.0", "explain": "The last octet of the mask is 0, so its wildcard is 255, not 0."},
+       {"text": "0.0.16.255", "explain": "16 is the block size in the third octet for this mask. The wildcard value is one less: 15."},
+       {"text": "0.0.240.255", "explain": "The third octet has not been inverted. 255 minus 240 is 15."}
+     ]},
+    {"id": "containing-subnet", "type": "single",
+     "text": "10.1.0.0/16 is divided into /21 subnets. Which subnet contains the address 10.1.9.200?",
+     "options": [
+       {"text": "10.1.0.0/21", "explain": "That block covers 10.1.0.0 to 10.1.7.255. The third octet of the address is 9, which is past it."},
+       {"text": "10.1.8.0/21", "correct": true, "explain": "A /21 has a block size of 8 in the third octet: 0, 8, 16 and so on. 9 falls in the block that starts at 8, which covers 10.1.8.0 to 10.1.15.255."},
+       {"text": "10.1.9.0/21", "explain": "9 is not a multiple of 8, so 10.1.9.0 is not a /21 boundary. It is an address inside 10.1.8.0/21."},
+       {"text": "10.1.16.0/21", "explain": "That block starts at 10.1.16.0, which is above the address."}
+     ]},
+    {"id": "summary-route", "type": "single",
+     "text": "Which single prefix covers exactly 192.168.8.0/24, 192.168.9.0/24, 192.168.10.0/24 and 192.168.11.0/24?",
+     "options": [
+       {"text": "192.168.8.0/23", "explain": "A /23 covers only two of the four /24 blocks: 192.168.8.0 and 192.168.9.0."},
+       {"text": "192.168.8.0/22", "correct": true, "explain": "Four consecutive /24 blocks that start at a multiple of 4 make one /22: 192.168.8.0 to 192.168.11.255."},
+       {"text": "192.168.8.0/21", "explain": "A /21 covers eight /24 blocks, 192.168.8.0 to 192.168.15.255, which is twice what is asked."},
+       {"text": "192.168.0.0/20", "explain": "A /20 starting at 192.168.0.0 covers 192.168.0.0 to 192.168.15.255: sixteen /24 blocks."}
+     ]}
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "rule": "Set passes to true only after the check ran green in the current session. Never edit a description. Never delete a feature.",
+  "features": [
+    {"id": "F1", "description": "", "check": "", "passes": false},
+    {"id": "F2", "description": "", "check": "", "passes": false}
+  ]
+}

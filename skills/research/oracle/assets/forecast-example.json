@@ -1,0 +1,45 @@
+{
+ "question": "Will the supplier's replacement part (SYNTHETIC example) ship to us by the date below?",
+ "resolves_on": "2027-01-31",
+ "resolution_criterion": "A delivery note for the part dated on or before 31 January 2027, as recorded in our receiving log.",
+ "exhaustive": true,
+ "scenarios": [
+  {
+   "name": "Ships on time",
+   "description": "Arrives by the date.",
+   "likelihood": "likely",
+   "basis": "Reference class: 7 of the supplier's last 10 quoted lead times on comparable parts were met (our own receiving log, 2025 to 2026).",
+   "indicators": [
+    "A tracking number is issued by 10 January"
+   ],
+   "would_falsify": "No tracking number by 20 January"
+  },
+  {
+   "name": "Ships late",
+   "description": "Arrives after the date.",
+   "likelihood": "unlikely",
+   "basis": "The same 10 orders: 3 were late, by 6 to 19 days. Nothing known makes this order different.",
+   "indicators": [
+    "The supplier revises the quoted date"
+   ],
+   "would_falsify": "A delivery note dated on or before 31 January"
+  },
+  {
+   "name": "Does not ship",
+   "description": "Cancelled or never sent.",
+   "likelihood": "almost no chance",
+   "basis": "None of the 10 comparable orders was cancelled; the part is in the supplier's current catalogue.",
+   "indicators": [
+    "The part is marked discontinued"
+   ],
+   "would_falsify": "Any delivery"
+  }
+ ],
+ "decision": {
+  "convention": "net",
+  "upside": 12000,
+  "downside": 4000,
+  "unit": "AUD",
+  "downside_is_ruin": false
+ }
+}

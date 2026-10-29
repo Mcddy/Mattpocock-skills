@@ -1,0 +1,30 @@
+respondent,question,text,screen,themes
+R03,q4__note,Hard to keep up while switching windows,,pace_fast; online_experience
+R05,q4__note,The exercise part went at double speed,,pace_fast; exercise_support
+R10,q4__note,First hour covered what I already knew,,level_mismatch
+R03,q9__note,Depends on whether it is recorded,,materials
+R05,q9__note,Not online again,,online_experience
+R12,q9__note,Only if the exercise is slower,,exercise_support; pace_fast
+R20,q9__note,Not relevant to my role [role removed],,level_mismatch
+R01,q11,Nothing major. Maybe a longer break in the middle.,,room_logistics
+R02,q11,"More time on the exercise, we were cut off just as it got useful.",,exercise_support
+R03,q11,The audio dropped out twice during the exercise instructions.,,online_experience
+R05,q11,Online attendees could not see the whiteboard at all.,,online_experience
+R06,q11,Slow down in the second half.,,pace_fast
+R07,q11,A printed copy of the slides would help.,,materials
+R08,q11,Questions from online people were missed until the end.,,online_experience
+R10,q11,Skip the introduction for people who have done the first workshop.,,level_mismatch
+R12,q11,I got lost in step three of the exercise and never caught up.,,exercise_support
+R13,q11,Could not hear the facilitator when they moved away from the laptop.,,online_experience
+R14,q11,More worked examples like the second one.,,materials
+R16,q11,Too fast for anyone following on a second screen.,,pace_fast; online_experience
+R17,q11,The room was cold and the projector was hard to read from the back.,,room_logistics
+R19,q11,"Share the files before the session, not during.",,materials
+R20,q11,This was pitched at beginners. I manage the team that already does this.,,level_mismatch
+R21,q11,Audio problems again. Otherwise the examples were clear.,,online_experience
+R03,q12,Please record it.,,materials
+R04,q12,Best session of the series so far.,,praise
+R11,q12,"Thank you, the handout is already on my wall.",,praise
+R15,q12,Is there a certificate for attending?,,
+R20,q12,Email me the advanced material: [address removed],email address,materials
+R22,q12,Loved it.,,praise

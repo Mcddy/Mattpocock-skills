@@ -1,0 +1,1844 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-size="standard" data-density="comfortable" data-motion="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questionnaire</title>
+<!--
+  Elicitor engine. One file, no build step, no outside requests.
+
+  To make a questionnaire, change ONLY the data block: the object between the two marker lines
+  "BEGIN INSTRUMENT DATA" and "END INSTRUMENT DATA" further down. Everything else is fixed.
+  The data block is strict JSON (double quotes, no trailing commas, no comments), so that
+  scripts/validate_instrument.py can read it. scripts/build_instrument.py writes it for you.
+
+  Delivery notes:
+  - No form element and no submit event. Buttons are type=button with click handlers, and Enter in
+    a one-line field calls the same function. A sandboxed frame drops form submits.
+  - No alert, confirm or prompt. Anything destructive is confirmed in the page.
+  - Storage is optional. Order tried: a host storage object (window.storage with async get and
+    set), then localStorage, then memory. The page says which one is in use.
+  - Every export is shown in a text box as well as offered to the clipboard and as a download,
+    because a frame can refuse both.
+  - Text is put on the page with textContent. No markup is built from the data block or from answers.
+-->
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4eee3;--surface:#fffbf3;--raised:#f9f2e4;--ink:#26211c;--muted:#5e554a;--line:#d6cab6;
+  --accent:#1d5461;--on-accent:#fffbf3;--accent-soft:#d9e6e4;
+  --warn:#8c2b1b;--warn-soft:#f6ddd2;--ok:#2a6042;--ok-soft:#dcebdd;--focus:#a34a12;
+  --gap:1rem;--opt-pad:.7rem;--q-size:1.42rem;--target:2.75rem;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="slate"]{
+  --bg:#edf0f2;--surface:#fbfcfd;--raised:#f2f5f7;--ink:#1e282e;--muted:#4f5d66;--line:#c6d0d6;
+  --accent:#34508a;--on-accent:#fbfcfd;--accent-soft:#dbe2f0;
+  --warn:#8a2a22;--warn-soft:#f3dcd8;--ok:#27634a;--ok-soft:#d8eadf;--focus:#7a3c12;
+}
+:root[data-theme="dusk"]{
+  color-scheme:dark;
+  --bg:#221c18;--surface:#2c2520;--raised:#362d27;--ink:#f2e8db;--muted:#c3b4a3;--line:#5a4b40;
+  --accent:#8fd0c8;--on-accent:#172221;--accent-soft:#2c4441;
+  --warn:#ffac99;--warn-soft:#4c2a23;--ok:#9ed6b3;--ok-soft:#27402f;--focus:#f2c08a;
+}
+:root[data-theme="ink"]{
+  color-scheme:dark;
+  --bg:#0f1418;--surface:#171e24;--raised:#1f2830;--ink:#eef3f6;--muted:#aebcc6;--line:#3f4e5a;
+  --accent:#f0c36a;--on-accent:#17120a;--accent-soft:#3a3220;
+  --warn:#ffb0a3;--warn-soft:#452622;--ok:#9bd8b6;--ok-soft:#1f3a2c;--focus:#8cc4e8;
+}
+:root[data-density="compact"]{--gap:.65rem;--opt-pad:.4rem;--q-size:1.25rem}
+:root[data-size="large"]{font-size:112.5%}
+:root[data-size="larger"]{font-size:125%}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 var(--sans);overflow-wrap:anywhere}
+.app{max-width:46rem;margin:0 auto;padding:0 1rem;min-height:100vh;display:flex;flex-direction:column}
+[hidden]{display:none !important}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;overflow-wrap:normal}
+button[aria-disabled="true"]{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+h1:focus,h2:focus,main:focus,.fb:focus{outline:none}
+
+.btn{min-height:var(--target);min-width:var(--target);padding:.35rem 1rem;border:1px solid var(--line);background:var(--surface);border-radius:.4rem;line-height:1.25}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.btn.danger{border-color:var(--warn);color:var(--warn);font-weight:600}
+.btn.quiet{border-color:transparent;background:transparent;text-decoration:underline;text-underline-offset:3px}
+.seg{min-height:var(--target);padding:.3rem .85rem;border:1px solid var(--line);background:var(--surface);border-radius:.4rem}
+.seg[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);font-weight:600}
+.seg[aria-pressed="true"]::before{content:"";display:inline-block;width:.45rem;height:.75rem;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg);margin:0 .5rem .1rem 0}
+input[type=text],textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:.4rem;min-height:var(--target);padding:.55rem .75rem;width:100%}
+textarea{display:block;resize:vertical;line-height:1.45}
+textarea[readonly]{font:1rem/1.45 var(--mono);background:var(--raised)}
+[aria-invalid="true"]{border-color:var(--warn) !important;border-width:2px !important}
+label,.lab{display:block;font-size:.9rem;color:var(--muted);margin-bottom:.3rem}
+.hint{font-size:.85rem;color:var(--muted);margin-top:.3rem}
+
+/* top: title, progress as "17 of 60" and a strip with one cell per question */
+.top{padding:.75rem 0 .6rem;border-bottom:2px solid var(--ink)}
+.top-row{display:flex;gap:.75rem;align-items:center;justify-content:space-between}
+#panel-toggle{flex:0 0 auto;white-space:nowrap;font-size:.92rem;padding:.35rem .7rem}
+.doc-title{font:600 1rem/1.3 var(--sans);overflow-wrap:anywhere;min-width:0}
+.progress{margin-top:.5rem}
+.progress-text{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.progress-text b{color:var(--ink);font-weight:600}
+.rail{display:flex;gap:1px;align-items:flex-end;height:.7rem;margin-top:.35rem}
+.rail .grp{display:flex;gap:1px;align-items:flex-end;flex-grow:1;margin-right:.35rem;min-width:0}
+.rail .grp:last-child{margin-right:0}
+.cell{flex:1 1 0;min-width:1px;height:.35rem;background:var(--line);border-radius:1px}
+.cell.done{background:var(--accent)}
+.cell.skip{background:transparent;box-shadow:inset 0 0 0 1px var(--muted)}
+.cell.cur{height:.7rem;background:var(--ink)}
+:root[data-motion="on"] .cell{transition:height .12s ease,background-color .12s ease}
+
+.status{min-height:1.5rem;margin:.5rem 0 0;font-size:.92rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.25rem .75rem;align-items:center}
+.status.bad{color:var(--warn);font-weight:600}
+.status .btn{min-height:var(--target)}
+.savebanner{margin:.6rem 0 0;padding:.55rem .75rem;background:var(--warn-soft);border:1px solid var(--line);font-size:.92rem;border-radius:.2rem}
+
+main{flex:1 1 auto;padding:1rem 0 1.25rem}
+.lead h1,.lead h2{font:600 1.75rem/1.2 var(--serif);letter-spacing:-.01em;margin-bottom:.5rem;overflow-wrap:anywhere}
+.lead p{margin-top:.6rem;max-width:62ch}
+.facts{margin:1rem 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.facts li{padding:.6rem 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.75rem}
+.facts .k{color:var(--muted);font-size:.9rem}
+.facts .v{overflow-wrap:anywhere}
+.how{margin:1rem 0 0;padding-left:1.2rem}
+.how li{margin:.3rem 0}
+.rowgap{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:.75rem}
+
+/* a question */
+.q{padding:.25rem 0 var(--gap)}
+.q + .q{border-top:1px solid var(--line);padding-top:var(--gap)}
+:root[data-motion="on"] .q.enter{animation:q-in .16s ease-out}
+@keyframes q-in{from{transform:translateY(.4rem)}to{transform:none}}
+.q-meta{display:flex;flex-wrap:wrap;gap:.2rem .75rem;align-items:baseline;font-size:.85rem;color:var(--muted)}
+.q-id{font:.8rem var(--mono);letter-spacing:.02em;overflow-wrap:anywhere}
+.q-req{color:var(--warn);font-weight:600}
+.q-text{font:600 var(--q-size)/1.28 var(--serif);margin:.35rem 0 .2rem;overflow-wrap:anywhere}
+.q-help{color:var(--muted);max-width:62ch;overflow-wrap:anywhere}
+.q-control{margin-top:var(--gap)}
+.q-err{color:var(--warn);font-weight:600;font-size:.95rem;margin-top:.5rem}
+.q-err:empty{display:none}
+.q-skipped{margin-top:.5rem;font-size:.92rem;color:var(--muted);font-style:italic}
+.q-note{margin-top:var(--gap)}
+.opts{display:grid;gap:.45rem}
+.opt{display:flex;gap:.7rem;align-items:flex-start;min-height:var(--target);padding:var(--opt-pad) .8rem;margin:0;border:1px solid var(--line);border-radius:.4rem;background:var(--surface);color:var(--ink);font-size:1rem;cursor:pointer}
+.opt:hover{border-color:var(--ink)}
+.opt input{flex:0 0 auto;width:1.25rem;height:1.25rem;margin:.12rem 0 0;accent-color:var(--accent)}
+.opt .t{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.opt .n{flex:0 0 auto;font:600 .95rem var(--mono);min-width:1.2rem}
+.opt.on{border-color:var(--ink);box-shadow:inset .25rem 0 0 var(--accent);background:var(--accent-soft)}
+.opt.locked{cursor:default}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;border:1px solid currentColor;border-radius:.25rem;padding:0 .35rem;margin-right:.4rem;white-space:nowrap}
+.tag.ok{color:var(--ok)}
+.tag.bad{color:var(--warn)}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--target),1fr));gap:.4rem}
+.chip{position:relative;display:grid;place-items:center;min-height:var(--target);margin:0;border:1px solid var(--line);border-radius:.4rem;background:var(--surface);color:var(--ink);font:600 1rem var(--mono);cursor:pointer}
+.chip input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);text-decoration:underline;text-underline-offset:3px}
+.chip:focus-within{outline:3px solid var(--focus);outline-offset:2px}
+@supports selector(:has(a)){
+  .chip:focus-within{outline:none}
+  .chip:has(input:focus-visible),.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+  .opt input:focus-visible{outline:none}
+}
+.ends{display:flex;justify-content:space-between;gap:1rem;margin-top:.45rem;font-size:.88rem;color:var(--muted)}
+.ends span{max-width:48%;overflow-wrap:anywhere}
+.ends span:last-child{text-align:right}
+.slider{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.5rem;align-items:center}
+.slider input[type=range]{width:100%;min-height:var(--target);accent-color:var(--accent)}
+.slider-val{font:600 1.1rem var(--mono);margin-bottom:.4rem}
+.numrow{display:flex;gap:.6rem;align-items:center}
+.numrow input{max-width:11rem}
+.unit{color:var(--muted)}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.rank li{display:grid;grid-template-columns:1.6rem minmax(0,1fr) auto auto;gap:.5rem;align-items:center;padding:.3rem .3rem .3rem .7rem;border:1px solid var(--line);border-radius:.4rem;background:var(--surface)}
+.rank .pos{font:600 1rem var(--mono)}
+.rank .t{overflow-wrap:anywhere}
+.mv{width:var(--target);height:var(--target);border:1px solid var(--line);border-radius:.4rem;background:var(--raised);display:grid;place-items:center;padding:0}
+.mv svg{width:1.1rem;height:1.1rem}
+.mv:hover{border-color:var(--ink)}
+
+/* quiz feedback: every option with its explanation */
+.fb{margin-top:var(--gap);padding:.75rem .9rem;border-radius:.3rem;border:1px solid var(--line);background:var(--ok-soft)}
+.fb.bad{background:var(--warn-soft)}
+.fb.passed{background:var(--raised)}
+.fb-verdict{font-weight:600}
+.fb ul{list-style:none;margin:.5rem 0 0;padding:0;display:grid;gap:.55rem}
+.fb li{overflow-wrap:anywhere}
+.fb .o{font-weight:600}
+.fb .why{display:block}
+
+/* review */
+.sec-h{font:600 1.05rem var(--sans);margin:1.25rem 0 .25rem;padding-bottom:.3rem;border-bottom:1px solid var(--ink);overflow-wrap:anywhere}
+.rv{list-style:none;margin:0;padding:0}
+.rv li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.75rem;align-items:start;padding:.65rem 0;border-bottom:1px solid var(--line)}
+.rv-q{font-weight:600;overflow-wrap:anywhere}
+.rv-a{overflow-wrap:anywhere;white-space:pre-line;margin-top:.15rem}
+.rv-a.none{color:var(--muted);font-style:italic}
+.rv-a.need{color:var(--warn);font-weight:600;font-style:normal}
+.rv-n{color:var(--muted);font-size:.92rem;overflow-wrap:anywhere;white-space:pre-line;margin-top:.15rem}
+.errbox{margin:1rem 0 0;padding:.75rem .9rem;background:var(--warn-soft);border:1px solid var(--line);border-radius:.2rem}
+.errbox p{font-weight:600;color:var(--warn)}
+.errbox ul{margin:.4rem 0 0;padding-left:1.1rem}
+.errbox .btn{overflow-wrap:anywhere;text-align:left}
+.blank{padding:2rem .5rem;text-align:center;border-bottom:1px solid var(--line)}
+.blank p{color:var(--muted);margin:.4rem auto .9rem;max-width:44ch}
+
+/* results */
+.score{margin-top:1rem;padding:1rem;border:1px solid var(--line);border-radius:.4rem;background:var(--surface)}
+.score-main{font:600 1.5rem/1.25 var(--serif)}
+.score-main b{font-family:var(--mono);font-size:1.6rem}
+.tallies{margin:1rem 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.tallies li{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.tallies .c{font:600 1rem var(--mono);white-space:nowrap}
+.caveat{font-size:.9rem;color:var(--muted);margin-top:.5rem}
+.sub-h{font:600 1.1rem var(--sans);margin:1.5rem 0 .4rem}
+.missed{list-style:none;margin:0;padding:0}
+.missed > li{padding:.75rem 0;border-bottom:1px solid var(--line)}
+
+/* the bar of actions: within thumb reach on a phone */
+.bar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:.6rem 0 calc(.6rem + env(safe-area-inset-bottom));display:flex;gap:.5rem;align-items:stretch}
+.bar:empty{display:none}
+.bar.flow{position:static}
+.bar .btn.primary{flex:1 1 auto}
+.foot{padding:.6rem 0 1rem;font-size:.85rem;color:var(--muted)}
+
+/* panel: saving, resume codes, import, display */
+.panel{margin-top:.75rem;background:var(--raised);border:1px solid var(--line);border-radius:.5rem;padding:1rem;display:grid;grid-template-columns:minmax(0,1fr);gap:1.1rem}
+.panel h2{font:600 1.05rem var(--sans)}
+.panel h3{font:600 .98rem var(--sans);margin-bottom:.4rem}
+.panel section{display:grid;grid-template-columns:minmax(0,1fr);gap:.5rem}
+.choice{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.choice .lab{width:5.2rem;margin:0}
+.confirm{display:grid;grid-template-columns:minmax(0,1fr);gap:.6rem;background:var(--warn-soft);border:1px solid var(--line);border-radius:.2rem;padding:.75rem .9rem}
+.msg{font-size:.95rem}
+.msg.bad{color:var(--warn);font-weight:600}
+.msg:empty{display:none}
+input[type=file]{font:inherit;color:var(--ink);width:100%;min-width:0;min-height:var(--target);padding:.4rem 0}
+
+@media (min-width:44rem){
+  .app{padding:0 1.5rem}
+  .bar{position:static;justify-content:flex-end;border-top:1px solid var(--line);padding:.9rem 0}
+  .bar .btn.primary{flex:0 0 auto;min-width:11rem}
+  .bar .spacer{flex:1 1 auto}
+  .lead h1,.lead h2{font-size:2.1rem}
+  .opts.across{grid-template-columns:repeat(auto-fit,minmax(7.5rem,1fr))}
+  .opts.across .opt{flex-direction:column;gap:.3rem}
+}
+@media (max-width:26rem){
+  .facts li{grid-template-columns:1fr;gap:.1rem}
+  .choice .lab{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div class="top-row">
+      <p class="doc-title" id="doc-title">Questionnaire</p>
+      <button type="button" class="btn" id="panel-toggle" aria-expanded="false" aria-controls="panel">Save and display</button>
+    </div>
+    <div class="progress" id="progress" hidden>
+      <p class="progress-text" id="progress-text"></p>
+      <div class="rail" id="rail" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <section class="panel" id="panel" hidden aria-labelledby="panel-h">
+    <h2 id="panel-h" tabindex="-1">Save and display</h2>
+
+    <section aria-labelledby="keep-h">
+      <h3 id="keep-h">Your progress</h3>
+      <p class="msg" id="store-note"></p>
+      <div class="rowgap" style="margin-top:0">
+        <button type="button" class="btn" id="resume-make">Get a resume code</button>
+        <button type="button" class="btn" id="import-open" aria-expanded="false" aria-controls="import-box">Continue from a code or export</button>
+        <button type="button" class="btn danger" id="reset-ask">Start again</button>
+      </div>
+      <div id="resume-box" hidden>
+        <label for="resume-text">Resume code. Paste it into this same questionnaire, on any device, to carry on.</label>
+        <textarea id="resume-text" readonly rows="5" spellcheck="false"></textarea>
+        <div class="rowgap">
+          <button type="button" class="btn primary" id="resume-copy">Copy the code</button>
+          <button type="button" class="btn" id="resume-download">Download as a file</button>
+        </div>
+        <p class="msg" id="resume-msg" role="status"></p>
+      </div>
+      <div id="import-box" hidden>
+        <label for="import-text">Paste a resume code, or a finished export from this questionnaire</label>
+        <textarea id="import-text" rows="5" spellcheck="false" autocomplete="off" aria-describedby="import-msg"></textarea>
+        <label for="import-file" style="margin-top:.6rem">Or choose a saved file</label>
+        <input type="file" id="import-file" accept=".json,.md,.txt,application/json,text/plain,text/markdown">
+        <div class="rowgap">
+          <button type="button" class="btn primary" id="import-go">Load it</button>
+        </div>
+        <p class="msg" id="import-msg" role="alert"></p>
+        <div class="confirm" id="import-confirm" hidden>
+          <p id="import-confirm-text"></p>
+          <div class="rowgap" style="margin-top:0">
+            <button type="button" class="btn" id="import-keep">Keep my current answers</button>
+            <button type="button" class="btn danger" id="import-continue">Load the answers that match</button>
+          </div>
+        </div>
+      </div>
+      <div class="confirm" id="reset-confirm" hidden>
+        <p id="reset-text"></p>
+        <div class="rowgap" style="margin-top:0">
+          <button type="button" class="btn" id="reset-cancel">Keep my answers</button>
+          <button type="button" class="btn" id="reset-export">Get a resume code first</button>
+          <button type="button" class="btn danger" id="reset-go">Clear and start again</button>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="disp-h">
+      <h3 id="disp-h">Display</h3>
+      <div class="choice" role="group" aria-label="Theme">
+        <span class="lab">Theme</span>
+        <button type="button" class="seg" data-set="theme" data-val="paper">Paper</button>
+        <button type="button" class="seg" data-set="theme" data-val="slate">Slate</button>
+        <button type="button" class="seg" data-set="theme" data-val="dusk">Dusk</button>
+        <button type="button" class="seg" data-set="theme" data-val="ink">Ink</button>
+      </div>
+      <div class="choice" role="group" aria-label="Text size">
+        <span class="lab">Text size</span>
+        <button type="button" class="seg" data-set="size" data-val="standard">Standard</button>
+        <button type="button" class="seg" data-set="size" data-val="large">Large</button>
+        <button type="button" class="seg" data-set="size" data-val="larger">Larger</button>
+      </div>
+      <div class="choice" role="group" aria-label="Spacing">
+        <span class="lab">Spacing</span>
+        <button type="button" class="seg" data-set="density" data-val="comfortable">Comfortable</button>
+        <button type="button" class="seg" data-set="density" data-val="compact">Compact</button>
+      </div>
+      <div class="choice" role="group" aria-label="Movement">
+        <span class="lab">Movement</span>
+        <button type="button" class="seg" data-set="motion" data-val="on">On</button>
+        <button type="button" class="seg" data-set="motion" data-val="off">Off</button>
+      </div>
+      <div class="choice" role="group" aria-label="Questions shown" id="layout-choice">
+        <span class="lab">Questions</span>
+        <button type="button" class="seg" data-set="layout" data-val="one">One at a time</button>
+        <button type="button" class="seg" data-set="layout" data-val="sections">A section at a time</button>
+      </div>
+      <div class="rowgap" style="margin-top:0">
+        <button type="button" class="btn quiet" id="display-reset">Reset display</button>
+        <span class="msg" id="display-note"></span>
+      </div>
+    </section>
+
+    <div><button type="button" class="btn" id="panel-close">Close</button></div>
+  </section>
+
+  <p class="savebanner" id="save-banner" hidden></p>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+  <main id="main" tabindex="-1"></main>
+  <div class="bar" id="bar"></div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+/* ====== BEGIN INSTRUMENT DATA: edit only between this line and the END line. Strict JSON. ======
+   Fields are described in references/modes.md. Question ids are permanent: when you revise, add
+   new ids and raise "version"; never renumber or reuse an id. */
+const INSTRUMENT = {
+  "id": "workshop-feedback",
+  "version": 1,
+  "mode": "survey",
+  "title": "Feedback on the afternoon workshop",
+  "purpose": "Thirteen short questions about how the workshop went for you.",
+  "minutes": 5,
+  "disclosure": {
+    "who": "The workshop organiser",
+    "purpose": "To decide what to keep, cut or change before the workshop runs again.",
+    "handling": "Your answers are read by the organiser only. They are kept in one spreadsheet with no names attached, and deleted once the next workshop has run. Nothing is passed on outside the organising group.",
+    "contact": "Reply to the message that brought you this file."
+  },
+  "questions": [
+    {
+      "id": "worthwhile",
+      "type": "likert",
+      "tags": [
+        "rating"
+      ],
+      "text": "The workshop was a good use of my afternoon.",
+      "labels": [
+        "Strongly disagree",
+        "Disagree",
+        "Neither",
+        "Agree",
+        "Strongly agree"
+      ]
+    },
+    {
+      "id": "pace",
+      "type": "single",
+      "text": "How was the pace?",
+      "options": [
+        "Too slow",
+        "About right",
+        "Too fast"
+      ]
+    },
+    {
+      "id": "rushed-part",
+      "type": "text",
+      "show_if": {
+        "q": "pace",
+        "equals": "Too fast"
+      },
+      "text": "Which part went too fast?"
+    },
+    {
+      "id": "level",
+      "type": "single",
+      "text": "How did the level match what you already knew?",
+      "options": [
+        "Mostly things I already knew",
+        "A good mix of familiar and new",
+        "Mostly new, and I could follow",
+        "Mostly new, and I got lost"
+      ]
+    },
+    {
+      "id": "exercise",
+      "type": "likert",
+      "tags": [
+        "rating"
+      ],
+      "text": "The hands-on exercise helped me understand the material.",
+      "labels": [
+        "Strongly disagree",
+        "Disagree",
+        "Neither",
+        "Agree",
+        "Strongly agree"
+      ]
+    },
+    {
+      "id": "handout",
+      "type": "likert",
+      "tags": [
+        "rating"
+      ],
+      "text": "I could use the handout afterwards without the presenter there.",
+      "labels": [
+        "Strongly disagree",
+        "Disagree",
+        "Neither",
+        "Agree",
+        "Strongly agree"
+      ]
+    },
+    {
+      "id": "most-useful",
+      "type": "multi",
+      "text": "Which parts were most useful to you?",
+      "options": [
+        "The opening walk-through",
+        "The worked example",
+        "The hands-on exercise",
+        "The question time",
+        "The handout",
+        "None of them"
+      ]
+    },
+    {
+      "id": "length",
+      "type": "single",
+      "text": "How was the length?",
+      "options": [
+        "Too short",
+        "About right",
+        "Too long"
+      ]
+    },
+    {
+      "id": "follow",
+      "type": "single",
+      "text": "How easy was it to follow from where you sat?",
+      "help": "Screen, sound, seating. Say what got in the way in the note box.",
+      "options": [
+        "No trouble",
+        "Some trouble",
+        "A lot of trouble"
+      ]
+    },
+    {
+      "id": "use-soon",
+      "type": "scale",
+      "min": 0,
+      "max": 10,
+      "min_label": "Will not",
+      "max_label": "Certain to",
+      "text": "How likely are you to use something from the workshop in the next month?"
+    },
+    {
+      "id": "suggest",
+      "type": "single",
+      "text": "Would you suggest the workshop to a colleague in the same role?",
+      "options": [
+        "Yes",
+        "Yes, if it changes",
+        "No"
+      ]
+    },
+    {
+      "id": "one-change",
+      "type": "text",
+      "long": true,
+      "text": "What one change would improve it most?"
+    },
+    {
+      "id": "anything-else",
+      "type": "text",
+      "long": true,
+      "text": "What else should the organiser know?"
+    }
+  ],
+  "tallies": [
+    {
+      "id": "rated-4-plus",
+      "label": "Statements you rated 4 or 5",
+      "tag": "rating",
+      "when": {
+        "at_least": 4
+      }
+    }
+  ]
+};
+/* ====== END INSTRUMENT DATA: everything below this line is the fixed engine. Do not edit it. ====== */
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var APP = 'elicitor';
+  var SCHEMA = 1;
+  // MIGRATE[n] turns data saved at schema n into schema n + 1. Schema 1 is the first, so there are none yet.
+  var MIGRATE = {};
+  var TALLY_LINE = 'These totals are counts of your answers. They are not a validated measure of anything.';
+  var SCORE_RULE = 'One mark per item. An item is correct only when the answer matches exactly; a select-all item needs every correct option and no others. Skipped items earn no mark and are reported separately, so the result gives correct out of attempted and correct out of all items.';
+  var TYPES = ['single', 'multi', 'text', 'likert', 'scale', 'number', 'rank'];
+  var NOTE_ON = {single: 1, multi: 1, likert: 1, scale: 1, rank: 1};
+  var THEMES = ['paper', 'slate', 'dusk', 'ink'];
+  var SIZES = ['standard', 'large', 'larger'];
+  var DENSITIES = ['comfortable', 'compact'];
+  var NUM_RE = /^-?\d{1,12}(\.\d{1,6})?$/;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      var v = attrs[k];
+      if (k === 'text') n.textContent = v;
+      else if (k === 'on') Object.keys(v).forEach(function (ev) { n.addEventListener(ev, v[ev]); });
+      else if (v !== false && v != null) n.setAttribute(k, v === true ? '' : v);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function svgArrow(up) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var s = document.createElementNS(NS, 'svg');
+    s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('focusable', 'false');
+    var p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', up ? 'M5 15l7-7 7 7' : 'M5 9l7 7 7-7');
+    p.setAttribute('fill', 'none'); p.setAttribute('stroke', 'currentColor'); p.setAttribute('stroke-width', '2.4');
+    p.setAttribute('stroke-linecap', 'round'); p.setAttribute('stroke-linejoin', 'round');
+    s.appendChild(p);
+    return s;
+  }
+  function oneLine(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').replace(/^ | $/g, ''); }
+  // The stored form of typed text: line ends as \n, no trailing spaces or tabs on a line, no blank edges.
+  function canon(s) {
+    return String(s == null ? '' : s).replace(/\r\n?/g, '\n').split('\n').map(function (l) { return l.replace(/[ \t]+$/, ''); }).join('\n').replace(/^[ \t\n]+|[ \t\n]+$/g, '');
+  }
+  function nowIso() { return new Date().toISOString().replace(/\.\d{3}Z$/, 'Z'); }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+
+  // ------------------------------------------------------------------ the instrument
+  var I = null, Q = [], QBY = {}, SECS = [];
+
+  function loadInstrument() {
+    var raw = null, probs = [];
+    try { raw = (typeof INSTRUMENT === 'undefined') ? null : INSTRUMENT; } catch (e) { raw = null; }
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+      return ['The data block did not load. It must be one object written as strict JSON: double quotes, no trailing commas, no comments.'];
+    }
+    if (typeof raw.id !== 'string' || !/^[a-z0-9_-]+$/.test(raw.id)) probs.push('"id" must be lower-case letters, digits, hyphens or underscores.');
+    if (typeof raw.version !== 'number' || raw.version % 1 !== 0 || raw.version < 1) probs.push('"version" must be a whole number from 1.');
+    if (['intake', 'survey', 'quiz'].indexOf(raw.mode) < 0) probs.push('"mode" must be intake, survey or quiz.');
+    if (typeof raw.title !== 'string' || !oneLine(raw.title)) probs.push('"title" is missing.');
+    if (!Array.isArray(raw.questions)) probs.push('"questions" must be a list.');
+    if (raw.mode === 'survey') {
+      var d = raw.disclosure || {};
+      ['who', 'purpose', 'handling'].forEach(function (k) { if (typeof d[k] !== 'string' || !oneLine(d[k])) probs.push('Survey mode needs disclosure.' + k + ': the respondent must be told this before starting.'); });
+    }
+    if (probs.length) return probs;
+    I = {
+      id: raw.id, version: raw.version, mode: raw.mode, title: oneLine(raw.title), purpose: oneLine(raw.purpose), intro: canon(raw.intro),
+      layout: raw.layout === 'sections' && raw.mode !== 'quiz' ? 'sections' : 'one',
+      feedback: raw.feedback === 'at_end' ? 'at_end' : 'immediate',
+      minutes: (typeof raw.minutes === 'number' && raw.minutes > 0) ? raw.minutes : null,
+      disclosure: raw.disclosure || null, tallies: [], notes: raw.notes === 'off' ? 'off' : (raw.notes === 'on' ? 'on' : (raw.mode === 'quiz' ? 'off' : 'on'))
+    };
+    SECS = (Array.isArray(raw.sections) ? raw.sections : []).filter(function (s) { return s && typeof s.id === 'string'; })
+      .map(function (s) { return {id: s.id, title: oneLine(s.title) || s.id, intro: oneLine(s.intro)}; });
+    var secIds = {};
+    SECS.forEach(function (s) { secIds[s.id] = true; });
+    Q = []; QBY = {};
+    raw.questions.forEach(function (r, n) {
+      var where = 'Question ' + (n + 1);
+      if (!r || typeof r !== 'object') { probs.push(where + ' is not an object.'); return; }
+      if (typeof r.id !== 'string' || !/^[a-z0-9_-]+$/.test(r.id)) { probs.push(where + ' has no usable id.'); return; }
+      where = 'Question "' + r.id + '"';
+      if (QBY[r.id]) { probs.push(where + ' uses an id twice.'); return; }
+      if (TYPES.indexOf(r.type) < 0) { probs.push(where + ' has an unknown type.'); return; }
+      if (typeof r.text !== 'string' || !oneLine(r.text)) { probs.push(where + ' has no text.'); return; }
+      var q = {id: r.id, type: r.type, text: oneLine(r.text), help: oneLine(r.help), section: secIds[r.section] ? r.section : null,
+        required: r.required === true, tags: Array.isArray(r.tags) ? r.tags.slice() : [], show_if: (r.show_if && typeof r.show_if === 'object') ? r.show_if : null,
+        note_label: oneLine(r.note_label) || 'Anything to add?'};
+      q.note = (r.note === true || r.note === false) ? r.note : (I.notes === 'on' && !!NOTE_ON[r.type]);
+      if (q.type === 'single' || q.type === 'multi' || q.type === 'rank') {
+        if (!Array.isArray(r.options) || r.options.length < 2) { probs.push(where + ' needs at least two options.'); return; }
+        q.options = r.options.map(function (o) {
+          return (o && typeof o === 'object') ? {text: oneLine(o.text), correct: o.correct === true, explain: oneLine(o.explain)} : {text: oneLine(o), correct: false, explain: ''};
+        });
+        q.optText = q.options.map(function (o) { return o.text; });
+        if (q.optText.some(function (t, i) { return !t || q.optText.indexOf(t) !== i; })) { probs.push(where + ' has an empty or repeated option.'); return; }
+        if (I.mode === 'quiz' && !q.options.some(function (o) { return o.correct; })) { probs.push(where + ' has no correct answer marked.'); return; }
+      }
+      if (I.mode === 'quiz' && q.type !== 'single' && q.type !== 'multi') { probs.push(where + ': quiz items must be single or multi.'); return; }
+      if (q.type === 'likert') {
+        if (!Array.isArray(r.labels) || (r.labels.length !== 4 && r.labels.length !== 5)) { probs.push(where + ' needs 4 or 5 labels.'); return; }
+        q.labels = r.labels.map(oneLine); q.points = q.labels.length;
+      }
+      if (q.type === 'scale') {
+        q.min = r.min; q.max = r.max; q.step = (typeof r.step === 'number') ? r.step : 1;
+        if (![q.min, q.max, q.step].every(function (x) { return typeof x === 'number' && x % 1 === 0; }) || q.max <= q.min || q.step < 1 || (q.max - q.min) % q.step !== 0) { probs.push(where + ' needs whole-number min, max and step, with max above min.'); return; }
+        q.min_label = oneLine(r.min_label); q.max_label = oneLine(r.max_label);
+      }
+      if (q.type === 'number') {
+        q.min = (typeof r.min === 'number') ? r.min : null; q.max = (typeof r.max === 'number') ? r.max : null;
+        q.unit = oneLine(r.unit); q.integer = r.integer === true;
+      }
+      if (q.type === 'text') q.long = r.long === true;
+      Q.push(q); QBY[q.id] = q;
+    });
+    if (probs.length) return probs;
+    if (SECS.length) {
+      // Questions keep the author's order. A question with no known section joins the section of the one before it.
+      var last = SECS[0].id;
+      Q.forEach(function (q) { if (q.section) last = q.section; else q.section = last; });
+    } else {
+      SECS = [{id: '_all', title: '', intro: ''}];
+      Q.forEach(function (q) { q.section = '_all'; });
+    }
+    Q.forEach(function (q) {
+      if (q.show_if && (!QBY[q.show_if.q] || Q.indexOf(QBY[q.show_if.q]) >= Q.indexOf(q))) probs.push('Question "' + q.id + '": show_if must point at an earlier question.');
+    });
+    if (I.mode !== 'quiz' && Array.isArray(raw.tallies)) {
+      raw.tallies.forEach(function (t) {
+        if (t && typeof t.id === 'string' && typeof t.tag === 'string' && oneLine(t.label)) I.tallies.push({id: t.id, tag: t.tag, label: oneLine(t.label), when: (t.when && typeof t.when === 'object') ? t.when : {answered: true}});
+      });
+    }
+    return probs;
+  }
+
+  // ------------------------------------------------------------------ answers
+  var ST = null;          // the state that is saved
+  var UI = {fromReview: false, filter: 'all', raw: {}, errors: {}, undo: null, dataProblems: [], pendingImport: null, justResumed: false};
+
+  function freshState() {
+    return {stage: I.mode === 'survey' ? 'disclosure' : 'intro', cur: null, ans: {}, feedback: I.feedback, agreed: false, finished_at: null};
+  }
+  function entry(q) { return ST.ans[q.id] || {}; }
+  function validValue(q, v) {
+    if (v === undefined || v === null) return false;
+    if (q.type === 'single') return typeof v === 'string' && q.optText.indexOf(v) >= 0;
+    if (q.type === 'multi') return Array.isArray(v) && v.length > 0 && v.every(function (x, i) { return typeof x === 'string' && q.optText.indexOf(x) >= 0 && v.indexOf(x) === i; });
+    if (q.type === 'rank') return Array.isArray(v) && v.length === q.optText.length && q.optText.every(function (t) { return v.indexOf(t) >= 0; }) && v.every(function (x) { return typeof x === 'string'; });
+    if (q.type === 'text') return typeof v === 'string' && canon(v).length > 0;
+    if (typeof v !== 'number' || !isFinite(v)) return false;
+    if (q.type === 'likert') return v % 1 === 0 && v >= 1 && v <= q.points;
+    if (q.type === 'scale') return v % 1 === 0 && v >= q.min && v <= q.max && (v - q.min) % q.step === 0;
+    if (q.type === 'number') return (q.min === null || v >= q.min) && (q.max === null || v <= q.max) && (!q.integer || v % 1 === 0);
+    return false;
+  }
+  function hasAnswer(q) { return validValue(q, entry(q).v); }
+  function statusOf(q) { return hasAnswer(q) ? 'answered' : (entry(q).skipped === true ? 'skipped' : 'none'); }
+  function noteOf(q) { return q.note ? canon(entry(q).note) : ''; }
+  function matches(v, c) {
+    if ('equals' in c) return !Array.isArray(v) && v === c.equals;
+    if ('includes' in c) return Array.isArray(v) && v.indexOf(c.includes) >= 0;
+    if ('at_least' in c) return typeof v === 'number' && v >= c.at_least;
+    if ('at_most' in c) return typeof v === 'number' && v <= c.at_most;
+    return true;
+  }
+  // A question with show_if is shown only when the earlier question is itself shown and its answer fits.
+  function visible() {
+    var out = [], shown = {};
+    Q.forEach(function (q) {
+      var c = q.show_if, ok = true;
+      if (c) {
+        var dep = QBY[c.q];
+        if (!dep || !shown[dep.id]) ok = false;
+        else if ('answered' in c) ok = (c.answered === false) ? !hasAnswer(dep) : hasAnswer(dep);
+        else ok = hasAnswer(dep) && matches(entry(dep).v, c);
+      }
+      if (ok) { out.push(q); shown[q.id] = true; }
+    });
+    return out;
+  }
+  function counts(vis) {
+    var c = {shown: vis.length, answered: 0, skipped: 0, none: 0, hidden: Q.length - vis.length, notes: 0};
+    vis.forEach(function (q) { var s = statusOf(q); if (s === 'answered') c.answered++; else if (s === 'skipped') c.skipped++; else c.none++; if (noteOf(q)) c.notes++; });
+    return c;
+  }
+  function setAnswer(q, v) {
+    var e = ST.ans[q.id] || (ST.ans[q.id] = {});
+    if (v === undefined) delete e.v; else e.v = v;
+    delete e.skipped;
+    clearError(q);
+    changed(q);
+  }
+  function setNote(q, text) {
+    var e = ST.ans[q.id] || (ST.ans[q.id] = {});
+    if (text) e.note = text; else delete e.note;
+    save();
+  }
+  // Called after an answer changes. Redraws only when the set of shown questions changed.
+  var lastVisKey = '';
+  function visKey() { return visible().map(function (q) { return q.id; }).join(','); }
+  function changed(q) {
+    save();
+    var key = visKey();
+    if (key !== lastVisKey && useSections()) { lastVisKey = key; render({keepFocus: true}); return; }
+    lastVisKey = key;
+    drawProgress();
+    drawNextLabel();
+    var mark = document.querySelector('[data-skipmark="' + q.id + '"]');
+    if (mark) mark.hidden = statusOf(q) !== 'skipped';
+    var sk = $('skip-' + q.id);
+    if (sk) sk.setAttribute('aria-pressed', String(statusOf(q) === 'skipped'));
+  }
+
+  // ------------------------------------------------------------------ quiz marking and tallies
+  function correctSet(q) { return q.options.filter(function (o) { return o.correct; }).map(function (o) { return o.text; }); }
+  function isCorrect(q) {
+    var v = entry(q).v, c = correctSet(q);
+    if (q.type === 'single') return v === c[0] && c.length === 1;
+    return Array.isArray(v) && v.length === c.length && c.every(function (t) { return v.indexOf(t) >= 0; });
+  }
+  function score() {
+    var vis = visible(), s = {correct: 0, attempted: 0, total: vis.length, skipped: 0, none: 0, missed: [], passed: []};
+    vis.forEach(function (q) {
+      var st = statusOf(q);
+      if (st === 'answered') { s.attempted++; if (isCorrect(q)) s.correct++; else s.missed.push(q); }
+      else { if (st === 'skipped') s.skipped++; else s.none++; s.passed.push(q); }
+    });
+    return s;
+  }
+  function tallies() {
+    var vis = visible();
+    return I.tallies.map(function (t) {
+      var items = vis.filter(function (q) { return q.tags.indexOf(t.tag) >= 0; });
+      var answered = items.filter(hasAnswer);
+      var n = answered.filter(function (q) { return ('answered' in t.when) ? true : matches(entry(q).v, t.when); }).length;
+      return {id: t.id, label: t.label, count: n, of: items.length, answered: answered.length};
+    });
+  }
+
+  // ------------------------------------------------------------------ text forms of an answer
+  function summary(q) {
+    var v = entry(q).v;
+    if (q.type === 'single') return v;
+    if (q.type === 'multi') return v.join('\n');
+    if (q.type === 'rank') return v.map(function (t, i) { return (i + 1) + '. ' + t; }).join('\n');
+    if (q.type === 'text') return canon(v);
+    if (q.type === 'likert') return v + ' of ' + q.points + ', ' + q.labels[v - 1];
+    if (q.type === 'scale') return v + ' (on ' + q.min + ' to ' + q.max + ')';
+    return String(v) + (q.unit ? ' ' + q.unit : '');
+  }
+  function typeLine(q) {
+    if (q.type === 'likert') return 'Type: likert, ' + q.points + ' points (1: ' + q.labels[0] + '; ' + q.points + ': ' + q.labels[q.points - 1] + ')';
+    if (q.type === 'scale') return 'Type: scale, ' + q.min + ' to ' + q.max + ((q.min_label || q.max_label) ? ' (' + q.min + ': ' + (q.min_label || 'lowest') + '; ' + q.max + ': ' + (q.max_label || 'highest') + ')' : '');
+    if (q.type === 'number') return 'Type: number' + (q.unit ? ', ' + q.unit : '');
+    return 'Type: ' + q.type;
+  }
+  function quote(text) { return text.split('\n').map(function (l) { return l ? '> ' + l : '>'; }); }
+  function listLines(q, arr, numbered) { return arr.map(function (t, i) { return (numbered ? (i + 1) + '. ' : '- ') + t; }); }
+  function answerLines(q) {
+    var st = statusOf(q), v = entry(q).v;
+    if (st === 'skipped') return ['Answer: (skipped)'];
+    if (st === 'none') return ['Answer: (no answer)'];
+    if (q.type === 'single') return ['Answer: ' + v];
+    if (q.type === 'multi') return ['Answer:'].concat(listLines(q, v, false));
+    if (q.type === 'rank') return ['Answer:'].concat(listLines(q, v, true));
+    if (q.type === 'text') return ['Answer:'].concat(quote(canon(v)));
+    if (q.type === 'likert') return ['Answer: ' + v + ' of ' + q.points + ', ' + q.labels[v - 1]];
+    if (q.type === 'scale') return ['Answer: ' + v];
+    return ['Answer: ' + String(v) + (q.unit ? ' ' + q.unit : '')];
+  }
+  function secTitle(id) { for (var i = 0; i < SECS.length; i++) if (SECS[i].id === id) return SECS[i].title; return ''; }
+
+  // The full export for intake and quiz modes: every shown question with its answer and its note.
+  function buildMarkdown() {
+    var vis = visible(), c = counts(vis), L = [], sec = null;
+    L.push('# ' + I.title, '');
+    L.push('Instrument: ' + I.id + ', version ' + I.version + ', ' + I.mode + ' mode');
+    L.push('Finished: ' + (ST.finished_at || nowIso()));
+    if (I.purpose) L.push('Purpose: ' + I.purpose);
+    L.push('Questions shown: ' + c.shown + '. Answered: ' + c.answered + '. Skipped: ' + c.skipped + '. No answer: ' + c.none + '. Hidden by earlier answers: ' + c.hidden + '.');
+    vis.forEach(function (q) {
+      if (q.section !== sec) { sec = q.section; if (secTitle(sec)) L.push('', '## Section: ' + secTitle(sec)); }
+      L.push('', '### [' + q.id + '] ' + q.text, typeLine(q));
+      L = L.concat(answerLines(q));
+      if (I.mode === 'quiz') {
+        var st = statusOf(q), right = correctSet(q);
+        L.push('Result: ' + (st === 'answered' ? (isCorrect(q) ? 'correct' : 'incorrect') : (st === 'skipped' ? 'skipped' : 'no answer')));
+        if (st !== 'answered' || !isCorrect(q)) L = L.concat(q.type === 'single' ? ['Correct answer: ' + right[0]] : ['Correct answer:'].concat(listLines(q, right, false)));
+      }
+      var note = noteOf(q);
+      if (note) L = L.concat(['Note:'], quote(note));
+    });
+    if (I.mode === 'quiz') {
+      var s = score();
+      L.push('', '## Score', '', 'Correct: ' + s.correct, 'Attempted: ' + s.attempted, 'Total: ' + s.total, 'Skipped: ' + s.skipped, 'No answer: ' + s.none, 'Rule: ' + SCORE_RULE);
+    } else if (I.tallies.length) {
+      L.push('', '## Tallies', '');
+      tallies().forEach(function (t) { L.push('- [' + t.id + '] ' + t.label + ': ' + t.count + ' of ' + t.of + ' (answered: ' + t.answered + ')'); });
+      L.push(TALLY_LINE);
+    }
+    L.push('', 'End of export: ' + plural(c.shown, 'question', 'questions') + '.');
+    return L.join('\n') + '\n';
+  }
+  // The compact block a survey respondent sends back: one line per question id, values as JSON.
+  function buildResponse() {
+    var vis = visible(), shown = {}, L = [], notes = 0;
+    vis.forEach(function (q) { shown[q.id] = true; });
+    L.push('=== elicitor response ===', 'instrument: ' + I.id, 'version: ' + I.version, 'finished: ' + (ST.finished_at || nowIso()));
+    Q.forEach(function (q) {
+      var st = shown[q.id] ? statusOf(q) : 'hidden', v = entry(q).v;
+      L.push(q.id + ' = ' + (st === 'hidden' ? 'HIDDEN' : st === 'skipped' ? 'SKIPPED' : st === 'none' ? 'NONE' : JSON.stringify(q.type === 'text' ? canon(v) : v)));
+      var note = shown[q.id] ? noteOf(q) : '';
+      if (note) { L.push(q.id + '.note = ' + JSON.stringify(note)); notes++; }
+    });
+    tallies().forEach(function (t) { L.push('tally:' + t.id + ' = ' + JSON.stringify([t.count, t.of])); });
+    L.push('=== end elicitor response: ' + plural(Q.length, 'question', 'questions') + ', ' + plural(notes, 'note', 'notes') + ' ===');
+    return L.join('\n') + '\n';
+  }
+  function buildExport() { return I.mode === 'survey' ? buildResponse() : buildMarkdown(); }
+
+  // ------------------------------------------------------------------ storage: host object, then localStorage, then memory
+  var store = {
+    kind: 'memory', mem: {},
+    init: function () {
+      var self = this;
+      return new Promise(function (resolve) {
+        var settled = false;
+        var finish = function (kind) { if (!settled) { settled = true; self.kind = kind; resolve(); } };
+        var tryLocal = function () {
+          try {
+            var ls = window.localStorage;
+            ls.setItem('elicitor:probe', '1'); ls.removeItem('elicitor:probe');
+            finish('local');
+          } catch (e) { finish('memory'); }
+        };
+        try {
+          var hs = window.storage;
+          if (hs && typeof hs.get === 'function' && typeof hs.set === 'function') {
+            setTimeout(function () { if (!settled) tryLocal(); }, 1500);   // a host object that never answers is treated as absent
+            Promise.resolve(hs.get('elicitor:probe')).then(function () { finish('host'); }, tryLocal);
+            return;
+          }
+        } catch (e) { /* fall through */ }
+        tryLocal();
+      });
+    },
+    get: function (key) {
+      var self = this;
+      try {
+        if (self.kind === 'host') return Promise.resolve(window.storage.get(key)).then(function (r) { return (r && typeof r === 'object') ? (r.value == null ? null : String(r.value)) : (r == null ? null : String(r)); }, function () { return null; });
+        if (self.kind === 'local') return Promise.resolve(window.localStorage.getItem(key));
+      } catch (e) { self.kind = 'memory'; }
+      return Promise.resolve(Object.prototype.hasOwnProperty.call(self.mem, key) ? self.mem[key] : null);
+    },
+    set: function (key, value) {
+      var self = this;
+      self.mem[key] = value;
+      var fail = function () { if (self.kind !== 'memory') { self.kind = 'memory'; drawStoreNote(); } };
+      try {
+        if (self.kind === 'host') { Promise.resolve(window.storage.set(key, value)).then(null, fail); return; }
+        if (self.kind === 'local') window.localStorage.setItem(key, value);
+      } catch (e) { fail(); }
+    },
+    words: function () {
+      if (this.kind === 'host') return 'Saved by the app that is showing this page.';
+      if (this.kind === 'local') return 'Saved in this browser.';
+      return 'Not saved: this page cannot store data here. Get a resume code to keep your work.';
+    }
+  };
+  function stateKey() { return 'elicitor:state:' + I.id; }
+  function envelope() {
+    var answers = {};
+    Object.keys(ST.ans).forEach(function (id) {
+      var e = ST.ans[id], o = {};
+      if (e.v !== undefined) o.v = e.v;
+      if (e.note) o.note = e.note;
+      if (e.skipped === true) o.skipped = true;
+      if (e.checked === true) o.checked = true;
+      if (Object.keys(o).length) answers[id] = o;
+    });
+    return {app: APP, schema: SCHEMA, content_id: I.id + '@' + I.version, saved_at: nowIso(),
+      data: {stage: ST.stage, cur: ST.cur, feedback: ST.feedback, agreed: ST.agreed === true, finished_at: ST.finished_at, answers: answers}};
+  }
+  var saveTimer = null;
+  function saveNow() { saveTimer = null; if (I && ST) store.set(stateKey(), JSON.stringify(envelope())); }
+  function save() { if (saveTimer === null) saveTimer = setTimeout(saveNow, 120); }
+  function drawStoreNote() {
+    var words = store.words(), bad = store.kind === 'memory';
+    $('store-note').textContent = words;
+    $('store-note').className = 'msg' + (bad ? ' bad' : '');
+    $('save-banner').hidden = !bad;
+    $('save-banner').textContent = bad ? words : '';
+    $('foot').textContent = bad ? '' : words;
+    $('display-note').textContent = bad ? 'Display choices last for this visit only.' : '';
+  }
+
+  // ------------------------------------------------------------------ reading a resume code or a finished export
+  // Every reader returns {ok:false, why:'...'} or {ok:true, state:{...}, dropped:[...], version:n, kind:'...'}.
+  // Nothing here touches ST: the caller swaps the state in only after a reader has succeeded.
+  function cleanAnswers(src, dropped) {
+    var out = {};
+    Object.keys(src).forEach(function (id) {
+      var q = QBY[id], a = src[id], e = {};
+      if (!q) { dropped.push('"' + id + '" is not a question in this version'); return; }
+      if (!a || typeof a !== 'object') { dropped.push('"' + id + '" is not readable'); return; }
+      if (a.v !== undefined && a.v !== null) {
+        if (validValue(q, a.v)) e.v = (q.type === 'multi') ? q.optText.filter(function (t) { return a.v.indexOf(t) >= 0; }) : a.v;
+        else { dropped.push('the answer to "' + id + '" does not fit that question here'); }
+      }
+      if (typeof a.note === 'string' && a.note) e.note = a.note;
+      if (a.skipped === true && e.v === undefined) e.skipped = true;
+      if (a.checked === true && e.v !== undefined && I.mode === 'quiz') e.checked = true;
+      if (Object.keys(e).length) out[id] = e;
+    });
+    return out;
+  }
+  function readEnvelope(text) {
+    var env;
+    try { env = JSON.parse(text); } catch (e) { return {ok: false, why: (text.charAt(0) === '{' ? 'The text is not complete JSON, so it is not a whole resume code. It may have been cut short when copied.' : 'The text is not complete JSON and not an export from a questionnaire page, so there is nothing here to load.')}; }
+    if (!env || typeof env !== 'object' || Array.isArray(env)) return {ok: false, why: 'The text is JSON but not a resume code.'};
+    if (env.app !== APP) return {ok: false, why: 'This code was made by a different app (' + JSON.stringify(env.app === undefined ? null : env.app).slice(0, 40) + '), not by this questionnaire page.'};
+    if (typeof env.schema !== 'number' || env.schema % 1 !== 0 || env.schema < 1) return {ok: false, why: 'The code has no usable schema number.'};
+    if (env.schema > SCHEMA) return {ok: false, why: 'This code was made by a newer copy of this page (schema ' + env.schema + '). This copy reads schema ' + SCHEMA + ' and earlier.'};
+    var data = env.data, at = env.schema;
+    while (at < SCHEMA) {
+      if (typeof MIGRATE[at] !== 'function') return {ok: false, why: 'There is no way to bring a schema ' + at + ' code up to schema ' + SCHEMA + '.'};
+      data = MIGRATE[at](data); at++;
+    }
+    var m = /^([a-z0-9_-]+)@(\d+)$/.exec(typeof env.content_id === 'string' ? env.content_id : '');
+    if (!m) return {ok: false, why: 'The code does not say which questionnaire it belongs to.'};
+    if (m[1] !== I.id) return {ok: false, why: 'This code is for a different questionnaire ("' + m[1] + '"). This page is "' + I.id + '".'};
+    if (!data || typeof data !== 'object' || !data.answers || typeof data.answers !== 'object' || Array.isArray(data.answers)) return {ok: false, why: 'The code has no answers section.'};
+    var dropped = [], st = freshState();
+    st.ans = cleanAnswers(data.answers, dropped);
+    if (['disclosure', 'intro', 'q', 'review', 'done'].indexOf(data.stage) >= 0) st.stage = data.stage;
+    if (typeof data.cur === 'string' && QBY[data.cur]) st.cur = data.cur;
+    if (data.feedback === 'immediate' || data.feedback === 'at_end') st.feedback = data.feedback;
+    st.agreed = data.agreed === true;
+    if (typeof data.finished_at === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(data.finished_at)) st.finished_at = data.finished_at;
+    if (I.mode === 'survey' && !st.agreed) st.stage = 'disclosure';
+    if (st.stage === 'done' && !st.finished_at) st.stage = 'review';
+    return {ok: true, state: st, dropped: dropped, version: Number(m[2]), kind: 'resume code'};
+  }
+  function parseValue(q, head, body) {
+    // head: the text after "Answer: " on the same line; body: the lines that follow it.
+    var strip = function (pre) { return body.map(function (l) { return l.replace(pre, ''); }); };
+    if (q.type === 'single') return head;
+    if (q.type === 'multi') return strip(/^- /);
+    if (q.type === 'rank') return strip(/^\d+\. /);
+    if (q.type === 'text') return body.map(function (l) { return l === '>' ? '' : l.replace(/^> /, ''); }).join('\n');
+    var m;
+    if (q.type === 'likert') { m = /^(\d+) of (\d+), /.exec(head); return m ? Number(m[1]) : undefined; }
+    m = /^(-?\d+(?:\.\d+)?)(?: |$)/.exec(head);
+    return m ? Number(m[1]) : undefined;
+  }
+  function readMarkdown(text) {
+    var lines = text.replace(/\r\n?/g, '\n').split('\n').map(function (l) { return l.replace(/[ \t]+$/, ''); });
+    var head = null, i, m;
+    for (i = 0; i < lines.length && !head; i++) head = /^Instrument: ([a-z0-9_-]+), version (\d+), (intake|survey|quiz) mode$/.exec(lines[i]);
+    if (!head) return {ok: false, why: 'The text is not an export from a questionnaire page: its "Instrument:" line is missing.'};
+    if (head[1] !== I.id) return {ok: false, why: 'This export is from a different questionnaire ("' + head[1] + '"). This page is "' + I.id + '".'};
+    if (!lines.some(function (l) { return /^End of export: \d+ questions?\.$/.test(l); })) return {ok: false, why: 'The export is cut short: its last line ("End of export") is missing.'};
+    var src = {}, cur = null, mode = null, fin = null;
+    lines.forEach(function (l) {
+      var f = /^Finished: (\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ)$/.exec(l);
+      if (f && !cur) fin = f[1];
+      if ((m = /^### \[([a-z0-9_-]+)\] /.exec(l))) { cur = src[m[1]] = {head: null, body: [], note: []}; mode = null; return; }
+      if (!cur) return;
+      if (/^## /.test(l) || /^End of export: /.test(l)) { cur = null; return; }
+      if (/^Answer:/.test(l)) { cur.head = l.replace(/^Answer: ?/, ''); mode = 'body'; return; }
+      if (l === 'Note:') { mode = 'note'; return; }
+      if (/^(Type|Result|Correct answer):/.test(l)) { mode = null; return; }
+      if (l === '') { mode = null; return; }
+      if (mode === 'body') cur.body.push(l); else if (mode === 'note') cur.note.push(l);
+    });
+    var answers = {};
+    Object.keys(src).forEach(function (id) {
+      var q = QBY[id], b = src[id], e = {};
+      if (!q) { answers[id] = {v: null}; return; }
+      if (b.head === '(skipped)' && !b.body.length) e.skipped = true;
+      else if (!(b.head === '(no answer)' && !b.body.length) && b.head !== null) { e.v = parseValue(q, b.head, b.body); if (e.v === undefined) e.v = NaN; }
+      if (b.note.length) e.note = b.note.map(function (l) { return l === '>' ? '' : l.replace(/^> /, ''); }).join('\n');
+      if (I.mode === 'quiz' && e.v !== undefined) e.checked = true;
+      answers[id] = e;
+    });
+    var dropped = [], st = freshState();
+    st.ans = cleanAnswers(answers, dropped);
+    st.agreed = true; st.finished_at = fin; st.stage = (I.mode === 'quiz' && fin) ? 'done' : 'review';
+    return {ok: true, state: st, dropped: dropped, version: Number(head[2]), kind: 'finished export'};
+  }
+  function readResponse(text) {
+    var lines = text.replace(/\r\n?/g, '\n').split('\n').map(function (l) { return l.replace(/[ \t]+$/, ''); });
+    var a = lines.indexOf('=== elicitor response ==='), b = -1, i, m, meta = {}, answers = {};
+    for (i = a + 1; a >= 0 && i < lines.length; i++) if (/^=== end elicitor response: /.test(lines[i])) { b = i; break; }
+    if (a < 0 || b < 0) return {ok: false, why: 'The response block is cut short: it needs its first line and its "end elicitor response" line.'};
+    for (i = a + 1; i < b; i++) {
+      if ((m = /^(instrument|version|finished): (.*)$/.exec(lines[i]))) { meta[m[1]] = m[2]; continue; }
+      if (!(m = /^([a-z0-9_-]+)(\.note)? = (.*)$/.exec(lines[i]))) continue;
+      var e = answers[m[1]] || (answers[m[1]] = {});
+      if (m[2]) { try { e.note = JSON.parse(m[3]); } catch (x) { return {ok: false, why: 'The note for "' + m[1] + '" in the block is damaged.'}; } continue; }
+      if (m[3] === 'SKIPPED') e.skipped = true;
+      else if (m[3] !== 'HIDDEN' && m[3] !== 'NONE') { try { e.v = JSON.parse(m[3]); } catch (x) { return {ok: false, why: 'The answer for "' + m[1] + '" in the block is damaged.'}; } }
+    }
+    if (meta.instrument !== I.id) return {ok: false, why: 'This response is for a different questionnaire ("' + String(meta.instrument) + '"). This page is "' + I.id + '".'};
+    if (!/^\d+$/.test(meta.version || '')) return {ok: false, why: 'The response block does not say which version it answers.'};
+    var dropped = [], st = freshState();
+    st.ans = cleanAnswers(answers, dropped);
+    st.agreed = true; st.stage = 'review';
+    st.finished_at = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(meta.finished || '') ? meta.finished : null;
+    return {ok: true, state: st, dropped: dropped, version: Number(meta.version), kind: 'finished response'};
+  }
+  function readIncoming(text) {
+    var t = String(text == null ? '' : text);
+    if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
+    if (!t.replace(/\s+/g, '')) return {ok: false, why: 'Nothing was pasted or chosen.'};
+    var first = t.replace(/^\s+/, '');
+    if (first.charAt(0) === '{') return readEnvelope(first);
+    // The two kinds are told apart by whole lines. An answer or a note may itself contain these words:
+    // in a markdown export it sits on a quoted line and in a response block inside a JSON string, so neither can start a line.
+    if (/^Instrument: [a-z0-9_-]+, version \d+, /m.test(t) && /^End of export: /m.test(t)) return readMarkdown(t);
+    if (/^=== (?:end )?elicitor response/m.test(t)) return readResponse(t);
+    if (/^Instrument: /m.test(t)) return readMarkdown(t);
+    return readEnvelope(first);
+  }
+
+  // ------------------------------------------------------------------ status line, with undo for the last destructive action
+  function say(text, bad, undo) {
+    var s = $('status');
+    s.textContent = '';
+    s.className = 'status' + (bad ? ' bad' : '');
+    if (!text) return;
+    s.appendChild(el('span', {text: text}));
+    UI.undo = undo || null;
+    if (undo) s.appendChild(el('button', {type: 'button', class: 'btn', id: 'undo', text: 'Undo', on: {click: function () { var u = UI.undo; UI.undo = null; if (u) u(); }}}));
+  }
+  function snapshot() { return JSON.stringify(ST); }
+  function restore(snap, words) { ST = JSON.parse(snap); UI.fromReview = false; UI.errors = {}; UI.raw = {}; saveNow(); render({focus: true}); say(words); }
+
+  // ------------------------------------------------------------------ progress
+  function useSections() { return I.mode !== 'quiz' && display.layout === 'sections'; }
+  function drawProgress() {
+    var box = $('progress');
+    if (!I || !ST || ST.stage === 'loading' || ST.stage === 'problem' || ST.stage === 'intro' || ST.stage === 'disclosure' || !Q.length) { box.hidden = true; return; }
+    box.hidden = false;
+    var vis = visible(), c = counts(vis), t = $('progress-text'), rail = $('rail');
+    t.textContent = '';
+    var idx = vis.indexOf(QBY[ST.cur]);
+    if (ST.stage === 'q' && idx >= 0 && !useSections()) {
+      t.appendChild(el('b', {text: String(idx + 1)}));
+      t.appendChild(document.createTextNode(' of ' + vis.length + (c.skipped ? ', ' + c.skipped + ' skipped' : '')));
+    } else {
+      t.appendChild(el('b', {text: String(c.answered)}));
+      t.appendChild(document.createTextNode(' of ' + vis.length + ' answered' + (c.skipped ? ', ' + c.skipped + ' skipped' : '')));
+    }
+    rail.textContent = '';
+    var grp = null, sec = null;
+    vis.forEach(function (q) {
+      if (q.section !== sec || !grp) { sec = q.section; grp = el('div', {class: 'grp'}); grp.style.flexGrow = '0'; rail.appendChild(grp); }
+      var st = statusOf(q);
+      grp.appendChild(el('span', {class: 'cell' + (st === 'answered' ? ' done' : st === 'skipped' ? ' skip' : '') + (ST.stage === 'q' && q.id === ST.cur && !useSections() ? ' cur' : '')}));
+      grp.style.flexGrow = String(Number(grp.style.flexGrow) + 1);
+    });
+  }
+
+  // ------------------------------------------------------------------ errors on a question
+  function showError(q, text) {
+    UI.errors[q.id] = text;
+    var e = $('qe-' + q.id);
+    if (e) e.textContent = text;
+    var f = $('in-' + q.id);
+    if (f && (q.type === 'number' || q.type === 'text')) f.setAttribute('aria-invalid', 'true');
+  }
+  function clearError(q) {
+    delete UI.errors[q.id];
+    var e = $('qe-' + q.id);
+    if (e) e.textContent = '';
+    var f = $('in-' + q.id);
+    if (f) f.removeAttribute('aria-invalid');
+  }
+  function numberProblem(q, typed) {
+    var t = String(typed).replace(/^\s+|\s+$/g, '');
+    if (!t) return '';
+    if (!NUM_RE.test(t)) return 'Enter a number using digits only, for example 12' + (q.integer ? '.' : ' or 12.5.');
+    var v = Number(t);
+    if (q.integer && v % 1 !== 0) return 'Enter a whole number.';
+    if (q.min !== null && v < q.min) return 'The smallest value accepted is ' + q.min + '.';
+    if (q.max !== null && v > q.max) return 'The largest value accepted is ' + q.max + '.';
+    return '';
+  }
+  // Can the reader leave this question? Returns '' or the reason shown beside it.
+  function blocker(q, movingOn) {
+    if (q.type === 'number' && UI.raw[q.id] !== undefined) { var p = numberProblem(q, UI.raw[q.id]); if (p) return p; }
+    var st = statusOf(q);
+    if (st === 'answered') return '';
+    if (q.required) return 'This question needs an answer before you go on.';
+    if (st === 'skipped' || !movingOn) return '';
+    if (q.type === 'rank') return 'Move the items into your order or press "Use this order", or press Skip.';
+    if (q.type === 'text' || q.type === 'number') return 'Type an answer, or press Skip to leave this one out.';
+    return 'Choose an answer, or press Skip to leave this one out.';
+  }
+
+  // ------------------------------------------------------------------ controls, one per question type
+  function focusLater(id) { var n = $(id); if (n) n.focus(); }
+  function choiceControl(q, multi) {
+    var e = entry(q), locked = I.mode === 'quiz' && e.checked === true;
+    var box = el('div', {class: 'opts', role: multi ? 'group' : 'radiogroup', 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'qe-' + q.id});
+    q.options.forEach(function (o, i) {
+      var on = multi ? (Array.isArray(e.v) && e.v.indexOf(o.text) >= 0) : e.v === o.text;
+      var input = el('input', {type: multi ? 'checkbox' : 'radio', name: 'q-' + q.id, id: 'in-' + q.id + '-' + i, 'aria-disabled': locked ? 'true' : null});
+      input.checked = on;
+      var row = el('label', {class: 'opt' + (on ? ' on' : '') + (locked ? ' locked' : ''), for: 'in-' + q.id + '-' + i}, [input, el('span', {class: 't', text: o.text})]);
+      input.addEventListener('click', function (ev) { if (entry(q).checked === true && I.mode === 'quiz') ev.preventDefault(); });
+      input.addEventListener('change', function () {
+        if (entry(q).checked === true && I.mode === 'quiz') return;
+        if (multi) {
+          var picked = [];
+          q.options.forEach(function (oo, j) { if ($('in-' + q.id + '-' + j).checked) picked.push(oo.text); });
+          setAnswer(q, picked.length ? picked : undefined);
+        } else setAnswer(q, o.text);
+        q.options.forEach(function (oo, j) { var inp = $('in-' + q.id + '-' + j); inp.parentNode.className = 'opt' + (inp.checked ? ' on' : ''); });
+      });
+      box.appendChild(row);
+    });
+    return box;
+  }
+  function likertControl(q) {
+    var e = entry(q);
+    var box = el('div', {class: 'opts across', role: 'radiogroup', 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'qe-' + q.id});
+    q.labels.forEach(function (lab, i) {
+      var on = e.v === i + 1;
+      var input = el('input', {type: 'radio', name: 'q-' + q.id, id: 'in-' + q.id + '-' + i});
+      input.checked = on;
+      input.addEventListener('change', function () {
+        setAnswer(q, i + 1);
+        q.labels.forEach(function (x, j) { var inp = $('in-' + q.id + '-' + j); inp.parentNode.className = 'opt' + (inp.checked ? ' on' : ''); });
+      });
+      box.appendChild(el('label', {class: 'opt' + (on ? ' on' : ''), for: 'in-' + q.id + '-' + i}, [input, el('span', {class: 'n', text: String(i + 1)}), el('span', {class: 't', text: lab})]));
+    });
+    return box;
+  }
+  function scaleControl(q) {
+    var e = entry(q), n = (q.max - q.min) / q.step + 1, wrap = el('div', {});
+    var ends = el('div', {class: 'ends'}, [el('span', {text: q.min + (q.min_label ? ': ' + q.min_label : '')}), el('span', {text: q.max + (q.max_label ? ': ' + q.max_label : '')})]);
+    if (n <= 11) {
+      var box = el('div', {class: 'chips', role: 'radiogroup', 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'qe-' + q.id});
+      for (var k = 0; k < n; k++) (function (val, i) {
+        var input = el('input', {type: 'radio', name: 'q-' + q.id, id: 'in-' + q.id + '-' + i, 'aria-label': String(val)});
+        input.checked = e.v === val;
+        input.addEventListener('change', function () {
+          setAnswer(q, val);
+          for (var j = 0; j < n; j++) { var inp = $('in-' + q.id + '-' + j); inp.parentNode.className = 'chip' + (inp.checked ? ' on' : ''); }
+        });
+        box.appendChild(el('label', {class: 'chip' + (e.v === val ? ' on' : ''), for: 'in-' + q.id + '-' + i}, [input, el('span', {text: String(val), 'aria-hidden': 'true'})]));
+      })(q.min + k * q.step, k);
+      wrap.appendChild(box);
+    } else {
+      var out = el('p', {class: 'slider-val', id: 'val-' + q.id, text: hasAnswer(q) ? 'Chosen: ' + e.v : 'No value chosen yet'});
+      var range = el('input', {type: 'range', id: 'in-' + q.id, min: String(q.min), max: String(q.max), step: String(q.step), 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'val-' + q.id});
+      range.value = String(hasAnswer(q) ? e.v : q.min + Math.floor(n / 2) * q.step);
+      var put = function (v) { v = Math.max(q.min, Math.min(q.max, v)); range.value = String(v); out.textContent = 'Chosen: ' + v; setAnswer(q, v); };
+      range.addEventListener('input', function () { put(Number(range.value)); });
+      range.addEventListener('click', function () { put(Number(range.value)); });
+      wrap.appendChild(out);
+      wrap.appendChild(el('div', {class: 'slider'}, [
+        el('button', {type: 'button', class: 'mv', id: 'less-' + q.id, 'aria-label': 'Lower by ' + q.step, text: '-', on: {click: function () { put(Number(range.value) - (hasAnswer(q) ? q.step : 0)); }}}),
+        range,
+        el('button', {type: 'button', class: 'mv', id: 'more-' + q.id, 'aria-label': 'Raise by ' + q.step, text: '+', on: {click: function () { put(Number(range.value) + (hasAnswer(q) ? q.step : 0)); }}})
+      ]));
+    }
+    wrap.appendChild(ends);
+    return wrap;
+  }
+  function numberControl(q) {
+    var e = entry(q);
+    var input = el('input', {type: 'text', inputmode: (q.min === null || q.min < 0) ? 'text' : (q.integer ? 'numeric' : 'decimal'), id: 'in-' + q.id, autocomplete: 'off', 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'qe-' + q.id + ' qr-' + q.id});
+    input.value = UI.raw[q.id] !== undefined ? UI.raw[q.id] : (hasAnswer(q) ? String(e.v) : '');
+    input.addEventListener('input', function () {
+      UI.raw[q.id] = input.value;
+      var t = input.value.replace(/^\s+|\s+$/g, '');
+      setAnswer(q, (t && !numberProblem(q, t)) ? Number(t) : undefined);
+    });
+    input.addEventListener('blur', function () { var p = numberProblem(q, input.value); if (p) showError(q, p); });
+    var range = (q.min !== null && q.max !== null) ? 'From ' + q.min + ' to ' + q.max + '.' : (q.min !== null ? 'At least ' + q.min + '.' : (q.max !== null ? 'At most ' + q.max + '.' : ''));
+    return el('div', {}, [
+      el('div', {class: 'numrow'}, [input, q.unit ? el('span', {class: 'unit', text: q.unit}) : null]),
+      el('p', {class: 'hint', id: 'qr-' + q.id, text: (q.integer ? 'A whole number. ' : 'A number. ') + range})
+    ]);
+  }
+  function textControl(q) {
+    var e = entry(q);
+    var input = q.long ? el('textarea', {id: 'in-' + q.id, rows: '5', 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'qe-' + q.id})
+      : el('input', {type: 'text', id: 'in-' + q.id, autocomplete: 'off', 'aria-labelledby': 'qt-' + q.id, 'aria-describedby': 'qe-' + q.id});
+    input.value = typeof e.v === 'string' ? e.v : '';
+    input.addEventListener('input', function () { setAnswer(q, canon(input.value) ? input.value : undefined); });
+    return input;
+  }
+  function rankControl(q) {
+    var wrap = el('div', {}), list = el('ol', {class: 'rank', 'aria-labelledby': 'qt-' + q.id});
+    var live = el('p', {class: 'hint', id: 'rk-' + q.id, role: 'status'});
+    var order = function () { return hasAnswer(q) ? entry(q).v.slice() : q.optText.slice(); };
+    var draw = function (focusId) {
+      var o = order();
+      list.textContent = '';
+      o.forEach(function (t, i) {
+        list.appendChild(el('li', {}, [
+          el('span', {class: 'pos', text: String(i + 1)}),
+          el('span', {class: 't', text: t}),
+          el('button', {type: 'button', class: 'mv', id: 'up-' + q.id + '-' + i, 'aria-label': 'Move "' + t + '" up', 'aria-disabled': i === 0 ? 'true' : null, on: {click: function () { move(i, -1); }}}, [svgArrow(true)]),
+          el('button', {type: 'button', class: 'mv', id: 'down-' + q.id + '-' + i, 'aria-label': 'Move "' + t + '" down', 'aria-disabled': i === o.length - 1 ? 'true' : null, on: {click: function () { move(i, 1); }}}, [svgArrow(false)])
+        ]));
+      });
+      keep.hidden = hasAnswer(q);
+      if (!live.textContent) live.textContent = hasAnswer(q) ? 'This order is recorded as your answer.' : 'Not recorded yet. Move an item, or keep the order as it stands.';
+      if (focusId) focusLater(focusId);
+    };
+    var move = function (i, d) {
+      var o = order(), j = i + d;
+      if (j < 0 || j >= o.length) return;
+      var t = o[i]; o[i] = o[j]; o[j] = t;
+      setAnswer(q, o);
+      live.textContent = 'Moved "' + t + '" to position ' + (j + 1) + ' of ' + o.length + '. This order is recorded.';
+      draw((d < 0 ? 'up-' : 'down-') + q.id + '-' + j);
+    };
+    var keep = el('button', {type: 'button', class: 'btn', id: 'keep-' + q.id, text: 'Use this order', on: {click: function () { setAnswer(q, order()); live.textContent = 'This order is recorded as your answer.'; draw('down-' + q.id + '-0'); }}});
+    wrap.appendChild(list);
+    wrap.appendChild(el('div', {class: 'rowgap'}, [keep]));
+    wrap.appendChild(live);
+    draw(null);
+    return wrap;
+  }
+  function feedbackBlock(q, withHeading) {
+    var st = statusOf(q), right = st === 'answered' && isCorrect(q), v = entry(q).v;
+    var chosen = function (t) { return Array.isArray(v) ? v.indexOf(t) >= 0 : v === t; };
+    var box = el('div', {class: 'fb' + (right ? '' : st === 'answered' ? ' bad' : ' passed'), id: 'fb-' + q.id, tabindex: '-1'});
+    box.appendChild(el('p', {class: 'fb-verdict', text: st !== 'answered' ? (st === 'skipped' ? 'Skipped. Not counted as wrong.' : 'Not answered.') : (right ? 'Correct.' : 'Not correct.')}));
+    var ul = el('ul', {});
+    q.options.forEach(function (o) {
+      var bits = [];
+      if (o.correct) bits.push(el('span', {class: 'tag ok', text: 'Correct answer'}));
+      if (st === 'answered' && chosen(o.text)) bits.push(el('span', {class: 'tag' + (o.correct ? ' ok' : ' bad'), text: 'Your answer'}));
+      bits.push(el('span', {class: 'o', text: o.text}));
+      bits.push(el('span', {class: 'why', text: o.explain}));
+      ul.appendChild(el('li', {}, bits));
+    });
+    box.appendChild(ul);
+    return box;
+  }
+  function questionCard(q, n, total) {
+    var e = entry(q), secs = SECS.filter(function (s) { return s.title; });
+    var meta = [];
+    if (secs.length && !useSections()) {
+      var si = SECS.map(function (s) { return s.id; }).indexOf(q.section);
+      meta.push(el('span', {text: 'Section ' + (si + 1) + ' of ' + SECS.length + ': ' + secTitle(q.section)}));
+    }
+    meta.push(el('span', {class: 'q-id', text: q.id}));
+    if (q.required) meta.push(el('span', {class: 'q-req', text: 'Needs an answer'}));
+    var control = q.type === 'single' ? choiceControl(q, false) : q.type === 'multi' ? choiceControl(q, true) : q.type === 'likert' ? likertControl(q)
+      : q.type === 'scale' ? scaleControl(q) : q.type === 'number' ? numberControl(q) : q.type === 'rank' ? rankControl(q) : textControl(q);
+    var kids = [
+      el('p', {class: 'q-meta'}, meta),
+      el('h2', {class: 'q-text', id: 'qt-' + q.id, tabindex: '-1', text: q.text}),
+      q.help ? el('p', {class: 'q-help', text: q.help}) : null,
+      q.type === 'multi' && !q.help ? el('p', {class: 'q-help', text: 'Tick every one that applies.'}) : null,
+      el('div', {class: 'q-control'}, [control]),
+      el('p', {class: 'q-err', id: 'qe-' + q.id, role: 'alert', text: UI.errors[q.id] || ''})
+    ];
+    var mark = el('p', {class: 'q-skipped', 'data-skipmark': q.id, text: 'Marked as skipped. Answering it removes the mark.'});
+    mark.hidden = statusOf(q) !== 'skipped';
+    kids.push(mark);
+    if (I.mode === 'quiz' && e.checked === true) kids.push(feedbackBlock(q));
+    if (q.note) {
+      var ta = el('textarea', {id: 'note-' + q.id, rows: '2', 'aria-describedby': 'nh-' + q.id});
+      ta.value = e.note || '';
+      ta.addEventListener('input', function () { setNote(q, ta.value); });
+      kids.push(el('div', {class: 'q-note'}, [el('label', {for: 'note-' + q.id, text: q.note_label}), ta, el('p', {class: 'hint', id: 'nh-' + q.id, text: 'Optional. It is exported word for word.'})]));
+    }
+    if (useSections() && !q.required) {
+      kids.push(el('div', {class: 'rowgap'}, [el('button', {type: 'button', class: 'seg', id: 'skip-' + q.id, 'aria-pressed': String(statusOf(q) === 'skipped'), text: 'Skip this one', on: {click: function () { toggleSkip(q); }}})]));
+    }
+    return el('article', {class: 'q', 'data-q': q.id, 'aria-labelledby': 'qt-' + q.id}, kids);
+  }
+
+  // ------------------------------------------------------------------ moving between questions
+  function skip(q) {
+    var before = snapshot(), had = hasAnswer(q);
+    var e = ST.ans[q.id] || (ST.ans[q.id] = {});
+    delete e.v; e.skipped = true; delete UI.raw[q.id]; clearError(q);
+    save();
+    return had ? before : null;
+  }
+  function toggleSkip(q) {
+    if (statusOf(q) === 'skipped') { delete ST.ans[q.id].skipped; save(); render({keepFocus: true}); return; }
+    var before = skip(q);
+    lastVisKey = visKey();
+    render({keepFocus: true});
+    if (before) say('Skipped "' + q.id + '" and removed its answer.', false, function () { restore(before, 'The answer to "' + q.id + '" is back.'); });
+  }
+  function goTo(id, opts) { ST.stage = 'q'; ST.cur = id; save(); render(opts || {focus: true}); }
+  function stepFrom(q, dir) {
+    var vis = visible(), i = vis.indexOf(q);
+    if (UI.fromReview) { UI.fromReview = false; ST.stage = 'review'; save(); render({focus: true}); return; }
+    if (dir > 0) {
+      if (i + 1 < vis.length) goTo(vis[i + 1].id); else { ST.stage = 'review'; save(); render({focus: true}); }
+    } else if (i > 0) goTo(vis[i - 1].id);
+    else { ST.stage = I.mode === 'survey' ? 'disclosure' : 'intro'; save(); render({focus: true}); }
+  }
+  function onNext() {
+    var q = QBY[ST.cur], why = blocker(q, true);
+    if (why) { showError(q, why); var f = $('in-' + q.id) || $('in-' + q.id + '-0') || $('keep-' + q.id) || $('down-' + q.id + '-0'); if (f) f.focus(); return; }
+    if (I.mode === 'quiz' && ST.feedback === 'immediate' && hasAnswer(q) && entry(q).checked !== true) {
+      ST.ans[q.id].checked = true; save(); render({});
+      var fb = $('fb-' + q.id); if (fb) fb.focus();
+      return;
+    }
+    stepFrom(q, 1);
+  }
+  function onSkip() {
+    var q = QBY[ST.cur], before = skip(q);
+    stepFrom(q, 1);
+    if (before) say('Skipped "' + q.id + '" and removed its answer.', false, function () { restore(before, 'The answer to "' + q.id + '" is back.'); });
+    else say('Skipped "' + q.id + '".');
+  }
+  function sectionQuestions(secId) { return visible().filter(function (q) { return q.section === secId; }); }
+  function sectionOrder() { var seen = [], vis = visible(); vis.forEach(function (q) { if (seen.indexOf(q.section) < 0) seen.push(q.section); }); return seen; }
+  function onSectionMove(dir) {
+    var secs = sectionOrder(), here = QBY[ST.cur].section, i = secs.indexOf(here);
+    if (dir > 0 || UI.fromReview) {
+      var bad = sectionQuestions(here).filter(function (q) { var w = blocker(q, false); if (w) showError(q, w); return !!w; });
+      if (bad.length) { var q0 = bad[0]; var f = $('in-' + q0.id) || $('in-' + q0.id + '-0') || $('keep-' + q0.id) || $('qt-' + q0.id); if (f) f.focus(); say(plural(bad.length, 'question in this section needs', 'questions in this section need') + ' attention.', true); return; }
+    }
+    if (UI.fromReview) { UI.fromReview = false; ST.stage = 'review'; save(); render({focus: true}); return; }
+    if (dir > 0) { if (i + 1 < secs.length) goTo(sectionQuestions(secs[i + 1])[0].id); else { ST.stage = 'review'; save(); render({focus: true}); } }
+    else if (i > 0) goTo(sectionQuestions(secs[i - 1])[0].id);
+    else { ST.stage = I.mode === 'survey' ? 'disclosure' : 'intro'; save(); render({focus: true}); }
+  }
+
+  // ------------------------------------------------------------------ screens
+  // The bar stays within thumb reach on question and review screens. On the first and last screens it follows the text.
+  function setBar(nodes) {
+    var b = $('bar');
+    b.textContent = '';
+    b.className = 'bar' + ((ST.stage === 'q' || ST.stage === 'review') ? '' : ' flow');
+    (nodes || []).forEach(function (n) { if (n) b.appendChild(n); });
+  }
+  function btn(id, text, cls, fn) { return el('button', {type: 'button', class: 'btn' + (cls ? ' ' + cls : ''), id: id, text: text, on: {click: fn}}); }
+  function start() {
+    var vis = visible();
+    if (I.mode === 'survey') ST.agreed = true;
+    if (!vis.length) { ST.stage = 'review'; save(); render({focus: true}); return; }
+    var open = vis.filter(function (q) { return statusOf(q) === 'none'; });
+    goTo(QBY[ST.cur] && vis.indexOf(QBY[ST.cur]) >= 0 ? ST.cur : (open.length ? open[0].id : vis[0].id));
+  }
+  function howLines() {
+    var L = [];
+    if (I.mode === 'quiz') {
+      L.push('Each item has one screen. Back returns to an earlier item.');
+      L.push('Skip leaves an item out. A skipped item is not counted as wrong.');
+    } else {
+      L.push(useSections() ? 'One section at a time, with every question in it on the screen.' : 'One question at a time. Back returns to an earlier answer so you can change it.');
+      L.push('Skip leaves a question out, and the export says it was skipped.');
+      if (I.notes === 'on') L.push('Most questions have a box for anything you want to add. Use it: it is exported word for word.');
+    }
+    L.push('A review screen comes before the end, where any answer can be changed.');
+    L.push(I.mode === 'survey' ? 'At the end the page shows a short block of text. Nothing is sent unless you copy it and send it yourself.'
+      : I.mode === 'quiz' ? 'At the end the page shows the score, each missed item with the reason for every option, and a text copy of the result.'
+      : 'At the end the page shows every question with your answer as text, ready to copy and paste back.');
+    return L;
+  }
+  function factsList(rows) {
+    return el('ul', {class: 'facts'}, rows.map(function (r) { return el('li', {}, [el('span', {class: 'k', text: r[0]}), el('span', {class: 'v', text: r[1]})]); }));
+  }
+  function lengthWords() {
+    var secs = SECS.filter(function (s) { return s.title; }).length;
+    return plural(Q.length, I.mode === 'quiz' ? 'item' : 'question', I.mode === 'quiz' ? 'items' : 'questions') + (secs > 1 ? ' in ' + secs + ' sections' : '') + (I.minutes ? '. The author estimates about ' + plural(I.minutes, 'minute', 'minutes') : '') + '.';
+  }
+  function resumeWords() {
+    var c = counts(visible());
+    return (c.answered + c.skipped) ? 'You have already answered ' + c.answered + (c.skipped ? ' and skipped ' + c.skipped : '') + ' of ' + c.shown + '.' : '';
+  }
+  function renderIntro() {
+    var kids = [el('h1', {tabindex: '-1', id: 'screen-h', text: I.title})];
+    if (I.purpose) kids.push(el('p', {text: I.purpose}));
+    if (I.intro) I.intro.split('\n').forEach(function (p) { if (p) kids.push(el('p', {text: p})); });
+    var rows = [['Length', lengthWords()], ['Saving', store.words()]];
+    if (I.mode === 'quiz') rows.splice(1, 0, ['Scoring', SCORE_RULE]);
+    kids.push(factsList(rows));
+    if (I.mode === 'quiz') {
+      var started = Object.keys(ST.ans).length > 0;
+      kids.push(el('div', {class: 'choice', role: 'group', 'aria-label': 'When answers are marked', style: 'margin-top:1rem'}, [
+        el('span', {class: 'lab', style: 'width:100%', text: started ? 'Marking (fixed once the quiz has started)' : 'When should answers be marked?'}),
+        el('button', {type: 'button', class: 'seg', id: 'fb-immediate', 'aria-pressed': String(ST.feedback === 'immediate'), 'aria-disabled': started ? 'true' : null, text: 'After each item', on: {click: function () { if (!Object.keys(ST.ans).length) { ST.feedback = 'immediate'; save(); render({keepFocus: true}); } }}}),
+        el('button', {type: 'button', class: 'seg', id: 'fb-at_end', 'aria-pressed': String(ST.feedback === 'at_end'), 'aria-disabled': started ? 'true' : null, text: 'All at the end', on: {click: function () { if (!Object.keys(ST.ans).length) { ST.feedback = 'at_end'; save(); render({keepFocus: true}); } }}})
+      ]));
+    }
+    kids.push(el('ul', {class: 'how'}, howLines().map(function (t) { return el('li', {text: t}); })));
+    var rw = resumeWords();
+    if (rw) kids.push(el('p', {id: 'resume-words', text: rw}));
+    $('main').appendChild(el('div', {class: 'lead'}, kids));
+    setBar([btn('btn-start', rw ? 'Carry on' : 'Start', 'primary', start)]);
+  }
+  function renderDisclosure() {
+    var d = I.disclosure, kids = [el('h1', {tabindex: '-1', id: 'screen-h', text: I.title}), el('p', {text: 'Read this before you start. It says who is asking, why, and what happens to what you write.'})];
+    var rows = [['Who is asking', oneLine(d.who)], ['What it is for', oneLine(d.purpose)], ['What happens to your answers', oneLine(d.handling)]];
+    if (oneLine(d.contact)) rows.push(['Questions about this', oneLine(d.contact)]);
+    rows.push(['What this page does', 'It sends nothing. At the end it shows your answers as a short block of text, and you decide whether to copy it and send it back.']);
+    rows.push(['Length', lengthWords()], ['Saving', store.words()]);
+    kids.push(factsList(rows));
+    kids.push(el('ul', {class: 'how'}, howLines().map(function (t) { return el('li', {text: t}); })));
+    var rw = resumeWords();
+    if (rw) kids.push(el('p', {id: 'resume-words', text: rw}));
+    $('main').appendChild(el('div', {class: 'lead'}, kids));
+    setBar([btn('btn-start', rw ? 'I have read this. Carry on' : 'I have read this. Start', 'primary', start)]);
+  }
+  function nextLabel(q) {
+    var vis = visible(), checked = I.mode === 'quiz' && entry(q).checked === true;
+    if (I.mode === 'quiz' && ST.feedback === 'immediate' && !checked) return 'Check answer';
+    return UI.fromReview ? 'Back to review' : (vis.indexOf(q) === vis.length - 1 ? 'Review answers' : 'Next');
+  }
+  function drawNextLabel() { var b = $('btn-next'); if (b && ST.stage === 'q' && !useSections() && QBY[ST.cur]) b.textContent = nextLabel(QBY[ST.cur]); }
+  function renderQuestion() {
+    var vis = visible(), q = QBY[ST.cur];
+    if (!q || vis.indexOf(q) < 0) { q = vis[0]; ST.cur = q ? q.id : null; }
+    if (!q) { ST.stage = 'review'; renderReview(); return; }
+    var card = questionCard(q);
+    card.className += ' enter';
+    $('main').appendChild(card);
+    var checked = I.mode === 'quiz' && entry(q).checked === true;
+    setBar([
+      UI.fromReview ? null : btn('btn-back', 'Back', '', function () { stepFrom(q, -1); }),
+      (q.required || checked) ? null : btn('btn-skip', 'Skip', '', onSkip),
+      el('span', {class: 'spacer'}),
+      btn('btn-next', nextLabel(q), 'primary', onNext)
+    ]);
+  }
+  function renderSection() {
+    var vis = visible(), q = QBY[ST.cur];
+    if (!q || vis.indexOf(q) < 0) { q = vis[0]; ST.cur = q ? q.id : null; }
+    if (!q) { ST.stage = 'review'; renderReview(); return; }
+    var secs = sectionOrder(), i = secs.indexOf(q.section), list = sectionQuestions(q.section), sec = SECS.filter(function (s) { return s.id === q.section; })[0];
+    var head = [el('h1', {tabindex: '-1', id: 'screen-h', text: sec.title || I.title})];
+    head.push(el('p', {text: 'Section ' + (i + 1) + ' of ' + secs.length + '. ' + plural(list.length, 'question', 'questions') + ' here.' + (sec.intro ? ' ' + sec.intro : '')}));
+    $('main').appendChild(el('div', {class: 'lead'}, head));
+    list.forEach(function (x) { $('main').appendChild(questionCard(x)); });
+    setBar([
+      UI.fromReview ? null : btn('btn-back', 'Back', '', function () { onSectionMove(-1); }),
+      el('span', {class: 'spacer'}),
+      btn('btn-next', UI.fromReview ? 'Back to review' : (i === secs.length - 1 ? 'Review answers' : 'Next section'), 'primary', function () { onSectionMove(1); })
+    ]);
+  }
+  function editFrom(q) { UI.fromReview = true; goTo(q.id, {focusId: 'qt-' + q.id}); }
+  function renderReview() {
+    var vis = visible(), c = counts(vis), main = $('main');
+    var need = vis.filter(function (q) { return q.required && !hasAnswer(q); });
+    var kids = [el('h1', {tabindex: '-1', id: 'screen-h', text: 'Review your answers'})];
+    kids.push(el('p', {id: 'review-counts', text: c.shown + ' shown: ' + c.answered + ' answered, ' + c.skipped + ' skipped, ' + c.none + ' with no answer.' + (c.hidden ? ' ' + plural(c.hidden, 'question is', 'questions are') + ' hidden because of earlier answers.' : '')}));
+    main.appendChild(el('div', {class: 'lead'}, kids));
+    if (UI.finishTried && need.length) {
+      main.appendChild(el('div', {class: 'errbox', id: 'need-box', role: 'alert', tabindex: '-1'}, [
+        el('p', {text: plural(need.length, 'question still needs', 'questions still need') + ' an answer before you can finish.'}),
+        el('ul', {}, need.map(function (q) { return el('li', {}, [el('button', {type: 'button', class: 'btn quiet', text: q.text, on: {click: function () { editFrom(q); }}})]); }))
+      ]));
+    }
+    if (!vis.length) {
+      main.appendChild(el('div', {class: 'blank'}, [el('p', {text: 'No questions apply. There is nothing to review.'})]));
+    } else {
+      main.appendChild(el('div', {class: 'choice', role: 'group', 'aria-label': 'Which questions to list', style: 'margin-top:1rem'}, [
+        el('button', {type: 'button', class: 'seg', id: 'filter-all', 'aria-pressed': String(UI.filter === 'all'), text: 'All ' + c.shown, on: {click: function () { UI.filter = 'all'; render({focusId: 'filter-all'}); }}}),
+        el('button', {type: 'button', class: 'seg', id: 'filter-open', 'aria-pressed': String(UI.filter === 'open'), text: 'Skipped or no answer: ' + (c.skipped + c.none), on: {click: function () { UI.filter = 'open'; render({focusId: 'filter-open'}); }}})
+      ]));
+      var shown = vis.filter(function (q) { return UI.filter === 'all' || statusOf(q) !== 'answered'; });
+      if (!shown.length) {
+        main.appendChild(el('div', {class: 'blank', id: 'review-none'}, [
+          el('p', {text: 'Nothing is skipped or unanswered. Every question shown has an answer.'}),
+          btn('filter-clear', 'Show all ' + c.shown, '', function () { UI.filter = 'all'; render({focusId: 'filter-all'}); })
+        ]));
+      }
+      var sec = null, ul = null;
+      shown.forEach(function (q) {
+        if (q.section !== sec || !ul) {
+          sec = q.section;
+          if (secTitle(sec)) main.appendChild(el('h2', {class: 'sec-h', text: secTitle(sec)}));
+          ul = el('ul', {class: 'rv'}); main.appendChild(ul);
+        }
+        var st = statusOf(q), note = noteOf(q);
+        var a = st === 'answered' ? el('p', {class: 'rv-a', text: summary(q)})
+          : el('p', {class: 'rv-a ' + (q.required ? 'need' : 'none'), text: q.required ? 'Needs an answer' : (st === 'skipped' ? 'Skipped' : 'No answer')});
+        var checked = I.mode === 'quiz' && entry(q).checked === true;
+        ul.appendChild(el('li', {id: 'rv-' + q.id, 'data-rv': q.id}, [
+          el('div', {}, [
+            el('p', {class: 'rv-q', text: q.text}),
+            a,
+            checked ? el('p', {class: 'rv-n', text: isCorrect(q) ? 'Marked: correct' : 'Marked: not correct'}) : null,
+            note ? el('p', {class: 'rv-n', text: 'Note: ' + note}) : null
+          ]),
+          checked ? null : el('button', {type: 'button', class: 'btn', id: 'edit-' + q.id, 'aria-label': 'Change the answer to: ' + q.text, text: st === 'answered' ? 'Change' : 'Answer', on: {click: function () { editFrom(q); }}})
+        ]));
+      });
+    }
+    setBar([
+      vis.length ? btn('btn-back', 'Back', '', function () { UI.finishTried = false; goTo(useSections() ? sectionQuestions(vis[vis.length - 1].section)[0].id : vis[vis.length - 1].id); }) : null,
+      el('span', {class: 'spacer'}),
+      btn('btn-finish', I.mode === 'quiz' ? 'Finish and see the score' : 'Finish', 'primary', function () {
+        if (need.length) { UI.finishTried = true; render({focusId: 'need-box'}); return; }
+        UI.finishTried = false; ST.stage = 'done'; ST.finished_at = nowIso();
+        Q.forEach(function (q) { if (I.mode === 'quiz' && hasAnswer(q)) ST.ans[q.id].checked = true; });
+        saveNow(); render({focus: true});
+      })
+    ]);
+  }
+  function download(name, text, msgEl) {
+    try {
+      var url = URL.createObjectURL(new Blob([text], {type: 'text/plain;charset=utf-8'}));
+      var a = el('a', {href: url, download: name});
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { try { URL.revokeObjectURL(url); } catch (e) { /* nothing to free */ } }, 2000);
+      msgEl.textContent = 'A download of ' + name + ' was requested. If no file arrives, this page is not allowed to save files here: copy the text from the box instead.';
+    } catch (e) {
+      msgEl.textContent = 'This page is not allowed to save files here. Copy the text from the box instead.';
+    }
+  }
+  // Copy with the full text always present in a box. If the clipboard is refused, the box is selected and the page says so.
+  function copyFrom(box, msgEl, okWords, button) {
+    if (button.getAttribute('aria-disabled') === 'true') return;
+    var label = button.textContent;
+    button.setAttribute('aria-disabled', 'true'); button.textContent = 'Copying';
+    var done = function (ok) {
+      button.removeAttribute('aria-disabled'); button.textContent = label;
+      if (ok) { msgEl.className = 'msg'; msgEl.textContent = okWords; return; }
+      try { box.focus(); box.select(); } catch (e) { /* the box is still there to select by hand */ }
+      msgEl.className = 'msg bad';
+      msgEl.textContent = 'Copying is blocked here. The complete text is in the box and is selected: press and hold it, or right-click it, and choose Copy.';
+    };
+    var byCommand = function () {
+      var ok = false;
+      try { box.focus(); box.select(); ok = document.execCommand('copy') === true; } catch (e) { ok = false; }
+      done(ok);
+    };
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') { navigator.clipboard.writeText(box.value).then(function () { done(true); }, byCommand); return; }
+    } catch (e) { /* fall through to the older command */ }
+    byCommand();
+  }
+  function renderDone() {
+    var main = $('main'), text = buildExport(), kids = [];
+    var fname = I.id + (I.mode === 'survey' ? '-response.txt' : '-export.md');
+    kids.push(el('h1', {tabindex: '-1', id: 'screen-h', text: I.mode === 'quiz' ? 'Your result' : 'Finished'}));
+    main.appendChild(el('div', {class: 'lead'}, kids));
+    if (I.mode === 'quiz') {
+      var s = score();
+      main.appendChild(el('div', {class: 'score', id: 'score'}, [
+        el('p', {class: 'score-main', id: 'score-main'}, [el('b', {text: String(s.correct)}), ' correct of ', el('b', {text: String(s.attempted)}), ' attempted']),
+        factsList([
+          ['Out of all items', s.correct + ' of ' + s.total],
+          ['Skipped', s.skipped + ' (not counted as wrong)'],
+          ['Not answered', String(s.none)],
+          ['Scoring rule', SCORE_RULE]
+        ])
+      ]));
+      main.appendChild(el('h2', {class: 'sub-h', id: 'missed-h', text: 'Missed: ' + s.missed.length}));
+      if (!s.missed.length) main.appendChild(el('p', {id: 'missed-none', text: s.attempted ? 'Nothing missed among the items you attempted.' : 'No items were attempted, so there is nothing to mark.'}));
+      var listOf = function (items, id) {
+        return el('ul', {class: 'missed', id: id}, items.map(function (q) { return el('li', {'data-missed': q.id}, [el('p', {class: 'rv-q', text: q.text}), feedbackBlock(q)]); }));
+      };
+      if (s.missed.length) main.appendChild(listOf(s.missed, 'missed-list'));
+      if (s.passed.length) {
+        main.appendChild(el('h2', {class: 'sub-h', text: 'Skipped or not answered: ' + s.passed.length}));
+        main.appendChild(listOf(s.passed, 'passed-list'));
+      }
+    }
+    var lines = text.split('\n').length - 1;
+    var box = el('textarea', {id: 'export-text', readonly: true, rows: '12', spellcheck: 'false', 'aria-describedby': 'copy-status'});
+    box.value = text;
+    box.addEventListener('focus', function () { try { box.select(); } catch (e) { /* selection is a convenience only */ } });
+    var msg = el('p', {class: 'msg', id: 'copy-status', role: 'status'});
+    var who = I.mode === 'survey' ? oneLine(I.disclosure.who) : '';
+    main.appendChild(el('h2', {class: 'sub-h', text: I.mode === 'survey' ? 'Send your answers back' : I.mode === 'quiz' ? 'A text copy of the result' : 'Copy your answers back'}));
+    main.appendChild(el('p', {text: I.mode === 'survey'
+      ? 'Nothing has been sent. To hand in your answers, copy the whole block below, first line to last, and send it the way you were asked. It goes to: ' + who + '.'
+      : I.mode === 'quiz' ? 'Paste this into a chat or a note to keep the result. It lists every item with your answer and the correct one.'
+      : 'Copy the text below and paste it into the chat. It holds every question with your answer and your notes.'}));
+    var copyBtn = btn('copy-export', I.mode === 'survey' ? 'Copy the response block' : 'Copy the export', 'primary', function () {
+      copyFrom(box, msg, I.mode === 'survey' ? 'Copied. Now paste it into a message. It goes to: ' + who + '.' : 'Copied. Paste it into the chat.', copyBtn);
+    });
+    main.appendChild(el('div', {class: 'rowgap'}, [copyBtn, btn('download-export', 'Download as a file', '', function () { download(fname, text, msg); })]));
+    main.appendChild(msg);
+    main.appendChild(el('label', {for: 'export-text', style: 'margin-top:.9rem', text: (I.mode === 'survey' ? 'The response block' : 'The full export') + ' (' + plural(lines, 'line', 'lines') + '). Everything is here even if copying fails.'}));
+    main.appendChild(box);
+    if (I.mode !== 'quiz' && I.tallies.length) {
+      main.appendChild(el('h2', {class: 'sub-h', text: 'Counts'}));
+      main.appendChild(el('ul', {class: 'tallies', id: 'tallies'}, tallies().map(function (t) {
+        return el('li', {'data-tally': t.id}, [el('span', {text: t.label + (t.answered < t.of ? ' (' + t.answered + ' of ' + t.of + ' answered)' : '')}), el('span', {class: 'c', text: t.count + ' of ' + t.of})]);
+      })));
+      main.appendChild(el('p', {class: 'caveat', id: 'tally-caveat', text: TALLY_LINE}));
+    }
+    main.appendChild(el('div', {class: 'rowgap', style: 'margin-top:1.25rem'}, [
+      I.mode === 'quiz' ? null : btn('change-answers', 'Change answers', '', function () { ST.stage = 'review'; save(); render({focus: true}); }),
+      btn('start-again', 'Start again', '', function () { openPanel(true); askReset(); })
+    ]));
+    setBar([]);
+  }
+  function renderProblem() {
+    var main = $('main');
+    if (UI.dataProblems.length) {
+      main.appendChild(el('div', {class: 'lead'}, [el('h1', {tabindex: '-1', id: 'screen-h', text: 'This questionnaire cannot open'}), el('p', {text: 'Its data block has a fault. Nothing you do here can lose answers, because none have been taken yet. Whoever built this file can find the fault with scripts/validate_instrument.py.'})]));
+      main.appendChild(el('div', {class: 'errbox', id: 'data-problems', role: 'alert'}, [el('ul', {}, UI.dataProblems.slice(0, 12).map(function (p) { return el('li', {text: p}); }))]));
+    } else {
+      main.appendChild(el('div', {class: 'blank', id: 'no-questions'}, [el('h1', {tabindex: '-1', id: 'screen-h', class: 'sub-h', text: 'No questions yet'}), el('p', {text: 'The data block has an empty question list. Add questions between the two marker lines in this file, then open it again.'})]));
+    }
+    setBar([]);
+    $('panel-toggle').hidden = true;
+  }
+  function render(opts) {
+    opts = opts || {};
+    var main = $('main'), keep = null;
+    if (opts.keepFocus && document.activeElement && document.activeElement.id) keep = document.activeElement.id;
+    main.textContent = '';
+    main.removeAttribute('aria-busy');
+    if (ST.stage === 'loading') {
+      main.setAttribute('aria-busy', 'true');
+      main.appendChild(el('div', {class: 'lead'}, [el('h1', {id: 'screen-h', text: I ? I.title : 'Questionnaire'}), el('p', {id: 'loading', text: 'Looking for saved answers.'})]));
+      setBar([]); drawProgress(); return;
+    }
+    if (ST.stage === 'problem') { renderProblem(); drawProgress(); return; }
+    lastVisKey = visKey();
+    if (ST.stage === 'intro') renderIntro();
+    else if (ST.stage === 'disclosure') renderDisclosure();
+    else if (ST.stage === 'q') { if (useSections()) renderSection(); else renderQuestion(); }
+    else if (ST.stage === 'review') renderReview();
+    else renderDone();
+    drawProgress();
+    if (opts.focus || opts.focusId) {
+      say('');
+      window.scrollTo(0, 0);
+      var target = (opts.focusId && $(opts.focusId)) || $('screen-h') || (ST.cur && $('qt-' + ST.cur)) || main;
+      if (target) { try { target.focus({preventScroll: !opts.focusId}); } catch (e) { target.focus(); } if (opts.focusId && target.scrollIntoView) target.scrollIntoView({block: 'center'}); }
+    } else if (keep && $(keep)) $(keep).focus();
+  }
+
+  // ------------------------------------------------------------------ display choices
+  var display = {theme: 'paper', size: 'standard', density: 'comfortable', motion: 'on', layout: 'one'};
+  function displayDefaults() {
+    var calm = false;
+    try { calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { calm = false; }
+    return {theme: 'paper', size: 'standard', density: 'comfortable', motion: calm ? 'off' : 'on', layout: I ? I.layout : 'one'};
+  }
+  function applyDisplay() {
+    var root = document.documentElement;
+    root.setAttribute('data-theme', display.theme);
+    root.setAttribute('data-size', display.size);
+    root.setAttribute('data-density', display.density);
+    root.setAttribute('data-motion', display.motion);
+    document.querySelectorAll('[data-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(display[b.getAttribute('data-set')] === b.getAttribute('data-val'))); });
+    $('layout-choice').hidden = !I || I.mode === 'quiz';
+  }
+  function readDisplay(text) {
+    var v = null;
+    try { v = JSON.parse(text || 'null'); } catch (e) { v = null; }
+    if (!v || typeof v !== 'object') return;
+    if (THEMES.indexOf(v.theme) >= 0) display.theme = v.theme;
+    if (SIZES.indexOf(v.size) >= 0) display.size = v.size;
+    if (DENSITIES.indexOf(v.density) >= 0) display.density = v.density;
+    if (v.motion === 'on' || v.motion === 'off') display.motion = v.motion;
+    if (v.layout && typeof v.layout === 'object' && I && (v.layout[I.id] === 'one' || v.layout[I.id] === 'sections')) display.layout = v.layout[I.id];
+  }
+  var layoutMemo = {};
+  function writeDisplay() {
+    if (I) layoutMemo[I.id] = display.layout;
+    store.set('elicitor:display', JSON.stringify({theme: display.theme, size: display.size, density: display.density, motion: display.motion, layout: layoutMemo}));
+  }
+
+  // ------------------------------------------------------------------ the panel: resume code, import, reset
+  function openPanel(open) {
+    $('panel').hidden = !open;
+    $('bar').hidden = open;            // the question's buttons wait underneath while the panel is open
+    $('panel-toggle').setAttribute('aria-expanded', String(open));
+    if (open) { drawStoreNote(); $('panel-h').focus(); } else { $('panel-toggle').focus(); }
+  }
+  function showResume() {
+    $('resume-box').hidden = false;
+    $('resume-text').value = JSON.stringify(envelope());
+    $('resume-msg').className = 'msg';
+    $('resume-msg').textContent = 'This code holds your answers so far. It is as long as your answers are.';
+  }
+  function importMsg(text, bad) { var m = $('import-msg'); m.className = 'msg' + (bad ? ' bad' : ''); m.textContent = text; }
+  function applyImport(res) {
+    var before = snapshot(), n = Object.keys(res.state.ans).length;
+    ST = res.state; UI.fromReview = false; UI.errors = {}; UI.raw = {}; UI.pendingImport = null; UI.finishTried = false;
+    $('import-confirm').hidden = true; $('import-text').value = '';
+    saveNow();
+    openPanel(false);
+    render({focus: true});
+    say('Loaded the ' + res.kind + ': ' + plural(n, 'question', 'questions') + ' restored.' + (res.dropped.length ? ' Left out: ' + res.dropped.join('; ') + '.' : ''), false,
+      function () { restore(before, 'The answers you had before loading are back.'); });
+  }
+  function tryImport(text) {
+    $('import-confirm').hidden = true; UI.pendingImport = null;
+    var res = readIncoming(text);
+    if (!res.ok) { importMsg(res.why + ' Nothing was changed: your current answers are as they were.', true); $('import-text').setAttribute('aria-invalid', 'true'); $('import-text').focus(); return; }
+    $('import-text').removeAttribute('aria-invalid');
+    if (res.version !== I.version) {
+      UI.pendingImport = res;
+      importMsg('', false);
+      $('import-confirm-text').textContent = 'This ' + res.kind + ' was made with version ' + res.version + ' of the questionnaire, and this page is version ' + I.version + '. '
+        + plural(Object.keys(res.state.ans).length, 'question matches', 'questions match') + ' and can be loaded.'
+        + (res.dropped.length ? ' These cannot: ' + res.dropped.join('; ') + '.' : ' Nothing would be left out.') + ' Loading replaces your current answers.';
+      $('import-confirm').hidden = false;
+      $('import-keep').focus();
+      return;
+    }
+    if (res.dropped.length) {
+      importMsg('The code does not fit this questionnaire (' + res.dropped.slice(0, 3).join('; ') + '). It may have been edited or cut. Nothing was changed: your current answers are as they were.', true);
+      $('import-text').setAttribute('aria-invalid', 'true'); $('import-text').focus();
+      return;
+    }
+    importMsg('', false);
+    applyImport(res);
+  }
+  function askReset() {
+    var c = counts(visible());
+    $('reset-text').textContent = 'Starting again clears ' + plural(c.answered, 'answer', 'answers') + ', ' + plural(c.skipped, 'skip mark', 'skip marks') + ' and ' + plural(c.notes, 'note', 'notes') + ' from this page' + (store.kind === 'memory' ? '.' : ' and from its saved copy.') + ' Get a resume code first if you might want them back.';
+    $('reset-confirm').hidden = false;
+    $('reset-cancel').focus();
+  }
+  function wirePanel() {
+    $('panel-toggle').addEventListener('click', function () { openPanel($('panel').hidden); });
+    $('panel-close').addEventListener('click', function () { openPanel(false); });
+    $('resume-make').addEventListener('click', showResume);
+    $('resume-copy').addEventListener('click', function () { copyFrom($('resume-text'), $('resume-msg'), 'Copied. Keep it somewhere you can reach from the other device.', $('resume-copy')); });
+    $('resume-download').addEventListener('click', function () { download(I.id + '-resume.json', $('resume-text').value, $('resume-msg')); });
+    $('import-open').addEventListener('click', function () {
+      var open = $('import-box').hidden;
+      $('import-box').hidden = !open; this.setAttribute('aria-expanded', String(open));
+      if (open) $('import-text').focus();
+    });
+    $('import-go').addEventListener('click', function () { tryImport($('import-text').value); });
+    $('import-file').addEventListener('change', function () {
+      var f = this.files && this.files[0], input = this;
+      if (!f) return;
+      if (f.size > 4000000) { importMsg('That file is larger than any export from this page (over 4 MB). Nothing was changed.', true); input.value = ''; return; }
+      importMsg('Reading the file.', false);
+      var r = new FileReader();
+      r.onload = function () { input.value = ''; tryImport(String(r.result)); };
+      r.onerror = function () { input.value = ''; importMsg('The file could not be read. Nothing was changed. Paste its text into the box instead.', true); };
+      r.readAsText(f);
+    });
+    $('import-keep').addEventListener('click', function () { UI.pendingImport = null; $('import-confirm').hidden = true; importMsg('Nothing was loaded. Your current answers are as they were.', false); $('import-text').focus(); });
+    $('import-continue').addEventListener('click', function () { if (UI.pendingImport) applyImport(UI.pendingImport); });
+    $('reset-ask').addEventListener('click', askReset);
+    $('reset-cancel').addEventListener('click', function () { $('reset-confirm').hidden = true; $('reset-ask').focus(); });
+    $('reset-export').addEventListener('click', function () { showResume(); $('resume-text').focus(); });
+    $('reset-go').addEventListener('click', function () {
+      var before = snapshot();
+      ST = freshState(); UI.fromReview = false; UI.errors = {}; UI.raw = {}; UI.finishTried = false; UI.filter = 'all';
+      $('reset-confirm').hidden = true; $('resume-box').hidden = true;
+      saveNow(); openPanel(false); render({focus: true});
+      say('Cleared. The questionnaire is back at the start.', false, function () { restore(before, 'Your answers are back.'); });
+    });
+    document.querySelectorAll('[data-set]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var key = b.getAttribute('data-set'), val = b.getAttribute('data-val'), was = display.layout;
+        display[key] = val; writeDisplay(); applyDisplay();
+        if (key === 'layout' && was !== val && ST.stage === 'q') { UI.errors = {}; render({}); }
+        else if (key === 'layout') drawProgress();
+      });
+    });
+    $('display-reset').addEventListener('click', function () {
+      var was = display.layout;
+      display = displayDefaults(); writeDisplay(); applyDisplay();
+      if (was !== display.layout && ST.stage === 'q') render({});
+      $('display-note').textContent = 'Display is back to its defaults.' + (store.kind === 'memory' ? ' Choices last for this visit only.' : '');
+    });
+  }
+  // Enter in a one-line field does what the main button does. There is no form to submit.
+  document.addEventListener('keydown', function (ev) {
+    var t = ev.target;
+    if (ev.key !== 'Enter' || !t || t.tagName !== 'INPUT' || t.type !== 'text') return;
+    ev.preventDefault();
+    if (t.id === 'import-text') return;
+    var main = $('btn-next') || $('btn-start');
+    if (main && $('main').contains(t) && !(ST.stage === 'q' && useSections())) main.click();
+  });
+  window.addEventListener('pagehide', function () { if (saveTimer !== null) { clearTimeout(saveTimer); saveNow(); } });
+
+  // ------------------------------------------------------------------ start
+  function boot() {
+    var probs = loadInstrument();
+    if (probs.length || !Q.length) {
+      UI.dataProblems = probs; ST = {stage: 'problem', ans: {}};
+      if (I) { document.title = I.title; $('doc-title').textContent = I.title; }
+      render({}); return;
+    }
+    document.title = I.title;
+    $('doc-title').textContent = I.title;
+    ST = {stage: 'loading', ans: {}, cur: null};
+    display = displayDefaults();
+    applyDisplay();
+    render({});
+    wirePanel();
+    store.init().then(function () {
+      return Promise.all([store.get('elicitor:display'), store.get(stateKey())]);
+    }).then(function (got) {
+      try { var memo = JSON.parse(got[0] || 'null'); if (memo && memo.layout && typeof memo.layout === 'object') layoutMemo = memo.layout; } catch (e) { layoutMemo = {}; }
+      readDisplay(got[0]);
+      applyDisplay();
+      var res = got[1] ? readEnvelope(got[1]) : null;
+      if (res && res.ok && res.version === I.version && !res.dropped.length) {
+        ST = res.state;
+        if (ST.stage === 'q' || ST.stage === 'review' || ST.stage === 'done') UI.justResumed = true;
+      } else {
+        ST = freshState();
+        if (res && res.ok && Object.keys(res.state.ans).length) UI.pendingStale = got[1];
+      }
+      drawStoreNote();
+      render({});
+      if (UI.justResumed) say('Picked up where you left off. ' + store.words());
+      else if (UI.pendingStale) say('Saved answers from another version of this questionnaire were found and not loaded. To load them, open Save and display: the saved code is already in the box there, so press Load it. They are replaced as soon as you answer or skip a question here.');
+      if (UI.pendingStale) { $('import-box').hidden = false; $('import-open').setAttribute('aria-expanded', 'true'); $('import-text').value = UI.pendingStale; }
+    });
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+=== sample-picker choice v1 ===
+picker: stallbook-heading@1
+kind: copy
+status: final
+chosen: speed-claim
+chosen-name: "One concrete claim"
+control: align = "centre"
+control: heading-size = 30
+control: action = true
+shortlist: problem-first, speed-claim
+rejected: (none)
+note: speed-claim = "Like the colour, not the weight. \"Calmer\" would suit; caf\u00e9 menu test\nsecond line"
+fact: "heading length" = "49 characters, 10 words"
+fact: "sub length" = "86 characters, 16 words"
+fact: "heading lines at this width" = 2
+saved: 2026-10-08T21:16:22Z
+=== end ===

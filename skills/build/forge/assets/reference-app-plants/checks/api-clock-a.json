@@ -1,0 +1,14 @@
+[
+ {
+  "name": "frozen clock is reported",
+  "method": "GET",
+  "path": "/api/today",
+  "expect": {
+   "status": 200,
+   "json": {
+    "today": "2026-10-23",
+    "frozen": true
+   }
+  }
+ }
+]

@@ -1,0 +1,62 @@
+{
+ "app": "sample-picker",
+ "schema": 1,
+ "content_id": "notes-theme@1",
+ "saved_at": "2026-10-08T21:16:02Z",
+ "data": {
+  "kind": "theme",
+  "status": "final",
+  "chosen": "slate-night",
+  "chosen_name": "Slate night",
+  "controls": {
+   "density": "compact",
+   "text-size": 16
+  },
+  "shortlist": [
+   "ember",
+   "slate-night"
+  ],
+  "rejected": [],
+  "notes": {
+   "slate-night": "Like the colour, not the weight. \"Calmer\" would suit; caf\u00e9 menu test\nsecond line"
+  },
+  "facts": [
+   {
+    "label": "heading, body text contrast",
+    "value": 15.25
+   },
+   {
+    "label": "status message contrast",
+    "value": 10.98
+   },
+   {
+    "label": "link contrast",
+    "value": 9.69
+   },
+   {
+    "label": "label on surface, muted text on surface contrast",
+    "value": 7.82
+   },
+   {
+    "label": "input text, text on surface, secondary button label contrast",
+    "value": 13.73
+   },
+   {
+    "label": "error text contrast",
+    "value": 9.26
+   },
+   {
+    "label": "button label contrast",
+    "value": 9.87
+   },
+   {
+    "label": "muted text contrast",
+    "value": 8.69
+   },
+   {
+    "label": "button label on hover contrast",
+    "value": 11.78
+   }
+  ]
+ }
+}

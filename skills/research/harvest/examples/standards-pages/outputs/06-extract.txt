@@ -1,0 +1,36 @@
+harvest extract: 12 stored version(s)
+  S1     store/c1646d07d9b5bba2241e997a9a70a4a3dd6524337227a103c6731272820992c4.raw: written
+         store/c1646d07d9b5bba2241e997a9a70a4a3dd6524337227a103c6731272820992c4.extracted.txt sha256 294e00acad56ad93
+         title 'Harbour Lighting Standards Board: published standards', 405 characters, decoded as utf-8 (Content-Type header)
+  S2     store/51451043c1756b90435b5b0409a9a721c003961382e26d29cf411c97179e96b8.raw: written
+         store/51451043c1756b90435b5b0409a9a721c003961382e26d29cf411c97179e96b8.extracted.txt sha256 d710315e24a6a099
+         title 'HL-101 Mounting heights (edition 3)', 494 characters, decoded as utf-8 (Content-Type header)
+  S3     store/94785491fc07db50c6bdf01fa2998b5b96034a14a9436b562c5a22cf83ef7d65.raw: written
+         store/94785491fc07db50c6bdf01fa2998b5b96034a14a9436b562c5a22cf83ef7d65.extracted.txt sha256 afa8f3805f015d65
+         title 'HL-102 Lamp colour (edition 2)', 334 characters, decoded as utf-8 (Content-Type header)
+  S4     store/12fa83f0b8639a2fd54728fd86bb5204b392af9f9860a44f533ec6feec7ae31e.raw: written
+         store/12fa83f0b8639a2fd54728fd86bb5204b392af9f9860a44f533ec6feec7ae31e.extracted.txt sha256 27deb7cf7fc404e3
+         title 'HL-103 Inspection intervals (edition 1)', 352 characters, decoded as utf-8 (Content-Type header)
+  S4     store/35d3dabe34ee8d589d038b6c601f3182cc5b0d2ac527b44ce813252ed9bde8fe.raw: written
+         store/35d3dabe34ee8d589d038b6c601f3182cc5b0d2ac527b44ce813252ed9bde8fe.extracted.txt sha256 1c035d24ba9aef7f
+         title 'HL-103 Inspection intervals (edition 2)', 410 characters, decoded as utf-8 (Content-Type header)
+  S5     store/1dedf83620b876ddddcd7046d5a48047fef545313444b5df0916cc67d7893c8b.raw: written
+         store/1dedf83620b876ddddcd7046d5a48047fef545313444b5df0916cc67d7893c8b.extracted.txt sha256 05f043377c73e0e7
+         title 'HL-104 Backup power (edition 1)', 308 characters, decoded as utf-8 (Content-Type header)
+  S6     store/b1cfa3d81ca794c6bf75b04d0255c3cb79ccceec4ce460d5fefa8450e9e3fa7a.raw: written
+         store/b1cfa3d81ca794c6bf75b04d0255c3cb79ccceec4ce460d5fefa8450e9e3fa7a.extracted.txt sha256 98e5fbaf5eaed96b
+         title 'Committee meeting 41: minutes', 300 characters, decoded as utf-8 (Content-Type header)
+  S7     store/8eba688d547d1b58795cb1c3b6b66ee02b982cbb803f7ba8c29dba3c6d0ab069.raw: written
+         store/8eba688d547d1b58795cb1c3b6b66ee02b982cbb803f7ba8c29dba3c6d0ab069.extracted.txt sha256 05b96b02cb3e2da3
+         title 'Committee meeting 42: minutes', 308 characters, decoded as utf-8 (Content-Type header)
+  S9     store/8dade89f68ca060a4563eb8c410082dff0002fdffdd74ecf8bca4da1e029547e.raw: written
+         store/8dade89f68ca060a4563eb8c410082dff0002fdffdd74ecf8bca4da1e029547e.extracted.txt sha256 40a76a9bec3ae58f
+         title 'HL-100 General requirements (withdrawn)', 233 characters, decoded as utf-8 (Content-Type header)
+  S10    store/0d83948cf1d321a2ac5fec0470b1212d3e888f37518b90d35ef05d2f79ea8f0f.raw: written
+         store/0d83948cf1d321a2ac5fec0470b1212d3e888f37518b90d35ef05d2f79ea8f0f.extracted.txt sha256 489a9436848ade8f
+         title 'Consultations', 235 characters, decoded as utf-8 (Content-Type header)
+  S12    store/880b13ac1812e9cf608fd83364502b1fd383d68470918c0f1b4a959346009546.raw: written
+         store/880b13ac1812e9cf608fd83364502b1fd383d68470918c0f1b4a959346009546.extracted.txt sha256 47b831ac562f64e2
+         feed 'Harbour Lighting Standards Board: notices (SYNTHETIC)', 3 entries
+  S13    store/9e6a04e4885946ab29b85354782d74e9ed75168cb9ac51de03143606784877f3.raw: not extracted: kind is file
+RESULT: PASS. 11 derivative(s) for 12 stored version(s). A derivative is markup removed, not the article found, and reading it is still to be done.

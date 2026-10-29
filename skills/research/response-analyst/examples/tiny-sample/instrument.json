@@ -1,0 +1,15 @@
+{
+ "title": "Volunteer roster pulse check (SYNTHETIC data)",
+ "collection": {
+  "reached": "Asked in person by the roster coordinator at the end of a shift, during one week.",
+  "invited": 9,
+  "missing": "3 of the 9 people on the roster were not on shift that week and were not asked. Answers were given face to face to the person who writes the roster, which may soften criticism."
+ },
+ "questions": [
+  {"id": "t1", "text": "How long have you volunteered here?", "type": "single", "options": ["Under a year", "A year or more"]},
+  {"id": "t2", "text": "The new roster works for me", "type": "scale", "options": ["Strongly disagree", "Disagree", "Agree", "Strongly agree"]},
+  {"id": "t3", "text": "Would you swap to a fixed weekly shift?", "type": "single", "options": ["Yes", "No", "Not sure"]},
+  {"id": "t4", "text": "What makes a shift hard to attend? Choose any", "type": "multi", "options": ["Short notice", "Transport", "Work clashes", "Family commitments"]},
+  {"id": "t5", "text": "One thing to change", "type": "text"}
+ ]
+}

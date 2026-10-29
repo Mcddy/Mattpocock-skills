@@ -1,0 +1,2 @@
+harvest verify: 13 file(s) named in the logs, 13 re-hashed and matching
+RESULT: PASS. 0 error(s), 0 advisory note(s). A match means the file is the one that was logged; it does not show the log itself is untouched.

@@ -1,0 +1,36 @@
+{
+ "quantity": "Households paying for a regular lawn-mowing service",
+ "unit": "households",
+ "timeframe": "during 2026",
+ "scope": "Australia, private households; regular means six or more paid visits a year; excludes body-corporate and commercial contracts",
+ "inputs": {
+  "operators": {
+   "dist": "lognormal",
+   "low": 15000,
+   "high": 70000,
+   "why": "GAP: people or businesses running a domestic mowing round. Official business counts for gardening services were not looked up in this session. Assessed from the trade being common in every suburb and town; surprised below 15,000 or above 70,000."
+  },
+  "regular_customers_each": {
+   "dist": "lognormal",
+   "low": 25,
+   "high": 90,
+   "why": "A full-time solo operator mows about 5 to 8 lawns a day, five days a week, mostly on a two to four week cycle: 50 to 160 regulars at capacity. Many operators are part-time or take one-off jobs, which pulls the typical book down."
+  },
+  "share_household_customers": {
+   "dist": "uniform",
+   "low": 0.7,
+   "high": 0.95,
+   "kind": "probability",
+   "why": "Some regular customers are agents managing rentals, body corporates and small commercial sites, which the quantity excludes. Bounds only."
+  }
+ },
+ "formula": "operators * regular_customers_each * share_household_customers",
+ "anchors": [
+  {
+   "name": "cannot exceed the number of occupied separate houses: 6,710,582 at the 2021 Census (ABS QuickStats, read 2026-10-09) scaled up 10 per cent, the top of the assumed growth range",
+   "max": 7381640
+  }
+ ],
+ "runs": 20000,
+ "seed": 1
+}

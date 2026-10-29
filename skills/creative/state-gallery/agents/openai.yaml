@@ -1,0 +1,14 @@
+interface:
+  display_name: State Gallery
+  short_description: Compare real interface states and viewport evidence
+  default_prompt: Use $state-gallery for this task; state the supported method, execute
+    inspected helpers and verify actual outputs.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  allow_implicit_invocation: true
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas

@@ -1,0 +1,63 @@
+# Journey for the built example, for delivery_check.py at a 390 pixel viewport:
+# read the header, filter, open an event, follow a conflict, show gaps, export, change the display.
+expect:#facts=30 events, 2014 to 2026, from 13 sources. 5 date conflicts, 1 not reconciled. 1 undated.
+expect-count:article.event=30
+expect-count:.pair=10
+expect:#when-E06=Aug 2018
+expect:#when-E06=day not recorded
+expect:#when-E01=2014
+expect:#when-E25=about Jul 2025
+expect:#when-U01=Undated
+# filter by status, then clear
+click:#filters-toggle
+click:#status-REPORTED
+expect:#status=Showing 11 of 30 events. Filters: status REPORTED.
+expect-count:article.event=11
+click:#clear
+expect-focus:#q
+expect-count:article.event=30
+# search, open an event, read its source and locator
+fill:#q=harmonised
+expect:#status=Showing 4 of 30 events.
+press:#open-E18=Enter
+expect-attr:#open-E18@aria-expanded=true
+expect-focus:#open-E18
+expect:#more-E18=ELI date of publication and first date of entry into force
+expect:#more-E18=https://eur-lex.europa.eu/eli/dec_impl/2021/1339/oj
+# the conflict is shown on both rows; follow it
+expect:#pair-E18-E19=Also dated 18 Aug 2021
+expect:#pair-E18-E19=Real disagreement
+expect:#pair-E19-E18=Also dated 12 Aug 2021
+click:#goto-E18-E19
+expect-focus:#open-E19
+expect-attr:#open-E19@aria-expanded=true
+click:#clear
+# gaps
+click:#gaps-toggle
+expect-attr:#gaps-toggle@aria-pressed=true
+expect-count:.gap=3
+expect:#status=3 gaps longer than 365 days.
+# export follows the view, as markdown and as CSV
+click:#export-toggle
+expect:#export-text=| Aug 2018 | EN 301 549 V2.1.2 published | REPORTED |
+expect:#export-text=## Gaps longer than 365 days
+expect:#export-text=At least 545 days
+click:#export-kind-csv
+expect:#export-text=E06,2018-08,month
+click:#export-copy
+click:#export-download
+click:#export-close
+expect-focus:#export-toggle
+# display settings apply at once and reset
+click:#display-toggle
+click:#set-theme-night
+expect-attr:html@data-theme=night
+click:#set-dates-iso
+expect:#when-E06=2018-08
+click:#set-text-large
+expect-attr:html@data-text=large
+click:#display-reset
+expect-attr:html@data-theme=paper
+expect:#when-E06=Aug 2018
+reload:
+expect-count:article.event=30

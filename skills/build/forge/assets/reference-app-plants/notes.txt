@@ -1,0 +1,84 @@
+Plants: watering round. Build notes (forge 3.1, steps 1 to 4). (i) = inferred.
+
+BRIEF
+- Who: one person (i), on a phone in the morning, daily; a laptop now and then (i).
+- One job: see who needs water today, tick them off, see when each was last watered.
+  Hardest judgement: "does this one really need it today?" Plants range from every 3 days to every
+  14 days; the expert checks the last watering date against the plant's own interval. Newcomers
+  overwater the slow ones and forget the thirsty ones, and two people can water the same plant twice.
+- Keeps: about 15 plants and every watering, indefinitely (i). So: a back end with SQLite.
+- Delivered: a local server on the user's machine, opened in a browser tab (i). Normal origin, so
+  forms are allowed; no sandboxed preview needed.
+- Conventions: Australian English, 24-hour time, Australia/Brisbane (no daylight saving), dates
+  written "Tue 2 Mar" (the user's form wins over Intl's "Tue, 2 Mar").
+- Works means: add a plant that needs water every 3 days, tick it off, reload the next morning and
+  see it listed as watered yesterday and due again in 2 days.
+
+FULL VISION (kept, not built)
+Edit and remove plants; photo of each plant; fertilising and repotting as other care kinds; a
+"water early / skip, soil still damp" choice; history per plant; seasonal intervals (Brisbane
+summer vs winter); reminders; two people sharing one house list; offline queue.
+
+FIRST SLICE
+Add a plant (name, room, every N days, shape) -> it appears in today's round -> tick "Watered" ->
+the row moves to "Watered today" with the time, the count drops, the next due date shows -> Undo ->
+restart the server -> everything is still there.
+Top risk inside the slice: "today" in Brisbane, computed by the server, and a double watering
+from two devices (race). Both are on the path: today/next-due comes only from the server, and the
+once-a-day rule is a UNIQUE constraint so 20 parallel ticks give one 201.
+Acceptance (SKILL.md step 2):
+ 1 write shown back from storage: POST watering, then GET /api/plants shows last_watered_at.
+ 2 rule refusal: second watering on the same Brisbane day -> 409 already_watered (shown in the
+   row); duplicate plant name -> 409 duplicate_name (shown beside Name).
+ 3 invalid input: every_days "lots" / 0 / 61 -> 422 with fields.every_days, beside the field.
+ 4 restart: api_check restart step, and delivery_check reload.
+
+CONTRACT (owner: the server for every rule; the page only displays)
+GET  /api/health                      200 {status}
+GET  /api/today                       200 {today, zone, frozen, now, counts{plants,left,done}, week[7]{date,due}}
+GET  /api/plants?limit=&after=        200 {plants[], next}  keyset by (next_due, name_key, id); limit 1..200
+POST /api/plants  {name, room?, every_days, kind}   Idempotency-Key optional
+     201 plant | 409 duplicate_name | 409 key_reused | 422 invalid (fields) | 415 | 400 | 413
+POST /api/plants/{id}/waterings  {}   Idempotency-Key optional
+     201 {watering, plant} | 409 already_watered | 404 not_found | 422 (unknown field) | 415
+DELETE /api/waterings/{id}            200 {plant} | 404 not_found | 409 too_old (only today's can be undone)
+Server-owned fields refused with 422 "is set by the server": id, created_at, last_watered_at,
+last_watered_on, next_due, status, days_overdue, days_until, watering_today_id, name_key.
+Error shape: {"error": {"code", "message", "fields", "request_id"}}; X-Request-Id on every answer.
+Time: watered_at is an instant (UTC, Z). local_date is date-only YYYY-MM-DD in Australia/Brisbane,
+computed by the server. next_due is date-only. "today" is the server's Brisbane date.
+Repeatable: GET, DELETE. Creates only with Idempotency-Key (the page always sends one).
+Messages (product copy):
+ already_watered  "Boston fern was already watered today at 07:12. It is next due Mon 26 Oct."
+ duplicate_name   "You already have a plant called Monstera (Lounge). Give this one another name, such as Monstera 2."
+ invalid          "Check the highlighted fields."  fields: name "is required" / "must be 60 characters or fewer";
+                  every_days "must be a whole number of days from 1 to 60"; kind "must be one of the shapes shown";
+                  room "must be 40 characters or fewer"; unknown "is not a plant field"; server-owned "is set by the server"
+ too_old          "Only today's watering can be undone. Boston fern was watered Sat 17 Oct."
+ storage/500      "The plant list could not be saved or read. Nothing was changed. Try again."
+
+REQUIREMENTS (id, observable, check)
+R1 add a plant, shown back from storage            api steps 3-4; ui steps add + reload
+R2 tick shows watered time and next due from server api "water monstera"; ui expect row
+R3 second watering same day refused, row shows why  api "same day refused"; ui (two-tab simulation)
+R4 duplicate name refused beside Name               api + ui
+R5 invalid interval refused beside the field        api + ui
+R6 survives restart                                 api restart step; ui reload
+R7 20 parallel ticks -> 1 x 201, 19 x 409           api parallel
+R8 "Undo" removes today's watering; older refused   api undo + too_old; ui undo
+R9 today is Brisbane's date, by the server          api with --now 2026-10-24T06:30+10:00 (20:30 UTC on the 23rd)
+R10 local server exposure: Host check, JSON-only writes, no CORS   api steps
+R11 every answer has X-Request-Id; 500 in error shape, no traceback (--faults)   api steps
+R12 creates replay with Idempotency-Key, across a restart   api steps
+R13 backup and restore run once                     shell, recorded in checks/backup.txt
+Promises the page makes: "Watered" (R2), "Undo" (R8). No "Saved", "Offline" or "Synced" claims.
+
+LEDGER
+In: Python 3 standard library http.server (serves page + API; the flow needs a server to keep data)
+    SQLite (keeps plants and waterings across restarts; UNIQUE/CHECK carry the rules)
+    zoneinfo Australia/Brisbane (today's date; falls back to fixed +10:00, Brisbane has no DST)
+    Kit faces Fraunces + DM Sans as woff2 on own origin (identity; page works with system fallbacks)
+    Kit CSS (tokens + composition layer; both files kept so the direction board works)
+Cut / add when: framework (when routes pass ~20), auth (a second person or a reachable address),
+    photos (when the user has pictures; tiles say where the photo goes until then), notifications
+    (when the user asks for reminders), service worker (when "works offline" is requested).

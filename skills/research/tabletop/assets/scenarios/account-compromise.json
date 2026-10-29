@@ -1,0 +1,605 @@
+{
+ "schema": 1,
+ "id": "account-compromise",
+ "version": "1.0",
+ "title": "Account compromise: odd messages from a colleague, and a supplier whose bank details have changed",
+ "type": "incident_response",
+ "subject": "fictional",
+ "system_under_test": "The email-fraud response plan of a fictional twelve-person design firm.",
+ "setting": "A fictional twelve-person design firm. Mail is a hosted service. You are the office manager and you also look after IT, with an outside helpdesk on a support contract. It is Thursday morning, and supplier payments go out in one run at 11:00.",
+ "player_role": "the office manager, who also looks after IT",
+ "notes": "A defensive exercise about responding to a compromised mailbox and a payment-redirection attempt. It contains nothing about how such an attack is carried out beyond what a responder sees. All people are roles, and the firm and its supplier are invented.",
+ "duration": {
+  "turns": 8,
+  "minutes_per_turn": 20,
+  "start_clock": "08:40"
+ },
+ "objectives": [
+  {
+   "id": "O1",
+   "text": "Is the compromised account found and properly closed off, including what was left behind inside it?"
+  },
+  {
+   "id": "O2",
+   "text": "Is the changed-bank-details payment stopped before the run, by checking through a channel the intruder does not control?"
+  },
+  {
+   "id": "O3",
+   "text": "Does the response stay on the evidence when a senior person points somewhere else?"
+  },
+  {
+   "id": "O4",
+   "text": "Does the plan say who may stop a payment, and how, when mail cannot be trusted?"
+  }
+ ],
+ "roles": [
+  {
+   "id": "R1",
+   "name": "director",
+   "can": "Approve holding a payment in the banking app, phone the bank, tell all staff something.",
+   "available_from_turn": 1
+  },
+  {
+   "id": "R2",
+   "name": "outside IT helpdesk",
+   "can": "Reset passwords, sign accounts out, read sign-in logs and mailbox settings. Opens at 09:00.",
+   "available_from_turn": 2
+  },
+  {
+   "id": "R3",
+   "name": "bookkeeper",
+   "can": "Look through their own mailbox, phone a supplier, read the payment run.",
+   "available_from_turn": 1
+  }
+ ],
+ "resources": [],
+ "constraints": [
+  "One thing of your own per turn. Each role you hand work to can do one thing per turn.",
+  "The payment run leaves at 11:00, the start of turn 8. A director can hold a payment until 10:55.",
+  "The director is travelling and reachable by phone."
+ ],
+ "known_facts": [
+  {
+   "id": "K1",
+   "text": "Everyone signs in to mail with a password. Two-step sign-in is switched on for the directors only."
+  },
+  {
+   "id": "K2",
+   "text": "Supplier invoices arrive in the bookkeeper's mailbox."
+  },
+  {
+   "id": "K3",
+   "text": "Supplier payments go out in one weekly run, today at 11:00."
+  },
+  {
+   "id": "K4",
+   "text": "The director approves payments in a banking app that signs in with the director's mail account."
+  },
+  {
+   "id": "K5",
+   "text": "The firm's response plan is plan steps P1 to P5."
+  }
+ ],
+ "hidden_facts": [
+  {
+   "id": "H1",
+   "text": "The bookkeeper's mailbox has a rule, made nine days ago, that forwards anything mentioning invoices or payments to an outside address and moves the original into a folder named RSS Feeds."
+  },
+  {
+   "id": "H2",
+   "text": "The sign-in log shows the bookkeeper's account used from an unfamiliar place nine days ago and on three days since, each time with the correct password. The director's account shows only the director's own devices."
+  },
+  {
+   "id": "H3",
+   "text": "The message announcing new bank details came from an address one letter different from the supplier's real one. The supplier has not changed bank."
+  },
+  {
+   "id": "H4",
+   "text": "The hidden RSS Feeds folder holds eleven supplier emails from the past nine days, including two more invoices nobody has seen."
+  }
+ ],
+ "state": {
+  "payment": "queued",
+  "bookkeeper_password": "unchanged",
+  "forwarding_rule": "not looked for",
+  "staff_warned": false,
+  "director_account": "working",
+  "second_account": "none known",
+  "incident": "open"
+ },
+ "actions": [
+  {
+   "id": "A1",
+   "label": "Tell all staff not to open the odd message or its link, and to say so if they already did",
+   "class": "communicate",
+   "costs_turn": false,
+   "delegable_to": [
+    "R1"
+   ]
+  },
+  {
+   "id": "A2",
+   "label": "Look at the rules and forwarding settings on the bookkeeper's mailbox",
+   "class": "investigate",
+   "costs_turn": true,
+   "reveals": [
+    "H1"
+   ],
+   "delegable_to": [
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "id": "A3",
+   "label": "Read the sign-in logs for the bookkeeper's account and the director's account",
+   "class": "investigate",
+   "costs_turn": true,
+   "reveals": [
+    "H2"
+   ],
+   "delegable_to": [
+    "R2"
+   ]
+  },
+  {
+   "id": "A4",
+   "label": "Reset the bookkeeper's password and sign the account out everywhere",
+   "class": "act",
+   "costs_turn": true,
+   "delegable_to": [
+    "R2"
+   ]
+  },
+  {
+   "id": "A5",
+   "label": "Phone the supplier on the number in last year's contract and ask whether their bank details have changed",
+   "class": "investigate",
+   "costs_turn": true,
+   "reveals": [
+    "H3"
+   ],
+   "delegable_to": [
+    "R3"
+   ]
+  },
+  {
+   "id": "A6",
+   "label": "Delete the forwarding rule and go through the folder it was hiding mail in",
+   "class": "act",
+   "costs_turn": true,
+   "needs_fact": [
+    "H1"
+   ],
+   "reveals": [
+    "H4"
+   ],
+   "delegable_to": [
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "id": "A7",
+   "label": "Ask the director to hold this week's payment to the timber supplier",
+   "class": "decide",
+   "costs_turn": false
+  },
+  {
+   "id": "A8",
+   "label": "Lock the director's account and reset its password",
+   "class": "act",
+   "costs_turn": true,
+   "delegable_to": [
+    "R2"
+   ]
+  },
+  {
+   "id": "A9",
+   "label": "Unlock the director's account",
+   "class": "act",
+   "costs_turn": true,
+   "delegable_to": [
+    "R2"
+   ]
+  },
+  {
+   "id": "A10",
+   "label": "Reply to the new-bank-details email and ask the sender to confirm",
+   "class": "communicate",
+   "costs_turn": false,
+   "delegable_to": [
+    "R3"
+   ]
+  },
+  {
+   "id": "A11",
+   "label": "Report it: the bank's fraud line first, then the mail provider and the national cybercrime reporting service",
+   "class": "communicate",
+   "costs_turn": true,
+   "delegable_to": [
+    "R1"
+   ]
+  },
+  {
+   "id": "A12",
+   "label": "Reset the password of the colleague who typed it into the linked page, and sign them out everywhere",
+   "class": "act",
+   "costs_turn": true,
+   "delegable_to": [
+    "R2"
+   ]
+  },
+  {
+   "id": "A13",
+   "label": "Declare the incident closed",
+   "class": "decide",
+   "costs_turn": false
+  }
+ ],
+ "injects": [
+  {
+   "id": "I1",
+   "turn": 1,
+   "told": "Three colleagues say they had an email from the bookkeeper overnight: 'Please review the attached remittance', with a link. The bookkeeper says they sent nothing.",
+   "truth": "The messages were sent from the bookkeeper's real account by someone else who has its password.",
+   "misleading": false,
+   "tone": "bad",
+   "probes": [
+    "O1"
+   ],
+   "task": "Stop the odd messages doing more harm",
+   "expects": [
+    "A1"
+   ],
+   "within": 1
+  },
+  {
+   "id": "I2",
+   "turn": 2,
+   "told": "The bookkeeper adds: 'Funny, I haven't had a single supplier invoice in my inbox for over a week. Quiet month, I suppose.'",
+   "truth": "Invoices are arriving. A rule in the mailbox copies them out and hides the originals (H1).",
+   "misleading": false,
+   "tone": "neutral",
+   "probes": [
+    "O1"
+   ],
+   "task": "Find out why invoices stopped arriving",
+   "expects": [
+    "A2"
+   ],
+   "within": 2
+  },
+  {
+   "id": "I3",
+   "turn": 3,
+   "told": "The bookkeeper finds one supplier thread after all, in Sent Items. The timber supplier's last message says their bank details have changed and gives a new account. That invoice is in today's 11:00 run.",
+   "truth": "The message came from a look-alike address and the supplier has not changed bank (H3). If the run goes ahead, the money goes to the intruder.",
+   "misleading": false,
+   "tone": "bad",
+   "probes": [
+    "O2",
+    "O4"
+   ],
+   "task": "Check the changed bank details before 11:00",
+   "expects": [
+    "A5",
+    "A7"
+   ],
+   "within": 3,
+   "bait": [
+    "A10"
+   ]
+  },
+  {
+   "id": "I4",
+   "turn": 4,
+   "told": "The director phones: 'I've just had a security alert: new sign-in to my account from another country. It's me they're after. Lock my account first, then deal with the rest.'",
+   "truth": "The director is abroad and the sign-in is the director's own phone. That account has two-step sign-in and shows nothing else unusual (H2). The compromised account is the bookkeeper's.",
+   "misleading": true,
+   "tone": "neutral",
+   "probes": [
+    "O3"
+   ],
+   "task": "Decide what to do about the director's alert",
+   "expects": [
+    "A3"
+   ],
+   "within": 1,
+   "bait": [
+    "A8"
+   ]
+  },
+  {
+   "id": "I5",
+   "turn": 5,
+   "told": "The bank's business line confirms: a director can hold any payment in today's run until 10:55, in the banking app or by phone with the account's security answers.",
+   "truth": "Accurate. Holding a payment does not need email at all.",
+   "misleading": false,
+   "tone": "good",
+   "probes": [
+    "O4",
+    "O2"
+   ]
+  },
+  {
+   "id": "I6",
+   "turn": 6,
+   "told": "A colleague admits they clicked the link in the odd message last night and typed their password into the page that opened.",
+   "truth": "That colleague's account must now be treated as compromised too. Nothing has been sent from it yet.",
+   "misleading": false,
+   "tone": "bad",
+   "probes": [
+    "O1"
+   ],
+   "task": "Deal with the second account",
+   "expects": [
+    "A12"
+   ],
+   "within": 1,
+   "set": {
+    "second_account": "password given away"
+   }
+  },
+  {
+   "id": "I7",
+   "turn": 7,
+   "told": "The helpdesk asks: 'Is there anything else on the bookkeeper's mailbox you want looked at, or is a new password the end of it?'",
+   "truth": "A new password does not remove a forwarding rule. If the rule is still there, mail is still leaving.",
+   "misleading": false,
+   "tone": "neutral",
+   "probes": [
+    "O1"
+   ],
+   "task": "Decide whether the mailbox is clean",
+   "expects": [
+    "A6"
+   ],
+   "within": 1
+  },
+  {
+   "id": "I8",
+   "turn": null,
+   "told": "It is 11:00 and the payment run has gone. The bookkeeper: 'The timber payment went to the new account.'",
+   "truth": "The money has left for the intruder's account. The bank's fraud line may be able to recall it if it is told at once.",
+   "misleading": false,
+   "tone": "bad",
+   "probes": [
+    "O2",
+    "O4"
+   ],
+   "task": "Tell the bank's fraud line now",
+   "expects": [
+    "A11"
+   ],
+   "within": 0
+  }
+ ],
+ "rules": [
+  {
+   "id": "RU1",
+   "when": {
+    "at_turn": 8,
+    "state": {
+     "payment": "queued"
+    }
+   },
+   "then": {
+    "text": "Nobody held the payment, so it leaves with the run at 11:00.",
+    "set": {
+     "payment": "sent to the new account"
+    },
+    "fires": [
+     "I8"
+    ]
+   }
+  },
+  {
+   "id": "RU2",
+   "when": {
+    "action": "A1"
+   },
+   "then": {
+    "text": "The warning goes round. Two people delete the message unread.",
+    "set": {
+     "staff_warned": true
+    }
+   }
+  },
+  {
+   "id": "RU3",
+   "when": {
+    "action": "A2"
+   },
+   "then": {
+    "text": "There is one rule nobody recognises. It is read out to you.",
+    "set": {
+     "forwarding_rule": "found, still active"
+    }
+   }
+  },
+  {
+   "id": "RU4",
+   "when": {
+    "action": "A4"
+   },
+   "then": {
+    "text": "The password is changed and every session is signed out. Whoever had the old password is locked out. Rules already set inside the mailbox are not touched by this.",
+    "set": {
+     "bookkeeper_password": "reset"
+    }
+   }
+  },
+  {
+   "id": "RU5",
+   "when": {
+    "action": "A6"
+   },
+   "then": {
+    "text": "The rule is deleted. The folder it used holds mail nobody has seen.",
+    "set": {
+     "forwarding_rule": "removed"
+    }
+   }
+  },
+  {
+   "id": "RU6",
+   "when": {
+    "action": "A7",
+    "state": {
+     "director_account": "working",
+     "payment": "queued"
+    },
+    "by_turn": 7
+   },
+   "then": {
+    "text": "The director opens the banking app and holds the timber payment. It will not go at 11:00.",
+    "set": {
+     "payment": "held"
+    }
+   },
+   "unmet": {
+    "done": false,
+    "text": "The hold prerequisites are not met: the payment must still be queued and the director account working. Check the printed state; an already held payment remains held, and a sent payment requires a bank recall request."
+   },
+   "late": {
+    "done": false,
+    "text": "The payment window has closed. The payment cannot be held now; contact the bank about recall and record its response."
+   }
+  },
+  {
+   "id": "RU7",
+   "when": {
+    "action": "A8"
+   },
+   "then": {
+    "text": "The director's account is locked and its password reset. The director is now signed out of mail and of the banking app that uses it.",
+    "set": {
+     "director_account": "locked"
+    }
+   }
+  },
+  {
+   "id": "RU8",
+   "when": {
+    "action": "A9",
+    "state": {
+     "director_account": "locked"
+    }
+   },
+   "then": {
+    "text": "The account is unlocked and the director signs back in.",
+    "set": {
+     "director_account": "working"
+    }
+   },
+   "unmet": {
+    "done": false,
+    "text": "The director's account is not locked. Nothing changes."
+   }
+  },
+  {
+   "id": "RU9",
+   "when": {
+    "action": "A10"
+   },
+   "then": {
+    "text": "A reply comes back within minutes: 'Confirmed, please use the new account from today.' It is from the same address as the message it confirms."
+   }
+  },
+  {
+   "id": "RU10",
+   "when": {
+    "action": "A12"
+   },
+   "then": {
+    "text": "The colleague's password is changed and their sessions are signed out.",
+    "set": {
+     "second_account": "password reset"
+    }
+   }
+  },
+  {
+   "id": "RU11",
+   "when": {
+    "action": "A13",
+    "state": {
+     "bookkeeper_password": "reset",
+     "forwarding_rule": "removed",
+     "payment": "held"
+    }
+   },
+   "then": {
+    "text": "The incident is closed with the account reset, the rule removed and the payment held.",
+    "set": {
+     "incident": "closed"
+    }
+   },
+   "unmet": {
+    "text": "The incident is marked closed. The record shows it closed with work outstanding.",
+    "set": {
+     "incident": "closed with work outstanding"
+    }
+   }
+  }
+ ],
+ "unknowable": [
+  "Who the intruder is.",
+  "Which messages were read during the nine days. The log shows sign-ins, not what was opened.",
+  "Whether the bank would recover a payment once sent."
+ ],
+ "key_actions": [
+  {
+   "id": "KA1",
+   "label": "staff warned",
+   "action": "A1",
+   "from_inject": "I1"
+  },
+  {
+   "id": "KA2",
+   "label": "bookkeeper's password reset",
+   "action": "A4",
+   "from_inject": "I1"
+  },
+  {
+   "id": "KA3",
+   "label": "supplier checked by phone",
+   "action": "A5",
+   "from_inject": "I3"
+  },
+  {
+   "id": "KA4",
+   "label": "payment held",
+   "action": "A7",
+   "from_inject": "I3"
+  },
+  {
+   "id": "KA5",
+   "label": "forwarding rule removed",
+   "action": "A6",
+   "from_inject": "I2"
+  }
+ ],
+ "plan": [
+  {
+   "id": "P1",
+   "text": "Anyone who sees a suspicious message tells the office manager."
+  },
+  {
+   "id": "P2",
+   "text": "Reset the password of any account that has sent mail its owner did not write."
+  },
+  {
+   "id": "P3",
+   "text": "A change to a supplier's bank details is confirmed with the supplier by email before paying."
+  },
+  {
+   "id": "P4",
+   "text": "A director decides whether a payment is stopped."
+  },
+  {
+   "id": "P5",
+   "text": "Report fraud to the bank."
+  }
+ ]
+}

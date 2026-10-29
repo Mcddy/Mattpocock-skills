@@ -1,0 +1,62 @@
+[
+ {
+  "name": "one second later it is the next day in Brisbane",
+  "method": "GET",
+  "path": "/api/today",
+  "expect": {
+   "status": 200,
+   "json": {
+    "today": "2026-10-24",
+    "frozen": true
+   }
+  }
+ },
+ {
+  "name": "add Peace lily",
+  "method": "POST",
+  "path": "/api/plants",
+  "json": {
+   "name": "Peace lily",
+   "every_days": 5,
+   "kind": "flower"
+  },
+  "expect": {
+   "status": 201,
+   "json": {
+    "next_due": "2026-10-24",
+    "status": "due"
+   }
+  },
+  "save": {
+   "lily": "id"
+  }
+ },
+ {
+  "name": "water it: stored as the instant, dated by Brisbane",
+  "method": "POST",
+  "path": "/api/plants/{lily}/waterings",
+  "json": {},
+  "expect": {
+   "status": 201,
+   "json": {
+    "watering.watered_at": "2026-10-23T14:00:00Z",
+    "watering.local_date": "2026-10-24",
+    "plant.next_due": "2026-10-29"
+   }
+  }
+ },
+ {
+  "name": "next seven days: due again on the 29th",
+  "method": "GET",
+  "path": "/api/today",
+  "expect": {
+   "status": 200,
+   "json": {
+    "week.0.date": "2026-10-24",
+    "week.5.date": "2026-10-29",
+    "week.5.due": 1,
+    "week.4.due": 0
+   }
+  }
+ }
+]

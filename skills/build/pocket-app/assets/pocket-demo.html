@@ -1,0 +1,1645 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-density="comfortable" data-text="standard">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checklist</title>
+<!--
+  Starter page for the pocket-app skill: a checklist that keeps its items without a server.
+  It is a working tool and a skeleton to build from. To make another tool from it, change, in
+  this order:
+    1. APP, SCHEMA, CONTENT and INITIAL: the identity and the empty shape of the data
+    2. validate: every rule the data must obey, each as a sentence a person can act on
+    3. MIGRATIONS: empty at schema 1; add step N whenever the shape changes and SCHEMA goes to N + 1
+    4. the changes (addItem, toggleItem, removeItem): each one is a store.update with a label
+    5. render and the markup above it: the main object first, with real loading, empty,
+       no-result and error states
+  Leave the two pocket-embed blocks as they are; scripts/pocket_embed.py checks them.
+
+  Delivery rules followed here: no form element, no alert, confirm or prompt, text set with
+  textContent, storage optional, downloads paired with an on-page text box.
+-->
+<style>
+:root{
+  --bg:#f6f0e4;--surface:#fffcf5;--raised:#eee5d4;--ink:#27211b;--muted:#5f5548;--line:#d4c8b3;
+  --accent:#1d5b55;--on-accent:#fffcf5;--accent-soft:#d8e7e1;
+  --warn:#8a2a1c;--warn-soft:#f5ddd3;--ok:#2a6044;--focus:#1b4f87;
+  --row-pad:16px;--gap:14px;--target:44px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="sage"]{
+  --bg:#edf1ec;--surface:#fbfdfa;--raised:#e1e8e1;--ink:#1c2620;--muted:#4c5b52;--line:#c3cfc5;
+  --accent:#2c5884;--on-accent:#fbfdfa;--accent-soft:#d7e3ee;
+  --warn:#8a2a22;--warn-soft:#f3dcd8;--ok:#27634a;--focus:#7a3c12;
+}
+:root[data-theme="dusk"]{
+  --bg:#221c18;--surface:#2c2520;--raised:#382f29;--ink:#f3e9dc;--muted:#c4b6a5;--line:#57493e;
+  --accent:#eba872;--on-accent:#221c18;--accent-soft:#4a3628;
+  --warn:#ffad9a;--warn-soft:#4c2a23;--ok:#a1d7b5;--focus:#9dcff2;
+}
+:root[data-theme="ink"]{
+  --bg:#101315;--surface:#181c20;--raised:#21272c;--ink:#eef2f4;--muted:#abb7bf;--line:#3c4851;
+  --accent:#90c8ea;--on-accent:#101315;--accent-soft:#233846;
+  --warn:#ffb4a7;--warn-soft:#452622;--ok:#9bd9b8;--focus:#f3c48b;
+}
+:root[data-density="compact"]{--row-pad:9px;--gap:10px}
+:root[data-text="large"]{font-size:112.5%}
+:root[data-text="larger"]{font-size:125%}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 var(--sans)}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 64px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+header.top>div{flex:1 1 0;min-width:0}
+h1{font:600 1.8rem/1.15 var(--serif);margin:0;letter-spacing:-.01em}
+.tally{color:var(--muted);margin:4px 0 0;font-size:.95rem}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button[aria-disabled="true"]{cursor:default;opacity:.55}
+.btn,.pk-btn{min-height:var(--target);padding:6px 16px;max-width:100%;border:1px solid var(--line);background:var(--surface);border-radius:6px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink)}
+.btn:hover,.pk-btn:hover{border-color:var(--ink)}
+.btn.primary,.pk-btn.pk-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:0 10px}
+.pk-btn.pk-danger{border-color:var(--warn);color:var(--warn)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+input[type=text],input[type=search],select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:var(--target);padding:0 12px;width:100%}
+textarea{padding:10px 12px;line-height:1.45;resize:vertical}
+[aria-invalid="true"]{border-color:var(--warn);border-width:2px}
+label,.lab{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+
+.display{margin-top:12px;background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:12px}
+.display[hidden]{display:none}
+.choice{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.choice .lab{width:70px;margin:0;font-size:.9rem}
+.seg{min-height:var(--target);padding:0 14px;border:1px solid var(--line);background:var(--surface);border-radius:6px}
+.seg[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);font-weight:600}
+.seg b{font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:6px}
+.seg[aria-pressed="true"] b{color:var(--ink)}
+
+.topnote{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:12px 0 0;padding:10px 12px;background:var(--warn-soft);border-radius:6px}
+.topnote[hidden]{display:none}
+.topnote p{margin:0;color:var(--warn);font-weight:600;flex:1 1 220px;overflow-wrap:anywhere}
+.adder{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin:18px 0 6px}
+.err{color:var(--warn);font-size:.85rem;font-weight:600;margin-top:4px;grid-column:1/-1}
+.err:empty{display:none}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:10px 0 4px;min-height:var(--target)}
+.status{margin:0;color:var(--muted);font-size:.95rem;flex:1 1 220px;overflow-wrap:anywhere}
+.status.bad{color:var(--warn);font-weight:600}
+.undo{display:flex;gap:8px;flex-wrap:wrap}
+.undo .pk-btn{max-width:100%;overflow-wrap:anywhere;text-align:left;padding-top:6px;padding-bottom:6px;height:auto}
+.items{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--gap);align-items:center;padding:var(--row-pad) 2px;border-bottom:1px solid var(--line)}
+.item input[type=checkbox]{width:24px;height:24px;margin:10px;accent-color:var(--accent)}
+.item label{margin:0;font-size:1rem;color:var(--ink);overflow-wrap:anywhere;min-height:var(--target);display:flex;align-items:center}
+.item label{gap:8px}
+.item.done .txt{color:var(--muted);text-decoration:line-through}
+.item .state{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.blank{padding:34px 12px;text-align:center;border-bottom:1px solid var(--line)}
+.blank h2{font:600 1.2rem var(--serif);margin:0 0 6px}
+.blank p{margin:0 auto 14px;color:var(--muted);max-width:46ch;overflow-wrap:anywhere}
+.ghost{height:calc(var(--target) + var(--row-pad) * 2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px}
+.ghost i{display:block;height:12px;border-radius:6px;background:var(--line)}
+
+section.card{margin-top:30px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+section.card>h2{font:600 1.2rem var(--serif);margin:0 0 12px}
+.foot{margin-top:24px;color:var(--muted);font-size:.875rem;max-width:66ch}
+
+/* pocket-ui styles: the export, import and start-again panel */
+.pk-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.pk-note{margin:0;color:var(--muted);font-size:.95rem}
+.pk-note[data-mode="memory"],.pk-note[data-state="conflict"],.pk-note[data-state="recovery"]{color:var(--warn);font-weight:600}
+.pk-block{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;justify-items:start;border-top:1px solid var(--line);padding-top:14px}
+.pk-block h3{font:600 1rem var(--sans);margin:0}
+.pk-block label{margin:4px 0 0}
+.pk-help{margin:0;color:var(--muted);font-size:.9rem;max-width:62ch}
+.pk-text{font-family:var(--mono);font-size:.82rem;line-height:1.4;width:100%;word-break:break-all}
+.pk-file{min-height:var(--target);max-width:100%;padding:8px 0}
+.pk-out{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
+.pk-out[hidden],.pk-alert[hidden]{display:none}
+.pk-row{display:flex;flex-wrap:wrap;gap:8px}
+.pk-msg{margin:0;font-size:.9rem;color:var(--muted);overflow-wrap:anywhere;max-width:66ch}
+.pk-msg:empty{display:none}
+.pk-msg.pk-bad{color:var(--warn);font-weight:600}
+.pk-msg.pk-good{color:var(--ok);font-weight:600}
+.pk-alert{background:var(--warn-soft);border-radius:6px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:100%}
+.pk-alert p{margin:0;overflow-wrap:anywhere}
+.pk-warn{margin:0;color:var(--warn);font-weight:600}
+
+@media (max-width:640px){
+  .choice .lab{width:100%}h1{font-size:1.5rem}}
+@media (prefers-reduced-motion:no-preference){.btn,.pk-btn,.seg{transition:border-color .12s ease,background-color .12s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Checklist</h1>
+      <p class="tally" id="tally">Opening the saved list.</p>
+    </div>
+    <button type="button" class="btn" id="display-toggle" aria-expanded="false" aria-controls="display">Display</button>
+  </header>
+
+  <section class="display" id="display" hidden aria-label="Display choices">
+    <div class="choice" role="group" aria-label="Theme">
+      <span class="lab">Theme</span>
+      <button type="button" class="seg" data-set="theme" data-value="paper">Paper</button>
+      <button type="button" class="seg" data-set="theme" data-value="sage">Sage</button>
+      <button type="button" class="seg" data-set="theme" data-value="dusk">Dusk</button>
+      <button type="button" class="seg" data-set="theme" data-value="ink">Ink</button>
+    </div>
+    <div class="choice" role="group" aria-label="Row spacing">
+      <span class="lab">Rows</span>
+      <button type="button" class="seg" data-set="density" data-value="comfortable">Comfortable</button>
+      <button type="button" class="seg" data-set="density" data-value="compact">Compact</button>
+    </div>
+    <div class="choice" role="group" aria-label="Text size">
+      <span class="lab">Text</span>
+      <button type="button" class="seg" data-set="text" data-value="standard">Standard</button>
+      <button type="button" class="seg" data-set="text" data-value="large">Large</button>
+      <button type="button" class="seg" data-set="text" data-value="larger">Larger</button>
+    </div>
+    <div class="choice">
+      <button type="button" class="btn quiet" id="display-reset">Reset display</button>
+      <span class="lab" id="display-note" style="width:auto"></span>
+    </div>
+  </section>
+
+  <div class="topnote" id="top-note" hidden>
+    <p id="top-note-text"></p>
+    <button type="button" class="btn" id="top-note-go">Go to Export</button>
+  </div>
+  <div class="adder" id="adder">
+    <div>
+      <label for="new-item">Something to do</label>
+      <input type="text" id="new-item" autocomplete="off" aria-describedby="e-new-item">
+    </div>
+    <button type="button" class="btn primary" id="add-go">Add</button>
+    <div class="err" id="e-new-item"></div>
+  </div>
+
+  <div class="bar">
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <div class="undo" id="undo-box"></div>
+  </div>
+  <div class="choice"><button type="button" class="seg" id="hide-done" aria-pressed="false">Hide what is done</button></div>
+
+  <ul class="items" id="items" aria-label="Items"></ul>
+
+  <section class="card" aria-labelledby="keep-h">
+    <h2 id="keep-h">Keep your list</h2>
+    <div id="keep"></div>
+  </section>
+
+  <p class="foot">This list lives in this page and, where the browser allows it, in this browser's storage. Nothing is sent anywhere. To move it to another device, export a copy here and import it there.</p>
+</div>
+
+<script>
+/* pocket-embed: pocket-state.js begin */
+/*
+  pocket-state.js, revision 1.0.0
+
+  State for a single-file tool that keeps its data without a server.
+  Plain ASCII, no dependencies, no network requests. Paste the whole file into the page inside
+  one script tag, before the page's own code. In a page it defines the global PocketState.
+  Under Node it is a module: var PocketState = require('./pocket-state.js').
+
+  var store = PocketState.create({
+    app: 'reading-log',            stable id of the tool; an import from another app is refused
+    schema: 2,                     whole number, starts at 1, goes up by one when the shape changes
+    contentId: 'my-books@1',       what this state belongs to, with its version
+    initial: {books: []},          a JSON value, or a function returning one
+    migrations: {1: function (data) { return dataForSchema2; }},
+    validate: function (data) { return []; }      list of problems; empty means the data is fine
+  });
+
+  Reading and changing
+    store.get()                    the current data, frozen. Never edit it; use update
+    store.update(fn, {label})      fn receives a private copy; edit it or return a new value.
+                                   Returns {ok, changed} or {ok: false, reason, message, problems}.
+                                   A refused update changes nothing. Each change is one undo step
+    store.undo() / store.redo()    {ok, label}. store.history() lists the labels
+    store.reset({label})           back to the initial data, as one undo step
+    store.isInitial()              true while the data is exactly the initial data
+    store.subscribe(fn)            fn({type}) on 'change', 'saved', 'persistence', 'external'.
+                                   Returns a function that unsubscribes
+
+  Keeping
+    store.ready                    a promise for {mode, restored, migratedFrom, held}. It never rejects
+    store.persistence()            {mode: 'host' | 'local' | 'memory', durable, state, text, savedAt,
+                                   pending, reason}. text is a sentence to show the user. savedAt is
+                                   the last time a layer that outlives the page took the data
+    store.flush()                  save now; a promise for persistence(). It never rejects.
+                                   The store also saves at once when the page is hidden or closed
+    store.size()                   {bytes, warnBytes, over, text} for the saved envelope
+    Storage is tried in this order: a host object with async get and set (window.storage), then
+    localStorage, then memory. Every access is inside try and catch. A layer that fails later is
+    left for the next one down, a 'persistence' event says so, and the layer is tried again on
+    later saves.
+
+  Export and import
+    store.exportEnvelope()         {envelope, text, bytes, filename}
+    store.inspect(text)            checks a file without changing anything
+    store.importText(text, {onContentMismatch, allowContentMismatch, label})
+                                   a promise for {ok: true, ...} or {ok: false, reason, message}.
+                                   Order of checks: not empty, parses as JSON, is an envelope, app
+                                   matches, schema is a whole number this page can read (older
+                                   schemas go through the numbered migration steps in order, newer
+                                   ones are refused), the data passes validate, then content_id.
+                                   A failed import never changes the state. A good one is an undo step
+
+  Other tabs and unreadable saves
+    store.conflict()               set when another tab saved different data. Saving stops until
+                                   store.resolveConflict('mine' | 'theirs') is called
+    store.recovery()               set when the stored copy could not be read (for example it was
+                                   written by a newer schema). It is left untouched and saving
+                                   stops until store.discardStored() is called
+
+  The only call that throws is create, and only for a mistake in its own arguments. Everything
+  else returns a result object.
+*/
+(function (root) {
+  'use strict';
+
+  var VERSION = '1.0.0';
+  var WORDS = {
+    host: 'Saved in this app\'s storage',
+    local: 'Saved in this browser',
+    memory: 'Not saved: this page cannot store data here. Export to keep your work',
+    loading: 'Opening saved data',
+    conflict: 'Not saving: another tab changed this data. Choose which copy to keep',
+    held: 'Not saving: the copy stored here could not be read and has been left as it was. Copy it out, or start fresh'
+  };
+
+  // ---------- small helpers ----------
+  function msg(e) {
+    try { return String((e && e.message) || e); } catch (x) { return 'unknown error'; }
+  }
+  function isPlain(v) {
+    if (v === null || typeof v !== 'object' || Array.isArray(v)) return false;
+    var p = Object.getPrototypeOf(v);
+    return p === Object.prototype || p === null;
+  }
+  function whole(n) {
+    return typeof n === 'number' && isFinite(n) && Math.floor(n) === n;
+  }
+  function thenable(v) {
+    return !!v && typeof v.then === 'function';
+  }
+  // Run fn on a value now, or when it arrives if it is a promise. Keeps one code path for
+  // storage that answers at once (localStorage, memory) and storage that answers later (a host).
+  function when(v, fn) {
+    return thenable(v) ? v.then(fn) : fn(v);
+  }
+  function utf8Bytes(text) {
+    var n = 0, i, c;
+    for (i = 0; i < text.length; i++) {
+      c = text.charCodeAt(i);
+      if (c < 0x80) n += 1;
+      else if (c < 0x800) n += 2;
+      else if (c >= 0xD800 && c <= 0xDBFF && i + 1 < text.length) { n += 4; i++; }
+      else n += 3;
+    }
+    return n;
+  }
+  // Freeze a JSON value all the way down. Returns false if any part cannot be saved as JSON.
+  function seal(value, depth) {
+    var t = typeof value, i, keys, ok = true;
+    if (value === null || t === 'string' || t === 'boolean') return true;
+    if (t === 'number') return isFinite(value);
+    if (depth > 100) return false;
+    if (Array.isArray(value)) {
+      for (i = 0; i < value.length; i++) if (!seal(value[i], depth + 1)) ok = false;
+      Object.freeze(value);
+      return ok;
+    }
+    if (isPlain(value)) {
+      keys = Object.keys(value);
+      for (i = 0; i < keys.length; i++) if (!seal(value[keys[i]], depth + 1)) ok = false;
+      Object.freeze(value);
+      return ok;
+    }
+    return false;
+  }
+  // The slow pass, run only after seal has said no, to name what is wrong and where.
+  function unsafeParts(value, path, out, depth) {
+    var t = typeof value, i, keys;
+    if (out.length >= 5 || value === null || t === 'string' || t === 'boolean') return out;
+    if (t === 'number') {
+      if (!isFinite(value)) out.push(path + ' is not a finite number');
+      return out;
+    }
+    if (depth > 100) { out.push(path + ' is nested too deeply or contains itself'); return out; }
+    if (Array.isArray(value)) {
+      for (i = 0; i < value.length; i++) unsafeParts(value[i], path + '[' + i + ']', out, depth + 1);
+      return out;
+    }
+    if (isPlain(value)) {
+      keys = Object.keys(value);
+      for (i = 0; i < keys.length; i++) unsafeParts(value[keys[i]], path + '.' + keys[i], out, depth + 1);
+      return out;
+    }
+    out.push(path + ' is ' + (t === 'object' ? 'an object that is not plain data' : (t === 'undefined' ? 'undefined' : 'a ' + t)) + ', which cannot be saved as JSON');
+    return out;
+  }
+  function problemsOf(fn, data) {
+    var out, i, list = [];
+    if (typeof fn !== 'function') return list;
+    try { out = fn(data); } catch (e) { return ['the validator threw: ' + msg(e)]; }
+    if (!Array.isArray(out)) return ['the validator did not return a list of problems'];
+    for (i = 0; i < out.length; i++) list.push(String(out[i]));
+    return list;
+  }
+  function listed(problems) {
+    var shown = problems.slice(0, 3).join('; ');
+    return problems.length > 3 ? shown + '; and ' + (problems.length - 3) + ' more' : shown;
+  }
+  function fail(reason, message, extra) {
+    var r = {ok: false, reason: reason, message: message}, k;
+    if (extra) for (k in extra) if (Object.prototype.hasOwnProperty.call(extra, k)) r[k] = extra[k];
+    return r;
+  }
+  function storageWhy(layerName, error) {
+    var name = '', code = 0;
+    try { name = String((error && error.name) || ''); code = Number((error && error.code) || 0); } catch (x) { name = ''; }
+    if (name === 'QuotaExceededError' || name === 'NS_ERROR_DOM_QUOTA_REACHED' || code === 22 || code === 1014) {
+      return layerName === 'host' ? 'this app\'s storage is full' : 'the browser\'s storage is full';
+    }
+    if (name === 'timeout') return 'this app\'s storage did not answer';
+    return layerName === 'host' ? 'this app\'s storage refused the data' : 'the browser refused to store the data';
+  }
+
+  // ---------- storage layers ----------
+  // Each layer answers {ok, value} to read and {ok, error} to write, and never throws.
+  function memoryLayer() {
+    var mem = {};
+    return {
+      name: 'memory',
+      read: function (key) { return {ok: true, value: Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null}; },
+      write: function (key, text) { mem[key] = text; return {ok: true}; }
+    };
+  }
+  function localLayer(ls) {
+    return {
+      name: 'local',
+      read: function (key) {
+        try { var v = ls.getItem(key); return {ok: true, value: typeof v === 'string' ? v : null}; } catch (e) { return {ok: false, error: e}; }
+      },
+      write: function (key, text) {
+        try { ls.setItem(key, text); return {ok: true}; } catch (e) { return {ok: false, error: e}; }
+      },
+      probe: function (key) {
+        try { ls.setItem(key, '1'); ls.removeItem(key); return true; } catch (e) { return false; }
+      }
+    };
+  }
+  function hostLayer(h, env, timeoutMs) {
+    // Wrap a call that may throw, reject or never answer into a promise that always resolves.
+    function settle(call) {
+      return new Promise(function (resolve) {
+        var done = false, timer = null;
+        function finish(r) {
+          if (done) return;
+          done = true;
+          if (timer !== null) { try { env.clearTimeout(timer); } catch (x) { timer = null; } }
+          resolve(r);
+        }
+        try {
+          timer = env.setTimeout(function () { finish({ok: false, error: {name: 'timeout'}}); }, timeoutMs);
+          Promise.resolve(call()).then(function (v) { finish({ok: true, value: v}); }, function (e) { finish({ok: false, error: e}); });
+        } catch (e) {
+          finish({ok: false, error: e});
+        }
+      });
+    }
+    function textOf(v) {
+      if (typeof v === 'string') return v;
+      if (v && typeof v === 'object' && typeof v.value === 'string') return v.value;
+      return null;
+    }
+    return {
+      name: 'host',
+      read: function (key) {
+        return settle(function () { return h.get(key); }).then(function (r) {
+          return r.ok ? {ok: true, value: textOf(r.value)} : {ok: false, error: r.error};
+        });
+      },
+      write: function (key, text) {
+        return settle(function () { return h.set(key, text); }).then(function (r) {
+          return r.ok ? {ok: true} : {ok: false, error: r.error};
+        });
+      },
+      probe: function (key) {
+        return settle(function () { return h.set(key, '1'); }).then(function (r) {
+          if (r.ok && typeof h.delete === 'function') settle(function () { return h.delete(key); });
+          return r.ok;
+        });
+      }
+    };
+  }
+  function resolveEnv(e) {
+    e = e || {};
+    var r = Object.prototype.hasOwnProperty.call(e, 'root') ? e.root : root;
+    return {
+      host: function () {
+        try {
+          var h = Object.prototype.hasOwnProperty.call(e, 'host') ? e.host : (r && r.storage);
+          return (h && typeof h.get === 'function' && typeof h.set === 'function') ? h : null;
+        } catch (x) { return null; }
+      },
+      local: function () {
+        try {
+          var ls = Object.prototype.hasOwnProperty.call(e, 'local') ? e.local : (r && r.localStorage);
+          return (ls && typeof ls.getItem === 'function' && typeof ls.setItem === 'function') ? ls : null;
+        } catch (x) { return null; }
+      },
+      setTimeout: function (fn, ms) { return (e.setTimeout || setTimeout)(fn, ms); },
+      clearTimeout: function (id) { return (e.clearTimeout || clearTimeout)(id); },
+      now: function () { return e.now ? e.now() : Date.now(); },
+      leaving: function (fn) {
+        // Call fn when the page is being hidden or closed, so the last change is not lost to the pause.
+        var offs = [];
+        function on(target, name, handler) {
+          try {
+            if (target && typeof target.addEventListener === 'function') {
+              target.addEventListener(name, handler);
+              offs.push(function () { try { target.removeEventListener(name, handler); } catch (x) { return; } });
+            }
+          } catch (x) { return; }
+        }
+        try {
+          if (typeof e.onLeave === 'function') return e.onLeave(fn) || function () {};
+          on(r, 'pagehide', fn);
+          on(r && r.document, 'visibilitychange', function () {
+            try { if (r.document.visibilityState === 'hidden') fn(); } catch (x) { return; }
+          });
+        } catch (x) { return function () {}; }
+        return function () { offs.forEach(function (off) { off(); }); };
+      },
+      listen: function (fn) {
+        try {
+          if (typeof e.onStorage === 'function') return e.onStorage(fn) || function () {};
+          if (r && typeof r.addEventListener === 'function') {
+            r.addEventListener('storage', fn);
+            return function () { try { r.removeEventListener('storage', fn); } catch (x) { return; } };
+          }
+        } catch (x) { return function () {}; }
+        return function () {};
+      }
+    };
+  }
+
+  // ---------- create ----------
+  function create(config) {
+    var cfg = config || {};
+    function bad(what) { throw new Error('PocketState.create: ' + what); }
+    if (typeof cfg.app !== 'string' || !cfg.app.trim()) bad('app must be a non-empty string');
+    if (!whole(cfg.schema) || cfg.schema < 1) bad('schema must be a whole number of 1 or more');
+    if (typeof cfg.contentId !== 'string' || !cfg.contentId.trim()) bad('contentId must be a non-empty string');
+    if (cfg.validate !== undefined && typeof cfg.validate !== 'function') bad('validate must be a function that returns a list of problems');
+    var migrations = cfg.migrations || {};
+    var validateOlder = cfg.validateOlder || {};
+    var step;
+    for (step in migrations) {
+      if (Object.prototype.hasOwnProperty.call(migrations, step)) {
+        if (!/^[1-9][0-9]*$/.test(step) || Number(step) >= cfg.schema) bad('migrations key ' + step + ' must be a schema number below ' + cfg.schema);
+        if (typeof migrations[step] !== 'function') bad('migrations[' + step + '] must be a function');
+      }
+    }
+    var historyLimit = cfg.historyLimit === undefined ? 50 : cfg.historyLimit;
+    var debounceMs = cfg.debounceMs === undefined ? 400 : cfg.debounceMs;
+    var warnBytes = cfg.warnBytes === undefined ? 1000000 : cfg.warnBytes;
+    var hostTimeoutMs = cfg.hostTimeoutMs === undefined ? 4000 : cfg.hostTimeoutMs;
+    if (!whole(historyLimit) || historyLimit < 0) bad('historyLimit must be a whole number of 0 or more');
+    if (!whole(debounceMs) || debounceMs < 0) bad('debounceMs must be a whole number of 0 or more');
+    if (!whole(warnBytes) || warnBytes < 1) bad('warnBytes must be a whole number of 1 or more');
+    if (!whole(hostTimeoutMs) || hostTimeoutMs < 1) bad('hostTimeoutMs must be a whole number of 1 or more');
+    var adopt = cfg.externalPolicy === 'adopt';
+    if (cfg.externalPolicy !== undefined && cfg.externalPolicy !== 'adopt' && cfg.externalPolicy !== 'hold') bad('externalPolicy must be "hold" or "adopt"');
+
+    var env = resolveEnv(cfg.env);
+    var key = typeof cfg.storageKey === 'string' && cfg.storageKey ? cfg.storageKey : 'pocket:' + cfg.app + ':' + cfg.contentId;
+
+    function freshInitial() {
+      var v = typeof cfg.initial === 'function' ? cfg.initial() : cfg.initial;
+      return JSON.parse(JSON.stringify(v === undefined ? null : v));
+    }
+    var state, stateText;
+    try { state = freshInitial(); } catch (e) { bad('initial could not be copied as JSON (' + msg(e) + ')'); }
+    if (!seal(state, 0)) bad('initial is not plain JSON data: ' + unsafeParts(state, 'data', [], 0).join('; '));
+    var initialProblems = problemsOf(cfg.validate, state);
+    if (initialProblems.length) bad('initial does not pass validate: ' + listed(initialProblems));
+    stateText = JSON.stringify(state);
+    var initialText = stateText;
+
+    var listeners = [];
+    var undoStack = [], redoStack = [];
+    var chain = [memoryLayer()];      // replaced in start()
+    var active = 0;                   // index in chain of the layer that took the last save
+    var seen = {};                    // per layer name: the exact text we believe is stored there
+    var hold = null;                  // null | 'loading' | 'conflict' | 'recovery'
+    var conflictInfo = null, recoveryInfo = null;
+    var pending = false, timer = null, busy = null, again = false;
+    var savedAt = null, degradeReason = null, changedWhileLoading = false;
+    var sizeCache = null, stopListening = function () {}, stopLeaving = function () {}, destroyed = false;
+
+    // ---------- events ----------
+    function emit(event) {
+      var i, copy = listeners.slice();
+      for (i = 0; i < copy.length; i++) {
+        try { copy[i](event); } catch (e) { continue; }
+      }
+    }
+    function subscribe(fn) {
+      if (typeof fn !== 'function') return function () {};
+      listeners.push(fn);
+      return function () {
+        var i = listeners.indexOf(fn);
+        if (i >= 0) listeners.splice(i, 1);
+      };
+    }
+
+    // ---------- the envelope ----------
+    function envelopeText(at) {
+      return '{"app":' + JSON.stringify(cfg.app) + ',"schema":' + cfg.schema + ',"content_id":' + JSON.stringify(cfg.contentId) +
+        ',"saved_at":' + JSON.stringify(at) + ',"data":' + stateText + '}';
+    }
+    function isoNow() {
+      try { return new Date(env.now()).toISOString(); } catch (e) { return new Date().toISOString(); }
+    }
+
+    // Check a saved file. Pure: works on copies and never touches the store's state.
+    function inspect(text) {
+      var parsed, data, from, v, fn, problems, i, steps = [], older;
+      if (typeof text !== 'string' || !text.trim()) return fail('empty', 'Nothing to import: the box is empty.');
+      if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+      try { parsed = JSON.parse(text); } catch (e) {
+        return fail('not_json', 'This is not a saved file: it could not be read as JSON (' + msg(e) + ').');
+      }
+      if (!isPlain(parsed)) return fail('not_envelope', 'This is JSON, but it is not a file saved by this tool: it is not an object with app, schema and data.');
+      var need = ['app', 'schema', 'data'];
+      for (i = 0; i < need.length; i++) {
+        if (!Object.prototype.hasOwnProperty.call(parsed, need[i])) {
+          return fail('not_envelope', 'This is JSON, but it is not a file saved by this tool: it has no "' + need[i] + '" field.');
+        }
+      }
+      if (typeof parsed.app !== 'string') return fail('not_envelope', 'This is JSON, but it is not a file saved by this tool: its "app" field is not text.');
+      if (parsed.app !== cfg.app) {
+        return fail('wrong_app', 'This file was saved by "' + parsed.app + '". This page is "' + cfg.app + '" and cannot read it.', {found: parsed.app, expected: cfg.app});
+      }
+      from = parsed.schema;
+      if (!whole(from) || from < 1) {
+        return fail('bad_schema', 'The schema in this file must be a whole number of 1 or more, and it is ' + JSON.stringify(from === undefined ? null : from) + '.');
+      }
+      if (from > cfg.schema) {
+        return fail('newer_schema', 'This file uses schema ' + from + ', which is newer than this page (schema ' + cfg.schema + '). Open it with a newer copy of the tool.', {found: from, expected: cfg.schema});
+      }
+      data = parsed.data;
+      if (data === null) return fail('not_envelope', 'This file has no data in it.');
+      for (v = from; v < cfg.schema; v++) {
+        fn = migrations[v];
+        if (typeof fn !== 'function') {
+          return fail('no_migration', 'This file uses schema ' + from + ', and this page has no step to bring schema ' + v + ' up to schema ' + (v + 1) + '.', {step: v});
+        }
+        try { data = fn(JSON.parse(JSON.stringify(data))); } catch (e) {
+          return fail('migration_failed', 'Bringing this file from schema ' + v + ' to schema ' + (v + 1) + ' failed: ' + msg(e) + '.', {step: v});
+        }
+        if (data === undefined || data === null || !seal(data, 0)) {
+          return fail('migration_failed', 'Bringing this file from schema ' + v + ' to schema ' + (v + 1) + ' did not produce plain data.', {step: v});
+        }
+        steps.push(v);
+        older = validateOlder[v + 1];
+        if (v + 1 < cfg.schema && typeof older === 'function') {
+          problems = problemsOf(older, data);
+          if (problems.length) {
+            return fail('migration_invalid', 'Bringing this file from schema ' + v + ' to schema ' + (v + 1) + ' produced data that does not fit: ' + listed(problems) + '.', {step: v, problems: problems});
+          }
+        }
+      }
+      if (!seal(data, 0)) return fail('invalid_data', 'The data in this file is not plain JSON data.');
+      problems = problemsOf(cfg.validate, data);
+      if (problems.length) {
+        if (steps.length) {
+          return fail('migration_invalid', 'After bringing this file from schema ' + from + ' to schema ' + cfg.schema + ', the data does not fit this tool: ' + listed(problems) + '.', {step: steps[steps.length - 1], problems: problems});
+        }
+        return fail('invalid_data', 'The data in this file does not fit this tool: ' + listed(problems) + '.', {problems: problems});
+      }
+      var found = typeof parsed.content_id === 'string' ? parsed.content_id : null;
+      return {
+        ok: true, data: data, migratedFrom: steps.length ? from : null, steps: steps,
+        savedAt: typeof parsed.saved_at === 'string' ? parsed.saved_at : null,
+        contentId: found,
+        contentMismatch: found === cfg.contentId ? null : {expected: cfg.contentId, found: found}
+      };
+    }
+
+    // ---------- committing a new state ----------
+    function commit(next, text, origin, label, opts) {
+      if (historyLimit > 0 && origin !== 'load' && origin !== 'undo' && origin !== 'redo') {
+        undoStack.push({data: state, text: stateText, label: label || origin});
+        if (undoStack.length > historyLimit) undoStack.splice(0, undoStack.length - historyLimit);
+        redoStack = [];
+      }
+      state = next;
+      stateText = text;
+      sizeCache = null;
+      if (hold === 'loading') changedWhileLoading = true;
+      emit({type: 'change', origin: origin, label: label || origin});
+      if (!opts || opts.save !== false) scheduleSave();
+    }
+    function update(fn, opts) {
+      var draft, out, next, problems, text;
+      try {
+        if (typeof fn !== 'function') return fail('bad_call', 'update needs a function.');
+        draft = JSON.parse(stateText);
+        try { out = fn(draft); } catch (e) {
+          return fail('threw', 'The change was not made: ' + msg(e) + '.');
+        }
+        next = out === undefined ? draft : out;
+        if (!seal(next, 0)) {
+          return fail('not_json', 'The change was not made: ' + unsafeParts(next, 'data', [], 0).join('; ') + '.');
+        }
+        problems = problemsOf(cfg.validate, next);
+        if (problems.length) return fail('invalid', 'The change was not made: ' + listed(problems) + '.', {problems: problems});
+        text = JSON.stringify(next);
+        if (text === stateText) return {ok: true, changed: false};
+        commit(next, text, 'update', opts && typeof opts.label === 'string' ? opts.label : 'Change');
+        return {ok: true, changed: true};
+      } catch (e) {
+        return fail('internal', 'The change was not made: ' + msg(e) + '.');
+      }
+    }
+    function undo() {
+      var step;
+      if (!undoStack.length) return fail('nothing', 'There is nothing to undo.');
+      step = undoStack.pop();
+      redoStack.push({data: state, text: stateText, label: step.label});
+      state = step.data; stateText = step.text; sizeCache = null;
+      if (hold === 'loading') changedWhileLoading = true;
+      emit({type: 'change', origin: 'undo', label: step.label});
+      scheduleSave();
+      return {ok: true, label: step.label};
+    }
+    function redo() {
+      var step;
+      if (!redoStack.length) return fail('nothing', 'There is nothing to redo.');
+      step = redoStack.pop();
+      undoStack.push({data: state, text: stateText, label: step.label});
+      state = step.data; stateText = step.text; sizeCache = null;
+      if (hold === 'loading') changedWhileLoading = true;
+      emit({type: 'change', origin: 'redo', label: step.label});
+      scheduleSave();
+      return {ok: true, label: step.label};
+    }
+    function history() {
+      function labels(stack) { return stack.map(function (s) { return s.label; }); }
+      return {undo: labels(undoStack), redo: labels(redoStack), limit: historyLimit};
+    }
+    function reset(opts) {
+      var next, text;
+      try {
+        next = freshInitial();
+        if (!seal(next, 0) || problemsOf(cfg.validate, next).length) next = JSON.parse(initialText);
+        seal(next, 0);
+        text = JSON.stringify(next);
+        if (text === stateText) return {ok: true, changed: false};
+        commit(next, text, 'reset', opts && typeof opts.label === 'string' ? opts.label : 'Reset');
+        return {ok: true, changed: true};
+      } catch (e) {
+        return fail('internal', 'Reset did not happen: ' + msg(e) + '.');
+      }
+    }
+
+    // ---------- import ----------
+    function importText(text, opts) {
+      opts = opts || {};
+      return new Promise(function (resolve) {
+        var r, answer;
+        function refuse(res) {
+          res.message = res.message + ' Nothing was changed.';
+          resolve(res);
+        }
+        function apply() {
+          try {
+            commit(r.data, JSON.stringify(r.data), 'import', typeof opts.label === 'string' ? opts.label : 'Import');
+            resolve({ok: true, migratedFrom: r.migratedFrom, steps: r.steps, savedAt: r.savedAt, contentId: r.contentId, contentMismatch: r.contentMismatch});
+          } catch (e) {
+            refuse(fail('internal', 'The import failed: ' + msg(e) + '.'));
+          }
+        }
+        function mismatch() {
+          return fail('content_mismatch', 'This file belongs to ' + (r.contentMismatch.found === null ? 'no named content' : '"' + r.contentMismatch.found + '"') +
+            ', and this page holds "' + r.contentMismatch.expected + '".', {expected: r.contentMismatch.expected, found: r.contentMismatch.found, canContinue: true});
+        }
+        try { r = inspect(text); } catch (e) { r = fail('internal', 'The file could not be checked: ' + msg(e) + '.'); }
+        if (!r.ok) return refuse(r);
+        if (!r.contentMismatch || opts.allowContentMismatch === true) return apply();
+        if (typeof opts.onContentMismatch !== 'function') return refuse(mismatch());
+        try {
+          answer = opts.onContentMismatch({expected: r.contentMismatch.expected, found: r.contentMismatch.found, savedAt: r.savedAt});
+        } catch (e) { answer = false; }
+        Promise.resolve(answer).then(function (yes) {
+          if (yes === true) apply(); else refuse(mismatch());
+        }, function () { refuse(mismatch()); });
+      });
+    }
+    function exportEnvelope() {
+      var at = isoNow();
+      var text = envelopeText(at);
+      return {
+        envelope: {app: cfg.app, schema: cfg.schema, content_id: cfg.contentId, saved_at: at, data: state},
+        text: text, bytes: utf8Bytes(text),
+        filename: cfg.app.replace(/[^A-Za-z0-9_-]+/g, '-') + '-' + at.slice(0, 10) + '.json'
+      };
+    }
+    function size() {
+      if (sizeCache === null) sizeCache = utf8Bytes(envelopeText('2000-01-01T00:00:00.000Z'));
+      var over = sizeCache > warnBytes;
+      return {
+        bytes: sizeCache, warnBytes: warnBytes, over: over,
+        text: over ? 'This data is ' + sizeCache + ' bytes, above the ' + warnBytes + ' byte level set for this tool. Storage may refuse it. Export a copy'
+          : 'This data is ' + sizeCache + ' bytes'
+      };
+    }
+
+    // ---------- saving ----------
+    function persistence() {
+      var mode = chain[active].name, text;
+      if (hold === 'loading') text = WORDS.loading;
+      else if (hold === 'conflict') text = WORDS.conflict;
+      else if (hold === 'recovery') text = WORDS.held;
+      else if (mode === 'memory') text = degradeReason ? 'Not saved: ' + degradeReason + '. Export to keep your work' : WORDS.memory;
+      else text = WORDS[mode];
+      return {
+        mode: mode, durable: mode !== 'memory', state: hold === null ? 'ok' : hold, text: text,
+        savedAt: savedAt, pending: pending, reason: mode === 'memory' ? degradeReason : null
+      };
+    }
+    function clearTimer() {
+      if (timer !== null) { try { env.clearTimeout(timer); } catch (e) { timer = null; } }
+      timer = null;
+    }
+    function scheduleSave() {
+      pending = true;
+      if (hold !== null || destroyed) return;
+      clearTimer();
+      try { timer = env.setTimeout(function () { timer = null; saveNow(); }, debounceMs); } catch (e) { saveNow(); }
+    }
+    function sameData(text) {
+      // True when a stored envelope holds exactly the data this store holds now.
+      try {
+        var p = JSON.parse(text);
+        return isPlain(p) && JSON.stringify(p.data) === stateText;
+      } catch (e) { return false; }
+    }
+    function raiseConflict(text, where) {
+      var at = null;
+      try { at = JSON.parse(text).saved_at || null; } catch (e) { at = null; }
+      conflictInfo = {text: text, savedAt: typeof at === 'string' ? at : null, where: where};
+      hold = 'conflict';
+      clearTimer();
+      emit({type: 'external', conflict: conflict()});
+      emit({type: 'persistence', persistence: persistence(), degraded: false, recovered: false});
+    }
+    function attempt(i, text, at, why) {
+      var layer = chain[i];
+      return when(layer.read(key), function (r) {
+        var known = seen[layer.name];
+        if (r.ok && r.value !== null && known !== undefined && r.value !== known) {
+          if (sameData(r.value)) seen[layer.name] = r.value;
+          else { pending = true; raiseConflict(r.value, layer.name); return null; }
+        }
+        return when(layer.write(key, text), function (w) {
+          var was = active, reason;
+          if (w.ok) {
+            seen[layer.name] = text;
+            active = i;
+            degradeReason = layer.name === 'memory' ? (why || degradeReason) : null;
+            if (was !== i) emit({type: 'persistence', persistence: persistence(), degraded: i > was, recovered: i < was});
+            // Memory is not a save. Only a layer that outlives the page sets the saved time.
+            if (layer.name !== 'memory') {
+              savedAt = at;
+              emit({type: 'saved', savedAt: at, mode: layer.name});
+            }
+            return null;
+          }
+          reason = storageWhy(layer.name, w.error);
+          return attempt(i + 1, text, at, why || reason);
+        });
+      });
+    }
+    function saveNow() {
+      var at, out;
+      clearTimer();
+      if (destroyed) return null;
+      if (hold !== null) { pending = true; return null; }
+      if (busy) { again = true; return busy; }
+      pending = false;
+      at = isoNow();
+      try { out = attempt(0, envelopeText(at), at, null); } catch (e) { out = null; }
+      if (thenable(out)) {
+        busy = out.then(function () {
+          busy = null;
+          if (again) { again = false; return saveNow(); }
+          return null;
+        }, function () { busy = null; return null; });
+        return busy;
+      }
+      return null;
+    }
+    function flush() {
+      var out;
+      try { out = (pending && hold === null) ? saveNow() : busy; } catch (e) { out = null; }
+      return Promise.resolve(out).then(function () { return persistence(); }, function () { return persistence(); });
+    }
+
+    // ---------- other tabs, and stored copies that cannot be read ----------
+    function conflict() {
+      if (!conflictInfo) return null;
+      var r = inspect(conflictInfo.text);
+      return {savedAt: conflictInfo.savedAt, readable: r.ok && !r.contentMismatch, message: r.ok ? '' : r.message, text: conflictInfo.text};
+    }
+    function resolveConflict(choice) {
+      var r, info = conflictInfo;
+      if (!info) return fail('nothing', 'There is no conflict to settle.');
+      if (choice === 'mine') {
+        seen[info.where] = info.text;
+        conflictInfo = null; hold = null;
+        emit({type: 'persistence', persistence: persistence(), degraded: false, recovered: false});
+        pending = true;
+        saveNow();
+        return {ok: true, kept: 'mine'};
+      }
+      if (choice === 'theirs') {
+        r = inspect(info.text);
+        if (!r.ok) return fail(r.reason, 'The other copy could not be loaded. ' + r.message + ' Nothing was changed.');
+        if (r.contentMismatch) return fail('content_mismatch', 'The other copy belongs to different content. Nothing was changed.');
+        seen[info.where] = info.text;
+        conflictInfo = null; hold = null;
+        pending = false;
+        commit(r.data, JSON.stringify(r.data), 'external', 'Load the copy from another tab', {save: r.migratedFrom !== null});
+        emit({type: 'persistence', persistence: persistence(), degraded: false, recovered: false});
+        return {ok: true, kept: 'theirs'};
+      }
+      return fail('bad_call', 'resolveConflict needs "mine" or "theirs".');
+    }
+    function recovery() {
+      return recoveryInfo ? {reason: recoveryInfo.reason, message: recoveryInfo.message, text: recoveryInfo.text} : null;
+    }
+    function discardStored() {
+      if (!recoveryInfo) return fail('nothing', 'There is no unread stored copy.');
+      seen[recoveryInfo.where] = recoveryInfo.text;
+      recoveryInfo = null; hold = null;
+      emit({type: 'persistence', persistence: persistence(), degraded: false, recovered: false});
+      pending = true;
+      saveNow();
+      return {ok: true};
+    }
+    function onStorageEvent(ev) {
+      var v, r;
+      try {
+        if (destroyed || !ev || ev.key !== key || chain[active].name !== 'local') return;
+        v = ev.newValue;
+        if (typeof v !== 'string') return;
+        if (hold === 'conflict' && conflictInfo && conflictInfo.where === 'local') {
+          // The other tab saved again while this one was waiting for a choice: keep its newest copy.
+          conflictInfo.text = v;
+          try { conflictInfo.savedAt = JSON.parse(v).saved_at || null; } catch (e) { conflictInfo.savedAt = null; }
+          emit({type: 'external', conflict: conflict()});
+          return;
+        }
+        if (hold !== null || v === seen.local) return;
+        if (sameData(v)) { seen.local = v; return; }
+        if (adopt) {
+          r = inspect(v);
+          if (r.ok && !r.contentMismatch) {
+            seen.local = v;
+            pending = false; clearTimer();
+            commit(r.data, JSON.stringify(r.data), 'external', 'Change from another tab', {save: false});
+            return;
+          }
+        }
+        raiseConflict(v, 'local');
+      } catch (e) { return; }
+    }
+
+    // ---------- start: find the storage that works and what it holds ----------
+    function finishLoad(found, resolve) {
+      var r, report = {mode: chain[active].name, restored: false, migratedFrom: null, held: false, backupKey: null};
+      var releasePending = pending || changedWhileLoading;
+      hold = null;
+      if (found) {
+        r = inspect(found.text);
+        if (r.ok && !r.contentMismatch) {
+          if (changedWhileLoading && !sameData(found.text)) {
+            raiseConflict(found.text, chain[found.index].name);
+            report.held = true;
+          } else {
+            if (r.migratedFrom !== null) {
+              // Keep the copy as it was before migration, if the storage will take it.
+              report.backupKey = key + ':before-migration';
+              try { chain[found.index].write(report.backupKey, found.text); } catch (e) { report.backupKey = null; }
+            }
+            state = r.data; stateText = JSON.stringify(state); sizeCache = null;
+            savedAt = r.savedAt;
+            report.restored = true;
+            report.migratedFrom = r.migratedFrom;
+            emit({type: 'change', origin: 'load', label: 'Open saved data'});
+            if (r.migratedFrom !== null || found.index !== 0) releasePending = true;
+          }
+        } else {
+          recoveryInfo = {
+            reason: r.ok ? 'content_mismatch' : r.reason,
+            message: r.ok ? 'The copy stored here belongs to "' + r.contentMismatch.found + '", and this page holds "' + r.contentMismatch.expected + '".' : r.message,
+            text: found.text, where: chain[found.index].name
+          };
+          hold = 'recovery';
+          report.held = true;
+        }
+      }
+      report.mode = chain[active].name;
+      emit({type: 'persistence', persistence: persistence(), degraded: false, recovered: false});
+      if (releasePending && hold === null) scheduleSave();
+      resolve(report);
+      return null;
+    }
+    function restoreFrom(i, resolve) {
+      var layer;
+      if (i >= chain.length) return finishLoad(null, resolve);
+      layer = chain[i];
+      return when(layer.read(key), function (r) {
+        if (r.ok) seen[layer.name] = r.value;
+        if (r.ok && r.value !== null) return finishLoad({index: i, text: r.value}, resolve);
+        return restoreFrom(i + 1, resolve);
+      });
+    }
+    function start(resolve) {
+      var h = env.host(), ls = env.local(), local = ls ? localLayer(ls) : null, host;
+      function build(hostOk, first) {
+        chain = [];
+        if (hostOk) chain.push(host);
+        if (local && local.probe(key + ':probe')) chain.push(local);
+        chain.push(memoryLayer());
+        active = 0;
+        if (!hostOk) return restoreFrom(0, resolve);
+        // The host has already been asked once; its answer is used and it is not asked again.
+        if (first.ok) seen.host = first.value;
+        if (first.ok && first.value !== null) return finishLoad({index: 0, text: first.value}, resolve);
+        return restoreFrom(1, resolve);
+      }
+      if (!h) return build(false, null);
+      hold = 'loading';
+      host = hostLayer(h, env, hostTimeoutMs);
+      return host.read(key).then(function (first) {
+        if (first.ok && first.value !== null) return build(true, first);
+        return host.probe(key + ':probe').then(function (ok) { return build(ok, first); });
+      }).then(null, function () {
+        chain = [memoryLayer()]; active = 0;
+        return finishLoad(null, resolve);
+      });
+    }
+
+    var ready = new Promise(function (resolve) {
+      try {
+        var out = start(resolve);
+        if (thenable(out)) out.then(null, function () { chain = [memoryLayer()]; active = 0; hold = null; resolve({mode: 'memory', restored: false, migratedFrom: null, held: false}); });
+      } catch (e) {
+        chain = [memoryLayer()]; active = 0; hold = null;
+        resolve({mode: 'memory', restored: false, migratedFrom: null, held: false});
+      }
+    });
+    stopListening = env.listen(onStorageEvent);
+    stopLeaving = env.leaving(function () {
+      try { if (pending && hold === null && !destroyed) saveNow(); } catch (e) { return; }
+    });
+
+    return {
+      get: function () { return state; },
+      isInitial: function () { return stateText === initialText; },
+      update: update,
+      undo: undo,
+      redo: redo,
+      canUndo: function () { return undoStack.length > 0; },
+      canRedo: function () { return redoStack.length > 0; },
+      history: history,
+      reset: reset,
+      subscribe: subscribe,
+      ready: ready,
+      persistence: persistence,
+      flush: flush,
+      size: size,
+      exportEnvelope: exportEnvelope,
+      inspect: function (text) { try { return inspect(text); } catch (e) { return fail('internal', 'The file could not be checked: ' + msg(e) + '.'); } },
+      importText: importText,
+      conflict: conflict,
+      resolveConflict: function (choice) { try { return resolveConflict(choice); } catch (e) { return fail('internal', msg(e)); } },
+      recovery: recovery,
+      discardStored: function () { try { return discardStored(); } catch (e) { return fail('internal', msg(e)); } },
+      info: function () { return {app: cfg.app, schema: cfg.schema, contentId: cfg.contentId, storageKey: key}; },
+      destroy: function () { destroyed = true; clearTimer(); try { stopListening(); stopLeaving(); } catch (e) { destroyed = true; } listeners = []; }
+    };
+  }
+
+  var api = {create: create, version: VERSION, utf8Bytes: utf8Bytes, words: WORDS};
+  if (typeof module === 'object' && module && module.exports) module.exports = api;
+  else root.PocketState = api;
+})(typeof globalThis !== 'undefined' ? globalThis : (typeof self !== 'undefined' ? self : this));
+/* pocket-embed: pocket-state.js end */
+/* pocket-embed: pocket-ui.js begin */
+/*
+  pocket-ui.js, revision 1.0.0
+
+  Page helpers for a tool built on pocket-state.js: the sentence that says where the data lives,
+  undo and redo buttons, and the export, import and start-again panel. Plain ASCII, no
+  dependencies, no network requests. Paste it after pocket-state.js, inside the same script tag.
+  It defines the global PocketUI.
+
+  Everything here follows the rules a sandboxed chat preview imposes:
+    - no form element and no submit event; buttons are type=button with click handlers
+    - no alert, confirm or prompt; questions are asked in the page
+    - text is always set with textContent, never assembled as markup
+    - a download is offered together with the same content in a read-only text box, because a
+      preview may block downloads; copying falls back to selecting the text for a manual copy
+    - a control that is busy or unavailable is marked aria-disabled and keeps keyboard focus
+
+  PocketUI.el(tag, attrs, children)       build an element; attrs.text sets textContent
+  PocketUI.note(element, store)           keep the persistence sentence in element up to date
+  PocketUI.undoButtons(container, store, {say})
+  PocketUI.panel(container, store, {describe, say, idPrefix, words})
+      describe(data) returns a short phrase for what the data holds, for example "14 books".
+      say(text, isProblem) is the page's own status line, if it has one.
+      words replaces wording where the defaults do not fit, for example a tool whose initial
+      data is not empty: {exportHeading, exportHelp, importHeading, resetHeading, resetButton,
+      resetNo, resetYes, resetLabel, resetNothing, resetQuestion(description, durable),
+      resetDone(description)}.
+  PocketUI.copyText(text, textarea)       promise for {ok}; selects the textarea when refused
+  PocketUI.clock(iso)                     "14:02" in the reader's own time zone, or ""
+
+  The panel uses these ids (with the default prefix "pk"), which tests and styles can rely on:
+    pk-note  pk-conflict pk-take-theirs pk-keep-mine  pk-recovery pk-recovery-text pk-discard
+    pk-size  pk-export pk-export-out pk-export-text pk-copy pk-download pk-export-msg
+    pk-import-text pk-import-file pk-import pk-import-msg pk-mismatch pk-mismatch-yes pk-mismatch-no
+    pk-reset pk-reset-confirm pk-reset-export pk-reset-no pk-reset-yes pk-reset-msg
+  Styles are the page's job: the rules for the pk- classes are in the starter page.
+*/
+(function (root) {
+  'use strict';
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag), k, ev, i;
+    attrs = attrs || {};
+    for (k in attrs) {
+      if (!Object.prototype.hasOwnProperty.call(attrs, k)) continue;
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'on') { for (ev in attrs.on) if (Object.prototype.hasOwnProperty.call(attrs.on, ev)) n.addEventListener(ev, attrs.on[ev]); }
+      else if (attrs[k] === true) n.setAttribute(k, '');
+      else if (attrs[k] !== false && attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, String(attrs[k]));
+    }
+    kids = kids || [];
+    for (i = 0; i < kids.length; i++) if (kids[i]) n.appendChild(kids[i]);
+    return n;
+  }
+  function clock(iso) {
+    var d;
+    try {
+      d = new Date(iso);
+      if (!iso || isNaN(d.getTime())) return '';
+      return d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    } catch (e) { return ''; }
+  }
+  function setBusy(button, busy, text) {
+    // aria-disabled keeps focus on the button; the disabled attribute would drop it.
+    if (busy) button.setAttribute('aria-disabled', 'true'); else button.removeAttribute('aria-disabled');
+    if (text) button.textContent = text;
+  }
+  function isOff(button) { return button.getAttribute('aria-disabled') === 'true'; }
+
+  function copyText(text, area) {
+    return new Promise(function (resolve) {
+      function byHand() {
+        var ok = false;
+        try {
+          area.focus(); area.select();
+          ok = typeof document.execCommand === 'function' && document.execCommand('copy');
+        } catch (e) { ok = false; }
+        resolve({ok: !!ok});
+      }
+      try {
+        if (root.navigator && root.navigator.clipboard && typeof root.navigator.clipboard.writeText === 'function') {
+          root.navigator.clipboard.writeText(text).then(function () { resolve({ok: true}); }, byHand);
+        } else byHand();
+      } catch (e) { byHand(); }
+    });
+  }
+  function fileLink(link, text, filename) {
+    // A blob address where the page may make one, otherwise a data address. Either can be
+    // blocked by a preview, which is why the same text is always shown in the page as well.
+    var href = '';
+    try {
+      if (link.getAttribute('data-blob')) root.URL.revokeObjectURL(link.getAttribute('data-blob'));
+      href = root.URL.createObjectURL(new root.Blob([text], {type: 'application/json'}));
+      link.setAttribute('data-blob', href);
+    } catch (e) {
+      link.removeAttribute('data-blob');
+      href = 'data:application/json;charset=utf-8,' + encodeURIComponent(text);
+    }
+    link.setAttribute('href', href);
+    link.setAttribute('download', filename);
+  }
+  function readFile(file) {
+    return new Promise(function (resolve) {
+      var reader;
+      try {
+        reader = new root.FileReader();
+        reader.onload = function () { resolve({ok: true, text: String(reader.result || ''), name: file.name}); };
+        reader.onerror = function () { resolve({ok: false, message: 'The file "' + file.name + '" could not be read.'}); };
+        reader.readAsText(file);
+      } catch (e) {
+        resolve({ok: false, message: 'This page could not read the file. Open it in a text editor and paste its contents instead.'});
+      }
+    });
+  }
+
+  // ---------- the sentence that says where the data lives ----------
+  function note(target, store) {
+    function draw() {
+      var p = store.persistence(), at = clock(p.savedAt), text = p.text + '.';
+      if (p.state === 'ok' && p.durable && at) text += ' Last saved ' + at + '.';
+      if (target.textContent !== text) target.textContent = text;
+      target.setAttribute('data-mode', p.mode);
+      target.setAttribute('data-state', p.state);
+    }
+    draw();
+    return store.subscribe(function (e) { if (e.type !== 'change') draw(); });
+  }
+
+  // ---------- undo and redo ----------
+  function undoButtons(container, store, opts) {
+    opts = opts || {};
+    var prefix = opts.idPrefix || 'pk';
+    var undo = el('button', {type: 'button', id: prefix + '-undo', class: 'pk-btn'});
+    var redo = el('button', {type: 'button', id: prefix + '-redo', class: 'pk-btn'});
+    function draw() {
+      var h = store.history();
+      var u = h.undo.length ? h.undo[h.undo.length - 1] : '', r = h.redo.length ? h.redo[h.redo.length - 1] : '';
+      undo.textContent = u ? 'Undo: ' + u : 'Undo';
+      redo.textContent = r ? 'Redo: ' + r : 'Redo';
+      setBusy(undo, !u); setBusy(redo, !r);
+    }
+    undo.addEventListener('click', function () {
+      if (isOff(undo)) return;
+      var r = store.undo();
+      if (opts.say) opts.say(r.ok ? 'Undone: ' + r.label + '.' : r.message, !r.ok);
+    });
+    redo.addEventListener('click', function () {
+      if (isOff(redo)) return;
+      var r = store.redo();
+      if (opts.say) opts.say(r.ok ? 'Done again: ' + r.label + '.' : r.message, !r.ok);
+    });
+    container.appendChild(undo); container.appendChild(redo);
+    draw();
+    return store.subscribe(function (e) { if (e.type === 'change') draw(); });
+  }
+
+  // ---------- export, import, start again ----------
+  function panel(container, store, opts) {
+    opts = opts || {};
+    var prefix = opts.idPrefix || 'pk';
+    var describe = typeof opts.describe === 'function' ? opts.describe : function () { return 'the data'; };
+    var say = typeof opts.say === 'function' ? opts.say : function () {};
+    function id(name) { return prefix + '-' + name; }
+    function what(data) { try { return String(describe(data)); } catch (e) { return 'the data'; } }
+    var given = opts.words || {};
+    var words = {
+      exportHeading: given.exportHeading || 'Export',
+      exportHelp: given.exportHelp || 'A copy you keep yourself: the only one that survives a cleared browser, another device, or a page that cannot store data.',
+      importHeading: given.importHeading || 'Import',
+      resetHeading: given.resetHeading || 'Start again',
+      resetButton: given.resetButton || 'Remove everything',
+      resetNo: given.resetNo || 'Keep everything',
+      resetYes: given.resetYes || 'Remove everything',
+      resetLabel: given.resetLabel || 'Remove everything',
+      resetNothing: given.resetNothing || 'There was nothing to remove.',
+      resetQuestion: typeof given.resetQuestion === 'function' ? given.resetQuestion : function (desc, durable) {
+        return 'This removes ' + desc + ' from this page' + (durable ? ' and from where it is saved' : '') +
+          '. Undo brings it back only until this page is closed or reloaded. An exported copy is the lasting way back.';
+      },
+      resetDone: typeof given.resetDone === 'function' ? given.resetDone : function (desc) { return 'Removed ' + desc + '. Undo brings it back.'; }
+    };
+
+    // -- where the data lives, and the two cases where saving has stopped
+    var noteEl = el('p', {id: id('note'), class: 'pk-note', role: 'status'});
+    var conflictText = el('p', {});
+    var takeTheirs = el('button', {type: 'button', id: id('take-theirs'), class: 'pk-btn', text: 'Load the other copy here'});
+    var keepMine = el('button', {type: 'button', id: id('keep-mine'), class: 'pk-btn', text: 'Keep this copy and save it'});
+    var conflictBox = el('div', {id: id('conflict'), class: 'pk-alert', role: 'alert', hidden: true}, [conflictText, el('div', {class: 'pk-row'}, [takeTheirs, keepMine])]);
+    var recoveryText = el('p', {});
+    var recoveryArea = el('textarea', {id: id('recovery-text'), class: 'pk-text', readonly: true, rows: 4, 'aria-label': 'The stored copy that could not be read'});
+    var discard = el('button', {type: 'button', id: id('discard'), class: 'pk-btn pk-danger', text: 'Start fresh and save over it'});
+    var recoveryBox = el('div', {id: id('recovery'), class: 'pk-alert', role: 'alert', hidden: true}, [recoveryText, recoveryArea, el('div', {class: 'pk-row'}, [discard])]);
+    var sizeEl = el('p', {id: id('size'), class: 'pk-warn', hidden: true});
+
+    // -- export
+    var exportBtn = el('button', {type: 'button', id: id('export'), class: 'pk-btn pk-primary', text: 'Export a copy', 'aria-expanded': 'false', 'aria-controls': id('export-out')});
+    var exportArea = el('textarea', {id: id('export-text'), class: 'pk-text', readonly: true, rows: 5, spellcheck: 'false'});
+    var copyBtn = el('button', {type: 'button', id: id('copy'), class: 'pk-btn', text: 'Copy the text'});
+    var download = el('a', {id: id('download'), class: 'pk-btn pk-link', text: 'Download as a file', href: '#'});
+    var exportMsg = el('p', {id: id('export-msg'), class: 'pk-msg', role: 'status'});
+    var exportOut = el('div', {id: id('export-out'), class: 'pk-out', hidden: true}, [
+      el('label', {for: id('export-text'), text: 'Your data as text. This is the whole saved copy'}),
+      exportArea, el('div', {class: 'pk-row'}, [copyBtn, download]), exportMsg
+    ]);
+
+    // -- import
+    var importArea = el('textarea', {id: id('import-text'), class: 'pk-text', rows: 4, spellcheck: 'false', autocomplete: 'off'});
+    var importFile = el('input', {type: 'file', id: id('import-file'), class: 'pk-file', accept: '.json,.txt,application/json,text/plain'});
+    var importBtn = el('button', {type: 'button', id: id('import'), class: 'pk-btn pk-primary', text: 'Import'});
+    var importMsg = el('p', {id: id('import-msg'), class: 'pk-msg', role: 'status'});
+    var mismatchText = el('p', {});
+    var mismatchYes = el('button', {type: 'button', id: id('mismatch-yes'), class: 'pk-btn', text: 'Import it anyway'});
+    var mismatchNo = el('button', {type: 'button', id: id('mismatch-no'), class: 'pk-btn', text: 'Cancel'});
+    var mismatchBox = el('div', {id: id('mismatch'), class: 'pk-alert', role: 'alert', hidden: true}, [mismatchText, el('div', {class: 'pk-row'}, [mismatchNo, mismatchYes])]);
+
+    // -- start again
+    var resetBtn = el('button', {type: 'button', id: id('reset'), class: 'pk-btn pk-danger', text: words.resetButton, 'aria-expanded': 'false', 'aria-controls': id('reset-confirm')});
+    var resetText = el('p', {});
+    var resetExport = el('button', {type: 'button', id: id('reset-export'), class: 'pk-btn', text: 'Export a copy first'});
+    var resetNo = el('button', {type: 'button', id: id('reset-no'), class: 'pk-btn', text: words.resetNo});
+    var resetYes = el('button', {type: 'button', id: id('reset-yes'), class: 'pk-btn pk-danger', text: words.resetYes});
+    var resetBox = el('div', {id: id('reset-confirm'), class: 'pk-alert', hidden: true}, [resetText, el('div', {class: 'pk-row'}, [resetNo, resetExport, resetYes])]);
+    var resetMsg = el('p', {id: id('reset-msg'), class: 'pk-msg', role: 'status'});
+
+    container.appendChild(el('div', {class: 'pk-panel'}, [
+      noteEl, conflictBox, recoveryBox, sizeEl,
+      el('div', {class: 'pk-block'}, [
+        el('h3', {text: words.exportHeading}),
+        el('p', {class: 'pk-help', text: words.exportHelp}),
+        exportBtn, exportOut
+      ]),
+      el('div', {class: 'pk-block'}, [
+        el('h3', {text: words.importHeading}),
+        el('label', {for: id('import-text'), text: 'Paste a saved copy here'}), importArea,
+        el('label', {for: id('import-file'), text: 'or choose a saved file'}), importFile,
+        el('div', {class: 'pk-row'}, [importBtn]), importMsg, mismatchBox
+      ]),
+      el('div', {class: 'pk-block'}, [
+        el('h3', {text: words.resetHeading}),
+        resetBtn, resetBox, resetMsg
+      ])
+    ]));
+
+    function message(target, text, isProblem) {
+      target.textContent = text;
+      target.className = 'pk-msg' + (isProblem ? ' pk-bad' : (text ? ' pk-good' : ''));
+    }
+
+    // -- drawing the parts that follow the store
+    function draw() {
+      var c = store.conflict(), r = store.recovery(), s = store.size(), at;
+      conflictBox.hidden = !c;
+      if (c) {
+        at = clock(c.savedAt);
+        conflictText.textContent = 'Another tab saved a different copy' + (at ? ' at ' + at : '') + '. Saving is paused here so that neither copy is lost. ' +
+          (c.readable ? 'Loading the other copy can be undone.' : 'The other copy cannot be read by this page (' + c.message + ')');
+        setBusy(takeTheirs, !c.readable);
+      }
+      recoveryBox.hidden = !r;
+      if (r) {
+        recoveryText.textContent = 'The copy stored here could not be opened. ' + r.message + ' It has been left exactly as it was, and nothing is being saved. Copy the text below somewhere safe if it matters.';
+        if (recoveryArea.value !== r.text) recoveryArea.value = r.text;
+      }
+      sizeEl.hidden = !s.over;
+      if (s.over) sizeEl.textContent = s.text + '.';
+    }
+    var stopNote = note(noteEl, store);
+    var stopDraw = store.subscribe(function () { draw(); });
+    draw();
+
+    takeTheirs.addEventListener('click', function () {
+      if (isOff(takeTheirs)) return;
+      var r = store.resolveConflict('theirs');
+      say(r.ok ? 'Loaded the copy from the other tab. Undo brings back what was here.' : r.message, !r.ok);
+      draw();
+    });
+    keepMine.addEventListener('click', function () {
+      var r = store.resolveConflict('mine');
+      say(r.ok ? 'Kept this copy. It has replaced the one the other tab saved.' : r.message, !r.ok);
+      draw();
+    });
+    var discardArmed = false;
+    discard.addEventListener('click', function () {
+      if (!discardArmed) {
+        discardArmed = true;
+        discard.textContent = 'Yes, replace the stored copy';
+        return;
+      }
+      discardArmed = false;
+      discard.textContent = 'Start fresh and save over it';
+      var r = store.discardStored();
+      say(r.ok ? 'The stored copy was replaced with what is on this page.' : r.message, !r.ok);
+      draw();
+    });
+
+    function showExport() {
+      var ex = store.exportEnvelope();
+      exportArea.value = ex.text;
+      fileLink(download, ex.text, ex.filename);
+      exportOut.hidden = false;
+      exportBtn.setAttribute('aria-expanded', 'true');
+      exportBtn.textContent = 'Export again';
+      message(exportMsg, 'A copy of ' + what(store.get()) + ', ' + ex.bytes + ' bytes, made at ' + (clock(ex.envelope.saved_at) || ex.envelope.saved_at) +
+        '. If the download does not arrive, the text above is the same thing: copy it into a file or a note.', false);
+      return ex;
+    }
+    exportBtn.addEventListener('click', function () { showExport(); });
+    copyBtn.addEventListener('click', function () {
+      copyText(exportArea.value, exportArea).then(function (r) {
+        message(exportMsg, r.ok ? 'Copied ' + exportArea.value.length + ' characters.' : 'Copying was refused here. The text is selected: copy it by hand.', !r.ok);
+      });
+    });
+    download.addEventListener('click', function (ev) {
+      if (download.getAttribute('href') === '#') { ev.preventDefault(); return; }
+      message(exportMsg, 'Download asked for: ' + download.getAttribute('download') + '. If no file arrives, this page is not allowed to download here; copy the text above instead.', false);
+    });
+
+    // -- import: one path for pasted text and for a chosen file
+    var waiting = null;      // the open question about a file that belongs to other content
+    function closeMismatch(answer) {
+      var w = waiting;
+      waiting = null;
+      mismatchBox.hidden = true;
+      if (w) w(answer);
+    }
+    function runImport() {
+      if (isOff(importBtn)) return;
+      var text = importArea.value, before = what(store.get()), wasBlank = store.isInitial();
+      setBusy(importBtn, true, 'Importing');
+      message(importMsg, '', false);
+      store.importText(text, {
+        label: 'Import',
+        onContentMismatch: function (m) {
+          return new Promise(function (resolve) {
+            waiting = resolve;
+            mismatchText.textContent = 'This file belongs to ' + (m.found === null ? 'content with no name' : '"' + m.found + '"') + ', and this page holds "' + m.expected +
+              '". Importing it ' + (wasBlank ? 'loads what the file holds.' : 'replaces ' + before + ' with what the file holds.') + ' That can be undone.';
+            mismatchBox.hidden = false;
+            mismatchNo.focus();
+          });
+        }
+      }).then(function (r) {
+        setBusy(importBtn, false, 'Import');
+        if (r.ok) {
+          importArea.value = '';
+          try { importFile.value = ''; } catch (e) { importArea.value = ''; }
+          message(importMsg, 'Imported ' + what(store.get()) + (r.migratedFrom !== null ? ', brought up from schema ' + r.migratedFrom + ' to schema ' + store.info().schema : '') +
+            '.' + (wasBlank ? '' : ' It replaced ' + before + ', which Undo brings back.'), false);
+          say('Imported ' + what(store.get()) + '.', false);
+        } else {
+          message(importMsg, 'Not imported. ' + r.message, true);
+          say('Not imported. ' + r.message, true);
+        }
+        importBtn.focus();
+      });
+    }
+    importBtn.addEventListener('click', runImport);
+    mismatchYes.addEventListener('click', function () { closeMismatch(true); });
+    mismatchNo.addEventListener('click', function () { closeMismatch(false); });
+    importFile.addEventListener('change', function () {
+      var f = importFile.files && importFile.files[0];
+      if (!f) return;
+      message(importMsg, 'Reading ' + f.name + '.', false);
+      readFile(f).then(function (r) {
+        if (!r.ok) { message(importMsg, 'Not imported. ' + r.message + ' Nothing was changed.', true); return; }
+        importArea.value = r.text;
+        message(importMsg, 'Read ' + r.name + ' (' + r.text.length + ' characters). Press Import to check it and load it.', false);
+        importBtn.focus();
+      });
+    });
+
+    // -- start again: confirmed in the page, names what will go, offers a copy first
+    function closeReset() {
+      resetBox.hidden = true;
+      resetBtn.setAttribute('aria-expanded', 'false');
+    }
+    resetBtn.addEventListener('click', function () {
+      if (!resetBox.hidden) { closeReset(); return; }
+      var p = store.persistence();
+      resetText.textContent = String(words.resetQuestion(what(store.get()), p.durable));
+      resetBox.hidden = false;
+      resetBtn.setAttribute('aria-expanded', 'true');
+      message(resetMsg, '', false);
+      resetNo.focus();
+    });
+    resetNo.addEventListener('click', function () { closeReset(); resetBtn.focus(); });
+    resetExport.addEventListener('click', function () { showExport(); exportArea.focus(); exportArea.select(); });
+    resetYes.addEventListener('click', function () {
+      var before = what(store.get()), r = store.reset({label: words.resetLabel});
+      closeReset();
+      if (r.ok && r.changed) { message(resetMsg, String(words.resetDone(before)), false); say(String(words.resetDone(before)), false); }
+      else if (r.ok) message(resetMsg, words.resetNothing, false);
+      else message(resetMsg, r.message, true);
+      resetBtn.focus();
+    });
+
+    return {
+      refresh: draw,
+      showExport: showExport,
+      destroy: function () { stopNote(); stopDraw(); }
+    };
+  }
+
+  var api = {el: el, clock: clock, note: note, undoButtons: undoButtons, panel: panel, copyText: copyText, readFile: readFile, fileLink: fileLink, setBusy: setBusy, isOff: isOff, version: '1.0.0'};
+  if (typeof module === 'object' && module && module.exports) module.exports = api;
+  else root.PocketUI = api;
+})(typeof globalThis !== 'undefined' ? globalThis : (typeof self !== 'undefined' ? self : this));
+/* pocket-embed: pocket-ui.js end */
+
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var el = PocketUI.el;
+
+  // ---------- 1. identity and empty shape ----------
+  var APP = 'checklist', SCHEMA = 1, CONTENT = 'checklist@1';
+  var INITIAL = {items: [], nextId: 1};
+  var MAX_TEXT = 200;
+
+  // ---------- 2. every rule the data must obey ----------
+  function whole(n) { return typeof n === 'number' && isFinite(n) && Math.floor(n) === n; }
+  function validate(d) {
+    var p = [], ids = {}, max = 0;
+    if (!d || typeof d !== 'object' || Array.isArray(d)) return ['the data is not an object'];
+    if (!Array.isArray(d.items)) return ['items must be a list'];
+    d.items.forEach(function (it, i) {
+      var n = 'item ' + (i + 1);
+      if (!it || typeof it !== 'object' || Array.isArray(it)) { p.push(n + ' is not an object'); return; }
+      if (!whole(it.id) || it.id < 1) p.push(n + ' has no whole-number id');
+      else {
+        if (ids[it.id]) p.push(n + ' repeats id ' + it.id);
+        ids[it.id] = true;
+        if (it.id > max) max = it.id;
+      }
+      if (typeof it.text !== 'string' || !it.text.trim()) p.push(n + ' has no text');
+      else if (it.text.length > MAX_TEXT) p.push(n + ' is longer than ' + MAX_TEXT + ' characters');
+      if (typeof it.done !== 'boolean') p.push(n + ' has a done mark that is not true or false');
+    });
+    if (!whole(d.nextId) || d.nextId <= max) p.push('nextId must be a whole number above every item id');
+    return p;
+  }
+
+  // ---------- 3. one step per change of shape; none yet at schema 1 ----------
+  var MIGRATIONS = {};
+
+  var store = PocketState.create({app: APP, schema: SCHEMA, contentId: CONTENT, initial: INITIAL, migrations: MIGRATIONS, validate: validate});
+  var DISPLAY = {theme: ['paper', 'sage', 'dusk', 'ink'], density: ['comfortable', 'compact'], text: ['standard', 'large', 'larger']};
+  var prefs = PocketState.create({
+    app: APP + '-display', schema: 1, contentId: 'display@1',
+    initial: {theme: 'paper', density: 'comfortable', text: 'standard'},
+    validate: function (d) {
+      var p = [];
+      if (!d || typeof d !== 'object') return ['display choices are not an object'];
+      Object.keys(DISPLAY).forEach(function (k) { if (DISPLAY[k].indexOf(d[k]) < 0) p.push(k + ' is not one of ' + DISPLAY[k].join(', ')); });
+      return p;
+    },
+    historyLimit: 0, externalPolicy: 'adopt', debounceMs: 0
+  });
+  var V = {hideDone: false};
+
+  function short(text) { return text.length > 40 ? text.slice(0, 37) + '...' : text; }
+  function items(n) { return n + (n === 1 ? ' item' : ' items'); }
+  function describe(d) { return items(d.items.length); }
+  function say(text, bad) { var s = $('status'); s.textContent = text; s.className = 'status' + (bad ? ' bad' : ''); }
+  function find(d, id) { for (var i = 0; i < d.items.length; i++) if (d.items[i].id === id) return d.items[i]; return null; }
+
+  // ---------- 4. the changes: each is one undo step with a label ----------
+  function addItem() {
+    var field = $('new-item'), text = field.value.trim(), problem = '', r;
+    if (!text) problem = 'Type something to do first. Nothing was added.';
+    else if (text.length > MAX_TEXT) problem = 'That is ' + text.length + ' characters. The limit is ' + MAX_TEXT + '.';
+    $('e-new-item').textContent = problem;
+    field.setAttribute('aria-invalid', problem ? 'true' : 'false');
+    if (problem) { say('Not added. ' + problem, true); field.focus(); return; }
+    r = store.update(function (d) { d.items.push({id: d.nextId, text: text, done: false}); d.nextId += 1; }, {label: 'Add "' + short(text) + '"'});
+    if (!r.ok) { say('Not added. ' + r.message, true); return; }
+    field.value = '';
+    say('Added "' + text + '".');
+    field.focus();
+  }
+  function toggleItem(id) {
+    var it = find(store.get(), id), r;
+    if (!it) return;
+    r = store.update(function (d) { var x = find(d, id); x.done = !x.done; }, {label: (it.done ? 'Reopen "' : 'Tick "') + short(it.text) + '"'});
+    if (r.ok) say((it.done ? 'Reopened "' : 'Ticked "') + it.text + '".' + (V.hideDone && !it.done ? ' It is hidden while done items are hidden.' : ''));
+    else say(r.message, true);
+  }
+  function removeItem(id) {
+    var it = find(store.get(), id), r;
+    if (!it) return;
+    r = store.update(function (d) { d.items = d.items.filter(function (x) { return x.id !== id; }); }, {label: 'Remove "' + short(it.text) + '"'});
+    if (!r.ok) { say(r.message, true); return; }
+    say('Removed "' + it.text + '". Undo brings it back.');
+    if ($('pk-undo')) $('pk-undo').focus();
+  }
+
+  // ---------- 5. drawing: loading, empty, nothing shown, and the list ----------
+  function render() {
+    var active = document.activeElement, keep = active && active.getAttribute ? active.getAttribute('data-fk') : null;
+    var d = store.get(), p = store.persistence(), list = $('items'), done, shown, i;
+    list.textContent = '';
+    list.setAttribute('aria-busy', String(p.state === 'loading'));
+    if (p.state === 'loading') {
+      $('tally').textContent = 'Opening the saved list.';
+      for (i = 0; i < 3; i++) list.appendChild(el('li', {class: 'ghost', 'aria-hidden': 'true'}, [el('i', {style: 'width:' + (48 - i * 9) + '%'})]));
+      return;
+    }
+    done = d.items.filter(function (x) { return x.done; }).length;
+    $('tally').textContent = d.items.length ? items(d.items.length) + ', ' + done + ' done, ' + (d.items.length - done) + ' to do.' : 'Nothing on the list yet.';
+    shown = V.hideDone ? d.items.filter(function (x) { return !x.done; }) : d.items;
+    if (!d.items.length) {
+      list.appendChild(el('li', {class: 'blank'}, [
+        el('h2', {text: 'Nothing on the list yet'}),
+        el('p', {text: 'Type the first thing to do in the box above and press Add or Enter.'}),
+        el('button', {type: 'button', class: 'btn', 'data-fk': 'first', text: 'Go to the box', on: {click: function () { $('new-item').focus(); }}})
+      ]));
+    } else if (!shown.length) {
+      list.appendChild(el('li', {class: 'blank'}, [
+        el('h2', {text: 'Everything is done'}),
+        el('p', {text: 'All ' + items(d.items.length) + ' are ticked, and done items are hidden.'}),
+        el('button', {type: 'button', class: 'btn', 'data-fk': 'show-done', text: 'Show done items', on: {click: function () { V.hideDone = false; $('hide-done').setAttribute('aria-pressed', 'false'); render(); $('hide-done').focus(); }}})
+      ]));
+    } else {
+      shown.forEach(function (it) {
+        var box = el('input', {type: 'checkbox', id: 'tick-' + it.id, 'data-fk': 'tick-' + it.id, on: {change: function () { toggleItem(it.id); }}});
+        box.checked = it.done;
+        list.appendChild(el('li', {class: 'item' + (it.done ? ' done' : ''), 'data-id': it.id}, [
+          box,
+          el('label', {for: 'tick-' + it.id}, [el('span', {class: 'txt', text: it.text}), it.done ? el('span', {class: 'state', text: 'done'}) : null]),
+          el('button', {type: 'button', class: 'btn quiet', 'data-fk': 'remove-' + it.id, 'aria-label': 'Remove ' + it.text, text: 'Remove', on: {click: function () { removeItem(it.id); }}})
+        ]));
+      });
+    }
+    if (keep) {
+      var again = document.querySelector('[data-fk="' + keep + '"]');
+      if (again) again.focus();
+      else if ($('pk-undo') && /^(tick|remove)-/.test(keep)) $('pk-undo').focus();
+    }
+  }
+  function drawTopNote() {
+    // Where the data lives is always stated in the Keep section. When it is not being saved,
+    // the same sentence is repeated at the top, where it cannot be missed.
+    var p = store.persistence(), show = p.state !== 'loading' && (!p.durable || p.state !== 'ok');
+    $('top-note').hidden = !show;
+    $('top-note-text').textContent = show ? p.text + '.' : '';
+    $('top-note-go').textContent = p.state === 'conflict' ? 'Choose which copy to keep' : (p.state === 'recovery' ? 'See the stored copy' : 'Go to Export');
+  }
+  function applyDisplay() {
+    var d = prefs.get(), root = document.documentElement, p = prefs.persistence();
+    root.setAttribute('data-theme', d.theme);
+    root.setAttribute('data-density', d.density);
+    root.setAttribute('data-text', d.text);
+    document.querySelectorAll('[data-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(d[b.getAttribute('data-set')] === b.getAttribute('data-value'))); });
+    $('display-note').textContent = p.state === 'loading' ? '' : (p.durable ? 'Display choices are kept: ' + p.text.toLowerCase() + '.' : 'Display choices last for this visit: this page cannot store data here.');
+  }
+
+  // ---------- wiring ----------
+  $('add-go').addEventListener('click', addItem);
+  $('new-item').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); addItem(); } });
+  $('hide-done').addEventListener('click', function () { V.hideDone = !V.hideDone; this.setAttribute('aria-pressed', String(V.hideDone)); render(); });
+  $('display-toggle').addEventListener('click', function () {
+    var open = this.getAttribute('aria-expanded') !== 'true';
+    this.setAttribute('aria-expanded', String(open));
+    $('display').hidden = !open;
+  });
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { prefs.update(function (d) { d[b.getAttribute('data-set')] = b.getAttribute('data-value'); }); });
+  });
+  $('display-reset').addEventListener('click', function () { prefs.reset(); });
+  prefs.subscribe(applyDisplay);
+
+  PocketUI.undoButtons($('undo-box'), store, {say: say});
+  PocketUI.panel($('keep'), store, {describe: describe, say: say});
+  store.subscribe(function (e) {
+    if (e.type === 'change' || e.type === 'persistence' || e.type === 'external') render();
+    drawTopNote();
+  });
+  $('top-note-go').addEventListener('click', function () {
+    var p = store.persistence(), target = p.state === 'conflict' ? $('pk-keep-mine') : (p.state === 'recovery' ? $('pk-recovery-text') : $('pk-export'));
+    target.focus();
+    target.scrollIntoView({block: 'center'});
+  });
+  store.ready.then(function (report) {
+    render();
+    drawTopNote();
+    if (report.restored) say('Opened the saved list: ' + describe(store.get()) + '.');
+  });
+  prefs.ready.then(applyDisplay);
+  applyDisplay();
+  render();
+  drawTopNote();
+})();
+</script>
+</body>
+</html>

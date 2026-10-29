@@ -1,0 +1,3 @@
+source_id,title,publisher,address,tier,published,accessed,read_level,family,notes
+S1,SYNTHETIC EXAMPLE ROW: the original record,Example authority,https://example.org/register,primary,2024-03-04,2026-01-10,full,,Replace every row. This file is in the research ledger's sources format.
+S2,SYNTHETIC EXAMPLE ROW: a report about it,Example paper,https://example.org/report,secondary,2024-03-06,2026-01-10,section,,read_level full or section means the source was opened and read.

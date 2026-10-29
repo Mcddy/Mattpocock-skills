@@ -1,0 +1,21 @@
+{
+ "job_id": "replace-with-a-short-name",
+ "description": "Replace this: say in a sentence or two what is being collected and what it is for.",
+ "people": "none",
+ "user_agent": "harvest/1.0 (research collection; contact: REPLACE_ME)",
+ "delay_seconds": 2,
+ "max_requests": 60,
+ "max_bytes": 20000000,
+ "timeout_seconds": 20,
+ "sources": [
+  {
+   "id": "S1",
+   "address": "https://publisher.example/report-2026.html",
+   "title": "Replace with the document's title",
+   "publisher": "Replace with who published it",
+   "tier": "primary",
+   "kind": "page",
+   "published": "2026-01-15"
+  }
+ ]
+}

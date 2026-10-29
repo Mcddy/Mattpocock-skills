@@ -1,0 +1,1 @@
+{"schema":1,"operation":"integrate","model":"decay","parameters":{"rate":2},"initial":[3],"t_span":[0,2],"time_unit":"s","state_units":["mg"],"rtol":1e-7,"atol":1e-9,"max_steps":10000}

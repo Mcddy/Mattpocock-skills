@@ -1,0 +1,20 @@
+=== elicitor response ===
+instrument: workshop-feedback
+version: 1
+finished: 2026-10-08T20:47:22Z
+worthwhile = 2
+pace = "Too slow"
+rushed-part = HIDDEN
+level = "Mostly things I already knew"
+exercise = 3
+handout = 4
+most-useful = ["The question time"]
+length = "Too long"
+follow = "No trouble"
+use-soon = 2
+suggest = "Yes, if it changes"
+suggest.note = "For people new to the topic, yes. Not for anyone who already does this every week."
+one-change = "Offer a fast track: skip the walk-through and start at the exercise."
+anything-else = SKIPPED
+tally:rated-4-plus = [1,3]
+=== end elicitor response: 13 questions, 1 note ===

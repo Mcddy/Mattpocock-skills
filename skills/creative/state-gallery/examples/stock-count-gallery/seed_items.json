@@ -1,0 +1,17 @@
+{
+ "note": "SYNTHETIC stock for the example. Invented items for a small workshop storeroom.",
+ "items": [
+  {"sku": "BOLT-M8", "name": "M8 x 40 hex bolts, zinc", "qty": 240, "location": "A3", "low_at": 50},
+  {"sku": "NUT-M8", "name": "M8 nyloc nuts", "qty": 180, "location": "A3", "low_at": 50},
+  {"sku": "WASH-M8", "name": "M8 flat washers", "qty": 12, "location": "A4", "low_at": 40},
+  {"sku": "SCREW-8G-32", "name": "8g x 32 mm countersunk wood screws", "qty": 950, "location": "B1", "low_at": 200},
+  {"sku": "GLUE-PVA-1L", "name": "PVA wood glue, 1 litre", "qty": 3, "location": "C2", "low_at": 2},
+  {"sku": "SAND-120", "name": "Sandpaper sheets, 120 grit", "qty": 40, "location": "C4", "low_at": 10},
+  {"sku": "SAND-240", "name": "Sandpaper sheets, 240 grit", "qty": 0, "location": "C4", "low_at": 10},
+  {"sku": "BLADE-TS-254", "name": "Table saw blade, 254 mm, 60 tooth", "qty": 1, "location": "D1", "low_at": 1},
+  {"sku": "OIL-DANISH-500", "name": "Danish oil, 500 ml", "qty": 4, "location": "C3", "low_at": 1},
+  {"sku": "DOWEL-8", "name": "Beech dowel, 8 mm x 1 m", "qty": 26, "location": "B4", "low_at": 10},
+  {"sku": "ZZ-LONG-NAME-CHECK-00001", "name": "Replacement dust extraction hose with reducing cuff and anti-static earth wire", "qty": 1, "location": "Back wall, rack 14, upper shelf, bin 32", "low_at": 1},
+  {"sku": "ZZ-LONG-NAME-CHECK-00002", "name": "Polytetrafluoroethylene-coated-fibreglass-reinforced-high-temperature-gaskettape", "qty": 1000000, "location": "Mezzanine-overflow-storage-cage-north-07", "low_at": 0}
+ ]
+}

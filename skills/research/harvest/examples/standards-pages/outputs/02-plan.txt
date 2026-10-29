@@ -1,0 +1,31 @@
+harvest plan: job standards-pages, 13 source(s), 2 host(s), offline fixtures (no network)
+  user agent  harvest/1.0 (standards collection example; contact: reviewer@harvest-example.invalid)
+  FETCH S1     page  https://standards.example/index.html
+        robots: allowed by Allow: /
+  FETCH S2     page  https://standards.example/standards/hl-101.html
+        robots: allowed by Allow: /
+  FETCH S3     page  https://standards.example/standards/hl-102.html
+        robots: allowed by Allow: /
+  FETCH S4     page  https://standards.example/standards/hl-103.html
+        robots: allowed by Allow: /
+  FETCH S5     page  https://standards.example/standards/hl-104.html
+        robots: allowed by Allow: /
+  FETCH S6     page  https://standards.example/committee/minutes-41.html
+        robots: allowed by Allow: /
+  FETCH S7     page  https://standards.example/committee/minutes-42.html
+        robots: allowed by Allow: /
+  SKIP  S8     page  https://standards.example/drafts/hl-105-draft.html
+        robots: Disallow: /drafts/ (group *)
+  FETCH S9     page  https://standards.example/old/hl-100.html
+        robots: allowed by Allow: /
+  FETCH S10    page  https://standards.example/consultations.html
+        robots: allowed by Allow: /
+  FETCH S11    page  https://standards.example/archive/2019-index.html
+        robots: allowed by Allow: /
+  FETCH S12    feed  https://standards.example/feed.xml
+        robots: allowed by Allow: /
+  FETCH S13    file  https://files.standards.example/hl-register.pdf
+        robots: no robots.txt (HTTP 404): no rules
+  to fetch 12, to skip 1. Requests: 12 content + 2 robots.txt = 14 of the cap of 60.
+  Least time for the run: 24 s (files.standards.example 2 s; standards.example 2 s between requests to one host, one request at a time). Transfer time, redirects and waits a server asks for come on top.
+RESULT: PLAN ONLY. robots.txt was read for 2 host(s); no content was fetched.

@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "title": "Synthetic quarterly activity",
+  "caption": "Bar widths encode [12, 24, 36]; growth reveal is a visual device, not new observations.",
+  "source": "synthetic demonstration",
+  "width": 400,
+  "height": 220,
+  "duration": "2",
+  "fps": "12",
+  "background": "#faf3e7",
+  "formats": [
+    "svg",
+    "png"
+  ],
+  "data": {
+    "activity": [
+      12,
+      24,
+      36
+    ]
+  },
+  "scene": [
+    {
+      "id": "bars",
+      "type": "group",
+      "x": 30,
+      "y": 25,
+      "scale": {
+        "keys": [
+          [
+            0,
+            0.1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "easing": "smooth"
+      },
+      "children": [
+        {
+          "id": "a",
+          "type": "rect",
+          "x": 0,
+          "y": 0,
+          "width": {
+            "data": "activity",
+            "index": 0,
+            "scale": 8
+          },
+          "height": 35,
+          "fill": "#b6603c"
+        },
+        {
+          "id": "b",
+          "type": "rect",
+          "x": 0,
+          "y": 55,
+          "width": {
+            "data": "activity",
+            "index": 1,
+            "scale": 8
+          },
+          "height": 35,
+          "fill": "#387e73"
+        },
+        {
+          "id": "c",
+          "type": "rect",
+          "x": 0,
+          "y": 110,
+          "width": {
+            "data": "activity",
+            "index": 2,
+            "scale": 8
+          },
+          "height": 35,
+          "fill": "#8e6a42"
+        }
+      ]
+    }
+  ]
+}

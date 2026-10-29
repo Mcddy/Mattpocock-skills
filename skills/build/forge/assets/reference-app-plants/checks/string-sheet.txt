@@ -1,0 +1,885 @@
+=== populated
+FRI 23 OCT
+Today's watering
+Add a plant
+Today
+23
+9 due
+Sat
+24
+1 due
+Sun
+25
+1 due
+Mon
+26
+2 due
+Tue
+27
+1 due
+Wed
+28
+2 due
+Thu
+29
+4 due
+STILL TO WATER TODAY
+
+7
+
+plants of 9 due · 2 watered
+Next: Boston fern, Bathroom · 2 days overdue
+Needs water
+7
+Boston fern
+
+Bathroom · every 3 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+2 days overdue
+Watered
+Chinese money plant
+
+Kitchen windowsill · every week
+
+Last watered Thu 15 Oct, 8 days ago
+
+1 day overdue
+Watered
+Maidenhair fern
+
+Bathroom · every 3 days
+
+Last watered Tue 20 Oct, 3 days ago
+
+Due today
+Watered
+Calathea orbifolia
+
+Bedroom · every 4 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due today
+Watered
+Monstera
+
+Lounge · every week
+
+Last watered Fri 16 Oct, 7 days ago
+
+Due today
+Watered
+Peace lily
+
+Lounge · every 5 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+Due today
+Watered
+Philodendron 'Pink Princess' by the big lounge window
+
+Lounge · every 6 days
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due today
+Watered
+Watered today
+2
+Fiddle-leaf fig
+
+Lounge · every week
+
+Watered today at 07:19
+
+Next due Fri 30 Oct
+Undo
+Bird of paradise
+
+Balcony door · every week
+
+Watered today at 07:17
+
+Next due Fri 30 Oct
+Undo
+Coming up
+6
+Aloe vera
+
+Kitchen windowsill · every 2 weeks
+
+Last watered Sat 10 Oct, 13 days ago
+
+Due tomorrow, Sat 24 Oct
+Water early
+ZZ plant
+
+Hallway · every 2 weeks
+
+Last watered Sun 11 Oct, 12 days ago
+
+Due Sun 25 Oct
+Water early
+Golden pothos
+
+Kitchen · every week
+
+Last watered Wed 21 Oct, 2 days ago
+
+Due Wed 28 Oct
+Water early
+Rubber plant
+
+Study · every 10 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due Thu 29 Oct
+Water early
+Snake plant
+
+Bedroom · every 2 weeks
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due Sat 31 Oct
+Water early
+String of pearls
+
+Study · every 10 days
+
+Last watered Thu 22 Oct, yesterday
+
+Due Sun 1 Nov
+Water early
+
+=== empty
+FRI 23 OCT
+Today's watering
+No plants yet
+
+Add each plant once with how often it needs water. Every morning this page lists the ones due that day.
+
+Add a plant
+
+Its name, where it lives and how often it needs water. It joins today's list until you tick it.
+
+Name
+Room (optional)
+Water every
+days
+3
+7
+14
+
+Choose 3, 7 or 14, or type any number of days from 1 to 60.
+
+Looks most like
+Split leaf
+like Monstera
+Fern
+like Boston fern
+Upright
+like snake plant
+Coin leaf
+like money plant
+Trailing
+like pothos
+Tall leafy
+like fiddle-leaf fig
+Spiky
+like aloe
+Flowering
+like peace lily
+Add plant
+
+=== success-ticked
+FRI 23 OCT
+Today's watering
+Add a plant
+Today
+23
+9 due
+Sat
+24
+1 due
+Sun
+25
+1 due
+Mon
+26
+2 due
+Tue
+27
+1 due
+Wed
+28
+2 due
+Thu
+29
+4 due
+STILL TO WATER TODAY
+
+6
+
+plants of 9 due · 3 watered
+Next: Chinese money plant, Kitchen windowsill · 1 day overdue
+Needs water
+6
+Boston fern
+
+Bathroom · every 3 days
+
+Watered today at 19:41
+
+Next due Mon 26 Oct
+Undo
+Chinese money plant
+
+Kitchen windowsill · every week
+
+Last watered Thu 15 Oct, 8 days ago
+
+1 day overdue
+Watered
+Maidenhair fern
+
+Bathroom · every 3 days
+
+Last watered Tue 20 Oct, 3 days ago
+
+Due today
+Watered
+Calathea orbifolia
+
+Bedroom · every 4 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due today
+Watered
+Monstera
+
+Lounge · every week
+
+Last watered Fri 16 Oct, 7 days ago
+
+Due today
+Watered
+Peace lily
+
+Lounge · every 5 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+Due today
+Watered
+Philodendron 'Pink Princess' by the big lounge window
+
+Lounge · every 6 days
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due today
+Watered
+Watered today
+2
+Fiddle-leaf fig
+
+Lounge · every week
+
+Watered today at 07:19
+
+Next due Fri 30 Oct
+Undo
+Bird of paradise
+
+Balcony door · every week
+
+Watered today at 07:17
+
+Next due Fri 30 Oct
+Undo
+Coming up
+6
+Aloe vera
+
+Kitchen windowsill · every 2 weeks
+
+Last watered Sat 10 Oct, 13 days ago
+
+Due tomorrow, Sat 24 Oct
+Water early
+ZZ plant
+
+Hallway · every 2 weeks
+
+Last watered Sun 11 Oct, 12 days ago
+
+Due Sun 25 Oct
+Water early
+Golden pothos
+
+Kitchen · every week
+
+Last watered Wed 21 Oct, 2 days ago
+
+Due Wed 28 Oct
+Water early
+Rubber plant
+
+Study · every 10 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due Thu 29 Oct
+Water early
+Snake plant
+
+Bedroom · every 2 weeks
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due Sat 31 Oct
+Water early
+String of pearls
+
+Study · every 10 days
+
+Last watered Thu 22 Oct, yesterday
+
+Due Sun 1 Nov
+Water early
+
+Boston fern watered at 19:41. Next due Mon 26 Oct.
+
+=== refused-already-watered
+FRI 23 OCT
+Today's watering
+Add a plant
+Today
+23
+9 due
+Sat
+24
+1 due
+Sun
+25
+1 due
+Mon
+26
+2 due
+Tue
+27
+1 due
+Wed
+28
+2 due
+Thu
+29
+4 due
+STILL TO WATER TODAY
+
+6
+
+plants of 9 due · 3 watered
+Next: Boston fern, Bathroom · 2 days overdue
+Needs water
+6
+Boston fern
+
+Bathroom · every 3 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+2 days overdue
+Watered
+Chinese money plant
+
+Kitchen windowsill · every week
+
+Last watered Thu 15 Oct, 8 days ago
+
+1 day overdue
+Watered
+Maidenhair fern
+
+Bathroom · every 3 days
+
+Last watered Tue 20 Oct, 3 days ago
+
+Due today
+Watered
+Calathea orbifolia
+
+Bedroom · every 4 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due today
+Watered
+Monstera
+
+Lounge · every week
+
+Watered today at 19:41
+
+Next due Fri 30 Oct
+Undo
+
+Monstera was already watered today at 19:41. It is next due Fri 30 Oct.
+
+Peace lily
+
+Lounge · every 5 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+Due today
+Watered
+Philodendron 'Pink Princess' by the big lounge window
+
+Lounge · every 6 days
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due today
+Watered
+Watered today
+2
+Fiddle-leaf fig
+
+Lounge · every week
+
+Watered today at 07:19
+
+Next due Fri 30 Oct
+Undo
+Bird of paradise
+
+Balcony door · every week
+
+Watered today at 07:17
+
+Next due Fri 30 Oct
+Undo
+Coming up
+6
+Aloe vera
+
+Kitchen windowsill · every 2 weeks
+
+Last watered Sat 10 Oct, 13 days ago
+
+Due tomorrow, Sat 24 Oct
+Water early
+ZZ plant
+
+Hallway · every 2 weeks
+
+Last watered Sun 11 Oct, 12 days ago
+
+Due Sun 25 Oct
+Water early
+Golden pothos
+
+Kitchen · every week
+
+Last watered Wed 21 Oct, 2 days ago
+
+Due Wed 28 Oct
+Water early
+Rubber plant
+
+Study · every 10 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due Thu 29 Oct
+Water early
+Snake plant
+
+Bedroom · every 2 weeks
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due Sat 31 Oct
+Water early
+String of pearls
+
+Study · every 10 days
+
+Last watered Thu 22 Oct, yesterday
+
+Due Sun 1 Nov
+Water early
+
+=== refused-duplicate-name
+FRI 23 OCT
+Today's watering
+Add a plant
+Today
+23
+9 due
+Sat
+24
+1 due
+Sun
+25
+1 due
+Mon
+26
+2 due
+Tue
+27
+1 due
+Wed
+28
+2 due
+Thu
+29
+4 due
+STILL TO WATER TODAY
+
+7
+
+plants of 9 due · 2 watered
+Next: Boston fern, Bathroom · 2 days overdue
+Add a plant
+
+Its name, where it lives and how often it needs water. It joins today's list until you tick it.
+
+Name
+
+Name is already used by another plant.
+
+Room (optional)
+Water every
+days
+3
+7
+14
+
+Choose 3, 7 or 14, or type any number of days from 1 to 60.
+
+Looks most like
+Split leaf
+like Monstera
+Fern
+like Boston fern
+Upright
+like snake plant
+Coin leaf
+like money plant
+Trailing
+like pothos
+Tall leafy
+like fiddle-leaf fig
+Spiky
+like aloe
+Flowering
+like peace lily
+
+You already have a plant called Monstera (Lounge). Give this one another name, such as Monstera 2.
+
+Add plant
+Close
+Needs water
+7
+Boston fern
+
+Bathroom · every 3 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+2 days overdue
+Watered
+Chinese money plant
+
+Kitchen windowsill · every week
+
+Last watered Thu 15 Oct, 8 days ago
+
+1 day overdue
+Watered
+Maidenhair fern
+
+Bathroom · every 3 days
+
+Last watered Tue 20 Oct, 3 days ago
+
+Due today
+Watered
+Calathea orbifolia
+
+Bedroom · every 4 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due today
+Watered
+Monstera
+
+Lounge · every week
+
+Last watered Fri 16 Oct, 7 days ago
+
+Due today
+Watered
+Peace lily
+
+Lounge · every 5 days
+
+Last watered Sun 18 Oct, 5 days ago
+
+Due today
+Watered
+Philodendron 'Pink Princess' by the big lounge window
+
+Lounge · every 6 days
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due today
+Watered
+Watered today
+2
+Fiddle-leaf fig
+
+Lounge · every week
+
+Watered today at 07:19
+
+Next due Fri 30 Oct
+Undo
+Bird of paradise
+
+Balcony door · every week
+
+Watered today at 07:17
+
+Next due Fri 30 Oct
+Undo
+Coming up
+6
+Aloe vera
+
+Kitchen windowsill · every 2 weeks
+
+Last watered Sat 10 Oct, 13 days ago
+
+Due tomorrow, Sat 24 Oct
+Water early
+ZZ plant
+
+Hallway · every 2 weeks
+
+Last watered Sun 11 Oct, 12 days ago
+
+Due Sun 25 Oct
+Water early
+Golden pothos
+
+Kitchen · every week
+
+Last watered Wed 21 Oct, 2 days ago
+
+Due Wed 28 Oct
+Water early
+Rubber plant
+
+Study · every 10 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due Thu 29 Oct
+Water early
+Snake plant
+
+Bedroom · every 2 weeks
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due Sat 31 Oct
+Water early
+String of pearls
+
+Study · every 10 days
+
+Last watered Thu 22 Oct, yesterday
+
+Due Sun 1 Nov
+Water early
+
+=== error-load
+FRI 23 OCT
+Today's watering
+The plant list did not load
+
+No answer from the plant server. Check it is running, then try again. Nothing was changed.
+
+Try again
+
+=== success-all-watered
+FRI 23 OCT
+Today's watering
+Add a plant
+Today
+23
+9 due
+Sat
+24
+1 due
+Sun
+25
+1 due
+Mon
+26
+2 due
+Tue
+27
+1 due
+Wed
+28
+2 due
+Thu
+29
+4 due
+TODAY
+
+All watered
+
+9 of 9 watered today
+Next round Sat 24 Oct: 1 plant.
+Needs water
+0
+
+Nothing else needs water today.
+
+Watered today
+9
+Monstera
+
+Lounge · every week
+
+Watered today at 19:42
+
+Next due Fri 30 Oct
+Undo
+Chinese money plant
+
+Kitchen windowsill · every week
+
+Watered today at 19:42
+
+Next due Fri 30 Oct
+Undo
+Philodendron 'Pink Princess' by the big lounge window
+
+Lounge · every 6 days
+
+Watered today at 19:42
+
+Next due Thu 29 Oct
+Undo
+Peace lily
+
+Lounge · every 5 days
+
+Watered today at 19:42
+
+Next due Wed 28 Oct
+Undo
+Calathea orbifolia
+
+Bedroom · every 4 days
+
+Watered today at 19:42
+
+Next due Tue 27 Oct
+Undo
+Maidenhair fern
+
+Bathroom · every 3 days
+
+Watered today at 19:42
+
+Next due Mon 26 Oct
+Undo
+Boston fern
+
+Bathroom · every 3 days
+
+Watered today at 19:42
+
+Next due Mon 26 Oct
+Undo
+Fiddle-leaf fig
+
+Lounge · every week
+
+Watered today at 07:19
+
+Next due Fri 30 Oct
+Undo
+Bird of paradise
+
+Balcony door · every week
+
+Watered today at 07:17
+
+Next due Fri 30 Oct
+Undo
+Coming up
+6
+Aloe vera
+
+Kitchen windowsill · every 2 weeks
+
+Last watered Sat 10 Oct, 13 days ago
+
+Due tomorrow, Sat 24 Oct
+Water early
+ZZ plant
+
+Hallway · every 2 weeks
+
+Last watered Sun 11 Oct, 12 days ago
+
+Due Sun 25 Oct
+Water early
+Golden pothos
+
+Kitchen · every week
+
+Last watered Wed 21 Oct, 2 days ago
+
+Due Wed 28 Oct
+Water early
+Rubber plant
+
+Study · every 10 days
+
+Last watered Mon 19 Oct, 4 days ago
+
+Due Thu 29 Oct
+Water early
+Snake plant
+
+Bedroom · every 2 weeks
+
+Last watered Sat 17 Oct, 6 days ago
+
+Due Sat 31 Oct
+Water early
+String of pearls
+
+Study · every 10 days
+
+Last watered Thu 22 Oct, yesterday
+
+Due Sun 1 Nov
+Water early

@@ -1,0 +1,26 @@
+{"turn": 1, "clock": "21:40", "class": "start", "inject": "I1"}
+{"turn": 1, "clock": "21:40", "class": "act", "input": "1", "action": "A1", "rule": null, "changes": [], "plan": {"step": "P1", "relation": "follows"}}
+{"turn": 1, "clock": "21:40", "class": "communicate", "input": "Runbook says confirm backups with the other engineer before I touch the database. I'll ring them.", "action": "A3", "rule": "RU9", "outcome": "then", "changes": [], "plan": {"step": "P3", "relation": "follows"}}
+{"turn": 2, "clock": "21:55", "class": "start", "inject": "I2"}
+{"turn": 2, "clock": "21:55", "class": "investigate", "input": "Not now, support can wait. I need to see what's eating the disk.", "action": "A2", "rule": null, "changes": [{"reveal": "H1"}], "plan": {"step": "P2", "relation": "follows"}}
+{"turn": 3, "clock": "22:10", "class": "start", "inject": "I3"}
+{"turn": 3, "clock": "22:10", "class": "communicate", "input": "Good, backups are fine then. Tell support: data's safe, we have current backups.", "action": "A12", "rule": "RU12", "outcome": "then", "changes": [{"set": {"data_claim": "claimed_safe", "customers_told": true}}], "plan": {"step": null, "relation": "silent"}}
+{"turn": 3, "clock": "22:10", "class": "other", "input": "Before I touch the database I'll clear out old application logs on the host to get some room.", "rule": "judgement call", "reason": "The rules name two ways to get space (grow the volume, drop the slot) and are silent on deleting other files. Ruling: it works and frees about 0.4 GB, because the app rotates its logs weekly and little is left to delete. That is about three minutes of growth at the current rate, so the disk state and the turn 6 deadline do not move. It uses the turn.", "costs_turn": true, "changes": []}
+{"turn": 4, "clock": "22:25", "class": "clock", "rule": "RU1", "outcome": "then", "changes": [{"fire": "I5"}]}
+{"turn": 4, "clock": "22:25", "class": "start", "inject": ["I4", "I5"]}
+{"turn": 4, "clock": "22:25", "class": "command", "input": "hint", "hint": true, "text": "The advice comes from someone who has not looked at this system. One of the things you can do costs no time: find out what that advice would actually do here before you take it or leave it."}
+{"turn": 4, "clock": "22:25", "class": "investigate", "input": "ok. Look up what a restart does when the disk is nearly full.", "action": "A5", "rule": null, "changes": [{"reveal": "H3"}]}
+{"turn": 4, "clock": "22:25", "class": "act", "input": "Right, not restarting. Drop the replication slot.", "action": "A8", "rule": "RU4", "outcome": "then", "changes": [{"set": {"disk": "ok", "cause": "removed"}}], "plan": {"step": "P3", "relation": "skips"}}
+{"turn": 5, "clock": "22:40", "class": "start"}
+{"turn": 5, "clock": "22:40", "class": "investigate", "input": "Now the backups properly. Read the backup job's log and list the files.", "action": "A4", "rule": null, "changes": [{"reveal": "H2"}], "plan": {"step": null, "relation": "silent"}}
+{"turn": 6, "clock": "22:55", "class": "start"}
+{"turn": 6, "clock": "22:55", "class": "communicate", "input": "I told support the wrong thing. Correct it now, to them and to customers.", "action": "A15", "rule": "RU15", "outcome": "then", "changes": [{"set": {"data_claim": "corrected"}}]}
+{"turn": 6, "clock": "22:55", "class": "communicate", "input": "And give support a proper holding message: disk problem found and fixed, no data lost, next update in 30 minutes.", "action": "A11", "rule": "RU11", "outcome": "then", "changes": [], "plan": {"step": "P5", "relation": "contradicts"}}
+{"turn": 6, "clock": "22:55", "class": "investigate", "input": "Search the password manager and the wiki for anything about backups.", "action": "A7", "rule": null, "changes": [{"reveal": "H4"}]}
+{"turn": 7, "clock": "23:10", "class": "start", "inject": "I7"}
+{"turn": 7, "clock": "23:10", "class": "decide", "input": "Yes. You take the updates from here.", "action": "A13", "rule": "RU13", "outcome": "then", "changes": [{"set": {"updates_owner": "support lead"}}], "plan": {"step": "P5", "relation": "contradicts"}}
+{"turn": 7, "clock": "23:10", "class": "act", "input": "Run the backup by hand, following the note.", "action": "A10", "rule": "RU10", "outcome": "then", "changes": [{"set": {"backup_tonight": true}}], "plan": {"step": null, "relation": "silent"}}
+{"turn": 8, "clock": "23:25", "class": "start", "inject": "I8"}
+{"turn": 8, "clock": "23:25", "class": "command", "input": "status"}
+{"turn": 8, "clock": "23:25", "class": "decide", "input": "We're done. Close it. No need to watch overnight, thanks.", "action": "A14", "rule": "RU14", "outcome": "then", "changes": [{"set": {"incident": "closed"}}], "plan": {"step": "P6", "relation": "follows"}}
+{"turn": 8, "clock": "23:25", "class": "command", "input": "end"}

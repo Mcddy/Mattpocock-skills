@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parcel shelf</title>
+<!--
+  SYNTHETIC test page for the state-gallery skill. A front-desk log of parcels waiting to be
+  collected. It holds THREE PLANTED DEFECTS, on purpose:
+
+  1. Sideways overflow at a phone width. A carrier reference is set not to wrap (.ref), so a long
+     one pushes the page wider than a 390 pixel viewport. A measurement finds this.
+  2. Low-contrast text in the "dusk" theme. Its muted colour is too close to its background.
+     A measurement finds this, but only in the states that draw muted text: the ones with parcels.
+  3. A blank empty state. With no parcels the page shows nothing at all where the list would be:
+     no sentence, no count, no first action. No measurement finds this. Only a person looking
+     at the frame does.
+
+  The sample data is invented. Do not fix the defects: the example depends on them.
+-->
+<style>
+:root{
+  --bg:#f5efe4;--surface:#fffaf1;--ink:#2a2320;--muted:#655a50;--line:#d8ccba;
+  --accent:#8f4319;--on-accent:#fffaf1;--warn:#8e2a1c;--focus:#1f5c8a;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+/* PLANTED DEFECT 2: --muted on --bg is about 2.2 to 1 here */
+:root[data-theme="dusk"]{
+  --bg:#262230;--surface:#302b3c;--ink:#efeaf5;--muted:#5f5872;--line:#494258;
+  --accent:#e5b47a;--on-accent:#262230;--warn:#ffb3a6;--focus:#a8d4f0;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+h1{font:600 1.6rem/1.2 var(--serif);margin:0}
+.tally{margin:4px 0 0;color:var(--muted);font-size:.95rem}
+button{font:inherit;color:inherit;cursor:pointer;min-height:44px;padding:0 14px;border:1px solid var(--line);background:var(--surface);border-radius:6px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+button[aria-pressed="true"]{border-color:var(--ink);font-weight:600;box-shadow:inset 0 -3px 0 var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.themes{display:flex;gap:8px}
+#shelf{list-style:none;margin:16px 0 0;padding:0}
+#shelf li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line)}
+.unit{font-weight:600}
+/* PLANTED DEFECT 1: a reference never wraps */
+.ref{font-family:var(--mono);font-size:.9rem;white-space:nowrap}
+.since{color:var(--muted);font-size:.875rem;grid-column:1/-1}
+.add{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:12px}
+.add h2{font:600 1.1rem var(--serif);margin:0}
+label{display:block;font-size:.85rem;color:var(--ink);margin-bottom:4px}
+input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;min-height:44px;padding:0 12px;width:100%}
+input[aria-invalid="true"]{border:2px solid var(--warn)}
+.err{color:var(--warn);font-size:.85rem;font-weight:600;margin-top:4px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+#status{min-height:1.5em;margin:10px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Parcel shelf</h1>
+      <p class="tally" id="tally"></p>
+    </div>
+    <div class="themes" role="group" aria-label="Theme">
+      <button type="button" data-theme-choice="paper" aria-pressed="true">Paper</button>
+      <button type="button" data-theme-choice="dusk" aria-pressed="false">Dusk</button>
+    </div>
+  </header>
+
+  <p id="status" role="status" aria-live="polite"></p>
+  <!-- PLANTED DEFECT 3: when this list is empty the page says nothing and offers nothing -->
+  <ul id="shelf" aria-label="Parcels waiting"></ul>
+
+  <section class="add" aria-labelledby="add-h">
+    <h2 id="add-h">Log a parcel</h2>
+    <div><label for="f-unit">For (unit or flat)</label><input type="text" id="f-unit" autocomplete="off" aria-describedby="e-unit"><div class="err" id="e-unit"></div></div>
+    <div><label for="f-ref">Carrier reference</label><input type="text" id="f-ref" autocomplete="off" spellcheck="false" aria-describedby="e-ref"><div class="err" id="e-ref"></div></div>
+    <div class="row">
+      <button type="button" class="primary" id="add-go">Log parcel</button>
+      <button type="button" id="load-sample">Load four sample parcels</button>
+    </div>
+  </section>
+</div>
+<script>
+(function () {
+  'use strict';
+  var parcels = [];
+  var SAMPLE = [
+    {unit: 'Unit 3', ref: 'AP 7741 2209', since: 'Monday 9:10 am'},
+    {unit: 'Unit 11', ref: 'TOLL-55810', since: 'Monday 2:45 pm'},
+    {unit: 'Shop 2', ref: 'CP 0093 1187 44', since: 'Tuesday 8:30 am'},
+    {unit: 'Unit 7', ref: 'DHL 4410 7782', since: 'Tuesday 11:05 am'}
+  ];
+  var $ = function (id) { return document.getElementById(id); };
+  function render() {
+    var shelf = $('shelf');
+    shelf.textContent = '';
+    parcels.forEach(function (p) {
+      var li = document.createElement('li');
+      var unit = document.createElement('span'); unit.className = 'unit'; unit.textContent = p.unit;
+      var ref = document.createElement('span'); ref.className = 'ref'; ref.textContent = p.ref;
+      var since = document.createElement('span'); since.className = 'since'; since.textContent = 'Waiting since ' + p.since;
+      li.appendChild(unit); li.appendChild(ref); li.appendChild(since);
+      shelf.appendChild(li);
+    });
+    $('tally').textContent = parcels.length === 0 ? '' : parcels.length + (parcels.length === 1 ? ' parcel waiting.' : ' parcels waiting.');
+  }
+  function add() {
+    var unit = $('f-unit').value.trim(), ref = $('f-ref').value.trim();
+    var eu = unit ? '' : 'Enter the unit or flat the parcel is for.';
+    var er = ref ? '' : 'Enter the reference printed on the label.';
+    $('e-unit').textContent = eu; $('f-unit').setAttribute('aria-invalid', eu ? 'true' : 'false');
+    $('e-ref').textContent = er; $('f-ref').setAttribute('aria-invalid', er ? 'true' : 'false');
+    if (eu || er) { $('status').textContent = 'The parcel was not logged.'; (eu ? $('f-unit') : $('f-ref')).focus(); return; }
+    parcels.push({unit: unit, ref: ref, since: 'just now'});
+    $('f-unit').value = ''; $('f-ref').value = '';
+    $('status').textContent = 'Logged a parcel for ' + unit + '.';
+    render();
+  }
+  $('add-go').addEventListener('click', add);
+  ['f-unit', 'f-ref'].forEach(function (id) { $(id).addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); add(); } }); });
+  $('load-sample').addEventListener('click', function () { parcels = SAMPLE.slice(); $('status').textContent = 'Loaded four sample parcels.'; render(); });
+  document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.documentElement.setAttribute('data-theme', b.getAttribute('data-theme-choice'));
+      document.querySelectorAll('[data-theme-choice]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

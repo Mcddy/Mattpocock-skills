@@ -1,0 +1,21 @@
+fermi: Households paying for a regular lawn-mowing service
+  during 2026; Australia, private households; regular means six or more paid visits a year; excludes body-corporate and commercial contracts
+INPUTS
+  separate_houses      FACT        fixed 6,710,582 (as of 2021-08-10); source: Australian Bureau of Statistics, 2021 Census All persons QuickStats, Australia (Census of 2021-08-10; read and confirmed 2026-10-09), table 'Dwelling structure', which covers occupied private dwellings excluding visitor only and other non-classifiable households: 'Separate house 6,710,582 72.3'. https://www.abs.gov.au/census/find-census-data/quickstats/2021/AUS
+  growth_since_census  ASSESSMENT  uniform, hard bounds 1.03 to 1.1, median 1.06; why: GAP: growth in occupied separate houses since August 2021 was not looked up. One to two per cent a year over five years gives 1.05 to 1.10; 1.03 allows for slower building. An assumption with bounds only, so uniform.
+  share_with_lawn      ASSESSMENT  uniform, hard bounds 0.6 to 0.95, median 0.77 [probability]; why: Most separate houses have some grass; paved courtyards and rural blocks slashed by their owners do not count. No source found, so bounds only.
+  share_paying         ASSESSMENT  lognormal, 5th to 95th percentile 0.05 to 0.25, median 0.11 [probability]; why: Share of lawn-owning households that pay someone to mow regularly. General knowledge only: most mow their own; older, time-poor and higher-income households pay. Surprised if under 1 in 20 or over 1 in 4.
+FORMULA  separate_houses * growth_since_census * share_with_lawn * share_paying
+RESULT   median 620,000 households; 90 percent range 270,000 to 1,400,000
+  percentiles  5th 270,000 | 25th 440,000 | 50th 620,000 | 75th 870,000 | 95th 1,400,000
+  mean 700,000 (above the median: the upper tail pulls it up. Quote the median and the range, not the mean)
+  every input at its median gives 620,000
+  20,000 runs, seed 1; printed to 2 significant figures; high end is about 5.3 times the low end
+ANCHORS
+  cannot exceed the number of occupied separate houses: 6,710,582 at the 2021 Census (ABS QuickStats, read 2026-10-09) scaled up 10 per cent, the top of the assumed growth range. above the max of 7,381,640: 0 of 20,000 runs
+SENSITIVITY  (rank correlation with the result; then the result with this input alone at its 5th and 95th percentile, the rest at their medians)
+  share_paying         +0.96  280,000 to 1,400,000   (a factor of 5)
+  share_with_lawn      +0.26  490,000 to 750,000   (a factor of 1.5)
+  growth_since_census  +0.04  600,000 to 640,000   (a factor of 1.1)
+  Drives the spread most: share_paying. Narrowing it narrows the answer more than narrowing any other input.
+RESULT: RAN. 0 errors, 0 advisory note(s). The range is only as good as the input ranges and the decomposition.

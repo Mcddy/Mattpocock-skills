@@ -1,0 +1,154 @@
+{
+ "title": "Spreadsheet basics quiz (SYNTHETIC data), k7 key corrected to B",
+ "collection": {
+  "reached": "Paper quiz sat by everyone present at the end of the session; 31 of 31 handed it in.",
+  "invited": 31,
+  "missing": "Nobody present is missing. People enrolled but absent that day did not sit it."
+ },
+ "questions": [
+  {
+   "id": "k1",
+   "text": "Which symbol starts a formula in a spreadsheet cell?  A) =  B) #  C) @  D) &",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "A"
+  },
+  {
+   "id": "k2",
+   "text": "What does SUM(A1:A5) add up?  A) A1 and A5 only  B) Cells A1 to A5  C) All of column A  D) Rows 1 to 5 of every column",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  },
+  {
+   "id": "k3",
+   "text": "Which chart suits shares of a whole at one point in time?  A) Line chart  B) Scatter plot  C) Pie or stacked bar  D) Histogram",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "C"
+  },
+  {
+   "id": "k4",
+   "text": "What does a filter do to rows that do not match?  A) Deletes them  B) Hides them  C) Sorts them to the bottom  D) Locks them",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  },
+  {
+   "id": "k5",
+   "text": "What is the mean of 2, 4 and 9?  A) 4  B) 5  C) 7.5  D) 15",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  },
+  {
+   "id": "k6",
+   "text": "Which of these is a relative cell reference?  A) $A$1  B) A1  C) $A1$  D) 'A1'",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  },
+  {
+   "id": "k7",
+   "text": "Which function gives the middle value of a sorted list?  A) MEAN  B) MEDIAN  C) MODE  D) MAX",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  },
+  {
+   "id": "k8",
+   "text": "What happens if one column of a table is sorted on its own?  A) Rows stay intact  B) Values no longer line up with their rows  C) Duplicates are removed  D) The header is frozen",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  },
+  {
+   "id": "k9",
+   "text": "What does a pivot table do?  A) Summarises rows by group  B) Rotates the sheet  C) Checks spelling  D) Protects the file",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "A"
+  },
+  {
+   "id": "k10",
+   "text": "What does $B$2 do when a formula is copied down a column?  A) Stays on B2  B) Moves down a row each time  C) Moves across a column each time  D) Deletes cell B2",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "A"
+  },
+  {
+   "id": "k11",
+   "text": "COUNT counts the cells in a range that contain  A) Anything  B) Text  C) Numbers  D) Formulas only",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "C"
+  },
+  {
+   "id": "k12",
+   "text": "Where does VLOOKUP look for its lookup value?  A) Any column of the range  B) The first column of the range  C) The last column of the range  D) The header row",
+   "type": "single",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "correct": "B"
+  }
+ ]
+}

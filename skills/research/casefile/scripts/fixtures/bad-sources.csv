@@ -1,0 +1,7 @@
+source_id,title,publisher,address,tier,published,accessed,read_level,family,notes
+S1,Search result extract,A news site,https://example.org/a,secondary,2026-09-01,2026-10-08,snippet,,
+S2,Summary from another assistant,Relayed,,unverified,,2026-10-08,relayed,,
+S3,Forum thread,A forum,https://example.org/forum,aggregator,20260901,2026-10-08,full,,
+S4,Official report,An agency,https://example.org/report,primary,2026-02-30,2026-10-08,full,,
+S4,Duplicate id,x,https://example.org/x,primary,,2026-10-08,full,,
+S6,Never used,x,https://example.org/y,gold,,2026-10-08,full,,

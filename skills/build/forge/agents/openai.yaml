@@ -1,0 +1,16 @@
+interface:
+  display_name: Forge
+  short_description: 'Build apps end to end: design pack, 16 looks, hardened back
+    end, demo to EXE'
+  default_prompt: 'Use $forge to build this end to end: brief and tier, a design pack
+    with diagrams for my approval, the back end with checks, the main screen in 16
+    looks for me to pick, then the full app, verified and packaged.'
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

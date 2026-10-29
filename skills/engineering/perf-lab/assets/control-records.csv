@@ -1,0 +1,5 @@
+run_id,arm,cache_mode,elapsed_ms,exit_code,output_id
+b,baseline,cold,100,0,ok
+c,candidate,cold,80,0,ok
+w,baseline,warm,20,0,ok
+f,corrupt,cold,1,0,bad

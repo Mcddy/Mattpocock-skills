@@ -1,0 +1,6 @@
+interface:
+  display_name: "Replicate Lab"
+  short_description: "Recompute reference results with units and tolerances"
+  default_prompt: "Use $replicate-lab for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

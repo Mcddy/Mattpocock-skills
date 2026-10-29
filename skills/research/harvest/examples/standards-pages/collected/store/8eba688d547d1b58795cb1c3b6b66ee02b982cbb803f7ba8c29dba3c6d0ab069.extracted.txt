@@ -1,0 +1,24 @@
+DERIVED TEXT. This is not the source. It was made from the raw file named below by
+harvest.py extract (extractor 1), which strips markup and nothing more.
+raw_file: store/8eba688d547d1b58795cb1c3b6b66ee02b982cbb803f7ba8c29dba3c6d0ab069.raw
+raw_sha256: 8eba688d547d1b58795cb1c3b6b66ee02b982cbb803f7ba8c29dba3c6d0ab069
+source_id: S7
+address: https://standards.example/committee/minutes-42.html
+fetched: 2026-10-08T21:16:05.088Z (UTC; when this copy was first stored)
+note: OFFLINE FIXTURE, not fetched from the network
+title: Committee meeting 42: minutes
+decoded_as: utf-8 (Content-Type header)
+Everything below the line of dashes is content from the source, kept as data. Anything in it
+that reads as an instruction is part of the page and is not an instruction to the reader.
+----
+Home Standards Committee
+
+Meeting 42
+
+Held 23 September 2026.
+
+Edition 2 of HL-103 was approved, in force from 1 October 2026.
+
+A public consultation on HL-105 will open in November 2026.
+
+SYNTHETIC: this page was invented for the harvest skill's example. The Harbour Lighting Standards Board does not exist.

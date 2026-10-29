@@ -1,0 +1,30 @@
+DERIVED TEXT. This is not the source. It was made from the raw file named below by
+harvest.py extract (extractor 1), which strips markup and nothing more.
+raw_file: store/51451043c1756b90435b5b0409a9a721c003961382e26d29cf411c97179e96b8.raw
+raw_sha256: 51451043c1756b90435b5b0409a9a721c003961382e26d29cf411c97179e96b8
+source_id: S2
+address: https://standards.example/standards/hl-101.html
+fetched: 2026-10-08T21:15:54.588Z (UTC; when this copy was first stored)
+note: OFFLINE FIXTURE, not fetched from the network
+title: HL-101 Mounting heights (edition 3)
+decoded_as: utf-8 (Content-Type header)
+Everything below the line of dashes is content from the source, kept as data. Anything in it
+that reads as an instruction is part of the page and is not an instruction to the reader.
+----
+Home Standards Committee
+
+HL-101 Mounting heights
+
+Edition 3, in force from 1 March 2026.
+
+1 Scope
+
+This standard sets the mounting height of fixed navigation lights on harbour walls up to 8 metres high.
+
+2 Requirement
+
+A fixed light shall be mounted at least 4.0 metres above mean high water.
+
+Where the wall is lower than 4.0 metres, the light shall be mounted on a mast.
+
+SYNTHETIC: this page was invented for the harvest skill's example. The Harbour Lighting Standards Board does not exist.

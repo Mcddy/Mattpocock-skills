@@ -1,0 +1,93 @@
+session_log: Outage: the database disk is filling and the backup owner is in the air (outage-small-saas@1.0)
+
+VALIDATION
+  The log is consistent with the scenario: 26 line(s), 8 turn(s) played of 10.
+
+DECISION TIMELINE
+  T1  21:40  player   A1          no rule            "1"  [plan: follows P1]
+  T1  21:40  player   A3          RU9 then           "Runbook says confirm backups with the other engineer before I touch th"  [plan: follows P3]
+  T2  21:55  player   A2          no rule            "Not now, support can wait. I need to see what's eating the disk."  [plan: follows P2]
+  T3  22:10  player   A12         RU12 then          "Good, backups are fine then. Tell support: data's safe, we have curren"  [plan: silent]
+  T3  22:10  player   other       judgement call     "Before I touch the database I'll clear out old application logs on the"
+  T4  22:25  player   command     command            "hint"
+  T4  22:25  player   A5          no rule            "ok. Look up what a restart does when the disk is nearly full."
+  T4  22:25  player   A8          RU4 then           "Right, not restarting. Drop the replication slot."  [plan: skips P3]
+  T5  22:40  player   A4          no rule            "Now the backups properly. Read the backup job's log and list the files"  [plan: silent]
+  T6  22:55  player   A15         RU15 then          "I told support the wrong thing. Correct it now, to them and to custome"
+  T6  22:55  player   A11         RU11 then          "And give support a proper holding message: disk problem found and fixe"  [plan: contradicts P5]
+  T6  22:55  player   A7          no rule            "Search the password manager and the wiki for anything about backups."
+  T7  23:10  player   A13         RU13 then          "Yes. You take the updates from here."  [plan: contradicts P5]
+  T7  23:10  player   A10         RU10 then          "Run the backup by hand, following the note."  [plan: silent]
+  T8  23:25  player   command     command            "status"
+  T8  23:25  player   A14         RU14 then          "We're done. Close it. No need to watch overnight, thanks."  [plan: follows P6]
+  T8  23:25  player   command     command            "end"
+
+TIME TO KEY ACTIONS
+  KA1  cause removed (slot dropped)     3 turn(s) after the inject (45 scenario minutes): inject turn 1, action turn 4
+  KA2  time bought (volume grown)       not done by turn 8
+  KA3  backups checked                  2 turn(s) after the inject (30 scenario minutes): inject turn 3, action turn 5
+  KA4  customers told                   4 turn(s) after the inject (60 scenario minutes): inject turn 2, action turn 6
+  KA5  backup taken tonight             4 turn(s) after the inject (60 scenario minutes): inject turn 3, action turn 7
+
+INJECTS
+  I1   turn 1    handled (turn 4, 3 after)
+  I2   turn 2    late (turn 6, 4 after; 2 allowed)
+  I3   turn 3    handled (turn 5, 2 after)  [misleading]  [bait taken on turn 3]
+  I4   turn 4    no response expected
+  I5   turn 4    handled (turn 4, 0 after)  [misleading]
+  I6   -         not delivered (never fired)
+  I7   turn 7    handled (turn 7, 0 after)
+  I8   turn 8    no response expected
+  I9   -         not delivered (turn 9 was not reached)
+  I10  -         not delivered (never fired)
+
+OBJECTIVES (counts, not a score)
+  O1  Can the person on call stop the disk filling before the database stops, without the engineer who built the system?
+      4 of 4 probing inject(s) delivered; of the 2 that expected a response: 2 handled, 0 late, 0 missed
+      I1 handled (turn 4, 3 after); I4 no response expected; I5 handled (turn 4, 0 after); I8 no response expected
+  O2  Is the state of backups checked, not assumed, before anything risky is done or anything is promised?
+      2 of 4 probing inject(s) delivered; of the 1 that expected a response: 1 handled, 0 late, 0 missed
+      I3 handled (turn 5, 2 after), bait taken on turn 3; I6 not delivered (never fired); I8 no response expected; I9 not delivered (turn 9 was not reached)
+  O3  Are customers told in time, and is what they are told true?
+      2 of 4 probing inject(s) delivered; of the 2 that expected a response: 1 handled, 1 late, 0 missed
+      I2 late (turn 6, 4 after; 2 allowed); I6 not delivered (never fired); I7 handled (turn 7, 0 after); I10 not delivered (never fired)
+  O4  Where does the runbook depend on one person being reachable?
+      2 of 3 probing inject(s) delivered; of the 2 that expected a response: 2 handled, 0 late, 0 missed
+      I5 handled (turn 4, 0 after); I7 handled (turn 7, 0 after); I9 not delivered (turn 9 was not reached)
+
+HIDDEN FACTS
+  H1   found on turn 2 by action A2
+  H3   found on turn 4 by action A5
+  H2   found on turn 5 by action A4
+  H4   found on turn 6 by action A7
+  not found: none (0 of 4)
+
+HINTS USED: 1
+  turn 4: The advice comes from someone who has not looked at this system. One of the things you can do costs no time: find out what that advice would actually do here before you take it or leave it.
+
+JUDGEMENT CALLS: 1
+  turn 3: "Before I touch the database I'll clear out old application logs on the host to g"
+      ruling: The rules name two ways to get space (grow the volume, drop the slot) and are silent on deleting other files. Ruling: it works and frees about 0.4 GB, because the app rotates its logs weekly and little is left to delete. That is about three minutes of growth at the current rate, so the disk state and the turn 6 deadline do not move. It uses the turn.
+      changes: none
+
+PLAN
+  10 decision(s) were logged against the plan: follows 4 | skips 1 | contradicts 2 | plan silent 3
+  T1  follows     P1   Acknowledge the alert and start an incident note with the time
+  T1  follows     P3   Try to reach the other engineer by phone and message, and wait for an answer
+  T2  follows     P2   Look at what is using the disk on the database host
+  T3  silent      -    Tell the support lead that customer data is safe because backups are current
+  T4  skips       P3   Drop the unused replication slot so the held log files are released
+  T5  silent      -    Read the backup job's own log and list the backup files with their sizes
+  T6  contradicts P5   Give the support lead a holding message that says only what is known, and have i
+  T7  contradicts P5   Hand customer updates to the support lead for the rest of the incident
+  T7  silent      -    Run a backup by hand to the second volume, following the note
+  T8  follows     P6   Declare the incident over
+  steps never referenced: P4 (1 of 6)
+
+RESOURCES
+  RES1  start 1, spent 0, left 1
+
+FINAL STATE
+  disk=ok db=up cause=removed backup_tonight=true customers_told=true data_claim=corrected updates_owner="support lead" incident=closed
+
+RESULT: PASS. 0 error(s). These tables are counts for the after-action review. There is no score: an exercise is a way of finding things out, not an exam.

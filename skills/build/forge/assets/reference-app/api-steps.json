@@ -1,0 +1,574 @@
+[
+ {
+  "name": "health answers",
+  "method": "GET",
+  "path": "/api/health",
+  "expect": {
+   "status": 200,
+   "json": {
+    "status": "ok"
+   }
+  }
+ },
+ {
+  "name": "empty list",
+  "method": "GET",
+  "path": "/api/items",
+  "expect": {
+   "status": 200,
+   "json": {
+    "items": {
+     "$len": 0
+    },
+    "total": 0
+   }
+  }
+ },
+ {
+  "name": "create a valid item",
+  "method": "POST",
+  "path": "/api/items",
+  "headers": {
+   "Idempotency-Key": "smoke-1"
+  },
+  "json": {
+   "sku": "BOLT-M8",
+   "name": "M8 bolts",
+   "qty": 40,
+   "location": "A3",
+   "low_at": 10
+  },
+  "expect": {
+   "status": 201,
+   "json": {
+    "sku": "BOLT-M8",
+    "qty": 40,
+    "low": false,
+    "id": {
+     "$exists": true
+    }
+   }
+  },
+  "save": {
+   "id": "id"
+  }
+ },
+ {
+  "name": "same key and body replays, creates nothing",
+  "method": "POST",
+  "path": "/api/items",
+  "headers": {
+   "Idempotency-Key": "smoke-1"
+  },
+  "json": {
+   "sku": "BOLT-M8",
+   "name": "M8 bolts",
+   "qty": 40,
+   "location": "A3",
+   "low_at": 10
+  },
+  "expect": {
+   "status": 201,
+   "json": {
+    "sku": "BOLT-M8"
+   },
+   "headers": {
+    "Idempotent-Replay": "true"
+   }
+  }
+ },
+ {
+  "name": "still exactly one item",
+  "method": "GET",
+  "path": "/api/items",
+  "expect": {
+   "status": 200,
+   "json": {
+    "items": {
+     "$len": 1
+    },
+    "total": 1
+   }
+  }
+ },
+ {
+  "name": "same key, different body is refused",
+  "method": "POST",
+  "path": "/api/items",
+  "headers": {
+   "Idempotency-Key": "smoke-1"
+  },
+  "json": {
+   "sku": "NUT-M8",
+   "name": "M8 nuts",
+   "qty": 5
+  },
+  "expect": {
+   "status": 409,
+   "json": {
+    "error.code": "key_reused"
+   }
+  }
+ },
+ {
+  "name": "duplicate code without a key is refused",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "BOLT-M8",
+   "name": "Other bolts",
+   "qty": 1
+  },
+  "expect": {
+   "status": 409,
+   "json": {
+    "error.code": "duplicate_sku",
+    "error.fields.sku": {
+     "$exists": true
+    }
+   }
+  }
+ },
+ {
+  "name": "invalid fields are named",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "bad sku",
+   "name": "",
+   "qty": "7",
+   "low_at": -1,
+   "colour": "red"
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.code": "invalid",
+    "error.fields.sku": {
+     "$exists": true
+    },
+    "error.fields.name": {
+     "$exists": true
+    },
+    "error.fields.qty": "must be a whole number",
+    "error.fields.low_at": {
+     "$exists": true
+    },
+    "error.fields.colour": "unknown field"
+   }
+  }
+ },
+ {
+  "name": "true is not a number",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "X-1",
+   "name": "x",
+   "qty": true
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.fields.qty": "must be a whole number"
+   }
+  }
+ },
+ {
+  "name": "a fraction is not a whole number",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "X-1",
+   "name": "x",
+   "qty": 3.5
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.fields.qty": "must be a whole number"
+   }
+  }
+ },
+ {
+  "name": "malformed JSON",
+  "method": "POST",
+  "path": "/api/items",
+  "raw": "{\"sku\": ",
+  "expect": {
+   "status": 400,
+   "json": {
+    "error.code": "bad_json"
+   }
+  }
+ },
+ {
+  "name": "a JSON list is not an object",
+  "method": "POST",
+  "path": "/api/items",
+  "raw": "[1,2]",
+  "expect": {
+   "status": 400,
+   "json": {
+    "error.code": "bad_json"
+   }
+  }
+ },
+ {
+  "name": "neighbour: a 24-character code is allowed",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "AAAAAAAAAAAAAAAAAAAAAAAA",
+   "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+   "qty": 1000000,
+   "low_at": 1000000,
+   "location": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"
+  },
+  "expect": {
+   "status": 201,
+   "json": {
+    "qty": 1000000
+   }
+  },
+  "save": {
+   "edge": "id"
+  }
+ },
+ {
+  "name": "neighbour: a 25-character code is refused",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "BBBBBBBBBBBBBBBBBBBBBBBBB",
+   "name": "x",
+   "qty": 1
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.fields.sku": {
+     "$exists": true
+    }
+   }
+  }
+ },
+ {
+  "name": "neighbour: an 81-character name is refused",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "B-1",
+   "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+   "qty": 1
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.fields.name": {
+     "$exists": true
+    }
+   }
+  }
+ },
+ {
+  "name": "neighbour: one over the largest count is refused",
+  "method": "POST",
+  "path": "/api/items",
+  "json": {
+   "sku": "B-1",
+   "name": "x",
+   "qty": 1000001
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.fields.qty": {
+     "$exists": true
+    }
+   }
+  }
+ },
+ {
+  "name": "neighbour: taking exactly everything is allowed",
+  "method": "POST",
+  "path": "/api/items/{edge}/adjust",
+  "json": {
+   "delta": -1000000
+  },
+  "expect": {
+   "status": 200,
+   "json": {
+    "qty": 0
+   }
+  }
+ },
+ {
+  "name": "neighbour item removed",
+  "method": "DELETE",
+  "path": "/api/items/{edge}",
+  "expect": {
+   "status": 204
+  }
+ },
+ {
+  "name": "invalid item created nothing",
+  "method": "GET",
+  "path": "/api/items",
+  "expect": {
+   "status": 200,
+   "json": {
+    "total": 1
+   }
+  }
+ },
+ {
+  "name": "take 30",
+  "method": "POST",
+  "path": "/api/items/{id}/adjust",
+  "json": {
+   "delta": -30
+  },
+  "expect": {
+   "status": 200,
+   "json": {
+    "qty": 10,
+    "low": true
+   }
+  }
+ },
+ {
+  "name": "low filter finds it",
+  "method": "GET",
+  "path": "/api/items?low=1",
+  "expect": {
+   "status": 200,
+   "json": {
+    "items": {
+     "$len": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "taking 11 from 10 is refused",
+  "method": "POST",
+  "path": "/api/items/{id}/adjust",
+  "json": {
+   "delta": -11
+  },
+  "expect": {
+   "status": 409,
+   "json": {
+    "error.code": "would_go_negative",
+    "error.message": {
+     "$contains": "10"
+    }
+   }
+  }
+ },
+ {
+  "name": "zero is refused",
+  "method": "POST",
+  "path": "/api/items/{id}/adjust",
+  "json": {
+   "delta": 0
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.fields.delta": {
+     "$exists": true
+    }
+   }
+  }
+ },
+ {
+  "name": "a text delta is refused",
+  "method": "POST",
+  "path": "/api/items/{id}/adjust",
+  "json": {
+   "delta": "-1"
+  },
+  "expect": {
+   "status": 422,
+   "json": {
+    "error.code": "invalid"
+   }
+  }
+ },
+ {
+  "name": "20 takes of 1 at once from 10",
+  "method": "POST",
+  "path": "/api/items/{id}/adjust",
+  "json": {
+   "delta": -1
+  },
+  "parallel": 20,
+  "expect": {
+   "status_counts": {
+    "200": 10,
+    "409": 10
+   }
+  }
+ },
+ {
+  "name": "count is exactly zero, never below",
+  "method": "GET",
+  "path": "/api/items?q=BOLT",
+  "expect": {
+   "status": 200,
+   "json": {
+    "items.0.qty": 0
+   }
+  }
+ },
+ {
+  "name": "search treats % as text",
+  "method": "GET",
+  "path": "/api/items?q=%25",
+  "expect": {
+   "status": 200,
+   "json": {
+    "items": {
+     "$len": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "unknown item",
+  "method": "POST",
+  "path": "/api/items/999999/adjust",
+  "json": {
+   "delta": 1
+  },
+  "expect": {
+   "status": 404,
+   "json": {
+    "error.code": "not_found"
+   }
+  }
+ },
+ {
+  "name": "wrong method",
+  "method": "PUT",
+  "path": "/api/items",
+  "json": {},
+  "expect": {
+   "status": 405,
+   "json": {
+    "error.code": "method_not_allowed"
+   }
+  }
+ },
+ {
+  "name": "unknown route",
+  "method": "GET",
+  "path": "/api/nothing",
+  "expect": {
+   "status": 404,
+   "json": {
+    "error.code": "not_found"
+   }
+  }
+ },
+ {
+  "name": "preflight from a sandboxed frame",
+  "method": "OPTIONS",
+  "path": "/api/items",
+  "headers": {
+   "Origin": "null",
+   "Access-Control-Request-Method": "POST",
+   "Access-Control-Request-Headers": "content-type, idempotency-key"
+  },
+  "expect": {
+   "status": 204,
+   "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Idempotency-Key"
+   }
+  }
+ },
+ {
+  "name": "add 7 before the restart",
+  "method": "POST",
+  "path": "/api/items/{id}/adjust",
+  "json": {
+   "delta": 7
+  },
+  "expect": {
+   "status": 200,
+   "json": {
+    "qty": 7
+   }
+  }
+ },
+ {
+  "restart": true
+ },
+ {
+  "name": "the count survived the restart",
+  "method": "GET",
+  "path": "/api/items",
+  "expect": {
+   "status": 200,
+   "json": {
+    "total": 1,
+    "items.0.qty": 7,
+    "items.0.sku": "BOLT-M8"
+   }
+  }
+ },
+ {
+  "name": "the key survived the restart",
+  "method": "POST",
+  "path": "/api/items",
+  "headers": {
+   "Idempotency-Key": "smoke-1"
+  },
+  "json": {
+   "sku": "BOLT-M8",
+   "name": "M8 bolts",
+   "qty": 40,
+   "location": "A3",
+   "low_at": 10
+  },
+  "expect": {
+   "status": 201,
+   "headers": {
+    "Idempotent-Replay": "true"
+   }
+  }
+ },
+ {
+  "name": "remove",
+  "method": "DELETE",
+  "path": "/api/items/{id}",
+  "expect": {
+   "status": 204
+  }
+ },
+ {
+  "name": "remove again",
+  "method": "DELETE",
+  "path": "/api/items/{id}",
+  "expect": {
+   "status": 404,
+   "json": {
+    "error.code": "not_found"
+   }
+  }
+ },
+ {
+  "name": "empty again",
+  "method": "GET",
+  "path": "/api/items",
+  "expect": {
+   "status": 200,
+   "json": {
+    "total": 0
+   }
+  }
+ }
+]

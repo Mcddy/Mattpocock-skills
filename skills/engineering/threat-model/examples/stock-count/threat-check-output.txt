@@ -1,0 +1,13 @@
+threat_check: Stock count reference app, if its server were bound to a network address so a phone can reach it (as of 2026-10-09)
+  ADVISORY  flow F2 crosses a trust boundary and is not authenticated  [boundary_unauthenticated]
+  ADVISORY  flow F3 crosses a trust boundary and is not authenticated  [boundary_unauthenticated]
+  ADVISORY  flow F4 crosses a trust boundary and is not authenticated  [boundary_unauthenticated]
+  ADVISORY  flow F5 crosses a trust boundary and is not authenticated  [boundary_unauthenticated]
+  SUMMARY
+    threats: 13   open 9 | mitigated 4 | accepted 0 | transferred 0
+    of the 9 open: nothing built 8 | built, not verified 0 | partly mitigated (a verified mitigation exists) 1
+    mitigations: 13   verified 6 | unverified 0 | failing 0 | not built 7
+    verifications: 13   pass 6 | fail 4 | not_run 3
+    flows: 9, of which 4 cross a trust boundary
+    likelihood unknown: 11 of 13 threat(s). Unknown is not low.
+RESULT: PASS. 0 error(s), 4 advisory note(s). This checks that the file is complete and consistent. It is not a penetration test, a compliance audit or a guarantee, and it cannot tell whether a threat is missing.

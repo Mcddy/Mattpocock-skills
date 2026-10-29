@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-density="comfortable" data-text="standard" data-motion="smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threat model drawing</title>
+<!--
+  A reading aid for one threat-model.json, written by scripts/threat_diagram.py. One file, no build
+  step, no outside requests. The model and the checker's result are embedded as data below; the
+  page draws them and decides nothing. To change what it shows, change the model and run the
+  script again.
+
+  Delivery notes:
+  - No form element, no alert, confirm or prompt. Buttons are type=button with click handlers.
+  - Every string from the model is set as text. Nothing is assembled as markup.
+  - Storage is optional. Display choices are kept if the host or the browser allows it and still
+    apply for the visit if not; the page says which.
+  - Copying uses the clipboard if allowed; the same text is always in a box on the page.
+-->
+<style>
+:root{
+  --bg:#f6f0e6;--surface:#fffaf2;--raised:#fbf3e4;--zone:#efe6d6;--ink:#2b2420;--muted:#62574d;--line:#d2c4af;--line-strong:#8b7d6c;
+  --accent:#8a3f17;--on-accent:#fffaf2;--accent-soft:#f1dccb;--warn:#8c2a1b;--warn-soft:#f6ddd3;--ok:#2a6144;--ok-soft:#dcecdf;
+  --focus:#1d5a88;--wire:#6b5f53;--wire-dim:#c9bca8;
+  --pad:14px;--gap:14px;--target:44px;--card-gap:14px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="slate"]{
+  --bg:#eef1f3;--surface:#fbfcfd;--raised:#f3f6f8;--zone:#e3e9ed;--ink:#1f2a30;--muted:#4f5e68;--line:#c5d0d7;--line-strong:#73838e;
+  --accent:#1f5878;--on-accent:#fbfcfd;--accent-soft:#d6e4ec;--warn:#8a2a22;--warn-soft:#f3dcd8;--ok:#25614a;--ok-soft:#d9ebe2;
+  --focus:#7a3c12;--wire:#55646e;--wire-dim:#bcc8cf;
+}
+:root[data-theme="ember"]{
+  --bg:#221b17;--surface:#2c2420;--raised:#362c26;--zone:#281f1a;--ink:#f3e9dc;--muted:#c4b5a4;--line:#55473d;--line-strong:#9a8878;
+  --accent:#f0a36b;--on-accent:#221b17;--accent-soft:#4a3528;--warn:#ffac99;--warn-soft:#4c2a23;--ok:#9ed6b3;--ok-soft:#24392d;
+  --focus:#9fd0f2;--wire:#b9a998;--wire-dim:#5d4f44;
+}
+:root[data-theme="night"]{
+  --bg:#12171c;--surface:#1a2128;--raised:#222b33;--zone:#161c22;--ink:#e8eef2;--muted:#a9b8c2;--line:#3a4853;--line-strong:#7d8f9b;
+  --accent:#8cc4e8;--on-accent:#12171c;--accent-soft:#243846;--warn:#ffb0a3;--warn-soft:#452622;--ok:#9bd8b6;--ok-soft:#1f3a2e;
+  --focus:#f2c08a;--wire:#a3b4bf;--wire-dim:#44535e;
+}
+:root[data-density="compact"]{--pad:9px;--gap:10px;--card-gap:8px}
+:root[data-text="large"]{font-size:118%}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+:root[data-motion="smooth"]{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding:18px 16px 96px}
+header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+header.top>div{min-width:0}
+.eyebrow{margin:0 0 2px;color:var(--muted);font-size:.85rem}
+h1{font:600 1.4rem/1.2 var(--serif);margin:0;overflow-wrap:anywhere}
+.tally{color:var(--muted);margin:6px 0 0;font-size:.93rem}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{min-height:var(--target);max-width:100%;padding:6px 14px;border:1px solid var(--line-strong);background:var(--surface);border-radius:6px;overflow-wrap:break-word}
+header.top .btn{flex:0 0 auto}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+[hidden]{display:none !important}
+
+.panel{margin-top:12px;background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:12px}
+.choice{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.choice .lab{width:84px;color:var(--muted);font-size:.9rem}
+.seg{min-height:var(--target);padding:0 14px;border:1px solid var(--line-strong);background:var(--surface);border-radius:6px}
+.seg[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);font-weight:600}
+.note{color:var(--muted);font-size:.9rem;margin:0}
+.banner{margin:12px 0 0;padding:10px 12px;border:2px solid var(--warn);background:var(--warn-soft);color:var(--ink);border-radius:6px}
+.banner b{color:var(--warn)}
+.banner ul{margin:6px 0 0;padding-left:20px}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:14px 0 4px}
+.tools .lab{color:var(--muted);font-size:.9rem}
+.status{min-height:1.6em;margin:6px 0 8px;color:var(--muted);font-size:.93rem}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media (min-width:900px){
+  .layout{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:start}
+  .detail{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+  .peek,.back-row{display:none !important}
+}
+.drawing h2,.detail h2{font:600 1.1rem/1.25 var(--serif);margin:0 0 8px}
+.canvas{position:relative;z-index:0}
+.wires{position:absolute;left:0;top:0;z-index:1;pointer-events:none;overflow:visible}
+.wire{fill:none;stroke:var(--wire);stroke-width:1.5}
+.wire.boundary{stroke-width:3}
+.head{fill:var(--wire);stroke:none}
+.wires.has-sel .wire:not(.hot){stroke:var(--wire-dim)}
+.wires.has-sel .head:not(.hot){fill:var(--wire-dim)}
+.wire.hot{stroke:var(--accent);stroke-width:2.5}
+.wire.boundary.hot{stroke-width:4}
+.head.hot{fill:var(--accent)}
+
+.zone{background:var(--zone);border:2px dashed var(--line-strong);border-radius:10px;padding:6px var(--gut) 12px}
+.zone-name{position:relative;z-index:2;display:inline-flex;align-items:center;min-height:var(--target);max-width:100%;padding:0 10px;margin:0 0 4px -4px;
+  border:0;border-radius:6px;background:transparent;font:600 .95rem var(--sans);text-align:left;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere;
+  text-shadow:0 0 3px var(--zone),0 0 3px var(--zone),0 0 4px var(--zone),0 0 5px var(--zone)}
+.zone-name[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--ink);text-shadow:none}
+.zone-empty{position:relative;z-index:2;margin:0;color:var(--muted);font-size:.9rem}
+.row{display:grid;gap:12px}
+.row.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.row.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.arcs{height:0}
+.corridor{height:30px}
+.node{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:64px;width:100%;padding:var(--pad) 10px;text-align:left;
+  background:var(--surface);border:1.5px solid var(--ink);border-radius:4px}
+.node.k-process{border-radius:16px}
+.node.k-store{border-left-color:transparent;border-right-color:transparent;border-top-width:3px;border-bottom-width:3px;border-radius:0}
+.node.k-human{border-style:dotted;border-width:2px}
+.node .kind{font:.72rem/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.node .nm{font-weight:600;font-size:.92rem;line-height:1.25;overflow-wrap:anywhere}
+.node .ct,.chip .ct{font-size:.78rem;line-height:1.2;color:var(--muted)}
+.node .ct.has,.chip .ct.has{color:var(--warn);font-weight:600}
+.node[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--accent-soft);box-shadow:0 0 0 3px var(--ink)}
+.chip{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:54px;min-height:var(--target);padding:2px 8px;
+  background:var(--surface);border:1.5px solid var(--ink);border-radius:22px;white-space:nowrap;transform:translate(-50%,-50%)}
+.chip .fid{font:600 .86rem/1.2 var(--mono)}
+.chip.boundary{border-width:4px;border-style:double}
+.legend{margin:10px 0 0;color:var(--muted);font-size:.86rem}
+.legend b{color:var(--ink);font-weight:600}
+
+.detail{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+.facts{margin:0 0 10px;padding:0;list-style:none;font-size:.93rem}
+.facts li{padding:3px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.facts .k{color:var(--muted)}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.jump.tight{margin:8px 0 0}
+.note.lead{margin:0 0 10px}
+.cards{list-style:none;margin:0;padding:0;display:grid;gap:var(--card-gap)}
+.card{border:1px solid var(--line-strong);border-radius:6px;padding:var(--pad) 12px;background:var(--bg)}
+.card h3{font:600 .98rem/1.3 var(--sans);margin:0 0 4px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.card h3 .tid{font-family:var(--mono)}
+.tag{display:inline-block;padding:1px 8px;border-radius:4px;font-size:.82rem;font-weight:600;border:1px solid currentColor}
+.tag.open{color:var(--warn);background:var(--warn-soft)}
+.tag.done{color:var(--ok);background:var(--ok-soft)}
+.tag.other{color:var(--ink);background:var(--raised)}
+.card p{margin:4px 0;overflow-wrap:anywhere}
+.cards.index{gap:6px}
+.trow{display:block;width:100%;min-height:var(--target);padding:8px 12px;text-align:left;border:1px solid var(--line-strong);border-radius:6px;background:var(--bg)}
+.trow-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-weight:600}
+.trow-top .tid{font-family:var(--mono)}
+.trow-where{display:block;color:var(--muted);font-size:.9rem;overflow-wrap:anywhere}
+.card .k{color:var(--muted)}
+.mits{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.mits li{border-top:1px solid var(--line-strong);padding:6px 0 0;font-size:.93rem;overflow-wrap:anywhere}
+.mits .ver{display:block;color:var(--muted);font-size:.88rem}
+.blank{padding:18px 8px;text-align:center}
+.blank h3{font:600 1.05rem var(--serif);margin:0 0 6px}
+.blank p{margin:0 auto 12px;color:var(--muted);max-width:46ch}
+.back-row{margin:0 0 10px}
+
+.peek{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:10px;align-items:center;padding:8px 16px;background:var(--surface);border-top:2px solid var(--ink)}
+.peek p{margin:0;flex:1 1 auto;min-width:0;font-size:.9rem;line-height:1.3;overflow-wrap:anywhere}
+.peek .btn{flex:0 0 auto;min-width:64px}
+.extra{margin-top:22px;display:grid;gap:10px}
+.extra .panel{margin-top:0}
+.extra ul{margin:0;padding-left:20px}
+.extra h3{font:600 .95rem var(--sans);margin:0}
+textarea{font:.85rem/1.45 var(--mono);color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:6px;width:100%;min-height:220px;padding:10px;resize:vertical}
+label{display:block;font-size:.88rem;color:var(--muted);margin-bottom:4px}
+.foot{margin-top:24px;color:var(--muted);font-size:.86rem}
+.fatal{margin:24px 0;padding:16px;border:2px solid var(--warn);background:var(--warn-soft);border-radius:8px}
+.fatal h2{font:600 1.15rem var(--serif);margin:0 0 6px}
+@media (max-width:520px){h1{font-size:1.2rem}}
+@media (prefers-reduced-motion:no-preference){:root[data-motion="smooth"] .node,:root[data-motion="smooth"] .chip,:root[data-motion="smooth"] .seg,:root[data-motion="smooth"] .wire{transition:background-color .12s ease,stroke .12s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow" id="eyebrow">Threat model drawing</p>
+      <h1 id="system">Loading the model.</h1>
+      <p class="tally" id="tally"></p>
+    </div>
+    <button type="button" class="btn" id="display-toggle" aria-expanded="false" aria-controls="display">Display</button>
+  </header>
+
+  <section class="panel" id="display" hidden aria-label="Display choices">
+    <div class="choice" role="group" aria-label="Theme">
+      <span class="lab">Theme</span>
+      <button type="button" class="seg" data-set="theme" data-val="paper">Paper</button>
+      <button type="button" class="seg" data-set="theme" data-val="slate">Slate</button>
+      <button type="button" class="seg" data-set="theme" data-val="ember">Ember</button>
+      <button type="button" class="seg" data-set="theme" data-val="night">Night</button>
+    </div>
+    <div class="choice" role="group" aria-label="Spacing">
+      <span class="lab">Spacing</span>
+      <button type="button" class="seg" data-set="density" data-val="comfortable">Comfortable</button>
+      <button type="button" class="seg" data-set="density" data-val="compact">Compact</button>
+    </div>
+    <div class="choice" role="group" aria-label="Text size">
+      <span class="lab">Text size</span>
+      <button type="button" class="seg" data-set="text" data-val="standard">Standard</button>
+      <button type="button" class="seg" data-set="text" data-val="large">Large</button>
+    </div>
+    <div class="choice" role="group" aria-label="Motion">
+      <span class="lab">Motion</span>
+      <button type="button" class="seg" data-set="motion" data-val="smooth">Smooth</button>
+      <button type="button" class="seg" data-set="motion" data-val="still">Still</button>
+    </div>
+    <div class="choice">
+      <button type="button" class="btn quiet" id="display-reset">Reset display</button>
+      <p class="note" id="display-note"></p>
+    </div>
+  </section>
+
+  <div id="banner" class="banner" hidden></div>
+  <div id="fatal" class="fatal" hidden>
+    <h2>The drawing could not be built</h2>
+    <p id="fatal-text">The model embedded in this page could not be read. Run threat_diagram.py on the model file again.</p>
+  </div>
+
+  <div id="app" hidden>
+    <div class="tools" role="group" aria-label="Which threats to show">
+      <span class="lab">Show</span>
+      <button type="button" class="seg" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" class="seg" data-filter="open" aria-pressed="false">Open</button>
+      <button type="button" class="seg" data-filter="unverified" aria-pressed="false">Unverified</button>
+    </div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
+    <div class="layout">
+      <section class="drawing" aria-labelledby="drawing-h">
+        <h2 id="drawing-h">Data flows and trust boundaries</h2>
+        <div class="canvas" id="canvas"></div>
+        <p class="legend" id="legend"></p>
+      </section>
+      <section class="detail" id="detail" aria-labelledby="detail-h">
+        <h2 id="detail-h" tabindex="-1"></h2>
+        <div class="back-row" id="back-row" hidden><button type="button" class="btn" id="back">Back to the drawing</button></div>
+        <div id="detail-body"></div>
+      </section>
+    </div>
+
+    <div class="extra">
+      <div><button type="button" class="btn" id="scope-toggle" aria-expanded="false" aria-controls="scope">Assumptions and what is out of scope</button></div>
+      <section class="panel" id="scope" hidden aria-label="Assumptions and what is out of scope"></section>
+      <div><button type="button" class="btn" id="text-toggle" aria-expanded="false" aria-controls="textver">Text version</button></div>
+      <section class="panel" id="textver" hidden aria-label="Text version">
+        <div>
+          <label for="text-box">The threats now shown, as plain text. Read-only.</label>
+          <textarea id="text-box" readonly spellcheck="false"></textarea>
+        </div>
+        <div class="choice">
+          <button type="button" class="btn primary" id="text-copy">Copy this text</button>
+          <p class="note" id="copy-note" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+    </div>
+    <p class="foot" id="foot"></p>
+  </div>
+</div>
+
+<noscript><p class="fatal">This page draws the model with a script, and scripting is switched off here. The same content is in the model file, and threat_check.py prints its summary.</p></noscript>
+
+<div class="peek" id="peek" hidden>
+  <p id="peek-text"></p>
+  <button type="button" class="btn primary" id="peek-read">Read</button>
+</div>
+
+<script type="application/json" id="model-data">{"check":{"advisories":[{"code":"boundary_unauthenticated","message":"flow F2 crosses a trust boundary and is not authenticated"},{"code":"boundary_unauthenticated","message":"flow F3 crosses a trust boundary and is not authenticated"},{"code":"boundary_unauthenticated","message":"flow F4 crosses a trust boundary and is not authenticated"},{"code":"boundary_unauthenticated","message":"flow F5 crosses a trust boundary and is not authenticated"}],"errors":[],"summary":{"boundary_flows":4,"flows":9,"likelihood_unknown":11,"mitigations":13,"mitigations_by_state":{"failing":0,"not_built":7,"unverified":0,"verified":6},"threats":13,"threats_by_state":{"mitigated_verified":4,"open_nothing_built":8,"open_partly_mitigated":1},"threats_by_status":{"accepted":0,"mitigated":4,"open":9,"transferred":0},"verifications":13,"verifications_by_result":{"fail":4,"not_run":3,"pass":6}}},"derived":{"boundary":{"F1":false,"F2":true,"F3":true,"F4":true,"F5":true,"F6":false,"F7":false,"F8":false,"F9":false},"mitigation_state":{"M1":"verified","M10":"not_built","M11":"not_built","M12":"not_built","M13":"not_built","M2":"verified","M3":"verified","M4":"verified","M5":"verified","M6":"verified","M7":"not_built","M8":"not_built","M9":"not_built"},"threat_state":{"T1":"open_nothing_built","T10":"mitigated_verified","T11":"mitigated_verified","T12":"mitigated_verified","T13":"mitigated_verified","T2":"open_nothing_built","T3":"open_nothing_built","T4":"open_nothing_built","T5":"open_nothing_built","T6":"open_partly_mitigated","T7":"open_nothing_built","T8":"open_nothing_built","T9":"open_nothing_built"}},"model":{"actors":[{"id":"U1","name":"the user","trust":"operator"},{"id":"U2","name":"another device on the same network","trust":"anonymous"},{"id":"U3","name":"a page from another website","trust":"external"}],"as_of":"2026-10-09","assets":[{"id":"A1","name":"stock sheet","sensitivity":"medium","why":"Item codes, names, shelves and counts. A wrong or wiped sheet means recounting every shelf, and the list shows what is kept and where."},{"id":"A2","name":"host computer account","sensitivity":"high","why":"The server runs as the person who started it and can reach that person's other files."},{"id":"A3","name":"display choices","sensitivity":"low","why":"Theme and row spacing only; losing them costs two taps."},{"id":"A4","name":"server log","sensitivity":"low","why":"One line per request, shown in the terminal. It is the only record of what was asked, and it includes search text."}],"assumptions":["Modelled change: the server listens on the machine's network address so a phone on the same Wi-Fi can open the page. This is not built: server.py binds 127.0.0.1 only, and its README says not to expose it.","The network is a home or workshop Wi-Fi that other people's devices also join. It is not reachable from the internet.","One person uses the app. There are no accounts and no login.","The verifications ran on loopback. The behaviours they test (validation, limits, error answers, how the page shows text) do not depend on the listening address."],"elements":[{"id":"E1","kind":"human","name":"The user at the shelves","zone":"Z1"},{"id":"E2","kind":"process","name":"Stock count page in the phone browser","zone":"Z1"},{"holds":["A3"],"id":"E3","kind":"store","name":"Browser storage","zone":"Z1"},{"id":"E4","kind":"external","name":"Another device on the Wi-Fi","zone":"Z2"},{"id":"E5","kind":"external","name":"Page from another website, open in a browser on the Wi-Fi","zone":"Z2"},{"holds":["A2"],"id":"E6","kind":"process","name":"API server (server.py)","zone":"Z3"},{"holds":["A1"],"id":"E7","kind":"store","name":"SQLite data file","zone":"Z3"},{"holds":["A4"],"id":"E8","kind":"store","name":"Server log in the terminal","zone":"Z3"}],"flows":[{"authenticated":false,"crosses":[],"data":["A1"],"from":"E1","id":"F1","protocol":"taps and typing","to":"E2"},{"authenticated":false,"crosses":["Z1","Z2","Z3"],"data":["A1"],"from":"E2","id":"F2","protocol":"HTTP, JSON: create, adjust, remove, search","to":"E6"},{"authenticated":false,"crosses":["Z3","Z2","Z1"],"data":["A1"],"from":"E6","id":"F3","protocol":"HTTP: the page itself and JSON answers","to":"E2"},{"authenticated":false,"crosses":["Z2","Z3"],"data":["A1"],"from":"E4","id":"F4","protocol":"HTTP, JSON sent straight to the API","to":"E6"},{"authenticated":false,"crosses":["Z2","Z3"],"data":["A1"],"from":"E5","id":"F5","protocol":"HTTP from a browser, cross-origin","to":"E6"},{"authenticated":false,"crosses":[],"data":["A1"],"from":"E6","id":"F6","protocol":"SQL through sqlite3, parameterised","to":"E7"},{"authenticated":false,"crosses":[],"data":["A1"],"from":"E7","id":"F7","protocol":"rows read back","to":"E6"},{"authenticated":false,"crosses":[],"data":["A4"],"from":"E6","id":"F8","protocol":"one line per request to stderr","to":"E8"},{"authenticated":false,"crosses":[],"data":["A3"],"from":"E2","id":"F9","protocol":"localStorage, optional","to":"E3"}],"mitigations":[{"built":true,"id":"M1","verified_by":["V1"],"what":"A request body over 64 kB is refused before it is read.","where":"server.py, Handler.read_json and MAX_BODY"},{"built":true,"id":"M2","verified_by":["V2"],"what":"Every query is parameterised, wildcard characters in search text are escaped, and the schema refuses negative counts and duplicate codes.","where":"server.py, list_items, create_item, adjust_item and SCHEMA"},{"built":true,"id":"M3","verified_by":["V3"],"what":"The page sets every string it shows as text and never assembles markup from it.","where":"index.html, el(): textContent"},{"built":true,"id":"M4","verified_by":["V4"],"what":"Counts must be whole numbers in range; an adjustment below zero is refused in one atomic statement.","where":"server.py, as_int, validate_item and adjust_item"},{"built":true,"id":"M5","verified_by":["V5"],"what":"Every error answer has one fixed shape and carries no trace, path or query text.","where":"server.py, ApiError, Handler.fail and Handler.route"},{"built":true,"id":"M6","verified_by":["V6"],"what":"A field the API does not know is refused, not ignored.","where":"server.py, validate_item and adjust_item"},{"built":false,"id":"M7","verified_by":["V7"],"what":"NOT BUILT. A secret token sent in a header on every API request, compared in constant time; a request without it gets 401.","where":"would live in server.py, Handler.route, before any route is chosen"},{"built":false,"id":"M8","verified_by":["V8"],"what":"NOT BUILT. Allow the page's own origin only, in place of every origin.","where":"would replace the wildcard in server.py, Handler.send_json"},{"built":false,"id":"M9","verified_by":["V11"],"what":"NOT BUILT. Run the server under its own account that can reach only its own folder, behind a maintained web server.","where":"host configuration; nothing in the app's folder"},{"built":false,"id":"M10","verified_by":["V12"],"what":"NOT BUILT. Serve the page and the API over HTTPS with a certificate the phone trusts.","where":"host configuration (a reverse proxy); nothing in the app's folder"},{"built":false,"id":"M11","verified_by":["V9"],"what":"NOT BUILT. A request limit per client address and a ceiling on the number of items.","where":"would live in server.py, Handler.route and create_item"},{"built":false,"id":"M12","verified_by":["V10"],"what":"NOT BUILT. Remove control characters from the request path before the log line is written.","where":"server.py, Handler.log_message, which replaces the standard library's scrubbed version with a raw write"},{"built":false,"id":"M13","verified_by":["V13"],"what":"NOT BUILT. A dated copy of the data file taken on a schedule, with one restore tried.","where":"host configuration; the app's README lists backups as absent"}],"notes":"Author-run example. The app is the forge skill's reference slice (server.py and index.html), read on 2026-10-09 and not changed. Verifications V1 to V10 were run that day on loopback against the unmodified app by verify_stock_count.py; V11 to V13 have not been run.","out_of_scope":["The Wi-Fi router, its password and its firmware.","The host computer's operating system and its other software.","Exposure to the internet. A forwarded port or a tunnel makes this model wrong; it would need redoing.","Physical access to the host computer or the phone.","Language-model cases. The app calls no model."],"schema":1,"system":"Stock count reference app, if its server were bound to a network address so a phone can reach it","threats":[{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"spoofing","id":"T1","impact":"Counts are changed or the whole stock sheet is removed. The user finds out at the next count, with nothing to restore from.","likelihood":"depends on who shares the network; it needs only the address and a browser, and V7 shows the server accepts it today","mitigations":["M7"],"scenario":"Another device on the same network sends create, adjust and remove requests straight to the API, and they are carried out as if the user had made them, because no request carries any proof of who sent it.","status":"open","target":"F4"},{"accepted_by":null,"accepted_why":null,"actor":"U3","asset":"A1","category":"tampering","id":"T2","impact":"The stock sheet is read or changed by a site the user, or anyone else on the network, merely visited.","likelihood":"unknown","mitigations":["M7","M8"],"scenario":"A page from another website, open in any browser on the network, sends requests to the API in the background and reads or changes the stock sheet, because the API allows every origin and asks for no credential.","status":"open","target":"F5"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A2","category":"elevation_of_privilege","id":"T3","impact":"Everything that account can reach on the host computer, not only the stock sheet.","likelihood":"unknown","mitigations":["M9"],"notes":"FACT: the Python documentation for http.server says it is not recommended for production and implements only basic security checks (docs.python.org/3/library/http.server.html, read 2026-10-09). No fault of this kind was looked for or found here.","scenario":"Another device on the same network sends a request that triggers a fault in the server code or in Python's http.server, and gains the ability to read or write files as the host computer account.","status":"open","target":"E6"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"information_disclosure","id":"T4","impact":"Anyone on the network learns what is kept and on which shelf.","likelihood":"depends on who shares the network; it needs one request, and V7 shows the server answers it today","mitigations":["M7"],"scenario":"Another device on the same network requests the item list and receives the whole stock sheet, because reading needs no credential.","status":"open","target":"F4"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"information_disclosure","id":"T5","impact":"The stock sheet is read or changed in transit, and the page cannot tell.","likelihood":"unknown","mitigations":["M10"],"scenario":"Another device on the same network that can observe or redirect Wi-Fi traffic reads the stock sheet in transit, alters requests, or answers in place of the server, because the page and the API use plain HTTP.","status":"open","target":"F2"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"denial_of_service","id":"T6","impact":"The stock sheet becomes unusable. Recovery means editing the data file by hand.","likelihood":"unknown","mitigations":["M1","M11"],"scenario":"Another device on the same network creates items or opens connections without limit until the data file fills the disk or the stock sheet is too long to load, because nothing limits requests or the number of items.","status":"open","target":"F4"},{"accepted_by":null,"accepted_why":null,"actor":"U1","asset":"A1","category":"denial_of_service","id":"T7","impact":"Every count is lost and every shelf has to be counted again.","likelihood":"unknown","mitigations":["M13"],"scenario":"The user deletes the data file by accident, or the disk fails, or T1 happens, and the stock sheet is gone because the SQLite file is its only copy.","status":"open","target":"E7"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"repudiation","id":"T8","impact":"A wrong count cannot be traced to its cause, so it cannot be told apart from a counting mistake.","likelihood":"unknown","mitigations":[],"scenario":"Another device on the same network changes a count in the stock sheet and nothing records which device did it or when, because the log holds only the method and path of each request.","status":"open","target":"F4"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A4","category":"tampering","id":"T9","impact":"The only record of requests can be made to mislead the person reading it.","likelihood":"unknown","mitigations":["M12"],"notes":"FACT: the standard library's own log_message removes control characters from Python 3.12 (same documentation page). server.py replaces it with a raw write, and V10 found the escape byte in the log.","scenario":"Another device on the same network puts terminal control characters in a request path, and the server log writes them unchanged to the user's terminal, where they can hide or rewrite earlier lines.","status":"open","target":"E8"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"tampering","id":"T10","impact":"The attacker's script could change or remove counts whenever the user opens the sheet.","likelihood":"unknown","mitigations":["M3"],"scenario":"Another device on the same network stores an item in the stock sheet whose name is written as markup, so that when the user opens the page the name runs as script and acts with the user's page.","status":"mitigated","target":"F3"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"tampering","id":"T11","impact":"Rows are read, changed or removed outside the API's rules.","likelihood":"unknown","mitigations":["M2"],"scenario":"Another device on the same network types SQL fragments or wildcard characters into the search and item fields to read or alter rows of the stock sheet beyond what the request should reach.","status":"mitigated","target":"E7"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A1","category":"tampering","id":"T12","impact":"A stored value that breaks the sheet for every later request.","likelihood":"unknown","mitigations":["M4","M6"],"scenario":"Another device on the same network sends counts as text, true, fractions or negatives, or fields the API does not know, so that the stock sheet holds a value the page and the rules cannot handle.","status":"mitigated","target":"F2"},{"accepted_by":null,"accepted_why":null,"actor":"U2","asset":"A2","category":"information_disclosure","id":"T13","impact":"Details that make a later fault in the server easier to use.","likelihood":"unknown","mitigations":["M5"],"scenario":"Another device on the same network sends malformed requests and reads the error answers for stack traces, file paths or query text that describe the host computer account's files.","status":"mitigated","target":"F3"}],"verifications":[{"how":"verify_stock_count.py --only V1: a body of 65537 bytes is refused with 413; one of 65536 bytes is stored with 201.","id":"V1","kind":"automated_test","last_result":"pass","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V2: searching for a percent sign, an underscore, a quote and a quoted clause each match as plain text; 'bolt' still finds its item.","id":"V2","kind":"automated_test","last_result":"pass","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V3: in a headless browser, an item name and a search string written as markup appear character for character and create no element.","id":"V3","kind":"automated_test","last_result":"pass","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V4: a count sent as text, true, 3.5 or -1 gets 422 naming qty; 7 is stored; 7 minus 8 gets 409 and the count stays 7; 7 minus 7 gives 0.","id":"V4","kind":"automated_test","last_result":"pass","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V5: five malformed or misdirected requests each get the fixed error shape and no trace, path or query text.","id":"V5","kind":"automated_test","last_result":"pass","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V6: a create with an extra field gets 422 naming it; the same create without it is stored.","id":"V6","kind":"automated_test","last_result":"pass","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V7: a read and a write with no credential must each get 401. Observed: 200 and 201.","id":"V7","kind":"automated_test","last_result":"fail","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V8: a request from another origin must get no allow-origin header. Observed: a wildcard on the preflight and on the read.","id":"V8","kind":"automated_test","last_result":"fail","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V9: 60 requests one after another must meet at least one 429. Observed: 60 answered 200.","id":"V9","kind":"automated_test","last_result":"fail","last_run":"2026-10-09"},{"how":"verify_stock_count.py --only V10: a request path holding an escape byte must reach the log without it. Observed: the byte is in the log.","id":"V10","kind":"automated_test","last_result":"fail","last_run":"2026-10-09"},{"how":"On the host: confirm the server process runs as its own account, then as that account try to list the user's home folder; it must be refused.","id":"V11","kind":"manual_check","last_result":"not_run","last_run":null},{"how":"From the phone: open the http address and confirm it is refused or redirected; open the https address and confirm the browser shows no certificate warning.","id":"V12","kind":"manual_check","last_result":"not_run","last_run":null},{"how":"Copy yesterday's backup to a scratch folder, start the server on it, and confirm the item count matches the day it was taken.","id":"V13","kind":"manual_check","last_result":"not_run","last_run":null}],"zones":[{"id":"Z1","name":"Phone","trust":"The user's own phone and browser. The user trusts it; the server does not, and re-checks everything it sends."},{"id":"Z2","name":"Shared Wi-Fi","trust":"Not controlled. Any device that joins can send to the server, and may be able to read traffic sent in clear text."},{"id":"Z3","name":"Host computer","trust":"Controlled by the user. Runs the server and holds the only copy of the data."}]},"source":"threat-model.json"}</script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var DEFAULTS = {theme: 'paper', density: 'comfortable', text: 'standard', motion: 'smooth'};
+  var CHOICES = {theme: ['paper', 'slate', 'ember', 'night'], density: ['comfortable', 'compact'], text: ['standard', 'large'], motion: ['smooth', 'still']};
+  var APP = 'threat-model-drawing';
+  var KEY = APP + ':display';
+  var CATEGORY = {spoofing: 'Spoofing', tampering: 'Tampering', repudiation: 'Repudiation', information_disclosure: 'Information disclosure',
+    denial_of_service: 'Denial of service', elevation_of_privilege: 'Elevation of privilege'};
+  var STATE = {mitigated_verified: 'Mitigated and verified', mitigated_claim_unsupported: 'Marked mitigated, but not shown to work',
+    open_partly_mitigated: 'Open: partly mitigated', open_built_unverified: 'Open: built, not verified', open_nothing_built: 'Open: nothing built',
+    accepted: 'Accepted', transferred: 'Transferred', unknown: 'Status not recognised'};
+  var MIT = {verified: 'Verified', unverified: 'Built, not verified', failing: 'A verification is failing', not_built: 'Not built'};
+  var KIND = {process: 'Process', store: 'Store', external: 'Outside party', human: 'Person'};
+  var VKIND = {automated_test: 'Automated test', manual_check: 'Manual check', review: 'Review', config_scan: 'Config scan'};
+  var RESULT = {pass: 'passed', fail: 'FAILED', not_run: 'not run'};
+  var FILTER_WORD = {all: 'All', open: 'Open', unverified: 'Unverified'};
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'on') Object.keys(attrs.on).forEach(function (ev) { n.addEventListener(ev, attrs.on[ev]); });
+      else if (attrs[k] !== false && attrs[k] != null) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function svg(tag, attrs) {
+    var n = document.createElementNS(SVGNS, tag);
+    Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); });
+    return n;
+  }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+
+  // ---------- display choices: storage is optional; the page says which store is in use ----------
+  var display = {theme: DEFAULTS.theme, density: DEFAULTS.density, text: DEFAULTS.text, motion: DEFAULTS.motion};
+  var store = {mode: 'memory'};
+  function clean(v) {
+    var out = {};
+    Object.keys(DEFAULTS).forEach(function (k) { out[k] = (v && CHOICES[k].indexOf(v[k]) >= 0) ? v[k] : DEFAULTS[k]; });
+    return out;
+  }
+  function parseStored(raw) {
+    if (raw && typeof raw === 'object' && 'value' in raw) raw = raw.value;
+    if (typeof raw !== 'string') return null;
+    // Saved as one envelope: {app, schema, content_id, saved_at, data}. Anything else is ignored.
+    try {
+      var env = JSON.parse(raw);
+      if (!env || env.app !== APP || env.schema !== 1 || env.content_id !== 'display' || !env.data || typeof env.data !== 'object') return null;
+      return env.data;
+    } catch (e) { return null; }
+  }
+  function readLocal() {
+    try { var raw = localStorage.getItem(KEY); store.mode = 'local'; return parseStored(raw); } catch (e) { store.mode = 'memory'; return null; }
+  }
+  function loadDisplay(done) {
+    var systemStill = false;
+    try { systemStill = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { systemStill = false; }
+    if (systemStill) DEFAULTS.motion = 'still';
+    var finish = function (v) { display = clean(v); applyDisplay(); done(); };
+    try {
+      var host = window.storage;
+      if (host && typeof host.get === 'function' && typeof host.set === 'function') {
+        var p = host.get(KEY);
+        if (p && typeof p.then === 'function') {
+          var settled = false;
+          var once = function (fn) { return function (raw) { if (settled) return; settled = true; fn(raw); }; };
+          p.then(once(function (raw) { store.mode = 'host'; finish(parseStored(raw)); }), once(function () { finish(readLocal()); }));
+          setTimeout(once(function () { finish(readLocal()); }), 1500);
+          return;
+        }
+      }
+    } catch (e) { /* fall through to the browser's own storage */ }
+    finish(readLocal());
+  }
+  function saveDisplay() {
+    var text = JSON.stringify({app: APP, schema: 1, content_id: 'display', saved_at: new Date().toISOString(), data: display});
+    if (store.mode === 'host') {
+      try { var p = window.storage.set(KEY, text); if (p && typeof p.then === 'function') p.then(null, function () { store.mode = 'memory'; noteStore(); }); return; }
+      catch (e) { store.mode = 'memory'; }
+    }
+    if (store.mode !== 'host') {
+      try { localStorage.setItem(KEY, text); store.mode = 'local'; } catch (e) { store.mode = 'memory'; }
+    }
+  }
+  function noteStore() {
+    $('display-note').textContent = store.mode === 'host' ? 'Display choices are saved by the app showing this page.'
+      : store.mode === 'local' ? 'Display choices are saved in this browser.'
+      : 'Not saved: this page cannot store data here, so display choices last for this visit.';
+  }
+  function applyDisplay() {
+    var root = document.documentElement;
+    Object.keys(DEFAULTS).forEach(function (k) { root.setAttribute('data-' + k, display[k]); });
+    document.querySelectorAll('[data-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(display[b.getAttribute('data-set')] === b.getAttribute('data-val'))); });
+    noteStore();
+  }
+  function wireDisplay(afterChange) {
+    $('display-toggle').addEventListener('click', function () {
+      var open = this.getAttribute('aria-expanded') !== 'true';
+      this.setAttribute('aria-expanded', String(open));
+      $('display').hidden = !open;
+      afterChange();
+    });
+    document.querySelectorAll('[data-set]').forEach(function (b) {
+      b.addEventListener('click', function () { display[b.getAttribute('data-set')] = b.getAttribute('data-val'); saveDisplay(); applyDisplay(); afterChange(); });
+    });
+    $('display-reset').addEventListener('click', function () { display = clean(null); saveDisplay(); applyDisplay(); afterChange(); });
+  }
+
+  // ---------- the model ----------
+  var DATA = null;
+  try { DATA = JSON.parse($('model-data').textContent); } catch (e) { DATA = null; }
+  if (!DATA || !DATA.model || !DATA.derived) {
+    $('system').textContent = 'Threat model drawing';
+    $('fatal').hidden = false;
+    loadDisplay(function () {});
+    wireDisplay(function () {});
+    return;
+  }
+  var M = DATA.model, DER = DATA.derived, CHECK = DATA.check || {errors: [], advisories: []};
+  var byId = {};
+  ['assets', 'actors', 'zones', 'elements', 'flows', 'threats', 'mitigations', 'verifications'].forEach(function (g) { M[g].forEach(function (x) { byId[x.id] = x; }); });
+  var threatsOn = {};
+  M.threats.forEach(function (t) { (threatsOn[t.target] = threatsOn[t.target] || []).push(t); });
+  var S = {sel: null, filter: 'all', cols: 0};
+  var rows = [], pos = {}, chipNode = {}, nodeNode = {}, zoneNode = {};
+
+  function isOpen(t) { return t.status === 'open'; }
+  function isUnverified(t) {
+    return (t.mitigations || []).some(function (m) { var s = DER.mitigation_state[m]; return s === 'unverified' || s === 'failing'; });
+  }
+  function shown(t) { return S.filter === 'all' ? true : S.filter === 'open' ? isOpen(t) : isUnverified(t); }
+  function countFor(id) {
+    var all = threatsOn[id] || [];
+    return {all: all.length, open: all.filter(isOpen).length, unverified: all.filter(isUnverified).length, shown: all.filter(shown).length};
+  }
+  function name(id) { return byId[id] ? byId[id].name : id; }
+  function flowTitle(f) { return name(f.from) + ' to ' + name(f.to); }
+  function zoneFlows(z) { return M.flows.filter(function (f) { return byId[f.from].zone === z || byId[f.to].zone === z || (f.crosses || []).indexOf(z) >= 0; }); }
+  function threatsFor(id) {
+    if (!id) return M.threats;
+    var x = byId[id];
+    if (x && M.zones.indexOf(x) >= 0) {
+      var ids = {};
+      M.elements.forEach(function (e) { if (e.zone === id) ids[e.id] = true; });
+      zoneFlows(id).forEach(function (f) { ids[f.id] = true; });
+      return M.threats.filter(function (t) { return ids[t.target]; });
+    }
+    return threatsOn[id] || [];
+  }
+  function kindOf(id) { var x = byId[id]; return M.zones.indexOf(x) >= 0 ? 'zone' : M.flows.indexOf(x) >= 0 ? 'flow' : 'element'; }
+  function titleOf(id) { var x = byId[id]; return kindOf(id) === 'flow' ? id + ': ' + flowTitle(x) : x.name; }
+  function countWords(c) {
+    if (!c.all) return 'no threats recorded';
+    if (S.filter === 'open') return plural(c.open, 'open threat', 'open threats');
+    if (S.filter === 'unverified') return plural(c.unverified, 'unverified threat', 'unverified threats');
+    return plural(c.all, 'threat', 'threats') + ', ' + c.open + ' open';
+  }
+
+  // ---------- the drawing: zones as rows, elements in them, flows as lines with a label button ----------
+  function buildCanvas() {
+    var canvas = $('canvas');
+    var keep = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-fk');
+    canvas.textContent = '';
+    rows = []; pos = {}; chipNode = {}; nodeNode = {}; zoneNode = {};
+    var cols = canvas.clientWidth >= 560 ? 3 : 2;
+    S.cols = cols;
+    canvas.style.setProperty('--gut', '12px');
+    canvas.appendChild(svg('svg', {'class': 'wires', id: 'wires', 'aria-hidden': 'true', focusable: 'false'}));
+    var pending = [];       // corridors made since the last row of elements; they belong after that row
+    M.zones.forEach(function (z, zi) {
+      var mine = M.elements.filter(function (e) { return e.zone === z.id; });
+      var box = el('section', {'class': 'zone', 'data-zone': z.id, 'aria-label': 'Zone: ' + z.name});
+      var zb = el('button', {type: 'button', 'class': 'zone-name', 'data-pick': z.id, 'data-fk': 'pick-' + z.id, 'aria-pressed': 'false', text: z.name, on: {click: function () { pick(z.id); }}});
+      zoneNode[z.id] = zb;
+      box.appendChild(zb);
+      if (!mine.length) box.appendChild(el('p', {'class': 'zone-empty', text: 'No elements are placed in this zone.'}));
+      for (var i = 0; i < mine.length; i += cols) {
+        var rowEl = el('div', {'class': 'row c' + cols});
+        var row = {index: rows.length, zone: z.id, box: box, first: i === 0, last: i + cols >= mine.length, node: rowEl, arcs: el('div', {'class': 'arcs'}), after: []};
+        if (rows.length) rows[rows.length - 1].after = pending;
+        pending = [];
+        mine.slice(i, i + cols).forEach(function (e) {
+          var b = el('button', {type: 'button', 'class': 'node k-' + e.kind, 'data-pick': e.id, 'data-fk': 'pick-' + e.id, 'aria-pressed': 'false', on: {click: function () { pick(e.id); }}}, [
+            el('span', {'class': 'kind', text: KIND[e.kind] || e.kind}), el('span', {'class': 'nm', text: e.name}), el('span', {'class': 'ct'})]);
+          nodeNode[e.id] = b;
+          pos[e.id] = {row: row.index};
+          rowEl.appendChild(b);
+        });
+        rows.push(row);
+        box.appendChild(rowEl);
+        box.appendChild(row.arcs);
+        if (!row.last) {
+          var inner = el('div', {'class': 'corridor'});
+          box.appendChild(inner);
+          pending.push({node: inner, between: false});
+        }
+      }
+      canvas.appendChild(box);
+      if (zi < M.zones.length - 1) {
+        var gap = el('div', {'class': 'corridor'});
+        canvas.appendChild(gap);
+        pending.push({node: gap, between: true});
+      }
+    });
+    M.flows.forEach(function (f) {
+      var c = el('button', {type: 'button', 'class': 'chip' + (DER.boundary[f.id] ? ' boundary' : ''), 'data-pick': f.id, 'data-fk': 'pick-' + f.id, 'aria-pressed': 'false',
+        on: {click: function () { pick(f.id); }}}, [el('span', {'class': 'fid', text: f.id}), el('span', {'class': 'ct'})]);
+      chipNode[f.id] = c;
+      canvas.appendChild(c);
+    });
+    paintCounts();
+    layoutWires();
+    if (keep) { var again = document.querySelector('[data-fk="' + keep + '"]'); if (again) again.focus(); }
+  }
+
+  function paintCounts() {
+    M.elements.forEach(function (e) {
+      var c = countFor(e.id), ct = nodeNode[e.id].querySelector('.ct');
+      ct.textContent = countWords(c);
+      ct.className = 'ct' + ((S.filter === 'unverified' ? c.unverified : c.open) ? ' has' : '');
+      nodeNode[e.id].setAttribute('aria-label', (KIND[e.kind] || e.kind) + ': ' + e.name + '. ' + countWords(c) + '.');
+      nodeNode[e.id].setAttribute('aria-pressed', String(S.sel === e.id));
+    });
+    M.flows.forEach(function (f) {
+      var c = countFor(f.id), ct = chipNode[f.id].querySelector('.ct');
+      var n = S.filter === 'unverified' ? c.unverified : c.open;
+      ct.textContent = c.all ? n + (S.filter === 'unverified' ? ' unverified' : ' open') : 'no threats';
+      ct.className = 'ct' + (n ? ' has' : '');
+      chipNode[f.id].setAttribute('aria-label', 'Flow ' + f.id + ': ' + flowTitle(f) + (DER.boundary[f.id] ? '. Crosses a trust boundary. ' : '. ') + countWords(c) + '.');
+      chipNode[f.id].setAttribute('aria-pressed', String(S.sel === f.id));
+    });
+    M.zones.forEach(function (z) { zoneNode[z.id].setAttribute('aria-pressed', String(S.sel === z.id)); });
+  }
+
+  function spread(items, minX, maxX) {
+    // items: [{pref, w}] in any order. Returns the number of levels used; sets x and level on each.
+    var sorted = items.slice().sort(function (a, b) { return a.pref - b.pref || (a.key < b.key ? -1 : 1); });
+    for (var levels = 1; levels <= 6; levels++) {
+      var ok = true;
+      for (var lv = 0; lv < levels && ok; lv++) {
+        var line = sorted.filter(function (_, i) { return i % levels === lv; }), prevRight = minX - 6;
+        line.forEach(function (it) { it.level = lv; it.x = Math.max(it.pref, prevRight + 6 + it.w / 2, minX + it.w / 2); prevRight = it.x + it.w / 2; });
+        var over = prevRight - maxX;
+        if (over > 0) {
+          for (var j = line.length - 1; j >= 0; j--) {
+            var limit = (j === line.length - 1 ? maxX : line[j + 1].x - line[j + 1].w / 2 - 6) - line[j].w / 2;
+            line[j].x = Math.min(line[j].x, limit);
+          }
+          if (line.length && line[0].x - line[0].w / 2 < minX - 0.5) ok = false;
+        }
+      }
+      if (ok || levels === 6) return levels;
+    }
+    return 1;
+  }
+
+  function layoutWires() {
+    var canvas = $('canvas'), wires = $('wires');
+    if (!wires) return;
+    var W = canvas.clientWidth, spans = false;
+    M.flows.forEach(function (f) { if (Math.abs(pos[f.from].row - pos[f.to].row) > 1) spans = true; });
+    canvas.style.setProperty('--gut', spans ? '34px' : '12px');
+    var cr = canvas.getBoundingClientRect();
+    function rect(node) { var r = node.getBoundingClientRect(); return {l: r.left - cr.left, r: r.right - cr.left, t: r.top - cr.top, b: r.bottom - cr.top, cx: (r.left + r.right) / 2 - cr.left}; }
+    var er = {};
+    M.elements.forEach(function (e) { er[e.id] = rect(nodeNode[e.id]); });
+    var gut = spans ? 34 : 12, minX = gut + 4, maxX = W - gut - 4;
+    var corridors = [];
+    rows.forEach(function (row) { row.after.forEach(function (c) { c.top = 0; c.bot = 0; c.levels = 0; corridors.push(c); }); });
+
+    // 1. Sort each flow into: an arc under one row, a line between neighbouring rows, or a line that
+    //    passes other rows and so runs down the side of the drawing.
+    var sideCount = {L: 0, R: 0};
+    var plan = M.flows.map(function (f, i) {
+      var a = pos[f.from].row, b = pos[f.to].row;
+      var p = {f: f, key: i, arc: a === b, w: chipNode[f.id].offsetWidth || 56};
+      if (p.arc) { p.row = a; return p; }
+      p.down = a < b; p.up = p.down ? f.from : f.to; p.lo = p.down ? f.to : f.from;
+      p.r1 = Math.min(a, b); p.r2 = Math.max(a, b);
+      if (p.r2 - p.r1 > 1) {
+        p.side = ((er[p.up].cx + er[p.lo].cx) / 2 < W / 2) ? 'L' : 'R';
+        var n = sideCount[p.side]++;
+        p.gx = p.side === 'L' ? 8 + (n % 4) * 7 : W - 8 - (n % 4) * 7;
+        p.cTop = rows[p.r1].after[0];
+        p.cBot = rows[p.r2 - 1].after[rows[p.r2 - 1].after.length - 1];
+        p.cor = p.down ? p.cTop : p.cBot;          // the label sits beside the source
+      } else {
+        var cands = rows[p.r1].after.slice();
+        if (!p.down) cands.reverse();
+        p.cor = cands.filter(function (c) { return c.between; })[0] || cands[0] || null;   // on the boundary it crosses
+      }
+      return p;
+    });
+
+    // 2. Ports: where each line meets its element, spread along the edge in the order of the far ends.
+    var ports = {};
+    function addPort(id, edge, p, farX) { (ports[id + '|' + edge] = ports[id + '|' + edge] || []).push({p: p, far: farX, end: id, edge: edge}); }
+    plan.forEach(function (p) {
+      if (p.arc) { addPort(p.f.from, 'b', p, er[p.f.to].cx); addPort(p.f.to, 'b', p, er[p.f.from].cx); }
+      else { addPort(p.up, 'b', p, p.side ? p.gx : er[p.lo].cx); addPort(p.lo, 't', p, p.side ? p.gx : er[p.up].cx); }
+    });
+    Object.keys(ports).forEach(function (k) {
+      var list = ports[k].sort(function (a, b) { return a.far - b.far || a.p.key - b.p.key; });
+      list.forEach(function (pt, i) {
+        var r = er[pt.end], x = r.l + (r.r - r.l) * (0.14 + 0.72 * (i + 0.5) / list.length);
+        if (pt.p.arc) { if (pt.end === pt.p.f.from && pt.p.ax == null) pt.p.ax = x; else pt.p.bx = x; }
+        else if (pt.edge === 'b') pt.p.xu = x; else pt.p.xl = x;
+      });
+    });
+
+    // A zone's name moves right, if it can, to a stretch of its header that no line crosses.
+    M.zones.forEach(function (z) {
+      var first = rows.filter(function (r) { return r.zone === z.id && r.first; })[0], zb = zoneNode[z.id];
+      zb.style.marginLeft = '';
+      if (!first) return;
+      var xs = plan.filter(function (p) { return !p.arc && pos[p.lo].row === first.index; }).map(function (p) { return p.xl; }).sort(function (a, b) { return a - b; });
+      if (!xs.length) return;
+      var band = rect(first.node), w = zb.offsetWidth, starts = [band.l - 4].concat(xs.map(function (x) { return x + 8; }));
+      for (var i = 0; i < starts.length; i++) {
+        var st = starts[i];
+        if (st + w > band.r + 4) break;
+        if (!xs.some(function (x) { return x > st - 6 && x < st + w + 6; })) { zb.style.marginLeft = (st - band.l) + 'px'; return; }
+      }
+    });
+
+    // 3. Label positions, packed so that no two overlap; side lines get their own tracks above and
+    //    below the labels; then each gap is given the height it needs.
+    rows.forEach(function (row) {
+      var arcs = plan.filter(function (p) { return p.arc && p.row === row.index; });
+      arcs.forEach(function (p) { p.pref = (er[p.f.from].cx + er[p.f.to].cx) / 2; });
+      var levels = arcs.length ? spread(arcs, minX, maxX) : 0;
+      row.arcs.style.height = levels ? (levels * 52 + 8) + 'px' : '0px';
+    });
+    corridors.forEach(function (c) {
+      var here = plan.filter(function (p) { return !p.arc && p.cor === c; });
+      here.forEach(function (p) { p.pref = p.side ? (p.down ? p.xu : p.xl) : (p.xu + p.xl) / 2; });
+      c.levels = here.length ? spread(here, minX, maxX) : 0;
+    });
+    plan.forEach(function (p) {
+      if (!p.side) return;
+      if (p.down) {
+        p.jog = Math.abs(p.x - p.xu) > 1;
+        if (p.jog) p.t1 = p.cTop.top++;
+        p.b1 = p.cTop.bot++; p.b2 = p.cBot.bot++;
+      } else {
+        p.jog = Math.abs(p.x - p.xl) > 1;
+        p.t1 = p.cTop.top++; p.t2 = p.cBot.top++;
+        if (p.jog) p.b2 = p.cBot.bot++;
+      }
+    });
+    corridors.forEach(function (c) {
+      c.padTop = c.top ? 6 + c.top * 6 : 8;
+      c.padBot = c.bot ? 6 + c.bot * 6 : 8;
+      var h = c.padTop + c.levels * 52 + c.padBot;
+      c.node.style.height = Math.max(h, 30) + 'px';
+    });
+
+    // 4. Measure again (heights changed), then draw.
+    cr = canvas.getBoundingClientRect();
+    M.elements.forEach(function (e) { er[e.id] = rect(nodeNode[e.id]); });
+    var rr = rows.map(function (row) {
+      var a = rect(row.node), b = rect(row.arcs), z = rect(row.box), bottom = Math.max(a.b, b.b);
+      return {arcTop: b.t, zt: row.first ? z.t - 4 : a.t - 8, zb: row.last ? z.b + 4 : bottom + 6};
+    });
+    corridors.forEach(function (c) { c.r = rect(c.node); });
+    function lane(c, level) { return c.r.t + c.padTop + 26 + level * 52; }
+    function trackTop(c, i) { return c.r.t + 5 + i * 6; }
+    function trackBot(c, i) { return c.r.b - 5 - i * 6; }
+    wires.textContent = '';
+    wires.setAttribute('width', W);
+    wires.setAttribute('height', canvas.scrollHeight);
+    wires.setAttribute('viewBox', '0 0 ' + W + ' ' + canvas.scrollHeight);
+    plan.forEach(function (p) {
+      var pts, cx = p.x, cy, tip;
+      if (p.arc) {
+        cy = rr[p.row].arcTop + 30 + p.level * 52;
+        pts = [[p.ax, er[p.f.from].b], [p.ax, cy], [cx, cy], [p.bx, cy], [p.bx, er[p.f.to].b + 9]];
+        tip = [p.bx, er[p.f.to].b, -1];
+      } else {
+        var top = [p.xu, er[p.up].b], end = [p.xl, er[p.lo].t];
+        if (!p.side) {
+          if (p.cor) cy = lane(p.cor, p.level); else { cy = (top[1] + end[1]) / 2; cx = (p.xu + p.xl) / 2; }
+          pts = [top, [p.xu, rr[p.r1].zb], [cx, cy], [p.xl, rr[p.r2].zt], end];
+        } else if (p.down) {
+          cy = lane(p.cTop, p.level);
+          var yb1 = trackBot(p.cTop, p.b1), yb2 = trackBot(p.cBot, p.b2);
+          pts = [top];
+          if (p.jog) { pts.push([p.xu, trackTop(p.cTop, p.t1)]); pts.push([cx, trackTop(p.cTop, p.t1)]); }
+          pts = pts.concat([[cx, yb1], [p.gx, yb1], [p.gx, yb2], [p.xl, yb2], end]);
+        } else {
+          cy = lane(p.cBot, p.level);
+          var yt1 = trackTop(p.cTop, p.t1), yt2 = trackTop(p.cBot, p.t2);
+          pts = [top, [p.xu, yt1], [p.gx, yt1], [p.gx, yt2], [cx, yt2]];
+          if (p.jog) { pts.push([cx, trackBot(p.cBot, p.b2)]); pts.push([p.xl, trackBot(p.cBot, p.b2)]); }
+          pts.push(end);
+        }
+        if (p.down) { end[1] -= 9; tip = [p.xl, er[p.lo].t, 1]; } else { top[1] += 9; tip = [p.xu, er[p.up].b, -1]; }
+      }
+      var d = 'M' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+      for (var i = 1; i < pts.length; i++) d += ' L' + pts[i][0].toFixed(1) + ' ' + pts[i][1].toFixed(1);
+      wires.appendChild(svg('path', {'class': 'wire' + (DER.boundary[p.f.id] ? ' boundary' : ''), d: d, 'data-flow': p.f.id, 'stroke-linejoin': 'round'}));
+      wires.appendChild(svg('path', {'class': 'head', 'data-flow': p.f.id, d: 'M' + tip[0].toFixed(1) + ' ' + tip[1].toFixed(1) + ' l-6 ' + (-10 * tip[2]) + ' l12 0 z'}));
+      chipNode[p.f.id].style.left = cx.toFixed(1) + 'px';
+      chipNode[p.f.id].style.top = cy.toFixed(1) + 'px';
+    });
+    paintSelection();
+  }
+
+  function hotFlows() {
+    if (!S.sel) return {};
+    var hot = {}, k = kindOf(S.sel);
+    if (k === 'flow') hot[S.sel] = true;
+    else if (k === 'element') M.flows.forEach(function (f) { if (f.from === S.sel || f.to === S.sel) hot[f.id] = true; });
+    else zoneFlows(S.sel).forEach(function (f) { hot[f.id] = true; });
+    return hot;
+  }
+  function paintSelection() {
+    var wires = $('wires');
+    if (!wires) return;
+    var hot = hotFlows();
+    wires.setAttribute('class', 'wires' + (S.sel ? ' has-sel' : ''));
+    wires.querySelectorAll('[data-flow]').forEach(function (n) {
+      var base = n.getAttribute('class').replace(/ hot/g, '');
+      n.setAttribute('class', base + (hot[n.getAttribute('data-flow')] ? ' hot' : ''));
+    });
+    wires.querySelectorAll('.hot').forEach(function (n) { wires.appendChild(n); });
+  }
+
+  // ---------- details ----------
+  function fact(k, v) { return el('li', {}, [el('span', {'class': 'k', text: k + ': '}), v]); }
+  function assetList(ids) {
+    return (ids || []).length ? ids.map(function (a) { return name(a) + ' (' + byId[a].sensitivity + ' sensitivity)'; }).join('; ') : 'nothing named';
+  }
+  function jumpButton(id, label) {
+    return el('button', {type: 'button', 'class': 'btn', 'data-jump': id, 'data-fk': 'jump-' + id, text: label, on: {click: function () { pick(id, true); }}});
+  }
+  function threatCard(t) {
+    var kids = [
+      el('h3', {}, [el('span', {'class': 'tid', text: t.id}), el('span', {text: CATEGORY[t.category] || t.category}), stateTag(t)]),
+      el('p', {text: t.scenario}),
+      el('p', {}, [el('span', {'class': 'k', text: 'Impact: '}), t.impact]),
+      el('p', {}, [el('span', {'class': 'k', text: 'Likelihood: '}), t.likelihood + (t.likelihood_why ? ' (' + t.likelihood_why + ')' : '')])
+    ];
+    if (t.status === 'accepted' || t.status === 'transferred') {
+      kids.push(el('p', {}, [el('span', {'class': 'k', text: (t.status === 'accepted' ? 'Accepted by: ' : 'Transferred: ')}), (t.accepted_by ? t.accepted_by + '. ' : '') + (t.accepted_why || 'no reason recorded')]));
+    }
+    if (t.notes) kids.push(el('p', {}, [el('span', {'class': 'k', text: 'Note: '}), t.notes]));
+    if (!(t.mitigations || []).length) kids.push(el('p', {}, [el('span', {'class': 'k', text: 'Mitigation: '}), 'none recorded']));
+    else kids.push(el('ul', {'class': 'mits'}, t.mitigations.map(function (mid) {
+      var m = byId[mid], ms = DER.mitigation_state[mid];
+      var li = [el('b', {text: mid + '. ' + MIT[ms] + '. '}), m.what + ' ', el('span', {'class': 'k', text: 'Where: '}), m.where];
+      (m.verified_by || []).forEach(function (vid) {
+        var v = byId[vid];
+        li.push(el('span', {'class': 'ver', text: vid + ', ' + (VKIND[v.kind] || v.kind).toLowerCase() + ', ' + RESULT[v.last_result] + (v.last_run ? ' on ' + v.last_run : '') + '. ' + v.how}));
+      });
+      if (!(m.verified_by || []).length) li.push(el('span', {'class': 'ver', text: 'No verification recorded.'}));
+      return el('li', {}, li);
+    })));
+    return el('li', {'class': 'card', 'data-threat': t.id}, kids);
+  }
+  function stateTag(t) {
+    var st = DER.threat_state[t.id] || 'unknown';
+    var cls = st === 'mitigated_verified' ? 'done' : (st.indexOf('open') === 0 || st === 'mitigated_claim_unsupported') ? 'open' : 'other';
+    return el('span', {'class': 'tag ' + cls, text: STATE[st]});
+  }
+  function threatRow(t) {
+    var where = kindOf(t.target) === 'flow' ? t.target + ', ' + flowTitle(byId[t.target]) : name(t.target);
+    return el('li', {'data-threat': t.id}, [el('button', {type: 'button', 'class': 'trow', 'data-jump': t.target, 'data-fk': 'row-' + t.id,
+      'aria-label': t.id + ', ' + (CATEGORY[t.category] || t.category) + ' on ' + where + '. ' + STATE[DER.threat_state[t.id] || 'unknown'] + '. Show it on the drawing.',
+      on: {click: function () { pick(t.target, true); }}}, [
+      el('span', {'class': 'trow-top'}, [el('span', {'class': 'tid', text: t.id}), el('span', {text: CATEGORY[t.category] || t.category}), stateTag(t)]),
+      el('span', {'class': 'trow-where', text: 'on ' + where})])]);
+  }
+  function renderDetail() {
+    var body = $('detail-body'), head = $('detail-h');
+    var keep = document.activeElement && body.contains(document.activeElement) ? document.activeElement.getAttribute('data-fk') : null;
+    body.textContent = '';
+    var all = threatsFor(S.sel), list = all.filter(shown), kids = [];
+    if (!S.sel) {
+      head.textContent = S.filter === 'all' ? 'All threats (' + all.length + ')' : FILTER_WORD[S.filter] + ' threats (' + list.length + ' of ' + all.length + ')';
+      kids.push(el('p', {'class': 'note lead', text: 'In the order of the model file. Choose a threat here, or an element, a flow label or a zone name in the drawing, to read it in full.'}));
+    } else {
+      var x = byId[S.sel], k = kindOf(S.sel);
+      head.textContent = titleOf(S.sel);
+      var facts = [];
+      if (k === 'flow') {
+        facts.push(fact('Carries', assetList(x.data)));
+        facts.push(fact('How', x.protocol));
+        facts.push(fact('Authenticated', x.authenticated ? 'yes' : 'no'));
+        facts.push(fact('Trust boundary', DER.boundary[x.id] ? 'crosses: ' + (x.crosses || []).map(name).join(', then ') : 'stays inside ' + name(byId[x.from].zone)));
+      } else if (k === 'element') {
+        facts.push(fact('Kind', (KIND[x.kind] || x.kind) + ', in the zone ' + name(x.zone)));
+        if ((x.holds || []).length) facts.push(fact('Holds', assetList(x.holds)));
+      } else {
+        facts.push(fact('Trust', x.trust));
+        facts.push(fact('Holds', plural(M.elements.filter(function (e) { return e.zone === x.id; }).length, 'element', 'elements') + '; ' + plural(zoneFlows(x.id).length, 'flow touches it', 'flows touch it')));
+      }
+      facts.push(fact('Threats', FILTER_WORD[S.filter] === 'All' ? plural(all.length, 'threat', 'threats') + ', ' + all.filter(isOpen).length + ' open'
+        : list.length + ' of ' + all.length + ' shown (' + FILTER_WORD[S.filter].toLowerCase() + ')'));
+      kids.push(el('ul', {'class': 'facts'}, facts));
+      var jumps = [];
+      if (k === 'element') M.flows.forEach(function (f) { if (f.from === x.id || f.to === x.id) jumps.push(jumpButton(f.id, f.id + (f.from === x.id ? ' to ' + name(f.to) : ' from ' + name(f.from)))); });
+      if (k === 'flow') { jumps.push(jumpButton(x.from, 'From: ' + name(x.from))); jumps.push(jumpButton(x.to, 'To: ' + name(x.to))); }
+      jumps.push(el('button', {type: 'button', 'class': 'btn quiet', 'data-fk': 'clear', id: 'clear-sel', text: 'Show the whole model', on: {click: function () { pick(null, true); }}}));
+      kids.push(el('div', {'class': 'jump'}, jumps));
+    }
+    var compact = !S.sel || kindOf(S.sel) === 'zone';
+    if (list.length) kids.push(el('ul', {'class': 'cards' + (compact ? ' index' : ''), id: 'cards'}, list.map(compact ? threatRow : threatCard)));
+    else if (!all.length) kids.push(el('div', {'class': 'blank', id: 'blank'}, [
+      el('h3', {text: S.sel ? 'No threats are recorded here' : 'The model records no threats'}),
+      el('p', {text: S.sel ? 'The checker asks for an entry only on flows that cross a trust boundary and on stores holding a high-sensitivity asset. Nothing recorded is not the same as nothing possible.'
+        : 'That is a result only if every flow and store was walked. Run threat_check.py on the model file.'})]));
+    else kids.push(el('div', {'class': 'blank', id: 'blank'}, [
+      el('h3', {text: 'Nothing here is ' + FILTER_WORD[S.filter].toLowerCase()}),
+      el('p', {text: (S.filter === 'unverified' ? 'Unverified means a mitigation is built and none of its verifications has passed. ' : '') + 'There ' + (all.length === 1 ? 'is 1 threat' : 'are ' + all.length + ' threats') + (S.sel ? ' on ' + titleOf(S.sel) : ' in the model') + ' in other states.'}),
+      el('button', {type: 'button', 'class': 'btn', 'data-fk': 'show-all', id: 'show-all', text: 'Show all threats', on: {click: function () { setFilter('all'); var b = document.querySelector('[data-filter="all"]'); if (b) b.focus(); }}})]));
+    kids.forEach(function (n) { body.appendChild(n); });
+    $('back-row').hidden = !S.sel;
+    if (keep) { var again = body.querySelector('[data-fk="' + keep + '"]'); if (again) again.focus(); }
+    var c = S.sel ? {all: all.length, open: all.filter(isOpen).length, unverified: all.filter(isUnverified).length} : null;
+    showPeek();
+    if (S.sel) $('peek-text').textContent = titleOf(S.sel) + '. ' + countWords(c) + '.';
+    renderText(list);
+  }
+  var detailSeen = false;
+  function showPeek() { $('peek').hidden = !S.sel || detailSeen; }
+  function watchDetail() {
+    if (!('IntersectionObserver' in window)) return;
+    try {
+      new IntersectionObserver(function (entries) { detailSeen = entries[entries.length - 1].isIntersecting; showPeek(); }, {rootMargin: '0px 0px -80px 0px'}).observe($('detail-h'));
+    } catch (e) { detailSeen = false; }
+  }
+  function renderText(list) {
+    var L = [M.system, 'Threat model as of ' + M.as_of + '. ' + (S.sel ? 'Showing: ' + titleOf(S.sel) + '. ' : '') + 'Filter: ' + FILTER_WORD[S.filter] + '. ' + plural(list.length, 'threat', 'threats') + '.', ''];
+    list.forEach(function (t) {
+      L.push(t.id + ' [' + STATE[DER.threat_state[t.id] || 'unknown'] + '] ' + (CATEGORY[t.category] || t.category) + ' on ' + (kindOf(t.target) === 'flow' ? t.target + ' (' + flowTitle(byId[t.target]) + ')' : name(t.target)));
+      L.push('  ' + t.scenario);
+      L.push('  Impact: ' + t.impact);
+      L.push('  Likelihood: ' + t.likelihood);
+      (t.mitigations || []).forEach(function (mid) {
+        var m = byId[mid];
+        L.push('  ' + mid + ' (' + MIT[DER.mitigation_state[mid]] + '): ' + m.what + ' Where: ' + m.where);
+        (m.verified_by || []).forEach(function (vid) { var v = byId[vid]; L.push('    ' + vid + ' ' + RESULT[v.last_result] + (v.last_run ? ' ' + v.last_run : '') + ': ' + v.how); });
+      });
+      if (!(t.mitigations || []).length) L.push('  Mitigation: none recorded');
+      if (t.status === 'accepted' || t.status === 'transferred') L.push('  ' + (t.status === 'accepted' ? 'Accepted by ' + (t.accepted_by || '?') : 'Transferred') + ': ' + (t.accepted_why || 'no reason recorded'));
+      L.push('');
+    });
+    L.push('A reading aid. Not a penetration test, a compliance audit or a guarantee.');
+    $('text-box').value = L.join('\n');
+    $('copy-note').textContent = '';
+  }
+
+  // ---------- actions ----------
+  function say(text) { $('status').textContent = text; }
+  function pick(id, fromDetail) {
+    S.sel = (id && S.sel === id && !fromDetail) ? null : id;
+    paintCounts();
+    paintSelection();
+    renderDetail();
+    var all = threatsFor(S.sel);
+    say(S.sel ? 'Selected ' + titleOf(S.sel) + '. ' + plural(all.filter(shown).length, 'threat', 'threats') + ' shown in the details.' : 'Showing the whole model: ' + plural(all.filter(shown).length, 'threat', 'threats') + '.');
+    if (fromDetail) {
+      var target = S.sel ? document.querySelector('#canvas [data-pick="' + S.sel + '"]') : $('detail-h');
+      if (target) { target.focus({preventScroll: false}); }
+    }
+  }
+  function setFilter(f) {
+    S.filter = f;
+    document.querySelectorAll('[data-filter]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-filter') === f)); });
+    paintCounts();
+    layoutWires();
+    renderDetail();
+    var n = M.threats.filter(shown).length;
+    say(f === 'all' ? 'Showing all ' + plural(n, 'threat', 'threats') + '.' : 'Showing ' + n + ' of ' + M.threats.length + ' threats: ' + FILTER_WORD[f].toLowerCase()
+      + (f === 'unverified' ? ' (a mitigation is built and none of its verifications has passed).' : '.'));
+  }
+  function fillStatic() {
+    document.title = 'Threat model: ' + M.system;
+    $('eyebrow').textContent = 'Threat model as of ' + M.as_of + (DATA.source ? ', drawn from ' + DATA.source : '');
+    $('system').textContent = M.system;
+    var open = M.threats.filter(isOpen).length, done = M.threats.filter(function (t) { return DER.threat_state[t.id] === 'mitigated_verified'; }).length;
+    var other = M.threats.length - open - done;
+    $('tally').textContent = plural(M.threats.length, 'threat', 'threats') + ': ' + open + ' open, ' + done + ' mitigated and verified' + (other ? ', ' + other + ' accepted, transferred or unsupported' : '')
+      + '. Checker: ' + plural(CHECK.errors.length, 'error', 'errors') + ', ' + plural(CHECK.advisories.length, 'advisory note', 'advisory notes') + '.';
+    document.querySelectorAll('[data-filter]').forEach(function (b) {
+      var f = b.getAttribute('data-filter');
+      var n = f === 'all' ? M.threats.length : M.threats.filter(f === 'open' ? isOpen : isUnverified).length;
+      b.textContent = FILTER_WORD[f] + ' ' + n;
+      b.addEventListener('click', function () { setFilter(f); });
+    });
+    if (CHECK.errors.length) {
+      var b = $('banner');
+      b.hidden = false;
+      b.appendChild(el('b', {text: 'The checker found ' + plural(CHECK.errors.length, 'error', 'errors') + ' in this model. '}));
+      b.appendChild(document.createTextNode('The drawing shows the file as written. Fix the model before relying on it.'));
+      b.appendChild(el('ul', {}, CHECK.errors.slice(0, 5).map(function (e) { return el('li', {text: e.message}); })));
+    }
+    $('legend').textContent = '';
+    [['Dashed box', 'a zone; its edge is a trust boundary. '], ['Thick line and double-edged label', 'a flow that crosses a trust boundary. '],
+      ['Rounded box', 'a process. '], ['Box with heavy top and bottom', 'a store. '], ['Square box', 'an outside party. '], ['Dotted box', 'a person. '],
+      ['The arrow', 'points the way the data moves.']].forEach(function (pair) { $('legend').appendChild(el('b', {text: pair[0] + ': '})); $('legend').appendChild(document.createTextNode(pair[1])); });
+    var scope = $('scope');
+    [['Assumptions', M.assumptions], ['Out of scope', M.out_of_scope]].forEach(function (pair) {
+      scope.appendChild(el('h3', {text: pair[0]}));
+      scope.appendChild((pair[1] || []).length ? el('ul', {}, pair[1].map(function (s) { return el('li', {text: s}); })) : el('p', {'class': 'note', text: 'None recorded.'}));
+    });
+    $('foot').textContent = 'A reading aid drawn from the model file by threat_diagram.py. It shows what the file says and decides nothing. It is not a penetration test, a compliance audit or a guarantee.';
+  }
+  function toggle(buttonId, panelId) {
+    $(buttonId).addEventListener('click', function () {
+      var open = this.getAttribute('aria-expanded') !== 'true';
+      this.setAttribute('aria-expanded', String(open));
+      $(panelId).hidden = !open;
+    });
+  }
+  function copyText() {
+    var box = $('text-box'), note = $('copy-note');
+    function fallback() { box.focus(); box.select(); note.textContent = "Copying was refused here. The text is selected: use your device's own copy."; }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(box.value).then(function () { note.textContent = 'Copied ' + box.value.length + ' characters.'; }, fallback);
+        return;
+      }
+    } catch (e) { /* use the box */ }
+    fallback();
+  }
+
+  var resizeTimer = null;
+  function relayout() {
+    var cols = $('canvas').clientWidth >= 560 ? 3 : 2;
+    if (cols !== S.cols) buildCanvas(); else layoutWires();
+  }
+  fillStatic();
+  toggle('scope-toggle', 'scope');
+  toggle('text-toggle', 'textver');
+  $('text-copy').addEventListener('click', copyText);
+  $('peek-read').addEventListener('click', function () { $('detail').scrollIntoView({block: 'start'}); $('detail-h').focus({preventScroll: true}); detailSeen = true; showPeek(); });
+  watchDetail();
+  $('back').addEventListener('click', function () {
+    var target = S.sel ? document.querySelector('#canvas [data-pick="' + S.sel + '"]') : $('canvas');
+    if (target) { target.scrollIntoView({block: 'center'}); if (target.focus) target.focus({preventScroll: true}); }
+  });
+  wireDisplay(function () { relayout(); });
+  window.addEventListener('resize', function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(relayout, 120); });
+  $('app').hidden = false;
+  loadDisplay(function () { buildCanvas(); renderDetail(); say('Showing all ' + plural(M.threats.length, 'threat', 'threats') + '.'); });
+})();
+</script>
+</body>
+</html>

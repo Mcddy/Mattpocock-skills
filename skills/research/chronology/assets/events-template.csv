@@ -1,0 +1,7 @@
+event_id,date,date_precision,end_date,time,title,detail,actors,source_id,locator,status,conflicts_with,tags
+E01,2024-03-18,day,,06:00 local,SYNTHETIC EXAMPLE ROW: the source gives the day and a time with no zone,,Example authority,S1,"Notice 11, para 2",FACT,E02:precision,example
+E02,2024-03,month,,,SYNTHETIC EXAMPLE ROW: the source gives the day and a time with no zone,A second source gives the month only. Two rows marked as conflicting on both.,Example authority,S2,para 1,REPORTED,E01:precision,example
+E03,2024,year,,,SYNTHETIC EXAMPLE ROW: the source gives the year only,,Example authority,S2,para 3,REPORTED,,example
+E04,2024-04-08,approx,,,SYNTHETIC EXAMPLE ROW: a relative date resolved from a dated anchor,"The source says about three weeks after 18 March 2024, so approximate.",Example operator,S2,para 4,REPORTED,,example
+E05,2024-05-20,day,2024-08-30,,SYNTHETIC EXAMPLE ROW: something that lasted from one date to another,,Example contractor,S1,Notice 19,FACT,,example
+E06,,undated,,,SYNTHETIC EXAMPLE ROW: the source gives no date,Listed apart. Never placed by guess.,Example group,S2,para 9,REPORTED,,example

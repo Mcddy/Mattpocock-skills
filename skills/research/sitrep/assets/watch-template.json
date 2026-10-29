@@ -1,0 +1,24 @@
+{
+ "watch_id": "replace-with-a-short-id",
+ "schema": 1,
+ "title": "SYNTHETIC TEMPLATE: replace with the name of the watch",
+ "purpose": "Replace with the decision or interest this watch serves, in one sentence.",
+ "requirements": [
+  {"id": "R1", "question": "Replace: a question whose answer could change.", "priority": "high"},
+  {"id": "R2", "question": "Replace: a second question.", "priority": "medium"}
+ ],
+ "indicators": [
+  {"id": "I1", "requirement": "R1", "watch_for": "Replace: the register lists the item with a number.", "where": "S1", "would_mean": "Replace: what to conclude or do if this is seen.", "status": "not seen", "seen_on": null, "evidence": []},
+  {"id": "I2", "requirement": "R2", "watch_for": "Replace: the published figure is above 100.", "where": "S1", "would_mean": "Replace: what to conclude or do if this is seen.", "status": "not seen", "seen_on": null, "evidence": []}
+ ],
+ "sources": [
+  {"id": "S1", "title": "Replace: the original record", "address": "https://example.org/replace", "tier": "primary", "check": "each run", "last_checked": "2026-01-15", "last_result": "reached", "note": "Replace: what was read."}
+ ],
+ "state": [
+  {"id": "F1", "requirement": "R1", "statement": "Replace: one assertion the source makes.", "status": "FACT", "source_ids": ["S1"], "as_of": "2026-01-15"},
+  {"id": "F2", "requirement": "R2", "statement": "Replace: what has not been established, and what was not read.", "status": "GAP", "source_ids": [], "as_of": "2026-01-15"}
+ ],
+ "runs": [
+  {"date": "2026-01-15", "summary": "Baseline.", "changes": 0}
+ ]
+}

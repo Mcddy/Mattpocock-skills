@@ -1,0 +1,4 @@
+source_id,title,publisher,address,tier,published,accessed,read_level,family,notes
+S1,"SYNTHETIC secondary source, section read, with address",Example press,https://example.org/n1,secondary,2026-10-09,2026-10-09,section,,
+S2,SYNTHETIC peer-reviewed paper,Example journal,https://example.org/n2,peer_reviewed,,2026-10-09,full,,
+S3,"SYNTHETIC aggregator, used only for a reported claim",Example aggregator,,aggregator,,2026-10-08,snippet,,

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Corpus Miner"
+  short_description: "Version and search corpora with reversible entity merges"
+  default_prompt: "Use $corpus-miner for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

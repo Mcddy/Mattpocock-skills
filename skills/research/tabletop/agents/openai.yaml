@@ -1,0 +1,6 @@
+interface:
+  display_name: "Tabletop"
+  short_description: "Run rule-based incident and technical drills"
+  default_prompt: "Use $tabletop for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

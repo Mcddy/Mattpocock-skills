@@ -1,0 +1,59 @@
+{
+ "schema": 1,
+ "id": "REPLACE-with-a-short-name",
+ "version": "1.0",
+ "title": "SAMPLE, replace every value: the storeroom door",
+ "notes": "A filled-in sample to copy and overwrite. It passes scenario_check.py as it stands. Write the scenario BEFORE play: what the player is told, what is really true, and what happens for each thing they might do. state holds only what the player can see; anything they cannot see is a hidden fact. type is incident_response, decision or study_drill. subject is own_system, own_plan or fictional: never a real third party, and never a named real person.",
+ "type": "incident_response",
+ "subject": "fictional",
+ "system_under_test": "The closing-up checklist of an invented shop.",
+ "setting": "An invented shop. The storeroom door has been found open at closing time and nobody knows since when.",
+ "player_role": "the person closing up",
+ "duration": {"turns": 6, "minutes_per_turn": 10, "start_clock": "09:00"},
+ "objectives": [
+  {"id": "O1", "text": "Is the door dealt with before the alarm company is called out?"},
+  {"id": "O2", "text": "Is the owner told something true, and in time?"}
+ ],
+ "roles": [
+  {"id": "R1", "name": "shop assistant", "can": "Phone the owner, or check a shelf.", "available_from_turn": 2}
+ ],
+ "resources": [
+  {"id": "RES1", "name": "spare padlock", "amount": 1, "unit": "padlock"}
+ ],
+ "constraints": ["One thing of your own per turn."],
+ "known_facts": [
+  {"id": "K1", "text": "The storeroom door is open and its lock is hanging off."}
+ ],
+ "hidden_facts": [
+  {"id": "H1", "text": "The lock was forced from the inside, by a delivery driver who was shut in."},
+  {"id": "H2", "text": "Nothing is missing from the shelves."}
+ ],
+ "state": {"door": "open", "alarm": false},
+ "actions": [
+  {"id": "A1", "label": "Look closely at the lock and the frame", "class": "investigate", "costs_turn": true, "reveals": ["H1"]},
+  {"id": "A2", "label": "Fit the spare padlock and close the door", "class": "act", "costs_turn": true, "needs_fact": ["H1"], "cost": {"RES1": 1}},
+  {"id": "A3", "label": "Tell the owner what is known so far", "class": "communicate", "costs_turn": false, "delegable_to": ["R1"]},
+  {"id": "A4", "label": "Set the alarm and leave", "class": "act", "costs_turn": true},
+  {"id": "A5", "label": "Write up what happened", "class": "decide", "costs_turn": false}
+ ],
+ "injects": [
+  {"id": "I1", "turn": 1, "told": "The storeroom door is standing open.", "truth": "Accurate. It has been open for about an hour.", "misleading": false, "tone": "bad", "probes": ["O1"], "task": "Deal with the door", "expects": ["A1"], "within": 1},
+  {"id": "I2", "turn": 2, "told": "The assistant says the alarm panel shows all clear, so you can just set it and go.", "truth": "The panel does not watch the storeroom door. Setting the alarm with the door open will trip it.", "misleading": true, "tone": "neutral", "probes": ["O2"], "task": "Tell the owner", "expects": ["A3"], "within": 1, "bait": ["A4"]},
+  {"id": "I3", "turn": 4, "told": "The owner texts: thanks for staying.", "truth": "Accurate. The owner is not coming in.", "misleading": false, "tone": "good", "probes": ["O1"]},
+  {"id": "I4", "turn": null, "told": "The alarm is sounding and the alarm company is on the phone.", "truth": "The open door tripped it.", "misleading": false, "tone": "bad", "probes": ["O2"]},
+  {"id": "I5", "turn": null, "told": "A neighbour knocks: your storeroom door is open.", "truth": "Accurate.", "misleading": false, "tone": "bad", "probes": ["O1"]}
+ ],
+ "rules": [
+  {"id": "RU1", "when": {"action": "A2", "by_turn": 3}, "then": {"text": "The padlock goes on and the door is shut. A stock sheet on the back of the door shows every shelf ticked.", "reveals": ["H2"], "set": {"door": "closed"}}, "late": {"text": "The padlock goes on and the door is shut, later than it should have been.", "set": {"door": "closed"}}},
+  {"id": "RU2", "when": {"action": "A4", "state": {"door": "open"}}, "then": {"text": "The alarm trips at once on the open door.", "set": {"alarm": true}, "fires": ["I4"]}, "unmet": {"text": "The alarm sets cleanly and you leave."}},
+  {"id": "RU3", "when": {"at_turn": 5, "state": {"door": "open"}}, "then": {"text": "The door is still open as turn 5 begins and a neighbour notices.", "fires": ["I5"]}}
+ ],
+ "unknowable": ["How long the driver was shut in."],
+ "key_actions": [
+  {"id": "KA1", "label": "door secured", "action": "A2", "from_inject": "I1"}
+ ],
+ "plan": [
+  {"id": "P1", "text": "Check every door before setting the alarm."},
+  {"id": "P2", "text": "Write up anything unusual the same day."}
+ ]
+}

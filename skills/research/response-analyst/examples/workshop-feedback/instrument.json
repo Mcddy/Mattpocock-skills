@@ -1,0 +1,137 @@
+{
+ "title": "Half-day workshop feedback (SYNTHETIC data)",
+ "collection": {
+  "reached": "Anonymous form link emailed to all 38 people who attended, with one reminder a week later.",
+  "invited": 38,
+  "missing": "15 attendees did not respond and nothing is known about them. People who left early, and people with nothing to say either way, are probably under-represented."
+ },
+ "questions": [
+  {
+   "id": "q1",
+   "text": "How did you attend?",
+   "type": "single",
+   "options": [
+    "In person",
+    "Online"
+   ],
+   "section": "About you"
+  },
+  {
+   "id": "q2",
+   "text": "Was this your first workshop in the series?",
+   "type": "single",
+   "options": [
+    "Yes",
+    "No"
+   ],
+   "section": "About you"
+  },
+  {
+   "id": "q3",
+   "text": "Overall, how useful was the workshop?",
+   "type": "scale",
+   "options": [
+    "Not useful",
+    "Slightly useful",
+    "Useful",
+    "Very useful"
+   ],
+   "section": "The session"
+  },
+  {
+   "id": "q4",
+   "text": "The pace was",
+   "type": "scale",
+   "options": [
+    "Much too slow",
+    "A bit slow",
+    "About right",
+    "A bit fast",
+    "Much too fast"
+   ],
+   "section": "The session"
+  },
+  {
+   "id": "q5",
+   "text": "I could follow the hands-on exercise",
+   "type": "scale",
+   "options": [
+    "Strongly disagree",
+    "Disagree",
+    "Agree",
+    "Strongly agree"
+   ],
+   "section": "The session"
+  },
+  {
+   "id": "q6",
+   "text": "Which parts were most valuable? Choose any",
+   "type": "multi",
+   "options": [
+    "Worked examples",
+    "Hands-on exercise",
+    "Q and A",
+    "Handout",
+    "Meeting other attendees"
+   ],
+   "section": "The session"
+  },
+  {
+   "id": "q7",
+   "text": "Did you have audio or connection problems?",
+   "type": "single",
+   "options": [
+    "Yes",
+    "No"
+   ],
+   "section": "The session",
+   "shown_if": {
+    "question": "q1",
+    "in": [
+     "Online"
+    ]
+   }
+  },
+  {
+   "id": "q8",
+   "text": "How many colleagues would you pass the handout to?",
+   "type": "number",
+   "section": "Afterwards"
+  },
+  {
+   "id": "q9",
+   "text": "Would you attend a follow-up session?",
+   "type": "single",
+   "options": [
+    "Yes",
+    "Maybe",
+    "No"
+   ],
+   "section": "Afterwards"
+  },
+  {
+   "id": "q10",
+   "text": "How confident are you to apply this next week?",
+   "type": "scale",
+   "options": [
+    "Not at all",
+    "Slightly",
+    "Fairly",
+    "Very"
+   ],
+   "section": "Afterwards"
+  },
+  {
+   "id": "q11",
+   "text": "What should we change?",
+   "type": "text",
+   "section": "Comments"
+  },
+  {
+   "id": "q12",
+   "text": "Anything else?",
+   "type": "text",
+   "section": "Comments"
+  }
+ ]
+}

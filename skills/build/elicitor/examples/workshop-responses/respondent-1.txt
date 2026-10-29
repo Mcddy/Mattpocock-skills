@@ -1,0 +1,20 @@
+=== elicitor response ===
+instrument: workshop-feedback
+version: 1
+finished: 2026-10-08T20:47:14Z
+worthwhile = 5
+pace = "About right"
+rushed-part = HIDDEN
+level = "A good mix of familiar and new"
+exercise = 5
+exercise.note = "Doing it myself made the difference."
+handout = 4
+most-useful = ["The worked example","The hands-on exercise"]
+length = "About right"
+follow = "No trouble"
+use-soon = 8
+suggest = "Yes"
+one-change = "Send the handout the day before, so the terms are familiar."
+anything-else = SKIPPED
+tally:rated-4-plus = [3,3]
+=== end elicitor response: 13 questions, 1 note ===

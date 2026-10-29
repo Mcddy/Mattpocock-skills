@@ -1,0 +1,35 @@
+{
+ "id": "plot-list-fixture",
+ "title": "Layout for the plot list (test fixture)",
+ "question": "How should the list of plots and their rent be laid out?",
+ "kind": "layout",
+ "recommended": {"id": "two-line-list", "reason": "it needs no sideways scrolling on a phone and is half the height of the cards."},
+ "options": [
+  {"id": "grid-table", "name": "Table", "note": "Every column in a grid; the easiest to scan down the rent column, and the widest.",
+   "sample": {"layout": "table"}},
+  {"id": "plot-cards", "name": "Cards", "note": "One card per plot with the rent large; the tallest of the three.",
+   "sample": {"layout": "cards"}},
+  {"id": "two-line-list", "name": "Two-line list", "note": "Holder and rent on the first line, the rest small beneath; the most compact on a phone.",
+   "sample": {"layout": "list"}}
+ ],
+ "controls": [
+  {"id": "stripes", "label": "Shade alternate rows", "type": "toggle", "default": false},
+  {"id": "density", "label": "Density", "type": "choice", "options": ["compact", "comfortable"], "default": "comfortable"}
+ ],
+ "context": {
+  "title": "Plots, north field",
+  "columns": [
+   {"key": "holder", "label": "Holder", "role": "title"},
+   {"key": "plot", "label": "Plot"},
+   {"key": "size", "label": "Size"},
+   {"key": "rent", "label": "Rent", "role": "value"},
+   {"key": "state", "label": "Rent status", "role": "status", "alert": ["Owing"]}
+  ],
+  "rows": [
+   {"holder": "Greenway Primary School gardening club", "plot": "14B", "size": "Half plot", "rent": "$42.00", "state": "Paid"},
+   {"holder": "Number 9 Wildflower Collective", "plot": "3", "size": "Full plot", "rent": "$84.00", "state": "Owing"},
+   {"holder": "Thursday seed swap group", "plot": "21A", "size": "Half plot", "rent": "$42.00", "state": "Paid"},
+   {"holder": "Community compost bays", "plot": "30", "size": "Full plot", "rent": "$0.00", "state": "Waived"}
+  ]
+ }
+}

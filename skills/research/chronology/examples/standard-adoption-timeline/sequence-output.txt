@@ -1,0 +1,51 @@
+chronology_check: 30 event row(s), 13 source(s). 29 dated, 1 undated. 19 FACT, 11 REPORTED, 0 ASSESSMENT.
+TIMELINE  Listed by the earliest day each written date could be; on a tie the less precise date first, then untimed before timed, then clock time as written, then file order. The listing is for reading. It is not a claim that one event preceded another.
+  E01  2014            REPORTED    EN 301 549 first published
+  E02  Apr 2015        REPORTED    EN 301 549 V1.1.2 published
+  E03  26 Oct 2016     FACT        Directive (EU) 2016/2102 adopted
+  E04  2 Dec 2016      FACT        Directive (EU) 2016/2102 published in the Official Journal
+  E05  5 Jun 2018      FACT        WCAG 2.1 published
+  E06  Aug 2018        REPORTED    EN 301 549 V2.1.2 published
+  E08  20 Dec 2018     REPORTED    EN 301 549 V2.1.2 referenced in the Official Journal
+  E07  21 Dec 2018     FACT        EN 301 549 V2.1.2 referenced in the Official Journal
+  E09  17 Apr 2019     FACT        Directive (EU) 2019/882 adopted
+  E10  23 Sep 2019     FACT        Directive (EU) 2016/2102 applies to new public sector websites
+  E11  Nov 2019        REPORTED    EN 301 549 V3.1.1 published
+  E12  23 Sep 2020     FACT        Directive (EU) 2016/2102 applies to all other public sector websites
+  E14  Mar 2021        FACT        EN 301 549 V3.2.1 published
+  E13  10 Mar 2021     FACT        EN 301 549 V3.2.1 adopted
+  E16  Jun 2021        REPORTED    Directive (EU) 2016/2102 applies in full
+  E15  23 Jun 2021     FACT        Directive (EU) 2016/2102 applies in full
+  E17  11 Aug 2021     FACT        Implementing Decision (EU) 2021/1339 adopted
+  E18  12 Aug 2021     FACT        EN 301 549 V3.2.1 harmonised under Directive (EU) 2016/2102
+  E19  18 Aug 2021     REPORTED    EN 301 549 V3.2.1 harmonised under Directive (EU) 2016/2102
+  E20  2022            REPORTED    Standardisation request M/587 issued
+  E21  28 Jun 2022     FACT        Deadline for Member States to adopt and publish measures under Directive (EU) 2019/882
+  E22  5 Oct 2023      FACT        WCAG 2.2 published
+  E23  12 Dec 2024     FACT        WCAG 2.2 update published
+  E24  28 Jun 2025     FACT        Directive (EU) 2019/882 measures apply
+  E25  about Jul 2025  REPORTED    Directive (EU) 2019/882 measures apply
+  E26  24 Aug 2026     FACT        EN 301 549 V4.1.1 adopted
+  E27  Sep 2026        FACT        EN 301 549 V4.1.1 published
+  E28  2 Sep 2026      FACT        EN 301 549 V4.1.1 published
+  E29  18 Sep 2026     REPORTED    Law firm note says EN 301 549 V4.1.1 is not yet cited in the Official Journal
+UNDATED  not placed in the order
+  U01  REPORTED    EN 301 549 V3.1.1 submitted for harmonisation
+DATE CONFLICTS  5 pair(s)
+  E07 (21 Dec 2018) against E08 (20 Dec 2018): class announcement; the dates are not compatible
+  E15 (23 Jun 2021) against E16 (Jun 2021): class precision; the dates are compatible
+  E18 (12 Aug 2021) against E19 (18 Aug 2021): class disagreement; the dates are not compatible
+  E24 (28 Jun 2025) against E25 (about Jul 2025): class precision; the dates are compatible
+  E27 (Sep 2026) against E28 (2 Sep 2026): class precision; the dates are compatible
+GAPS  3 longer than 365 days
+  at least 545 days: after E02, before E03 (nothing listed can fall between 2015-04-30 and 2016-10-26)
+  at least 550 days: after E04, before E05 (nothing listed can fall between 2016-12-02 and 2018-06-05)
+  at least 434 days: after E22, before E23 (nothing listed can fall between 2023-10-05 and 2024-12-12)
+SEQUENCE  A must precede B
+  HOLDS     E05 before E06: the latest E05 could be is 5 Jun 2018; the earliest E06 could be is 1 Aug 2018
+  UNDECIDED E13 before E14: E13 is 10 Mar 2021; E14 is known only to the month (1 Mar 2021 to 31 Mar 2021)
+  HOLDS     E14 before E17: the latest E14 could be is 31 Mar 2021; the earliest E17 could be is 11 Aug 2021
+  UNDECIDED E20 before E21: E20 is known only to the year (1 Jan 2022 to 31 Dec 2022); E21 is 28 Jun 2022
+  HOLDS     E22 before E26: the latest E22 could be is 5 Oct 2023; the earliest E26 could be is 24 Aug 2026
+  VIOLATED  E28 before E24: the latest E24 could be is 28 Jun 2025; the earliest E28 could be is 2 Sep 2026, so E24 is the earlier
+RESULT: FAIL. 0 error(s), 0 advisory note(s). Sequence: 3 hold, 1 violated, 2 cannot be decided. This checks form and date arithmetic. It does not check that a source says what a row claims.

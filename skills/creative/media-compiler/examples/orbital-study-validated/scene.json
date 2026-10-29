@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "title": "Procedural orbital study",
+  "caption": "Three deterministic parametric points; geometric illustration, not a physical n-body simulation.",
+  "source": "synthetic trigonometric construction",
+  "width": 300,
+  "height": 300,
+  "duration": "2",
+  "fps": "15",
+  "background": "#faf3e7",
+  "formats": [
+    "svg",
+    "png"
+  ],
+  "data": {},
+  "scene": [
+    {
+      "id": "centre",
+      "type": "circle",
+      "cx": 150,
+      "cy": 150,
+      "r": 12,
+      "fill": "#8e6a42"
+    },
+    {
+      "id": "orbit-one",
+      "type": "circle",
+      "cx": {
+        "function": "cos",
+        "frequency": 0.5,
+        "amplitude": 95,
+        "offset": 150
+      },
+      "cy": {
+        "function": "sin",
+        "frequency": 0.5,
+        "amplitude": 95,
+        "offset": 150
+      },
+      "r": 10,
+      "fill": "#b6603c"
+    },
+    {
+      "id": "orbit-two",
+      "type": "circle",
+      "cx": {
+        "function": "cos",
+        "frequency": 1,
+        "phase": 1.2,
+        "amplitude": 55,
+        "offset": 150
+      },
+      "cy": {
+        "function": "sin",
+        "frequency": 1,
+        "phase": 1.2,
+        "amplitude": 55,
+        "offset": 150
+      },
+      "r": 7,
+      "fill": "#387e73"
+    }
+  ]
+}

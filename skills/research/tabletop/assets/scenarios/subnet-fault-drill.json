@@ -1,0 +1,128 @@
+{
+ "schema": 1,
+ "id": "subnet-fault-drill",
+ "version": "1.0",
+ "title": "Study drill: staff on one VLAN cannot reach the file server",
+ "type": "study_drill",
+ "subject": "fictional",
+ "system_under_test": "The student's own troubleshooting method (plan steps P1 to P5), on a small routed lab network.",
+ "setting": "A training lab with three VLANs and one router between them. Since this morning, staff PCs on VLAN 20 cannot open the file server. Guests on VLAN 30 can, and so can the other servers on VLAN 10. You have a console on every device.",
+ "player_role": "the student, acting as the network technician",
+ "notes": "Every address fact in this file is checked by verify_subnet_drill.py with Python's ipaddress module. The behaviour of the hosts (a host asks by ARP for anything its own mask says is on-link, and uses its gateway for everything else) is standard IPv4 host behaviour; the drill states that proxy ARP is off, because with it on the router would answer and the fault would be hidden.",
+ "duration": {"turns": 8, "minutes_per_turn": 5, "start_clock": "14:00"},
+ "objectives": [
+  {"id": "O1", "text": "Does the student localise the fault by testing from both ends, not only from the client?"},
+  {"id": "O2", "text": "Does the student test a suspicion before acting on it?"},
+  {"id": "O3", "text": "Can the student explain why a wrong prefix length produces exactly these symptoms?"}
+ ],
+ "roles": [],
+ "resources": [],
+ "constraints": [
+  "One test or one change per turn. Looking at a table that is already on screen is free.",
+  "Change one thing at a time, and re-test after each change."
+ ],
+ "known_facts": [
+  {"id": "K1", "text": "VLAN 10, servers: 172.16.10.0/24, gateway 172.16.10.1. VLAN 20, staff: 172.16.20.0/24, gateway 172.16.20.1. VLAN 30, guests: 172.17.30.0/24, gateway 172.17.30.1."},
+  {"id": "K2", "text": "The file server is 172.16.10.25. A staff PC you can use is 172.16.20.57. A guest PC you can use is 172.17.30.44."},
+  {"id": "K3", "text": "One router routes between the VLANs. Proxy ARP is switched off on its interfaces."},
+  {"id": "K4", "text": "Two switches, SW1 and SW2, are joined by one trunk."}
+ ],
+ "hidden_facts": [
+  {"id": "H1", "text": "From the staff PC 172.16.20.57: the gateway 172.16.20.1 answers. The server 172.16.10.25 does not: request timed out. The trace shows 172.16.20.1 as the first hop and nothing after it."},
+  {"id": "H2", "text": "The trunk allows VLANs 10, 20 and 30 at both ends. Yesterday's change added VLAN 30 and removed nothing."},
+  {"id": "H3", "text": "The file server's interface is set to 172.16.10.25 with mask 255.255.0.0 and gateway 172.16.10.1. The mask should be 255.255.255.0. The server was rebuilt from a template last night."},
+  {"id": "H4", "text": "From the server: a ping to the staff PC 172.16.20.57 fails with 'Destination host unreachable', reported by the server itself. A ping to the guest PC 172.17.30.44 is answered."},
+  {"id": "H5", "text": "The server's ARP table has an incomplete entry for 172.16.20.57. It is asking for that PC's hardware address on its own VLAN, and nobody answers."},
+  {"id": "H6", "text": "A capture on the server shows echo requests arriving from 172.16.20.57, ARP requests leaving that ask who has 172.16.20.57, and no echo replies leaving."}
+ ],
+ "state": {"staff_access": "broken", "guest_access": "working", "fix_applied": false},
+ "actions": [
+  {"id": "A1", "label": "From the staff PC: ping its gateway, ping the file server, and trace the route to the server", "class": "investigate", "costs_turn": true, "reveals": ["H1"]},
+  {"id": "A2", "label": "Show the allowed VLAN list on the trunk, on both switches", "class": "investigate", "costs_turn": true, "reveals": ["H2"]},
+  {"id": "A3", "label": "Show the file server's IP configuration", "class": "investigate", "costs_turn": true, "reveals": ["H3"]},
+  {"id": "A4", "label": "From the file server: ping the staff PC and the guest PC", "class": "investigate", "costs_turn": true, "reveals": ["H4"]},
+  {"id": "A5", "label": "Show the file server's ARP table", "class": "investigate", "costs_turn": false, "reveals": ["H5"]},
+  {"id": "A6", "label": "Capture traffic on the file server while the staff PC pings it", "class": "investigate", "costs_turn": true, "reveals": ["H6"]},
+  {"id": "A7", "label": "Roll back yesterday's trunk change", "class": "act", "costs_turn": true},
+  {"id": "A8", "label": "Set the file server's mask to 255.255.255.0 and re-test from the staff PC", "class": "act", "costs_turn": true, "needs_fact": ["H3"]},
+  {"id": "A9", "label": "State the fault, the evidence for it and the fix", "class": "decide", "costs_turn": false},
+  {"id": "A10", "label": "Put yesterday's trunk change back", "class": "act", "costs_turn": true}
+ ],
+ "injects": [
+  {"id": "I1", "turn": 1, "told": "The ticket: 'Staff on VLAN 20 cannot open the file server at 172.16.10.25. It worked yesterday.'",
+   "truth": "Accurate. Requests from VLAN 20 reach the server. Its replies never leave, because its mask makes it treat 172.16.20.0/24 as its own network.",
+   "misleading": false, "tone": "bad", "probes": ["O1"], "task": "Define the problem and test from the affected end", "expects": ["A1"], "within": 1},
+  {"id": "I2", "turn": 2, "told": "The change log shows one change yesterday: 'Edited allowed VLANs on the trunk between SW1 and SW2.' A colleague says that must be it, and suggests rolling it back.",
+   "truth": "The trunk change added VLAN 30 and is correct (H2). The cause is on the server. Rolling the change back breaks guest access and fixes nothing.",
+   "misleading": true, "tone": "neutral", "probes": ["O2"], "task": "Test the trunk suspicion", "expects": ["A2"], "within": 2, "bait": ["A7"]},
+  {"id": "I3", "turn": 3, "told": "A guest on VLAN 30 mentions that the file server is working fine for them.",
+   "truth": "Accurate, and it is a clue. Guest addresses are outside 172.16.0.0/16, so the server sends its replies to them through its gateway.",
+   "misleading": false, "tone": "good", "probes": ["O1"]},
+  {"id": "I4", "turn": 5, "told": "A server administrator says: 'Every other server on VLAN 10 can reach it. The server is fine, so it has to be the network.'",
+   "truth": "Hosts on VLAN 10 are on-link under either mask, so that test cannot tell a right mask from a wrong one. The fault is on the server.",
+   "misleading": true, "tone": "neutral", "probes": ["O2", "O1"], "task": "Test from the far end", "expects": ["A3", "A4"], "within": 2},
+  {"id": "I5", "turn": 7, "told": "Your instructor: 'State the fault, the evidence for it and the fix, one sentence each.'",
+   "truth": "Fault: the server's prefix length is /16 where /24 was intended. Evidence: unreachable from the server itself, an incomplete ARP entry, requests in and no replies out. Fix: set the mask to 255.255.255.0 and re-test.",
+   "misleading": false, "tone": "neutral", "probes": ["O3"], "task": "State fault, evidence and fix", "expects": ["A9"], "within": 1},
+  {"id": "I6", "turn": null, "told": "Your instructor: 'Twenty-five minutes gone and staff still cannot reach the server. Tell me what you have ruled out so far, and how.'",
+   "truth": "A prompt to summarise. Nothing on the network has changed.",
+   "misleading": false, "tone": "neutral", "probes": ["O1"]}
+ ],
+ "rules": [
+  {"id": "RU1", "when": {"at_turn": 6, "state": {"staff_access": "broken"}},
+   "then": {"text": "Staff access is still broken as turn 6 begins, so the instructor asks for a summary.", "fires": ["I6"]}},
+  {"id": "RU2", "when": {"action": "A7", "state": {"guest_access": "working"}},
+   "then": {"text": "The trunk no longer carries VLAN 30. Guests lose the file server and everything else. Staff still cannot reach the server.", "set": {"guest_access": "broken"}},
+   "unmet": {"done": false, "text": "The change is already rolled back. Nothing changes."}},
+  {"id": "RU3", "when": {"action": "A10", "state": {"guest_access": "broken"}},
+   "then": {"text": "VLAN 30 is back on the trunk and guests can work again.", "set": {"guest_access": "working"}},
+   "unmet": {"done": false, "text": "The change is already in place. Nothing changes."}},
+  {"id": "RU4", "when": {"action": "A8"},
+   "then": {"text": "The server now has 172.16.10.25 with mask 255.255.255.0. A ping from 172.16.20.57 is answered at once and the share opens.", "set": {"staff_access": "working", "fix_applied": true}}},
+  {"id": "RU5", "when": {"action": "A9", "requires": ["A3"]},
+   "then": {"text": "Recorded. The instructor compares each sentence with what you tested."},
+   "unmet": {"done": false, "text": "You have named a fault on a device whose configuration you have not looked at. The instructor asks what you saw that points to it."}}
+ ],
+ "unknowable": [
+  "Who built the template with the wrong mask.",
+  "Whether any other server was rebuilt from the same template. Only this one is in the lab."
+ ],
+ "key_actions": [
+  {"id": "KA1", "label": "tested from the far end", "action": "A4", "from_inject": "I1"},
+  {"id": "KA2", "label": "fault found (server configuration read)", "action": "A3", "from_inject": "I1"},
+  {"id": "KA3", "label": "fix applied and re-tested", "action": "A8", "from_inject": "I1"}
+ ],
+ "plan": [
+  {"id": "P1", "text": "Define the problem: who is affected, who is not, and since when."},
+  {"id": "P2", "text": "Test from the affected end."},
+  {"id": "P3", "text": "Test from the far end."},
+  {"id": "P4", "text": "Change one thing, then re-test."},
+  {"id": "P5", "text": "Write down the cause and the evidence for it."}
+ ],
+ "addressing": {
+  "hosts": {"file server": "172.16.10.25", "staff PC": "172.16.20.57", "guest PC": "172.17.30.44", "server gateway": "172.16.10.1", "staff gateway": "172.16.20.1", "guest gateway": "172.17.30.1"},
+  "networks": {"VLAN 10 servers": "172.16.10.0/24", "VLAN 20 staff": "172.16.20.0/24", "VLAN 30 guests": "172.17.30.0/24", "what the server believes": "172.16.0.0/16"},
+  "claims": [
+   {"id": "C1", "kind": "netmask", "prefix": 16, "expect": "255.255.0.0", "says": "The mask found on the server is a /16."},
+   {"id": "C2", "kind": "netmask", "prefix": 24, "expect": "255.255.255.0", "says": "The mask it should have is a /24."},
+   {"id": "C3", "kind": "network", "interface": "172.16.10.25/16", "expect": "172.16.0.0/16", "says": "As configured, the server believes its own network is all of 172.16."},
+   {"id": "C4", "kind": "network", "interface": "172.16.10.25/24", "expect": "172.16.10.0/24", "says": "With the right mask its network is VLAN 10 only."},
+   {"id": "C5", "kind": "on_link", "interface": "172.16.10.25/16", "address": "172.16.20.57", "expect": true, "says": "So it treats the staff PC as a neighbour and asks for it by ARP, where it should use its gateway."},
+   {"id": "C6", "kind": "on_link", "interface": "172.16.10.25/16", "address": "172.17.30.44", "expect": false, "says": "The guest PC is outside that range, so replies to it go to the gateway and arrive."},
+   {"id": "C7", "kind": "on_link", "interface": "172.16.10.25/16", "address": "172.16.10.1", "expect": true, "says": "The server's gateway is on-link under the wrong mask."},
+   {"id": "C8", "kind": "on_link", "interface": "172.16.10.25/24", "address": "172.16.10.1", "expect": true, "says": "And under the right one, so reaching the gateway proves nothing about the mask."},
+   {"id": "C9", "kind": "on_link", "interface": "172.16.10.25/24", "address": "172.16.20.57", "expect": false, "says": "With the right mask the staff PC is remote and replies go to the gateway."},
+   {"id": "C10", "kind": "on_link", "interface": "172.16.20.57/24", "address": "172.16.10.25", "expect": false, "says": "The staff PC's own configuration is right: it sends to its gateway, which is why its requests arrive."},
+   {"id": "C11", "kind": "on_link", "interface": "172.16.20.57/24", "address": "172.16.20.1", "expect": true, "says": "The staff PC's gateway is on its own network."},
+   {"id": "C12", "kind": "member", "network": "172.16.10.0/24", "address": "172.16.10.25", "expect": true, "says": "The file server is in VLAN 10's range."},
+   {"id": "C13", "kind": "member", "network": "172.16.20.0/24", "address": "172.16.20.57", "expect": true, "says": "The staff PC is in VLAN 20's range."},
+   {"id": "C14", "kind": "member", "network": "172.17.30.0/24", "address": "172.17.30.44", "expect": true, "says": "The guest PC is in VLAN 30's range."},
+   {"id": "C15", "kind": "member", "network": "172.17.30.0/24", "address": "172.17.30.1", "expect": true, "says": "The guest gateway is in VLAN 30's range."},
+   {"id": "C16", "kind": "overlap", "a": "172.16.0.0/16", "b": "172.16.20.0/24", "expect": true, "says": "The network the server believes in swallows VLAN 20."},
+   {"id": "C17", "kind": "overlap", "a": "172.16.0.0/16", "b": "172.17.30.0/24", "expect": false, "says": "It does not touch VLAN 30."},
+   {"id": "C18", "kind": "overlap", "a": "172.16.10.0/24", "b": "172.16.20.0/24", "expect": false, "says": "As designed, VLAN 10 and VLAN 20 do not overlap."},
+   {"id": "C19", "kind": "usable_hosts", "network": "172.16.10.0/24", "expect": 254, "says": "A /24 has 254 usable host addresses."},
+   {"id": "C20", "kind": "usable_hosts", "network": "172.16.0.0/16", "expect": 65534, "says": "A /16 has 65534."}
+  ]
+ }
+}

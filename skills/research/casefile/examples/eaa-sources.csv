@@ -1,0 +1,6 @@
+source_id,title,publisher,address,tier,published,accessed,read_level,family,notes
+S1,Commission Implementing Decision (EU) 2021/1339 of 11 August 2021 amending Implementing Decision (EU) 2018/2048 as regards the harmonised standard for websites and mobile applications,"EUR-Lex, Official Journal of the European Union",https://eur-lex.europa.eu/eli/dec_impl/2021/1339/oj,primary,2021-08-12,2026-10-08,full,,Operative text and annex read on 8 Oct 2026. A re-fetch on 9 Oct returned title and metadata only.
+S2,Understanding Success Criterion 2.5.8: Target Size (Minimum),W3C Web Accessibility Initiative,https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html,primary,,2026-10-08,full,,Living document; no single publication date recorded.
+S3,Article on harmonised standards under the European Accessibility Act,Legalithm,,secondary,,2026-10-08,section,,Address was not kept when it was read. Find it again before citing.
+S4,European Accessibility Act: ICT standards update,Davis Wright Tremaine (law firm note),https://www.dwt.com/insights/2026/09/european-accessibility-act-ict-standards-update,secondary,,2026-10-08,section,,September 2026 by its address; day not recorded.
+S5,Vendor article on EN 301 549 V4.1.1,BrowserStack (vendor blog),,aggregator,,2026-10-08,section,,Address was not kept. Vendor content; used only as a second mention.

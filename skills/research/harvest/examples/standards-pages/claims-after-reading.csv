@@ -1,0 +1,5 @@
+claim_id,question_id,statement,status,source_ids,locator,load_bearing,confidence,conflicts_with,conflict_class,resolution
+C1,Q1,"SYNTHETIC: HL-103 edition 2, in force from 1 October 2026, requires each fixed light to be inspected at least once every 6 months",FACT,S4,"section 2 Requirement, first sentence, in stored copy 35d3dabe34ee8d58",yes,,,,
+C2,Q1,SYNTHETIC: HL-103 edition 1 required inspection at least once every 12 months,FACT,S4,"section 2 Requirement, first sentence, in stored copy 12fa83f0b8639a2f (the version fetched in run 1)",yes,,,,
+C3,Q1,SYNTHETIC: the committee agreed to shorten the interval at meeting 41 and approved edition 2 at meeting 42,FACT,S6;S7,"minutes 41, first item; minutes 42, first item",no,,,,
+C4,Q1,SYNTHETIC: whether HL-105 changes inspection rules is not established; the draft was not collected because robots.txt disallows it,GAP,,,no,,,,

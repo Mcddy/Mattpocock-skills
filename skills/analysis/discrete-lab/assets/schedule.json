@@ -1,0 +1,1 @@
+{"capacity":2,"tasks":[{"id":"draft","duration":3,"resource":1,"after":[]},{"id":"research","duration":2,"resource":1,"after":[]},{"id":"review","duration":2,"resource":2,"after":["draft","research"]}],"units":"integer ticks","objective":"minimise makespan","time_semantics":"half-open intervals [start,finish)"}

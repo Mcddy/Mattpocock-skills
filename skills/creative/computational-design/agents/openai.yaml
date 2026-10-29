@@ -1,0 +1,6 @@
+interface:
+  display_name: "Computational Design"
+  short_description: "Compile constrained geometry into checked SVG and mesh"
+  default_prompt: "Use $computational-design for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

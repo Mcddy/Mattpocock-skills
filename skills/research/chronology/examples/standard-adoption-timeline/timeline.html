@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-density="comfortable" data-text="standard">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EN 301 549 and EU accessibility law: adoption timeline</title>
+<!--
+  Timeline viewer. One file, no build step, no outside requests.
+  The data block near the end of the body is filled in by scripts/build_timeline.py, which first
+  runs scripts/chronology_check.py on the two CSV files. This page decides nothing about the data:
+  it shows each date as precisely as it was recorded and never fills in a day or a month.
+
+  Delivery notes:
+  - No form element and no submit event. Controls are type=button with click handlers.
+  - No alert, confirm or prompt.
+  - Storage is optional. Display settings are kept by a host storage object if one is present,
+    else by the browser, else for the visit only, and the page says which.
+  - Exports are offered as text in the page as well as a download, because a sandboxed frame can
+    refuse both downloads and the clipboard.
+  - Text is always set as text. No markup is built from data.
+  The page holds no work of the reader's: nothing is edited here, so there is nothing to import.
+-->
+<style>
+:root{
+  --bg:#f5efe4;--surface:#fffaf1;--raised:#fbf4e6;--ink:#2a2320;--muted:#62574d;--line:#d6c9b5;
+  --accent:#8a3f17;--on-accent:#fffaf1;--accent-soft:#f0dccb;
+  --warn:#8a2718;--warn-soft:#f6ddd3;--focus:#1b5a8a;
+  --pad:12px;--gap:14px;--target:44px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="slate"]{
+  --bg:#eef1f3;--surface:#fbfcfd;--raised:#f3f6f8;--ink:#1f2a30;--muted:#4d5c66;--line:#c6d0d6;
+  --accent:#225877;--on-accent:#fbfcfd;--accent-soft:#d6e4ec;
+  --warn:#87271f;--warn-soft:#f3dcd8;--focus:#7a3c12;
+}
+:root[data-theme="ember"]{
+  --bg:#231c18;--surface:#2d2520;--raised:#372d27;--ink:#f3e9dc;--muted:#c6b7a6;--line:#5a4b40;
+  --accent:#f0a36b;--on-accent:#231c18;--accent-soft:#4a3528;
+  --warn:#ffb3a1;--warn-soft:#4c2a23;--focus:#9fd0f2;
+}
+:root[data-theme="night"]{
+  --bg:#12171c;--surface:#1a2128;--raised:#222b33;--ink:#e8eef2;--muted:#adbcc6;--line:#3f4d58;
+  --accent:#8cc4e8;--on-accent:#12171c;--accent-soft:#243846;
+  --warn:#ffb5a8;--warn-soft:#452622;--focus:#f2c08a;
+}
+:root[data-density="compact"]{--pad:5px;--gap:8px}
+:root[data-text="large"]{font-size:112.5%}
+:root[data-text="larger"]{font-size:125%}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 var(--sans)}
+[hidden]{display:none !important}
+.page{max-width:1120px;margin:0 auto;padding:20px 16px 64px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.head{min-width:0;flex:1 1 180px}
+h1{font:600 1.7rem/1.15 var(--serif);margin:0;letter-spacing:-.01em;overflow-wrap:anywhere}
+.facts{color:var(--muted);margin:4px 0 0;font-size:.95rem}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.btn,.seg{min-height:var(--target);padding:0 14px;border:1px solid var(--line);background:var(--surface);border-radius:6px}
+.btn:hover,.seg:hover{border-color:var(--ink)}
+.seg[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);font-weight:600}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:0 6px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+label,.lab{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+input[type=search],input[type=text],select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:var(--target);padding:0 10px;width:100%}
+input[aria-invalid="true"]{border-color:var(--warn);border-width:2px}
+textarea{padding:10px;font:.85rem/1.45 var(--mono);min-height:11rem;resize:vertical;white-space:pre;overflow:auto}
+
+.panel{margin-top:12px;background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:12px}
+.panel h2{font:600 1rem var(--sans);margin:0}
+.choice{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.choice .lab{width:100%;margin:0}
+.note{color:var(--muted);font-size:.875rem;margin:0}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:16px}
+.tools{display:grid;gap:12px;align-content:start}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.tools .row .btn,.tools .row .seg{padding:0 12px}
+.filters{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+.gapset{display:grid;grid-template-columns:auto minmax(0,7rem);gap:8px;align-items:end}
+.err{color:var(--warn);font-size:.85rem;font-weight:600;margin:4px 0 0}
+.err[data-show="no"]{display:none}
+.statusrow{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;min-height:var(--target)}
+.status{margin:0;color:var(--muted);font-size:.95rem;display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center}
+.status b{color:var(--ink);font-variant-numeric:tabular-nums}
+.legend{color:var(--muted);font-size:.8rem;margin:0;display:flex;flex-wrap:wrap;gap:4px 14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{position:static}
+
+.year{font:600 1.5rem/1.2 var(--serif);margin:22px 0 0;padding-bottom:4px;border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.year small{font:400 .85rem var(--sans);color:var(--muted)}
+.month{font:600 .8rem var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 0 7px;padding:14px 0 0 21px;border-left:2px solid var(--line)}
+.event{position:relative;margin-left:7px;padding:var(--pad) 0 var(--pad) 21px;border-left:2px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:0 16px}
+.mark{position:absolute;left:-8px;top:calc(var(--pad) + 13px);width:14px;height:14px;display:block;box-sizing:border-box}
+.mark.day{border-radius:50%;background:var(--ink);border:2px solid var(--bg)}
+.mark.month-p{height:8px;top:calc(var(--pad) + 16px);background:var(--bg);border:2px solid var(--ink);border-radius:2px}
+.mark.year-p{background:var(--bg);border:2px solid var(--ink);border-radius:2px}
+.mark.approx{border-radius:50%;background:var(--bg);border:2px dashed var(--ink)}
+.mark.undated{background:var(--bg);border:2px dotted var(--muted);border-radius:2px}
+.when{font:600 .95rem/1.4 var(--mono);font-variant-numeric:tabular-nums;padding-top:9px;overflow-wrap:anywhere}
+.when span{display:block}
+.when .clock{font-weight:400;font-size:.85rem}
+.when small{display:block;font:400 .78rem var(--sans);color:var(--muted)}
+.what{min-width:0}
+.open{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:var(--target);padding:6px 0;margin:0;border:0;background:none;text-align:left;font-weight:600;font-size:1.02rem;line-height:1.35;overflow-wrap:anywhere}
+.open::after{content:"+";flex:none;width:28px;height:28px;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;font:400 1.1rem/1 var(--mono);color:var(--muted)}
+.open[aria-expanded="true"]::after{content:"-"}
+.open:hover::after{border-color:var(--ink);color:var(--ink)}
+.meta{color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;overflow-wrap:anywhere}
+.meta .src{color:var(--ink)}
+.meta .loc{flex:1 1 100%}
+.tag{font:600 .72rem var(--sans);letter-spacing:.05em;color:var(--ink);border:1px solid var(--ink);border-radius:3px;padding:1px 6px;white-space:nowrap}
+.tag.REPORTED{border-style:dashed}
+.tag.ASSESSMENT{border-style:dotted;font-style:italic}
+.pair{margin:8px 0 2px;padding:8px 10px;border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:4px;background:var(--surface);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.9rem}
+.pair.open-q{border-left-color:var(--warn);background:var(--warn-soft)}
+.pair p{margin:0;flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.pair b.cls{color:var(--warn)}
+.pair:not(.open-q) b.cls{color:var(--ink)}
+.pair .letter{font:600 .78rem var(--mono);border:1px solid var(--ink);border-radius:3px;padding:1px 6px;white-space:nowrap}
+.more{margin:8px 0 4px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;font-size:.92rem}
+.more dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.more dt{font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.more dt:first-child{margin-top:0}
+.more dd{margin:0;overflow-wrap:anywhere}
+.more .addr{font:.82rem var(--mono);color:var(--muted)}
+a.btn{display:inline-flex;align-items:center;text-decoration:none;color:var(--ink);margin-top:6px}
+.gap{margin:6px 0 6px 7px;padding:10px 12px 10px 21px;border-left:2px dashed var(--muted);color:var(--muted);font-size:.9rem}
+.gap b{color:var(--ink)}
+.blank{padding:32px 12px;text-align:center;border:1px dashed var(--line);border-radius:8px;margin-top:16px}
+.blank h2{font:600 1.2rem var(--serif);margin:0 0 6px}
+.blank p{margin:0 auto 14px;color:var(--muted);max-width:52ch}
+.blank.bad h2{color:var(--warn)}
+.ghost{height:54px;border-left:2px solid var(--line);margin-left:7px;display:flex;align-items:center;gap:14px;padding-left:21px}
+.ghost i{display:block;height:12px;border-radius:6px;background:var(--line)}
+.foot{margin-top:28px;color:var(--muted);font-size:.85rem}
+@media (max-width:640px){h1{font-size:1.4rem}}
+@media (min-width:700px){
+  .choice .lab{width:88px}
+  .event{grid-template-columns:9.5rem minmax(0,1fr)}
+  .more dl{grid-template-columns:6.5rem minmax(0,1fr);gap:6px 14px}
+  .more dt{margin-top:2px}
+}
+@media (min-width:960px){
+  .layout{grid-template-columns:340px minmax(0,1fr);align-items:start;gap:28px}
+  .tools{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding:2px 4px 8px 2px}
+}
+@media (prefers-reduced-motion:no-preference){.btn,.seg,.open::after{transition:border-color .12s ease}}
+@media print{.tools,#display-toggle,#display,#export,#clear,.open::after{display:none !important}.layout{display:block}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="head">
+      <h1 id="title">Timeline</h1>
+      <p class="facts" id="facts">Reading the events.</p>
+    </div>
+    <button type="button" class="btn" id="display-toggle" aria-expanded="false" aria-controls="display">Display</button>
+  </header>
+
+  <section class="panel" id="display" hidden aria-label="Display settings">
+    <div class="choice" role="group" aria-label="Theme">
+      <span class="lab">Theme</span>
+      <button type="button" class="seg" data-set="theme" data-value="paper">Paper</button>
+      <button type="button" class="seg" data-set="theme" data-value="slate">Slate</button>
+      <button type="button" class="seg" data-set="theme" data-value="ember">Ember</button>
+      <button type="button" class="seg" data-set="theme" data-value="night">Night</button>
+    </div>
+    <div class="choice" role="group" aria-label="Spacing">
+      <span class="lab">Spacing</span>
+      <button type="button" class="seg" data-set="density" data-value="comfortable">Comfortable</button>
+      <button type="button" class="seg" data-set="density" data-value="compact">Compact</button>
+    </div>
+    <div class="choice" role="group" aria-label="Text size">
+      <span class="lab">Text size</span>
+      <button type="button" class="seg" data-set="text" data-value="standard">Standard</button>
+      <button type="button" class="seg" data-set="text" data-value="large">Large</button>
+      <button type="button" class="seg" data-set="text" data-value="larger">Larger</button>
+    </div>
+    <div class="choice" role="group" aria-label="Date style">
+      <span class="lab">Dates</span>
+      <button type="button" class="seg" data-set="dates" data-value="words">12 Aug 2021</button>
+      <button type="button" class="seg" data-set="dates" data-value="iso">2021-08-12</button>
+    </div>
+    <div class="choice" role="group" aria-label="Scrolling when jumping to an event">
+      <span class="lab">Jumps</span>
+      <button type="button" class="seg" data-set="motion" data-value="smooth">Smooth</button>
+      <button type="button" class="seg" data-set="motion" data-value="instant">Instant</button>
+    </div>
+    <div class="choice">
+      <button type="button" class="btn quiet" id="display-reset">Reset display</button>
+      <p class="note" id="store-note"></p>
+    </div>
+  </section>
+
+  <div class="layout" id="layout">
+    <div class="tools" id="tools" role="search" aria-label="Find and filter events" hidden>
+      <div>
+        <label for="q">Search events and their sources</label>
+        <input type="search" id="q" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="row">
+        <button type="button" class="btn" id="filters-toggle" aria-expanded="false" aria-controls="filters">Filters</button>
+        <button type="button" class="seg" id="gaps-toggle" aria-pressed="false">Gaps</button>
+        <button type="button" class="seg" id="open-all" aria-pressed="false">Open all</button>
+        <button type="button" class="btn" id="export-toggle" aria-expanded="false" aria-controls="export">Export</button>
+      </div>
+      <div class="filters" id="filters" hidden>
+        <div><label for="f-tag">Tag</label><select id="f-tag"></select></div>
+        <div><label for="f-actor">Actor</label><select id="f-actor"></select></div>
+        <div><label for="f-tier">Source tier</label><select id="f-tier"></select></div>
+        <div role="group" aria-label="Status">
+          <span class="lab">Status (none chosen shows all)</span>
+          <div class="row">
+            <button type="button" class="seg" data-status="FACT" aria-pressed="false">FACT</button>
+            <button type="button" class="seg" data-status="REPORTED" aria-pressed="false">REPORTED</button>
+            <button type="button" class="seg" data-status="ASSESSMENT" aria-pressed="false">ASSESSMENT</button>
+          </div>
+        </div>
+        <div class="row"><button type="button" class="seg" id="conflicts-only" aria-pressed="false">Date conflicts only</button></div>
+        <div>
+          <label for="gap-days">Gaps: show when longer than (days)</label>
+          <input type="text" id="gap-days" inputmode="numeric" autocomplete="off" aria-describedby="gap-err">
+          <p class="err" id="gap-err" data-show="no">Enter a whole number of days from 1 to 36500. The last valid number is still in use.</p>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <div class="statusrow" id="statusrow" hidden>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <button type="button" class="btn quiet" id="clear" hidden>Clear filters</button>
+      </div>
+      <p class="legend" id="legend" hidden>
+        <span>Known to the</span>
+        <span><i class="mark day"></i>day</span>
+        <span><i class="mark month-p"></i>month</span>
+        <span><i class="mark year-p"></i>year</span>
+        <span><i class="mark approx"></i>or about</span>
+      </p>
+      <section class="panel" id="export" hidden aria-labelledby="export-h">
+        <h2 id="export-h">Export this view</h2>
+        <div class="choice" role="group" aria-label="Export format">
+          <span class="lab">Format</span>
+          <button type="button" class="seg" data-export="md" aria-pressed="true">Markdown</button>
+          <button type="button" class="seg" data-export="csv" aria-pressed="false">CSV</button>
+        </div>
+        <p class="note" id="export-what"></p>
+        <div>
+          <label for="export-text">Exported text. It can be selected and copied by hand.</label>
+          <textarea id="export-text" readonly spellcheck="false"></textarea>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="export-copy">Copy</button>
+          <button type="button" class="btn" id="export-download">Download</button>
+          <button type="button" class="btn quiet" id="export-close">Close export</button>
+        </div>
+        <p class="note" id="export-msg" role="status" aria-live="polite"></p>
+      </section>
+      <div id="timeline" aria-busy="true">
+        <div class="ghost" aria-hidden="true"><i style="width:18%"></i><i style="width:44%"></i></div>
+        <div class="ghost" aria-hidden="true"><i style="width:14%"></i><i style="width:52%"></i></div>
+        <div class="ghost" aria-hidden="true"><i style="width:18%"></i><i style="width:36%"></i></div>
+      </div>
+    </main>
+  </div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script type="application/json" id="timeline-data">{"app":"chronology-timeline","schema":1,"title":"EN 301 549 and EU accessibility law: adoption timeline","built_from":{"events":"events.csv","sources":"sources.csv"},"gap_days":365,"approx_days":15,"order_rule":"Listed by the earliest day each written date could be; on a tie the less precise date first, then untimed before timed, then clock time as written, then file order. The listing is for reading. It is not a claim that one event preceded another.","events":[{"id":"E01","date":"2014","precision":"year","end":"","time":"","title":"EN 301 549 first published","detail":"The note says the standard was first published in 2014 by the European standards organisations in response to Commission Mandate M/376.","actors":["ETSI","CEN","CENELEC"],"sources":["LAW"],"locator":"Sentence beginning \"EN 301 549 was first published in 2014\"","status":"REPORTED","tags":["en-301-549"],"conflicts":[],"e":16071,"l":16435},{"id":"E02","date":"2015-04","precision":"month","end":"","time":"","title":"EN 301 549 V1.1.2 published","detail":"The page's table lists this version as based on WCAG 2.0, drafted under Mandate 376 and never referenced in the Official Journal.","actors":["ETSI","CEN","CENELEC"],"sources":["EC1"],"locator":"History section, \"had already been published in April 2015\"; table row 1.1.2","status":"REPORTED","tags":["en-301-549"],"conflicts":[],"e":16526,"l":16555},{"id":"E03","date":"2016-10-26","precision":"day","end":"","time":"","title":"Directive (EU) 2016/2102 adopted","detail":"The Web Accessibility Directive. The date is the one in the title of the act.","actors":["European Parliament","Council of the European Union"],"sources":["EU2"],"locator":"Title of the act","status":"FACT","tags":["directive-2016-2102","legislation"],"conflicts":[],"e":17100,"l":17100},{"id":"E04","date":"2016-12-02","precision":"day","end":"","time":"","title":"Directive (EU) 2016/2102 published in the Official Journal","detail":"","actors":["European Parliament","Council of the European Union"],"sources":["EU1","EU2"],"locator":"Official Journal header line, L 327/1; ELI date of publication","status":"FACT","tags":["directive-2016-2102","official-journal"],"conflicts":[],"e":17137,"l":17137},{"id":"E05","date":"2018-06-05","precision":"day","end":"","time":"","title":"WCAG 2.1 published","detail":"","actors":["W3C"],"sources":["W3C"],"locator":"Sentence \"WCAG 2.1 was published on 5 June 2018\"","status":"FACT","tags":["wcag"],"conflicts":[],"e":17687,"l":17687},{"id":"E06","date":"2018-08","precision":"month","end":"","time":"","title":"EN 301 549 V2.1.2 published","detail":"The page's table lists this version as based on WCAG 2.1 and drafted under Mandate 554.","actors":["ETSI","CEN","CENELEC"],"sources":["EC1"],"locator":"History section, \"was published in August 2018\"; table row 2.1.2","status":"REPORTED","tags":["en-301-549"],"conflicts":[],"e":17744,"l":17774},{"id":"E08","date":"2018-12-20","precision":"day","end":"","time":"","title":"EN 301 549 V2.1.2 referenced in the Official Journal","detail":"The policy page gives 20 December, which is the date in the title of Implementing Decision (EU) 2018/2048. EUR-Lex records publication on the following day. Classed as announcement against occurrence on that reading, which is an inference.","actors":["European Commission"],"sources":["EC1"],"locator":"Sentence \"It was referenced in the Official Journal on 20th December 2018\"; table row 2.1.2","status":"REPORTED","tags":["directive-2016-2102","harmonisation","official-journal"],"conflicts":[{"id":"E07","class":"announcement"}],"e":17885,"l":17885},{"id":"E07","date":"2018-12-21","precision":"day","end":"","time":"","title":"EN 301 549 V2.1.2 referenced in the Official Journal","detail":"Implementing Decision (EU) 2018/2048, adopted on 20 December 2018, was published and entered into force on this date. That it cites V2.1.2 is taken from the Commission's policy page (EC1): the annex was not returned by the fetch.","actors":["European Commission"],"sources":["EU4","EC2"],"locator":"ELI date of publication and first date of entry into force; single market page, OJ L 327 of 21/12/2018","status":"FACT","tags":["directive-2016-2102","harmonisation","official-journal"],"conflicts":[{"id":"E08","class":"announcement"}],"e":17886,"l":17886},{"id":"E09","date":"2019-04-17","precision":"day","end":"","time":"","title":"Directive (EU) 2019/882 adopted","detail":"The European Accessibility Act. The Official Journal published it on 7 June 2019 (header line of the same text).","actors":["European Parliament","Council of the European Union"],"sources":["EU3"],"locator":"Closing line \"Done at Strasbourg, 17 April 2019\"","status":"FACT","tags":["directive-2019-882","legislation"],"conflicts":[],"e":18003,"l":18003},{"id":"E10","date":"2019-09-23","precision":"day","end":"","time":"","title":"Directive (EU) 2016/2102 applies to new public sector websites","detail":"Websites not published before 23 September 2018.","actors":["Member States"],"sources":["EU1"],"locator":"Article 12(3)(a)","status":"FACT","tags":["directive-2016-2102","legislation"],"conflicts":[],"e":18162,"l":18162},{"id":"E11","date":"2019-11","precision":"month","end":"","time":"","title":"EN 301 549 V3.1.1 published","detail":"The page says this version was submitted for harmonisation and in the end was never referenced in the Official Journal.","actors":["ETSI","CEN","CENELEC"],"sources":["EC1"],"locator":"History section, \"was published in November 2019 and submitted for harmonisation\"; table row 3.1.1","status":"REPORTED","tags":["en-301-549"],"conflicts":[],"e":18201,"l":18230},{"id":"E12","date":"2020-09-23","precision":"day","end":"","time":"","title":"Directive (EU) 2016/2102 applies to all other public sector websites","detail":"","actors":["Member States"],"sources":["EU1"],"locator":"Article 12(3)(b)","status":"FACT","tags":["directive-2016-2102","legislation"],"conflicts":[],"e":18528,"l":18528},{"id":"E14","date":"2021-03","precision":"month","end":"","time":"","title":"EN 301 549 V3.2.1 published","detail":"The standard carries its publication month in its designation. The policy page's table gives the same month.","actors":["ETSI","CEN","CENELEC"],"sources":["ET2","EC1"],"locator":"Cover: \"EN 301 549 V3.2.1 (2021-03)\"; policy page table row 3.2.1, \"March 2021\"","status":"FACT","tags":["en-301-549"],"conflicts":[],"e":18687,"l":18717},{"id":"E13","date":"2021-03-10","precision":"day","end":"","time":"","title":"EN 301 549 V3.2.1 adopted","detail":"","actors":["ETSI","CEN","CENELEC"],"sources":["ET2"],"locator":"Foreword, national transposition dates: \"Date of adoption of this EN: 10 March 2021\"","status":"FACT","tags":["en-301-549"],"conflicts":[],"e":18696,"l":18696},{"id":"E16","date":"2021-06","precision":"month","end":"","time":"","title":"Directive (EU) 2016/2102 applies in full","detail":"The policy page gives the month only.","actors":["Member States"],"sources":["EC1"],"locator":"Opening section: \"adopted in 2016 and came into full effect in June 2021\"","status":"REPORTED","tags":["directive-2016-2102","legislation"],"conflicts":[{"id":"E15","class":"precision"}],"e":18779,"l":18808},{"id":"E15","date":"2021-06-23","precision":"day","end":"","time":"","title":"Directive (EU) 2016/2102 applies in full","detail":"Mobile applications of public sector bodies, the last of the three application dates in Article 12(3).","actors":["Member States"],"sources":["EU1"],"locator":"Article 12(3)(c)","status":"FACT","tags":["directive-2016-2102","legislation"],"conflicts":[{"id":"E16","class":"precision"}],"e":18801,"l":18801},{"id":"E17","date":"2021-08-11","precision":"day","end":"","time":"","title":"Implementing Decision (EU) 2021/1339 adopted","detail":"Amends Implementing Decision (EU) 2018/2048 as regards the harmonised standard.","actors":["European Commission"],"sources":["EU5"],"locator":"Title of the act; ELI document date","status":"FACT","tags":["directive-2016-2102","harmonisation"],"conflicts":[],"e":18850,"l":18850},{"id":"E18","date":"2021-08-12","precision":"day","end":"","time":"","title":"EN 301 549 V3.2.1 harmonised under Directive (EU) 2016/2102","detail":"Implementing Decision (EU) 2021/1339 was published and entered into force on this date. The policy page's own table also gives 12th August 2021.","actors":["European Commission"],"sources":["EU5","EC1"],"locator":"ELI date of publication and first date of entry into force; annex entry as recorded in the research ledger; policy page table row 3.2.1","status":"FACT","tags":["directive-2016-2102","harmonisation","official-journal"],"conflicts":[{"id":"E19","class":"disagreement"}],"e":18851,"l":18851},{"id":"E19","date":"2021-08-18","precision":"day","end":"","time":"","title":"EN 301 549 V3.2.1 harmonised under Directive (EU) 2016/2102","detail":"The running text of the policy page says 18 August in two places. The table on the same page says 12th August. Nothing read explains 18 August.","actors":["European Commission"],"sources":["EC1"],"locator":"Sentences \"the latest version EN 301 549 v3.2.1, harmonised on 18 August 2021\" and \"v3.2.1, published in March 2021, was harmonised on 18 August 2021\"","status":"REPORTED","tags":["directive-2016-2102","harmonisation","official-journal"],"conflicts":[{"id":"E18","class":"disagreement"}],"e":18857,"l":18857},{"id":"E20","date":"2022","precision":"year","end":"","time":"","title":"Standardisation request M/587 issued","detail":"The Commission's own record of the request could not be read: its page returned metadata only.","actors":["European Commission"],"sources":["LAW"],"locator":"Sentence \"the European Commission issued Standardisation Request M/587 in 2022\"","status":"REPORTED","tags":["directive-2019-882","standardisation-request"],"conflicts":[],"e":18993,"l":19357},{"id":"E21","date":"2022-06-28","precision":"day","end":"","time":"","title":"Deadline for Member States to adopt and publish measures under Directive (EU) 2019/882","detail":"","actors":["Member States"],"sources":["EU3"],"locator":"Article 31(1)","status":"FACT","tags":["directive-2019-882","legislation"],"conflicts":[],"e":19171,"l":19171},{"id":"E22","date":"2023-10-05","precision":"day","end":"","time":"","title":"WCAG 2.2 published","detail":"","actors":["W3C"],"sources":["W3C"],"locator":"Sentence \"WCAG 2.2 was published on 5 October 2023, and an update was published on 12 December 2024\"","status":"FACT","tags":["wcag"],"conflicts":[],"e":19635,"l":19635},{"id":"E23","date":"2024-12-12","precision":"day","end":"","time":"","title":"WCAG 2.2 update published","detail":"","actors":["W3C"],"sources":["W3C","W3T"],"locator":"Overview: the same sentence; Recommendation header: \"W3C Recommendation 12 December 2024\"","status":"FACT","tags":["wcag"],"conflicts":[],"e":20069,"l":20069},{"id":"E24","date":"2025-06-28","precision":"day","end":"","time":"","title":"Directive (EU) 2019/882 measures apply","detail":"Article 32 adds a transitional period for service providers ending on 28 June 2030.","actors":["Member States"],"sources":["EU3"],"locator":"Article 31(2)","status":"FACT","tags":["directive-2019-882","legislation"],"conflicts":[{"id":"E25","class":"precision"}],"e":20267,"l":20267},{"id":"E25","date":"2025-07","precision":"approx","end":"","time":"","title":"Directive (EU) 2019/882 measures apply","detail":"A relative date. The note, dated 18 September 2026, says the Act became effective for enforcement purposes last summer. Summer 2025 is recorded as about July 2025.","actors":["Member States"],"sources":["LAW"],"locator":"Phrase \"became effective for enforcement purposes last summer\"","status":"REPORTED","tags":["directive-2019-882","legislation"],"conflicts":[{"id":"E24","class":"precision"}],"e":20240,"l":20331},{"id":"E26","date":"2026-08-24","precision":"day","end":"","time":"","title":"EN 301 549 V4.1.1 adopted","detail":"The law firm note gives the same date. The foreword also sets 30 November 2026 as the latest date of announcement.","actors":["ETSI","CEN","CENELEC"],"sources":["ET3","LAW"],"locator":"Foreword, national transposition dates: \"Date of adoption of this EN: 24 August 2026\"","status":"FACT","tags":["en-301-549"],"conflicts":[],"e":20689,"l":20689},{"id":"E27","date":"2026-09","precision":"month","end":"","time":"","title":"EN 301 549 V4.1.1 published","detail":"The standard carries its publication month in its designation.","actors":["ETSI","CEN","CENELEC"],"sources":["ET3"],"locator":"Cover: \"EN 301 549 V4.1.1 (2026-09)\"","status":"FACT","tags":["en-301-549"],"conflicts":[{"id":"E28","class":"precision"}],"e":20697,"l":20726},{"id":"E28","date":"2026-09-02","precision":"day","end":"","time":"","title":"EN 301 549 V4.1.1 published","detail":"The law firm note says the standard was published on September 2, 2026. ETSI's delivery server lists the PDF with the file stamp 9/2/2026 7:36 AM, month first and with no zone. The research ledger records the same date as REPORTED.","actors":["ETSI","CEN","CENELEC"],"sources":["LAW","ET1"],"locator":"Note: sentence beginning \"On September 2, 2026\"; directory entry en_301549v040101p.pdf","status":"FACT","tags":["en-301-549"],"conflicts":[{"id":"E27","class":"precision"}],"e":20698,"l":20698},{"id":"E29","date":"2026-09-18","precision":"day","end":"","time":"","title":"Law firm note says EN 301 549 V4.1.1 is not yet cited in the Official Journal","detail":"The note says the standard's most significant legal effect will not occur until it is cited there, when conformity would give a presumption of conformity.","actors":["European Commission"],"sources":["LAW"],"locator":"Date line \"09.18.26\"; sentence containing \"will not occur until it is cited in the Official Journal\"","status":"REPORTED","tags":["directive-2019-882","harmonisation","official-journal"],"conflicts":[],"e":20714,"l":20714},{"id":"U01","date":"","precision":"undated","end":"","time":"","title":"EN 301 549 V3.1.1 submitted for harmonisation","detail":"The page gives no date for the submission.","actors":["European Commission"],"sources":["EC1"],"locator":"History section, \"published in November 2019 and submitted for harmonisation\"","status":"REPORTED","tags":["en-301-549","harmonisation"],"conflicts":[],"e":null,"l":null}],"sources":[{"title":"Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies: text","publisher":"EUR-Lex, Official Journal of the European Union","address":"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016L2102","tier":"primary","published":"2016-12-02","accessed":"2026-10-09","read_level":"section","family":"eur-lex","notes":"Official Journal header line, Article 12 and Article 14 read by page fetch on 9 Oct 2026.","id":"EU1"},{"title":"Directive (EU) 2016/2102: ELI record","publisher":"EUR-Lex, Official Journal of the European Union","address":"https://eur-lex.europa.eu/eli/dir/2016/2102/oj","tier":"primary","published":"2016-12-02","accessed":"2026-10-09","read_level":"section","family":"eur-lex","notes":"The fetch returned the title and ELI metadata only: date of publication 2016-12-02, first date of entry into force 2016-12-22.","id":"EU2"},{"title":"Directive (EU) 2019/882 on the accessibility requirements for products and services: text","publisher":"EUR-Lex, Official Journal of the European Union","address":"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32019L0882","tier":"primary","published":"2019-06-07","accessed":"2026-10-09","read_level":"section","family":"eur-lex","notes":"Official Journal header line, Articles 31, 32 and 34 and the closing line read by page fetch in two parts on 9 Oct 2026.","id":"EU3"},{"title":"Commission Implementing Decision (EU) 2018/2048 of 20 December 2018 on the harmonised standard for websites and mobile applications: ELI record","publisher":"EUR-Lex, Official Journal of the European Union","address":"https://eur-lex.europa.eu/eli/dec_impl/2018/2048/oj","tier":"primary","published":"2018-12-21","accessed":"2026-10-09","read_level":"section","family":"eur-lex","notes":"The fetch returned the title and ELI metadata only: date of publication 2018-12-21, first date of entry into force 2018-12-21. The annex was not returned.","id":"EU4"},{"title":"Commission Implementing Decision (EU) 2021/1339 of 11 August 2021 amending Implementing Decision (EU) 2018/2048: ELI record","publisher":"EUR-Lex, Official Journal of the European Union","address":"https://eur-lex.europa.eu/eli/dec_impl/2021/1339/oj","tier":"primary","published":"2021-08-12","accessed":"2026-10-09","read_level":"section","family":"eur-lex","notes":"On 9 Oct 2026 the fetch returned the title and ELI metadata only: document date 2021-08-11, publication and first entry into force 2021-08-12. The research ledger this example was seeded from records a full read of the operative text and annex on 8 Oct 2026, including the annex entry EN 301 549 V3.2.1 (2021-03).","id":"EU5"},{"title":"Web Accessibility Directive: standards and harmonisation","publisher":"European Commission, digital strategy site","address":"https://digital-strategy.ec.europa.eu/en/policies/web-accessibility-directive-standards-and-harmonisation","tier":"secondary","published":"","accessed":"2026-10-09","read_level":"full","family":"","notes":"The page's footer says it was last updated on 5 May 2025. Its running text and its table give different dates for the 2021 harmonisation.","id":"EC1"},{"title":"Harmonised standards: websites and mobile applications of public sector bodies","publisher":"European Commission, single market site","address":"https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/accessibility-websites-and-mobile-applications_en","tier":"primary","published":"","accessed":"2026-10-09","read_level":"full","family":"","notes":"Lists Implementing Decision (EU) 2018/2048 as published in OJ L 327 of 21/12/2018, and one amendment, of 11 August 2021.","id":"EC2"},{"title":"ETSI delivery directory for EN 301 549","publisher":"ETSI","address":"https://www.etsi.org/deliver/etsi_en/301500_301599/301549/","tier":"primary","published":"","accessed":"2026-10-09","read_level":"full","family":"etsi","notes":"A server file listing. Dates are written month first with no zone. They are file stamps, not stated publication dates.","id":"ET1"},{"title":"EN 301 549 V3.2.1 (2021-03): Accessibility requirements for ICT products and services","publisher":"ETSI, CEN and CENELEC","address":"https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf","tier":"primary","published":"","accessed":"2026-10-09","read_level":"section","family":"etsi","notes":"Cover and foreword read by page fetch.","id":"ET2"},{"title":"EN 301 549 V4.1.1 (2026-09): Accessibility requirements for ICT products and services","publisher":"ETSI, CEN and CENELEC","address":"https://www.etsi.org/deliver/etsi_en/301500_301599/301549/04.01.01_60/en_301549v040101p.pdf","tier":"primary","published":"","accessed":"2026-10-09","read_level":"section","family":"etsi","notes":"Cover and foreword read by page fetch. The fetch stopped before the change history annex.","id":"ET3"},{"title":"WCAG 2 Overview","publisher":"W3C Web Accessibility Initiative","address":"https://www.w3.org/WAI/standards-guidelines/wcag/","tier":"primary","published":"","accessed":"2026-10-09","read_level":"full","family":"","notes":"The page says it was updated on 17 September 2026.","id":"W3C"},{"title":"Web Content Accessibility Guidelines (WCAG) 2.2","publisher":"W3C","address":"https://www.w3.org/TR/WCAG22/","tier":"primary","published":"2024-12-12","accessed":"2026-10-09","read_level":"section","family":"","notes":"Document header read by page fetch: W3C Recommendation 12 December 2024.","id":"W3T"},{"title":"European Accessibility Act: ICT standards update","publisher":"Davis Wright Tremaine (law firm note)","address":"https://www.dwt.com/insights/2026/09/european-accessibility-act-ict-standards-update","tier":"secondary","published":"2026-09-18","accessed":"2026-10-09","read_level":"full","family":"","notes":"The date line reads 09.18.26. Also source S4 in the research ledger, which recorded it as read in part on 8 Oct 2026.","id":"LAW"}],"conflicts":[{"a":"E07","b":"E08","cls":"announcement","dates":"not compatible","label":"A"},{"a":"E15","b":"E16","cls":"precision","dates":"compatible","label":"B"},{"a":"E18","b":"E19","cls":"disagreement","dates":"not compatible","label":"C"},{"a":"E24","b":"E25","cls":"precision","dates":"compatible","label":"D"},{"a":"E27","b":"E28","cls":"precision","dates":"compatible","label":"E"}]}</script>
+
+<script>
+(function () {
+  'use strict';
+  var APP = 'chronology-timeline', SCHEMA = 1, KEY = 'chronology-timeline:display';
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var CLASS_TEXT = {precision: 'Different precision, compatible', timezone: 'Time zone: one moment, two local dates', announcement: 'Announcement against occurrence',
+                    disagreement: 'Real disagreement', '': 'Not classified'};
+  var PRECISION_NOTE = {day: '', month: 'day not recorded', year: 'month not recorded', approx: 'approximate', undated: 'not placed'};
+  var CHOICES = {theme: ['paper', 'slate', 'ember', 'night'], density: ['comfortable', 'compact'], text: ['standard', 'large', 'larger'],
+                 dates: ['words', 'iso'], motion: ['smooth', 'instant']};
+  var COLS = ['event_id', 'date', 'date_precision', 'end_date', 'time', 'title', 'detail', 'actors', 'source_id', 'locator', 'status', 'conflicts_with', 'tags'];
+  var D = null, byId = {}, srcById = {}, pairsOf = {};
+  var S = {q: '', tag: '', actor: '', tier: '', status: {}, conflictsOnly: false, gaps: false, gapDays: 90, open: {}, openAll: false, exportKind: ''};
+  var settings = defaults();
+  var store = {kind: 'memory'};
+  var $ = function (id) { return document.getElementById(id); };
+
+  function systemMotion() {
+    try { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'; } catch (e) { return 'instant'; }
+  }
+  function defaults() { return {theme: 'paper', density: 'comfortable', text: 'standard', dates: 'words', motion: systemMotion()}; }
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'on') Object.keys(attrs.on).forEach(function (ev) { n.addEventListener(ev, attrs.on[ev]); });
+      else if (attrs[k] !== false && attrs[k] != null) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+
+  // ---------- display settings: host storage, then the browser, then this visit only ----------
+  function hostStorage() {
+    try { var h = window.storage; if (h && typeof h.get === 'function' && typeof h.set === 'function') return h; } catch (e) { /* not available */ }
+    return null;
+  }
+  function readSaved(v) {
+    try {
+      if (typeof v === 'string') v = JSON.parse(v);
+      if (v && typeof v === 'object' && !('app' in v) && 'value' in v) return readSaved(v.value);
+      if (!v || v.app !== APP || v.schema !== SCHEMA || !v.data || typeof v.data !== 'object') return null;
+      var out = defaults();
+      Object.keys(CHOICES).forEach(function (k) { if (CHOICES[k].indexOf(v.data[k]) >= 0) out[k] = v.data[k]; });
+      return out;
+    } catch (e) { return null; }
+  }
+  function loadSettings(done) {
+    var called = false;
+    function finish(v) { if (!called) { called = true; done(v); } }
+    function browser() {
+      try {
+        var raw = window.localStorage.getItem(KEY);
+        window.localStorage.setItem(KEY + ':probe', '1');
+        window.localStorage.removeItem(KEY + ':probe');
+        store.kind = 'browser';
+        finish(readSaved(raw));
+      } catch (e) { store.kind = 'memory'; finish(null); }
+    }
+    var h = hostStorage();
+    if (h) {
+      try {
+        Promise.resolve(h.get(KEY)).then(function (v) { store.kind = 'host'; finish(readSaved(v)); }, browser);
+        return;
+      } catch (e) { /* fall through to the browser */ }
+    }
+    browser();
+  }
+  function saveSettings() {
+    var text = JSON.stringify({app: APP, schema: SCHEMA, content_id: 'display-settings', saved_at: new Date().toISOString(), data: settings});
+    try {
+      if (store.kind === 'host') {
+        Promise.resolve(hostStorage().set(KEY, text)).then(null, function () { store.kind = 'memory'; storeNote(); });
+      } else if (store.kind === 'browser') {
+        window.localStorage.setItem(KEY, text);
+      }
+    } catch (e) { store.kind = 'memory'; }
+    storeNote();
+  }
+  function storeNote() {
+    $('store-note').textContent = store.kind === 'host' ? 'Display settings are saved by the app showing this page.'
+      : store.kind === 'browser' ? 'Display settings are saved in this browser.'
+      : 'Not saved: this page cannot store data here. Display settings last for this visit.';
+  }
+  function applySettings() {
+    var root = document.documentElement;
+    root.setAttribute('data-theme', settings.theme);
+    root.setAttribute('data-density', settings.density);
+    root.setAttribute('data-text', settings.text);
+    document.querySelectorAll('[data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(settings[b.getAttribute('data-set')] === b.getAttribute('data-value')));
+    });
+    storeNote();
+  }
+
+  // ---------- dates: shown exactly as precise as recorded ----------
+  function fmt(s) {
+    if (settings.dates === 'iso') return s;
+    var p = s.split('-');
+    if (p.length === 1) return p[0];
+    var m = MON[parseInt(p[1], 10) - 1];
+    return p.length === 2 ? m + ' ' + p[0] : String(parseInt(p[2], 10)) + ' ' + m + ' ' + p[0];
+  }
+  function dateLabel(ev) {
+    if (ev.precision === 'undated') return 'Undated';
+    return (ev.precision === 'approx' ? 'about ' : '') + fmt(ev.date) + (ev.end ? ' to ' + fmt(ev.end) : '');
+  }
+  function label(ev) { return dateLabel(ev) + (ev.time ? ' ' + ev.time : ''); }
+  function form(ev) { return ev.date ? ['year', 'month', 'day'][ev.date.split('-').length - 1] : 'undated'; }
+  function dayLabel(n) {
+    var d = new Date(n * 86400000);
+    var iso = d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '-' + ('0' + d.getUTCDate()).slice(-2);
+    return fmt(iso);
+  }
+
+  // ---------- filtering ----------
+  function sourceWords(ev) {
+    return ev.sources.map(function (i) { var s = srcById[i]; return s ? [i, s.title, s.publisher].join(' ') : i; }).join(' ');
+  }
+  function matches(ev) {
+    if (S.tag && ev.tags.indexOf(S.tag) < 0) return false;
+    if (S.actor && ev.actors.indexOf(S.actor) < 0) return false;
+    if (S.tier && !ev.sources.some(function (i) { return srcById[i] && srcById[i].tier === S.tier; })) return false;
+    var chosen = Object.keys(S.status).filter(function (k) { return S.status[k]; });
+    if (chosen.length && chosen.indexOf(ev.status) < 0) return false;
+    if (S.conflictsOnly && !(pairsOf[ev.id] || []).length) return false;
+    if (S.q) {
+      var hay = [ev.id, ev.title, ev.detail, ev.actors.join(' '), ev.tags.join(' '), ev.locator, sourceWords(ev), label(ev)].join(' ').toLowerCase();
+      if (!S.q.toLowerCase().split(/\s+/).every(function (w) { return !w || hay.indexOf(w) >= 0; })) return false;
+    }
+    return true;
+  }
+  function filterWords() {
+    var w = [];
+    if (S.q) w.push('search "' + S.q + '"');
+    if (S.tag) w.push('tag ' + S.tag);
+    if (S.actor) w.push('actor ' + S.actor);
+    if (S.tier) w.push('source tier ' + S.tier);
+    var chosen = Object.keys(S.status).filter(function (k) { return S.status[k]; });
+    if (chosen.length) w.push('status ' + chosen.join(' or '));
+    if (S.conflictsOnly) w.push('date conflicts only');
+    return w;
+  }
+  function clearFilters() {
+    S.q = ''; S.tag = ''; S.actor = ''; S.tier = ''; S.status = {}; S.conflictsOnly = false;
+    $('q').value = ''; $('f-tag').value = ''; $('f-actor').value = ''; $('f-tier').value = '';
+    document.querySelectorAll('[data-status]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    $('conflicts-only').setAttribute('aria-pressed', 'false');
+  }
+
+  // ---------- gaps: stretches in which nothing shown can fall ----------
+  function findGaps(list) {
+    var dated = list.filter(function (e) { return e.e != null; }), out = {};
+    if (dated.length < 2) return out;
+    var hi = [], lo = [], i, best = -Infinity;
+    for (i = 0; i < dated.length; i++) { best = Math.max(best, dated[i].l); hi.push(best); }
+    best = Infinity;
+    for (i = dated.length - 1; i >= 0; i--) { best = Math.min(best, dated[i].e); lo[i] = best; }
+    for (i = 0; i < dated.length - 1; i++) {
+      var days = lo[i + 1] - hi[i];
+      if (days > S.gapDays) out[dated[i].id] = {days: days, from: hi[i], to: lo[i + 1]};
+    }
+    return out;
+  }
+
+  // ---------- drawing (text is always set as text) ----------
+  function statusTag(ev) { return el('span', {class: 'tag ' + ev.status, text: ev.status}); }
+  function sourceShort(ev) {
+    var names = [];
+    ev.sources.forEach(function (i) { var s = srcById[i], n = s ? (s.publisher || s.title) : i; if (names.indexOf(n) < 0) names.push(n); });
+    return names.length ? names.join('; ') : 'no source';
+  }
+  function pairBlock(ev, pair) {
+    var otherId = pair.a === ev.id ? pair.b : pair.a, other = byId[otherId];
+    var openQ = pair.cls === 'disagreement' || pair.cls === '';
+    var words = 'Also dated ' + label(other) + ' by ' + sourceShort(other) + ' (' + other.id + '). ';
+    var tail = pair.cls === '' ? ' The dates are ' + pair.dates + '.' : '';
+    return el('div', {class: 'pair' + (openQ ? ' open-q' : ''), id: 'pair-' + ev.id + '-' + other.id, 'data-pair': pair.label, 'data-class': pair.cls || 'none'}, [
+      el('span', {class: 'letter', text: 'Conflict ' + pair.label}),
+      el('p', {}, [words, el('b', {class: 'cls', text: CLASS_TEXT[pair.cls] + '.'}), tail]),
+      el('button', {type: 'button', class: 'btn', id: 'goto-' + ev.id + '-' + other.id, 'data-goto': other.id, text: 'Go to ' + other.id,
+                    'aria-label': 'Go to ' + other.id + ', ' + other.title, on: {click: function () { goTo(other.id); }}})
+    ]);
+  }
+  function detailBlock(ev) {
+    var dl = el('dl', {});
+    function add(term, node) { dl.appendChild(el('dt', {text: term})); dl.appendChild(node); }
+    if (ev.detail) add('Detail', el('dd', {text: ev.detail}));
+    add('Recorded as', el('dd', {text: (ev.date || 'no date') + ', precision ' + ev.precision + (ev.end ? ', ending ' + ev.end : '') + (ev.time ? ', time ' + ev.time : '') + '. Id ' + ev.id + '.'}));
+    if (ev.actors.length) add('Actors', el('dd', {text: ev.actors.join('; ')}));
+    if (ev.tags.length) add('Tags', el('dd', {text: ev.tags.join('; ')}));
+    if (ev.locator) add('Locator', el('dd', {text: ev.locator}));
+    ev.sources.forEach(function (i) {
+      var s = srcById[i];
+      if (!s) { add('Source ' + i, el('dd', {text: 'Not in the sources list.'})); return; }
+      var kids = [el('div', {text: s.title + (s.publisher ? '. ' + s.publisher + '.' : '')}),
+                  el('div', {text: 'Tier ' + s.tier + '; read ' + (s.read_level || 'not stated') + (s.accessed ? '; accessed ' + fmt(s.accessed) : '') + (s.published ? '; published ' + fmt(s.published) : '') + '.'})];
+      if (s.notes) kids.push(el('div', {text: s.notes}));
+      if (s.address) {
+        kids.push(el('div', {class: 'addr', text: s.address}));
+        if (/^https?:\/\//i.test(s.address)) kids.push(el('a', {class: 'btn', href: s.address, target: '_blank', rel: 'noopener noreferrer', text: 'Open source ' + i}));
+      }
+      add('Source ' + i, el('dd', {}, kids));
+    });
+    return el('div', {class: 'more', id: 'more-' + ev.id}, [dl]);
+  }
+  function eventNode(ev) {
+    var isOpen = S.openAll || !!S.open[ev.id];
+    var f = form(ev);
+    var markClass = ev.precision === 'approx' ? 'approx' : (f === 'day' ? 'day' : f === 'month' ? 'month-p' : f === 'year' ? 'year-p' : 'undated');
+    var note = PRECISION_NOTE[ev.precision];
+    if (ev.precision === 'approx') note = 'approximate';
+    var when = el('div', {class: 'when', id: 'when-' + ev.id, 'data-when': ev.id, 'data-label': label(ev)},
+                  [el('span', {text: dateLabel(ev)}), ev.time ? el('span', {class: 'clock', text: ev.time}) : null, note ? el('small', {text: note}) : null]);
+    var btn = el('button', {type: 'button', class: 'open', id: 'open-' + ev.id, 'aria-expanded': String(isOpen), 'aria-controls': 'more-' + ev.id, 'data-open': ev.id,
+                            on: {click: function () { toggle(ev.id); }}}, [el('span', {id: 'h-' + ev.id, text: ev.title})]);
+    var what = el('div', {class: 'what'}, [btn,
+      el('div', {class: 'meta'}, [statusTag(ev), el('span', {class: 'src', text: sourceShort(ev)}), ev.locator ? el('span', {class: 'loc', text: ev.locator}) : null])]);
+    (pairsOf[ev.id] || []).forEach(function (p) { what.appendChild(pairBlock(ev, p)); });
+    if (isOpen) what.appendChild(detailBlock(ev));
+    return el('article', {class: 'event', 'data-id': ev.id, 'data-precision': ev.precision, 'aria-labelledby': 'h-' + ev.id},
+              [el('i', {class: 'mark ' + markClass, 'aria-hidden': 'true'}), when, what]);
+  }
+  function blank(title, body, action, bad) {
+    return el('div', {class: 'blank' + (bad ? ' bad' : ''), role: bad ? 'alert' : null}, [el('h2', {text: title}), el('p', {text: body}), action || null]);
+  }
+  function render() {
+    var keep = document.activeElement && document.activeElement.getAttribute ? document.activeElement.getAttribute('data-open') : null;
+    var tl = $('timeline');
+    tl.textContent = '';
+    tl.setAttribute('aria-busy', 'false');
+    var shown = D.events.filter(matches), words = filterWords();
+    var st = $('status');
+    st.textContent = '';
+    st.appendChild(el('span', {}, ['Showing ', el('b', {id: 'shown', text: String(shown.length)}), ' of ', el('b', {text: String(D.events.length)}),
+                                    ' events' + (words.length ? '. Filters: ' + words.join('; ') + '.' : '.')]));
+    $('clear').hidden = !words.length;
+    if (!shown.length) {
+      tl.appendChild(blank('Nothing matches', 'No event fits: ' + words.join('; ') + '. The search looks at titles, details, actors, tags, locators and source names.',
+                           el('button', {type: 'button', class: 'btn', text: 'Show all ' + D.events.length + ' events',
+                                         on: {click: function () { clearFilters(); render(); $('q').focus(); }}})));
+      refreshExport();
+      return;
+    }
+    var gaps = S.gaps ? findGaps(shown) : {}, gapCount = Object.keys(gaps).length;
+    var perYear = {};
+    shown.forEach(function (e) { if (e.date) { var y = e.date.slice(0, 4); perYear[y] = (perYear[y] || 0) + 1; } });
+    var year = null, group = null, undatedOpen = false;
+    shown.forEach(function (ev) {
+      if (ev.precision === 'undated') {
+        if (!undatedOpen) {
+          undatedOpen = true;
+          tl.appendChild(el('h2', {class: 'year', id: 'y-undated'}, ['Undated', el('small', {text: 'not placed in the order'})]));
+        }
+      } else {
+        var y = ev.date.slice(0, 4), g = y + '|' + (ev.date.length >= 7 ? ev.date.slice(5, 7) : '00');
+        if (y !== year) {
+          year = y; group = null;
+          tl.appendChild(el('h2', {class: 'year', id: 'y-' + y}, [y, el('small', {text: perYear[y] + (perYear[y] === 1 ? ' event' : ' events')})]));
+        }
+        if (g !== group) {
+          group = g;
+          if (g.slice(5) !== '00') tl.appendChild(el('h3', {class: 'month', text: MONTH[parseInt(g.slice(5), 10) - 1]}));
+        }
+      }
+      tl.appendChild(eventNode(ev));
+      if (gaps[ev.id]) {
+        var gp = gaps[ev.id];
+        tl.appendChild(el('div', {class: 'gap', role: 'note', 'data-gap': String(gp.days)}, [
+          el('b', {text: 'At least ' + gp.days + ' days'}), ' with nothing listed' + (words.length ? ' in this filtered view' : '') + ', from ' +
+          dayLabel(gp.from) + ' to ' + dayLabel(gp.to) + '.']));
+      }
+    });
+    if (S.gaps) {
+      st.appendChild(el('span', {id: 'gap-count', text: gapCount + (gapCount === 1 ? ' gap' : ' gaps') + ' longer than ' + S.gapDays + ' days.'}));
+    }
+    if (keep) { var again = document.querySelector('[data-open="' + keep + '"]'); if (again) again.focus(); }
+    refreshExport();
+  }
+  function toggle(id) {
+    if (S.openAll) { S.openAll = false; $('open-all').setAttribute('aria-pressed', 'false'); D.events.forEach(function (e) { S.open[e.id] = true; }); }
+    S.open[id] = !S.open[id];
+    var btn = document.querySelector('[data-open="' + id + '"]');
+    if (!btn) return;
+    btn.setAttribute('aria-expanded', String(!!S.open[id]));
+    var more = $('more-' + id);
+    if (S.open[id] && !more) btn.parentNode.appendChild(detailBlock(byId[id]));
+    if (!S.open[id] && more) more.parentNode.removeChild(more);
+  }
+  function goTo(id) {
+    var target = byId[id];
+    if (!target) return;
+    var cleared = false;
+    if (!matches(target)) { clearFilters(); cleared = true; }
+    S.open[id] = true;
+    render();
+    var btn = document.querySelector('[data-open="' + id + '"]');
+    if (!btn) return;
+    try { btn.scrollIntoView({block: 'center', behavior: settings.motion === 'smooth' ? 'smooth' : 'auto'}); } catch (e) { btn.scrollIntoView(); }
+    btn.focus({preventScroll: true});
+    if (cleared) $('status').appendChild(el('span', {text: 'Filters were cleared to show ' + id + '.'}));
+  }
+
+  // ---------- export of what is shown ----------
+  function cell(s) { return String(s == null ? '' : s).replace(/\|/g, '\\|').replace(/\s*\n\s*/g, ' '); }
+  function csvCell(s) { s = String(s == null ? '' : s); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function shownPairs(shown) {
+    var ids = {}; shown.forEach(function (e) { ids[e.id] = true; });
+    return D.conflicts.filter(function (p) { return ids[p.a] || ids[p.b]; });
+  }
+  function asMarkdown(shown) {
+    var words = filterWords(), L = ['# ' + D.title, ''];
+    L.push('View exported: ' + shown.length + ' of ' + D.events.length + ' events. ' + (words.length ? 'Filters: ' + words.join('; ') + '.' : 'No filters.'));
+    L.push('Each date is written as precisely as its source gives it. The order is for reading; where dates are imprecise it is not a claim of sequence.');
+    L.push('', '| Date | Event | Status | Source and locator | Id |', '|---|---|---|---|---|');
+    var dated = shown.filter(function (e) { return e.precision !== 'undated'; }), undated = shown.filter(function (e) { return e.precision === 'undated'; });
+    dated.forEach(function (e) {
+      L.push('| ' + [label(e), e.title, e.status, e.sources.join('; ') + (e.locator ? ': ' + e.locator : ''), e.id].map(cell).join(' | ') + ' |');
+    });
+    var pairs = shownPairs(shown);
+    if (pairs.length) {
+      L.push('', '## Date conflicts', '');
+      pairs.forEach(function (p) {
+        L.push('- ' + p.label + ': ' + p.a + ' (' + label(byId[p.a]) + ', ' + sourceShort(byId[p.a]) + ') against ' + p.b + ' (' + label(byId[p.b]) + ', ' +
+               sourceShort(byId[p.b]) + '). ' + CLASS_TEXT[p.cls] + '.' + (p.cls === '' ? ' The dates are ' + p.dates + '.' : ''));
+      });
+    }
+    if (S.gaps) {
+      var g = findGaps(shown), keys = Object.keys(g);
+      L.push('', '## Gaps longer than ' + S.gapDays + ' days' + (words.length ? ' in this filtered view' : ''), '');
+      if (!keys.length) L.push('- None.');
+      shown.forEach(function (e) {
+        if (g[e.id]) L.push('- At least ' + g[e.id].days + ' days: nothing shown can fall between ' + dayLabel(g[e.id].from) + ' and ' + dayLabel(g[e.id].to) + ' (after ' + e.id + ').');
+      });
+    }
+    if (undated.length) {
+      L.push('', '## Undated, not placed', '');
+      undated.forEach(function (e) { L.push('- ' + e.id + ': ' + cell(e.title) + ' (' + e.status + '; ' + e.sources.join('; ') + (e.locator ? ': ' + cell(e.locator) : '') + ')'); });
+    }
+    var used = {}; shown.forEach(function (e) { e.sources.forEach(function (i) { used[i] = true; }); });
+    L.push('', '## Sources', '');
+    D.sources.forEach(function (s) {
+      if (used[s.id]) L.push('- ' + s.id + ': ' + cell(s.title) + (s.publisher ? '. ' + cell(s.publisher) : '') + '. Tier ' + s.tier + ', read ' + (s.read_level || 'not stated') +
+                             (s.accessed ? ', accessed ' + s.accessed : '') + '.' + (s.address ? ' ' + s.address : ''));
+    });
+    return L.join('\n') + '\n';
+  }
+  function asCsv(shown) {
+    var L = [COLS.join(',')];
+    shown.forEach(function (e) {
+      L.push([e.id, e.date, e.precision, e.end, e.time, e.title, e.detail, e.actors.join('; '), e.sources.join('; '), e.locator, e.status,
+              e.conflicts.map(function (c) { return c.id + (c['class'] ? ':' + c['class'] : ''); }).join('; '), e.tags.join('; ')].map(csvCell).join(','));
+    });
+    return L.join('\n') + '\n';
+  }
+  function refreshExport() {
+    if (!S.exportKind) return;
+    var shown = D.events.filter(matches), words = filterWords();
+    $('export-text').value = S.exportKind === 'md' ? asMarkdown(shown) : asCsv(shown);
+    document.querySelectorAll('[data-export]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-export') === S.exportKind)); });
+    $('export-what').textContent = shown.length + ' of ' + D.events.length + ' events, ' + (words.length ? 'with filters: ' + words.join('; ') : 'no filters') +
+      '. The text follows the view: change a filter and it is rewritten.' + (S.exportKind === 'csv' ? ' Conflicts that point at events outside this view keep their ids.' : '');
+  }
+  function openExport(kind) {
+    S.exportKind = kind;
+    $('export').hidden = false;
+    $('export-msg').textContent = '';
+    $('export-toggle').setAttribute('aria-expanded', 'true');
+    refreshExport();
+  }
+  function closeExport() {
+    S.exportKind = '';
+    $('export').hidden = true;
+    $('export-toggle').setAttribute('aria-expanded', 'false');
+    $('export-toggle').focus();
+  }
+  function selectExport() { var ta = $('export-text'); try { ta.focus(); ta.select(); } catch (e) { /* nothing more to try */ } }
+  function copyExport() {
+    var text = $('export-text').value, msg = $('export-msg');
+    function refused() { selectExport(); msg.textContent = 'Copying was refused here. The text is selected: copy it with the keyboard or the touch menu.'; }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { msg.textContent = 'Copied ' + text.length + ' characters.'; }, refused);
+      } else refused();
+    } catch (e) { refused(); }
+  }
+  function downloadExport() {
+    var msg = $('export-msg'), name = (D.title || 'timeline').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'timeline';
+    try {
+      var blob = new Blob([$('export-text').value], {type: S.exportKind === 'md' ? 'text/markdown' : 'text/csv'});
+      var url = URL.createObjectURL(blob), a = el('a', {href: url, download: name + (S.exportKind === 'md' ? '.md' : '.csv')});
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+      msg.textContent = 'Download requested as ' + name + (S.exportKind === 'md' ? '.md' : '.csv') + '. If nothing arrives, downloads are blocked here: copy the text above.';
+    } catch (e) { selectExport(); msg.textContent = 'Downloads are not available here. The text is selected: copy it.'; }
+  }
+
+  // ---------- start ----------
+  function fillSelect(id, anyWord, counts) {
+    var sel = $(id);
+    sel.textContent = '';
+    sel.appendChild(el('option', {value: '', text: anyWord}));
+    Object.keys(counts).sort(function (a, b) { return a.toLowerCase() < b.toLowerCase() ? -1 : 1; }).forEach(function (k) {
+      sel.appendChild(el('option', {value: k, text: k + ' (' + counts[k] + ')'}));
+    });
+  }
+  function fail(title, body) {
+    $('tools').hidden = true; $('legend').hidden = true;
+    $('facts').textContent = 'No timeline to show.';
+    var tl = $('timeline');
+    tl.textContent = ''; tl.setAttribute('aria-busy', 'false');
+    tl.appendChild(blank(title, body, null, true));
+  }
+  function start() {
+    var raw;
+    try { raw = JSON.parse($('timeline-data').textContent); }
+    catch (e) { fail('The timeline data in this page could not be read', 'The data block is not valid JSON, so no events can be shown. Nothing was changed. Build the page again with build_timeline.py.'); return; }
+    if (!raw || raw.app !== APP) { fail('This page does not hold timeline data', 'The data block is for a different page. Build this page again with build_timeline.py.'); return; }
+    if (typeof raw.schema !== 'number' || raw.schema !== SCHEMA) {
+      fail('The data is in a format this viewer does not read', 'The data says schema ' + String(raw.schema) + ' and this viewer reads schema ' + SCHEMA + '. Build the page again with the viewer and script from the same copy of the skill.'); return;
+    }
+    if (!Array.isArray(raw.events) || !Array.isArray(raw.sources) || !Array.isArray(raw.conflicts)) {
+      fail('The timeline data in this page is incomplete', 'The data block has no list of events, sources or conflicts. Build the page again with build_timeline.py.'); return;
+    }
+    D = raw;
+    document.title = D.title || 'Timeline';
+    $('title').textContent = D.title || 'Timeline';
+    var tl = $('timeline');
+    if (!D.events.length) {
+      $('facts').textContent = 'No events.';
+      tl.textContent = ''; tl.setAttribute('aria-busy', 'false');
+      tl.appendChild(blank('No events are embedded in this page',
+        'This is the viewer on its own. To fill it, run build_timeline.py with an events file and a sources file; it checks them and writes a page with the timeline inside.'));
+      return;
+    }
+    D.sources.forEach(function (s) { srcById[s.id] = s; });
+    D.events.forEach(function (e) { byId[e.id] = e; });
+    D.conflicts.forEach(function (p) { if (byId[p.a] && byId[p.b]) { (pairsOf[p.a] = pairsOf[p.a] || []).push(p); (pairsOf[p.b] = pairsOf[p.b] || []).push(p); } });
+    var tags = {}, actors = {}, tiers = {}, undated = 0, years = [];
+    D.events.forEach(function (e) {
+      e.tags.forEach(function (t) { tags[t] = (tags[t] || 0) + 1; });
+      e.actors.forEach(function (a) { actors[a] = (actors[a] || 0) + 1; });
+      var seen = {};
+      e.sources.forEach(function (i) { var s = srcById[i]; if (s && !seen[s.tier]) { seen[s.tier] = true; tiers[s.tier] = (tiers[s.tier] || 0) + 1; } });
+      if (e.precision === 'undated') undated++; else years.push(e.date.slice(0, 4));
+    });
+    fillSelect('f-tag', 'Any tag', tags); fillSelect('f-actor', 'Any actor', actors); fillSelect('f-tier', 'Any tier', tiers);
+    var open = D.conflicts.filter(function (p) { return p.cls === 'disagreement' || p.cls === ''; }).length;
+    years.sort();
+    $('facts').textContent = D.events.length + (D.events.length === 1 ? ' event' : ' events') + (years.length ? ', ' + years[0] + (years[years.length - 1] !== years[0] ? ' to ' + years[years.length - 1] : '') : '') +
+      ', from ' + D.sources.length + (D.sources.length === 1 ? ' source. ' : ' sources. ') + D.conflicts.length + (D.conflicts.length === 1 ? ' date conflict' : ' date conflicts') +
+      (D.conflicts.length ? ', ' + open + ' not reconciled' : '') + '. ' + (undated ? undated + ' undated.' : 'None undated.');
+    S.gapDays = (typeof D.gap_days === 'number' && D.gap_days >= 1) ? Math.floor(D.gap_days) : 90;
+    $('gap-days').value = String(S.gapDays);
+    $('foot').textContent = (D.order_rule || '') + ' Approximate dates are widened by ' + D.approx_days + ' days each side (one month or one year for approximate months and years) when gaps are worked out.' +
+      (D.built_from && D.built_from.events ? ' Built from ' + D.built_from.events + ' and ' + D.built_from.sources + '.' : '');
+    $('tools').hidden = false; $('legend').hidden = false; $('statusrow').hidden = false;
+    var wide = false;
+    try { wide = window.matchMedia('(min-width: 960px)').matches; } catch (e) { wide = false; }
+    $('filters').hidden = !wide;
+    $('filters-toggle').setAttribute('aria-expanded', String(wide));
+    render();
+  }
+
+  // ---------- wiring ----------
+  var timer = null;
+  $('q').addEventListener('input', function () {
+    var v = this.value.trim();
+    clearTimeout(timer);
+    timer = setTimeout(function () { S.q = v; render(); }, 120);
+  });
+  [['f-tag', 'tag'], ['f-actor', 'actor'], ['f-tier', 'tier']].forEach(function (pair) {
+    $(pair[0]).addEventListener('change', function () { S[pair[1]] = this.value; render(); });
+  });
+  document.querySelectorAll('[data-status]').forEach(function (b) {
+    b.id = 'status-' + b.getAttribute('data-status');
+    b.addEventListener('click', function () {
+      var k = b.getAttribute('data-status');
+      S.status[k] = !S.status[k];
+      b.setAttribute('aria-pressed', String(!!S.status[k]));
+      render();
+    });
+  });
+  $('conflicts-only').addEventListener('click', function () { S.conflictsOnly = !S.conflictsOnly; this.setAttribute('aria-pressed', String(S.conflictsOnly)); render(); });
+  $('gaps-toggle').addEventListener('click', function () { S.gaps = !S.gaps; this.setAttribute('aria-pressed', String(S.gaps)); render(); });
+  $('open-all').addEventListener('click', function () {
+    S.openAll = !S.openAll;
+    if (!S.openAll) S.open = {};
+    this.setAttribute('aria-pressed', String(S.openAll));
+    render();
+  });
+  $('gap-days').addEventListener('input', function () {
+    var v = this.value.trim(), ok = /^\d{1,5}$/.test(v) && parseInt(v, 10) >= 1 && parseInt(v, 10) <= 36500;
+    this.setAttribute('aria-invalid', String(!ok));
+    $('gap-err').setAttribute('data-show', ok ? 'no' : 'yes');
+    if (ok) { S.gapDays = parseInt(v, 10); render(); }
+  });
+  $('filters-toggle').addEventListener('click', function () {
+    var open = this.getAttribute('aria-expanded') !== 'true';
+    this.setAttribute('aria-expanded', String(open));
+    $('filters').hidden = !open;
+  });
+  $('display-toggle').addEventListener('click', function () {
+    var open = this.getAttribute('aria-expanded') !== 'true';
+    this.setAttribute('aria-expanded', String(open));
+    $('display').hidden = !open;
+  });
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    b.id = 'set-' + b.getAttribute('data-set') + '-' + b.getAttribute('data-value');
+    b.addEventListener('click', function () {
+      settings[b.getAttribute('data-set')] = b.getAttribute('data-value');
+      applySettings(); saveSettings();
+      if (D && D.events.length) render();
+    });
+  });
+  $('display-reset').addEventListener('click', function () {
+    settings = defaults();
+    applySettings(); saveSettings();
+    if (D && D.events.length) render();
+  });
+  $('export-toggle').addEventListener('click', function () { if (S.exportKind) closeExport(); else openExport('md'); });
+  document.querySelectorAll('[data-export]').forEach(function (b) {
+    b.id = 'export-kind-' + b.getAttribute('data-export');
+    b.addEventListener('click', function () { openExport(b.getAttribute('data-export')); });
+  });
+  $('clear').addEventListener('click', function () { clearFilters(); render(); $('q').focus(); });
+  $('export-close').addEventListener('click', closeExport);
+  $('export-copy').addEventListener('click', copyExport);
+  $('export-download').addEventListener('click', downloadExport);
+
+  applySettings();
+  loadSettings(function (saved) {
+    if (saved) settings = saved;
+    applySettings();
+    if (D && D.events.length) render();
+  });
+  setTimeout(start, 0);
+})();
+</script>
+</body>
+</html>

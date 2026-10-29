@@ -1,0 +1,6 @@
+interface:
+  display_name: "Fermi"
+  short_description: "Estimate bounded quantities and decision uncertainty"
+  default_prompt: "Use $fermi for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

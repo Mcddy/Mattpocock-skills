@@ -1,0 +1,8 @@
+code,definition
+pace_fast,"Says the session, or a named part of it, moved too fast to follow. Not used for wanting more content."
+online_experience,"A problem that only affects people attending online: audio, seeing the room, questions being missed."
+exercise_support,"Wants more time, slower steps or more help on the hands-on exercise."
+materials,"Asks for slides, files, the handout, more examples or a recording."
+level_mismatch,"Says the content was pitched below or above what they needed."
+room_logistics,"Comments on the physical room or the running order: temperature, projector, breaks."
+praise,"Positive comment with no request attached."

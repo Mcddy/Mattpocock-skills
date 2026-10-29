@@ -1,0 +1,8 @@
+claim_id,question_id,statement,status,source_ids,locator,load_bearing,confidence,conflicts_with,conflict_class,resolution
+C1,Q1,SYNTHETIC fact on the weakest source that can carry one.,FACT,S1,section 2,yes,,,,
+C2,Q1,SYNTHETIC fact where one of two sources qualifies.,FACT,S3;S2,table 1,no,,,,
+C3,Q1,SYNTHETIC model output that is not load-bearing.,MODEL_OUTPUT,,,no,,,,
+C4,Q1,SYNTHETIC assessment with the lowest confidence.,ASSESSMENT,,,Yes,low,,,
+C5,Q2,SYNTHETIC reported claim on a snippet.,REPORTED,S3,extract,no,,C6,direct_conflict,C6 is the later figure.
+C6,Q2,"SYNTHETIC reported claim in a two-sided, settled conflict.",REPORTED,S1,section 4,no,,C5,direct_conflict,C6 is the later figure.
+C7,Q2,SYNTHETIC gap with no source.,GAP,,,no,,,,

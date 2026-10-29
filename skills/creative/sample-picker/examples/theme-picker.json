@@ -1,0 +1,40 @@
+{
+ "id": "notes-theme",
+ "version": 1,
+ "title": "Theme for the notes tool",
+ "question": "Which colour theme should the note-taking tool open in?",
+ "kind": "theme",
+ "recommended": {"id": "warm-paper", "reason": "it is the warm light theme that was asked for, and every text pair on it measures above 4.5."},
+ "options": [
+  {"id": "warm-paper", "name": "Warm paper",
+   "note": "Cream page, brown-black ink and a rust accent; the warmest of the five.",
+   "tokens": {"bg": "#f6f0e4", "surface": "#fffaf0", "text": "#2b2420", "muted": "#6a5d51", "line": "#dccfba", "accent": "#94441a", "on-accent": "#fff8ee", "danger": "#9a2a1c", "ok": "#2d6646", "accent-strong": "#7a3612", "focus": "#1f5c8a"}},
+  {"id": "linen-ink", "name": "Linen and ink",
+   "note": "Near-white linen, blue-black text and an ink-blue accent; cooler and crisper.",
+   "tokens": {"bg": "#f4f3ee", "surface": "#ffffff", "text": "#1d2430", "muted": "#566070", "line": "#d5d6d0", "accent": "#234e86", "on-accent": "#ffffff", "danger": "#a3261f", "ok": "#1f6a4d", "accent-strong": "#1a3c68", "focus": "#8a4b12"}},
+  {"id": "sage-desk", "name": "Sage desk",
+   "note": "Pale grey-green page with a deep green accent; the quietest, with panels that barely lift off the page.",
+   "tokens": {"bg": "#eef1ea", "surface": "#f8faf5", "text": "#232a25", "muted": "#59645b", "line": "#cfd6cb", "accent": "#2f6148", "on-accent": "#f7fbf7", "danger": "#9c2d22", "ok": "#1f5f6b", "accent-strong": "#234a37", "focus": "#7a3c12"}},
+  {"id": "ember", "name": "Ember",
+   "note": "Dark brown page, cream text and an amber accent; for night use while staying warm.",
+   "tokens": {"bg": "#241d19", "surface": "#2e2621", "text": "#f2e8db", "muted": "#c3b4a3", "line": "#55473d", "accent": "#f0a56d", "on-accent": "#241d19", "danger": "#ffad9b", "ok": "#9fd6b4", "accent-strong": "#f6b98a", "focus": "#9fd0f2"}},
+  {"id": "slate-night", "name": "Slate night",
+   "note": "Blue-black page, cool grey text and a sky accent; the highest contrast and the least warmth.",
+   "tokens": {"bg": "#12181d", "surface": "#1a2229", "text": "#e7eef2", "muted": "#a8b7c1", "line": "#3a4954", "accent": "#8cc6ea", "on-accent": "#10161b", "danger": "#ffb1a4", "ok": "#9bd8b6", "accent-strong": "#a9d6f1", "focus": "#f2c08a"}}
+ ],
+ "controls": [
+  {"id": "density", "label": "Density", "type": "choice", "options": [{"value": "compact", "label": "Compact"}, {"value": "comfortable", "label": "Comfortable"}, {"value": "roomy", "label": "Roomy"}], "default": "comfortable"},
+  {"id": "text-size", "label": "Text size", "type": "range", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16}
+ ],
+ "context": {
+  "title": "Kiln log: glaze test 14",
+  "status": "Saved 2 minutes ago",
+  "body": "Celadon over iron slip, cone 6 reduction. The breaks came out darker than test 12, and the pooling in the foot ring is the colour I was after.",
+  "link": "Compare with test 12",
+  "field": {"label": "Tag", "value": "cone 6 reduction", "error": "A tag cannot contain spaces. Try cone-6-reduction."},
+  "columns": ["Recent notes", "Edited", "Words"],
+  "rows": [["Glaze test 13: tenmoku", "Tuesday", "412"], ["Clay order for November", "3 October", "96"]],
+  "primary": "Save note",
+  "secondary": "Discard changes"
+ }
+}

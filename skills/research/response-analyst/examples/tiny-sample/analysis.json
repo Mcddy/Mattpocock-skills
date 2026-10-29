@@ -1,0 +1,1066 @@
+{
+ "file": "responses.csv",
+ "instrument": "instrument.json",
+ "level": 95.0,
+ "errors": [],
+ "advisories": [],
+ "layout": null,
+ "overview": {
+  "respondents": 6,
+  "questions": 5,
+  "title": "Volunteer roster pulse check (SYNTHETIC data)",
+  "reached": "Asked in person by the roster coordinator at the end of a shift, during one week.",
+  "missing": "3 of the 9 people on the roster were not on shift that week and were not asked. Answers were given face to face to the person who writes the roster, which may soften criticism.",
+  "invited": 9,
+  "responded_of_invited": {
+   "count": 6,
+   "n": 9,
+   "proportion": 0.6667,
+   "percent": 67,
+   "interval": [
+    0.3542,
+    0.8794
+   ],
+   "interval_percent": [
+    35,
+    88
+   ]
+  },
+  "closed_questions": 4,
+  "answered_every_closed_question_shown": {
+   "count": 4,
+   "n": 6,
+   "proportion": 0.6667,
+   "percent": 67,
+   "interval": [
+    0.3,
+    0.9032
+   ],
+   "interval_percent": [
+    30,
+    90
+   ]
+  },
+  "answered_nothing": [],
+  "ids": "replaced by R01 to R06 in file order"
+ },
+ "questions": [
+  {
+   "id": "t1",
+   "text": "How long have you volunteered here?",
+   "type": "single",
+   "section": "",
+   "inferred": false,
+   "note_of": null,
+   "routing": null,
+   "respondents": 6,
+   "shown": 6,
+   "not_shown": 0,
+   "answered": 6,
+   "skipped": 0,
+   "unrecognised": 0,
+   "skipped_ids": [],
+   "not_shown_ids": [],
+   "skipped_of_shown": {
+    "count": 0,
+    "n": 6,
+    "proportion": 0.0,
+    "percent": 0,
+    "interval": [
+     0.0,
+     0.3903
+    ],
+    "interval_percent": [
+     0,
+     39
+    ]
+   },
+   "options": [
+    {
+     "option": "Under a year",
+     "count": 2,
+     "of_answered": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     },
+     "of_shown": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     },
+     "of_respondents": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     }
+    },
+    {
+     "option": "A year or more",
+     "count": 4,
+     "of_answered": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     },
+     "of_shown": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     },
+     "of_respondents": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "t2",
+   "text": "The new roster works for me",
+   "type": "scale",
+   "section": "",
+   "inferred": false,
+   "note_of": null,
+   "routing": null,
+   "respondents": 6,
+   "shown": 6,
+   "not_shown": 0,
+   "answered": 5,
+   "skipped": 1,
+   "unrecognised": 0,
+   "skipped_ids": [
+    "R06"
+   ],
+   "not_shown_ids": [],
+   "skipped_of_shown": {
+    "count": 1,
+    "n": 6,
+    "proportion": 0.1667,
+    "percent": 17,
+    "interval": [
+     0.0301,
+     0.5635
+    ],
+    "interval_percent": [
+     3,
+     56
+    ]
+   },
+   "options": [
+    {
+     "option": "Strongly disagree",
+     "count": 0,
+     "of_answered": {
+      "count": 0,
+      "n": 5,
+      "proportion": 0.0,
+      "percent": 0,
+      "interval": [
+       0.0,
+       0.4345
+      ],
+      "interval_percent": [
+       0,
+       43
+      ]
+     },
+     "of_shown": {
+      "count": 0,
+      "n": 6,
+      "proportion": 0.0,
+      "percent": 0,
+      "interval": [
+       0.0,
+       0.3903
+      ],
+      "interval_percent": [
+       0,
+       39
+      ]
+     },
+     "of_respondents": {
+      "count": 0,
+      "n": 6,
+      "proportion": 0.0,
+      "percent": 0,
+      "interval": [
+       0.0,
+       0.3903
+      ],
+      "interval_percent": [
+       0,
+       39
+      ]
+     }
+    },
+    {
+     "option": "Disagree",
+     "count": 1,
+     "of_answered": {
+      "count": 1,
+      "n": 5,
+      "proportion": 0.2,
+      "percent": 20,
+      "interval": [
+       0.0362,
+       0.6245
+      ],
+      "interval_percent": [
+       4,
+       62
+      ]
+     },
+     "of_shown": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     },
+     "of_respondents": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     }
+    },
+    {
+     "option": "Agree",
+     "count": 3,
+     "of_answered": {
+      "count": 3,
+      "n": 5,
+      "proportion": 0.6,
+      "percent": 60,
+      "interval": [
+       0.2307,
+       0.8824
+      ],
+      "interval_percent": [
+       23,
+       88
+      ]
+     },
+     "of_shown": {
+      "count": 3,
+      "n": 6,
+      "proportion": 0.5,
+      "percent": 50,
+      "interval": [
+       0.1876,
+       0.8124
+      ],
+      "interval_percent": [
+       19,
+       81
+      ]
+     },
+     "of_respondents": {
+      "count": 3,
+      "n": 6,
+      "proportion": 0.5,
+      "percent": 50,
+      "interval": [
+       0.1876,
+       0.8124
+      ],
+      "interval_percent": [
+       19,
+       81
+      ]
+     }
+    },
+    {
+     "option": "Strongly agree",
+     "count": 1,
+     "of_answered": {
+      "count": 1,
+      "n": 5,
+      "proportion": 0.2,
+      "percent": 20,
+      "interval": [
+       0.0362,
+       0.6245
+      ],
+      "interval_percent": [
+       4,
+       62
+      ]
+     },
+     "of_shown": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     },
+     "of_respondents": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     }
+    }
+   ],
+   "middle_answer": [
+    "Agree"
+   ]
+  },
+  {
+   "id": "t3",
+   "text": "Would you swap to a fixed weekly shift?",
+   "type": "single",
+   "section": "",
+   "inferred": false,
+   "note_of": null,
+   "routing": null,
+   "respondents": 6,
+   "shown": 6,
+   "not_shown": 0,
+   "answered": 6,
+   "skipped": 0,
+   "unrecognised": 0,
+   "skipped_ids": [],
+   "not_shown_ids": [],
+   "skipped_of_shown": {
+    "count": 0,
+    "n": 6,
+    "proportion": 0.0,
+    "percent": 0,
+    "interval": [
+     0.0,
+     0.3903
+    ],
+    "interval_percent": [
+     0,
+     39
+    ]
+   },
+   "options": [
+    {
+     "option": "Yes",
+     "count": 4,
+     "of_answered": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     },
+     "of_shown": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     },
+     "of_respondents": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     }
+    },
+    {
+     "option": "No",
+     "count": 2,
+     "of_answered": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     },
+     "of_shown": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     },
+     "of_respondents": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     }
+    },
+    {
+     "option": "Not sure",
+     "count": 0,
+     "of_answered": {
+      "count": 0,
+      "n": 6,
+      "proportion": 0.0,
+      "percent": 0,
+      "interval": [
+       0.0,
+       0.3903
+      ],
+      "interval_percent": [
+       0,
+       39
+      ]
+     },
+     "of_shown": {
+      "count": 0,
+      "n": 6,
+      "proportion": 0.0,
+      "percent": 0,
+      "interval": [
+       0.0,
+       0.3903
+      ],
+      "interval_percent": [
+       0,
+       39
+      ]
+     },
+     "of_respondents": {
+      "count": 0,
+      "n": 6,
+      "proportion": 0.0,
+      "percent": 0,
+      "interval": [
+       0.0,
+       0.3903
+      ],
+      "interval_percent": [
+       0,
+       39
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "t4",
+   "text": "What makes a shift hard to attend? Choose any",
+   "type": "multi",
+   "section": "",
+   "inferred": false,
+   "note_of": null,
+   "routing": null,
+   "respondents": 6,
+   "shown": 6,
+   "not_shown": 0,
+   "answered": 5,
+   "skipped": 1,
+   "unrecognised": 0,
+   "skipped_ids": [
+    "R04"
+   ],
+   "not_shown_ids": [],
+   "skipped_of_shown": {
+    "count": 1,
+    "n": 6,
+    "proportion": 0.1667,
+    "percent": 17,
+    "interval": [
+     0.0301,
+     0.5635
+    ],
+    "interval_percent": [
+     3,
+     56
+    ]
+   },
+   "options": [
+    {
+     "option": "Short notice",
+     "count": 4,
+     "of_answered": {
+      "count": 4,
+      "n": 5,
+      "proportion": 0.8,
+      "percent": 80,
+      "interval": [
+       0.3755,
+       0.9638
+      ],
+      "interval_percent": [
+       38,
+       96
+      ]
+     },
+     "of_shown": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     },
+     "of_respondents": {
+      "count": 4,
+      "n": 6,
+      "proportion": 0.6667,
+      "percent": 67,
+      "interval": [
+       0.3,
+       0.9032
+      ],
+      "interval_percent": [
+       30,
+       90
+      ]
+     }
+    },
+    {
+     "option": "Transport",
+     "count": 1,
+     "of_answered": {
+      "count": 1,
+      "n": 5,
+      "proportion": 0.2,
+      "percent": 20,
+      "interval": [
+       0.0362,
+       0.6245
+      ],
+      "interval_percent": [
+       4,
+       62
+      ]
+     },
+     "of_shown": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     },
+     "of_respondents": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     }
+    },
+    {
+     "option": "Work clashes",
+     "count": 2,
+     "of_answered": {
+      "count": 2,
+      "n": 5,
+      "proportion": 0.4,
+      "percent": 40,
+      "interval": [
+       0.1176,
+       0.7693
+      ],
+      "interval_percent": [
+       12,
+       77
+      ]
+     },
+     "of_shown": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     },
+     "of_respondents": {
+      "count": 2,
+      "n": 6,
+      "proportion": 0.3333,
+      "percent": 33,
+      "interval": [
+       0.0968,
+       0.7
+      ],
+      "interval_percent": [
+       10,
+       70
+      ]
+     }
+    },
+    {
+     "option": "Family commitments",
+     "count": 1,
+     "of_answered": {
+      "count": 1,
+      "n": 5,
+      "proportion": 0.2,
+      "percent": 20,
+      "interval": [
+       0.0362,
+       0.6245
+      ],
+      "interval_percent": [
+       4,
+       62
+      ]
+     },
+     "of_shown": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     },
+     "of_respondents": {
+      "count": 1,
+      "n": 6,
+      "proportion": 0.1667,
+      "percent": 17,
+      "interval": [
+       0.0301,
+       0.5635
+      ],
+      "interval_percent": [
+       3,
+       56
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "t5",
+   "text": "One thing to change",
+   "type": "text",
+   "section": "",
+   "inferred": false,
+   "note_of": null,
+   "routing": null,
+   "respondents": 6,
+   "shown": 6,
+   "not_shown": 0,
+   "answered": 4,
+   "skipped": 2,
+   "unrecognised": 0,
+   "skipped_ids": [
+    "R03",
+    "R06"
+   ],
+   "not_shown_ids": [],
+   "skipped_of_shown": {
+    "count": 2,
+    "n": 6,
+    "proportion": 0.3333,
+    "percent": 33,
+    "interval": [
+     0.0968,
+     0.7
+    ],
+    "interval_percent": [
+     10,
+     70
+    ]
+   }
+  }
+ ],
+ "cross": [
+  {
+   "rows_question": "t1",
+   "columns_question": "t3",
+   "respondents": 6,
+   "answered_both": 6,
+   "left_out": 0,
+   "rows_unanswered": 0,
+   "columns_unanswered": 0,
+   "rows": [
+    {
+     "option": "Under a year",
+     "n": 2,
+     "one_respondent_points": 50,
+     "cells": [
+      {
+       "option": "Yes",
+       "of_row": {
+        "count": 2,
+        "n": 2,
+        "proportion": 1.0,
+        "percent": 100,
+        "interval": [
+         0.3424,
+         1.0
+        ],
+        "interval_percent": [
+         34,
+         100
+        ]
+       }
+      },
+      {
+       "option": "No",
+       "of_row": {
+        "count": 0,
+        "n": 2,
+        "proportion": 0.0,
+        "percent": 0,
+        "interval": [
+         0.0,
+         0.6576
+        ],
+        "interval_percent": [
+         0,
+         66
+        ]
+       }
+      },
+      {
+       "option": "Not sure",
+       "of_row": {
+        "count": 0,
+        "n": 2,
+        "proportion": 0.0,
+        "percent": 0,
+        "interval": [
+         0.0,
+         0.6576
+        ],
+        "interval_percent": [
+         0,
+         66
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "option": "A year or more",
+     "n": 4,
+     "one_respondent_points": 25,
+     "cells": [
+      {
+       "option": "Yes",
+       "of_row": {
+        "count": 2,
+        "n": 4,
+        "proportion": 0.5,
+        "percent": 50,
+        "interval": [
+         0.15,
+         0.85
+        ],
+        "interval_percent": [
+         15,
+         85
+        ]
+       }
+      },
+      {
+       "option": "No",
+       "of_row": {
+        "count": 2,
+        "n": 4,
+        "proportion": 0.5,
+        "percent": 50,
+        "interval": [
+         0.15,
+         0.85
+        ],
+        "interval_percent": [
+         15,
+         85
+        ]
+       }
+      },
+      {
+       "option": "Not sure",
+       "of_row": {
+        "count": 0,
+        "n": 4,
+        "proportion": 0.0,
+        "percent": 0,
+        "interval": [
+         0.0,
+         0.4899
+        ],
+        "interval_percent": [
+         0,
+         49
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "multi": false
+  }
+ ],
+ "combined": [
+  {
+   "question": "t2",
+   "options": [
+    "Agree",
+    "Strongly agree"
+   ],
+   "label": "Agree or Strongly agree",
+   "of_answered": {
+    "count": 4,
+    "n": 5,
+    "proportion": 0.8,
+    "percent": 80,
+    "interval": [
+     0.3755,
+     0.9638
+    ],
+    "interval_percent": [
+     38,
+     96
+    ]
+   },
+   "of_shown": {
+    "count": 4,
+    "n": 6,
+    "proportion": 0.6667,
+    "percent": 67,
+    "interval": [
+     0.3,
+     0.9032
+    ],
+    "interval_percent": [
+     30,
+     90
+    ]
+   },
+   "of_respondents": {
+    "count": 4,
+    "n": 6,
+    "proportion": 0.6667,
+    "percent": 67,
+    "interval": [
+     0.3,
+     0.9032
+    ],
+    "interval_percent": [
+     30,
+     90
+    ]
+   }
+  }
+ ],
+ "compare": {
+  "question": "t3",
+  "option": "Yes",
+  "by": "t1",
+  "level": 95.0,
+  "groups": [
+   {
+    "group": "Under a year",
+    "chose": {
+     "count": 2,
+     "n": 2,
+     "proportion": 1.0,
+     "percent": 100,
+     "interval": [
+      0.3424,
+      1.0
+     ],
+     "interval_percent": [
+      34,
+      100
+     ]
+    }
+   },
+   {
+    "group": "A year or more",
+    "chose": {
+     "count": 2,
+     "n": 4,
+     "proportion": 0.5,
+     "percent": 50,
+     "interval": [
+      0.15,
+      0.85
+     ],
+     "interval_percent": [
+      15,
+      85
+     ]
+    }
+   }
+  ],
+  "difference": {
+   "first": "Under a year",
+   "second": "A year or more",
+   "points": 50,
+   "difference": 0.5,
+   "interval": [
+    -0.2449,
+    0.85
+   ],
+   "interval_points": [
+    -24,
+    85
+   ],
+   "method": "Newcombe hybrid score interval (1998, method 10), from the two Wilson intervals",
+   "includes_zero": true,
+   "group_intervals": "overlap for most of their width"
+  },
+  "note": null,
+  "left_out": 0
+ },
+ "quiz": null,
+ "coding_sheet": null,
+ "themes": null
+}

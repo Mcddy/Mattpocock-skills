@@ -1,0 +1,35 @@
+verify_stock_count: 2026-10-09 on 127.0.0.1:8220
+  PASS    V1  body size limit
+          expected: 413 for 65537 bytes; 201 for 65536 bytes
+          observed: 413 for 65537 bytes; 201 for 65536 bytes
+  PASS    V2  search text is literal
+          expected: percent finds only '50% mix'; underscore only 'snake_case tag'; a quote and a quoted clause find nothing; 'bolt' finds 'M8 bolt'
+          observed: percent -> 200 ['50% mix']; underscore -> 200 ['snake_case tag']; quote -> 200 []; clause -> 200 []; plain -> 200 ['M8 bolt']; total 4
+  PASS    V3  markup shown as text
+          expected: name and search text appear character for character; 0 img, b or script elements made from them; marker undefined; no dialog
+          observed: name shown exactly: True; search text shown exactly: True; elements made: 0; marker: undefined; dialogs: 0
+  PASS    V4  no silent coercion
+          expected: 422 naming qty for "7", true, 3.5 and -1; 201 for 7; 409 for 7 minus 8 with the count still 7; 200 and a count of 0 for 7 minus 7
+          observed: probes -> [422, 422, 422, 422]; whole number -> 201; minus 8 -> 409 would_go_negative, count then 7; minus 7 -> 200, count 0
+  PASS    V5  error answers leak nothing
+          expected: 400, 400, 404, 405, 404, each with exactly error.code, error.message and error.fields, and no trace, path or query text
+          observed: statuses and shape -> [(400, True), (400, True), (404, True), (405, True), (404, True)]; leaked words: none
+  PASS    V6  unknown field refused
+          expected: 422 naming the unknown field; 201 without it
+          observed: with the extra field -> 422 (unknown field); without -> 201
+  FAIL    V7  credential required
+          expected: 401 for a read and for a write that carry no credential
+          observed: read -> 200; write -> 201
+  FAIL    V8  origin restricted
+          expected: no allow-origin header for an origin that is not the page's own
+          observed: allow-origin on the preflight: *; on the read: *
+  FAIL    V9  request limit
+          expected: at least one 429 within 60 requests sent one after another
+          observed: 0 of 60 answered 429; 60 answered 200
+  FAIL    V10  log lines are scrubbed
+          expected: the probe request appears in the log and the log holds no escape byte
+          observed: probe line in the log: yes; escape bytes in the log: 1
+  PASS    B1  baseline: loopback only
+          expected: an answer on 127.0.0.1 and a refused connection on the machine's other address
+          observed: 127.0.0.1 -> 200; the machine's other address -> refused
+RESULT: 7 pass, 4 fail, 0 not run, of 11. Server stopped: yes.

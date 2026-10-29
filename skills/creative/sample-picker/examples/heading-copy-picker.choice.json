@@ -1,0 +1,39 @@
+{
+ "app": "sample-picker",
+ "schema": 1,
+ "content_id": "stallbook-heading@1",
+ "saved_at": "2026-10-08T21:16:22Z",
+ "data": {
+  "kind": "copy",
+  "status": "final",
+  "chosen": "speed-claim",
+  "chosen_name": "One concrete claim",
+  "controls": {
+   "align": "centre",
+   "heading-size": 30,
+   "action": true
+  },
+  "shortlist": [
+   "problem-first",
+   "speed-claim"
+  ],
+  "rejected": [],
+  "notes": {
+   "speed-claim": "Like the colour, not the weight. \"Calmer\" would suit; caf\u00e9 menu test\nsecond line"
+  },
+  "facts": [
+   {
+    "label": "heading length",
+    "value": "49 characters, 10 words"
+   },
+   {
+    "label": "sub length",
+    "value": "86 characters, 16 words"
+   },
+   {
+    "label": "heading lines at this width",
+    "value": 2
+   }
+  ]
+ }
+}

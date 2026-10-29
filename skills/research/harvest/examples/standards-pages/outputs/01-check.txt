@@ -1,0 +1,2 @@
+harvest check: job standards-pages, 13 source(s)
+RESULT: PASS. The job file is well formed. This does not show that the sites' terms allow collection or that no page is about a private person.

@@ -1,0 +1,1 @@
+{"schema":1,"operation":"profile","model":"product-decay","amplitude":1,"sigma":0.02,"time_unit":"s","observation_unit":"1","a_grid":[0.5,2,31],"b_grid":[0.5,2,31],"observations":[{"t":0,"y":1},{"t":1,"y":0.36787944117144233},{"t":2,"y":0.1353352832366127}]}

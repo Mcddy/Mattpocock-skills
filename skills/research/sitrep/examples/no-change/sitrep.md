@@ -1,0 +1,1 @@
+**Sitrep, changes since last run.** EN 301 549 and the European Accessibility Act: no change since 2026-10-09. 8 of 10 items rechecked, 2 carried forward (F2, F8), all 6 sources due were reached. SYNTHETIC run. Updated watch file follows.

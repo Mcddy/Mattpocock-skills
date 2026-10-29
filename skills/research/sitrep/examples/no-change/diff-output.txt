@@ -1,0 +1,1 @@
+sitrep_diff: NO CHANGE since 2026-10-09 (run 2026-10-16). 10 of 10 state item(s) unchanged: 8 rechecked, 2 carried forward. 5 indicator(s) unchanged. 6 of 6 source(s) due this run reached.

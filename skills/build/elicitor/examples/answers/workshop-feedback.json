@@ -1,0 +1,46 @@
+{
+  "_about": "SYNTHETIC answers for three invented respondents, written by the authoring session. No real person is described.",
+  "respondent-1": {
+    "worthwhile": {"v": 5},
+    "pace": {"v": "About right"},
+    "level": {"v": "A good mix of familiar and new"},
+    "exercise": {"v": 5, "note": "Doing it myself made the difference."},
+    "handout": {"v": 4},
+    "most-useful": {"v": ["The worked example", "The hands-on exercise"]},
+    "length": {"v": "About right"},
+    "follow": {"v": "No trouble"},
+    "use-soon": {"v": 8},
+    "suggest": {"v": "Yes"},
+    "one-change": {"v": "Send the handout the day before, so the terms are familiar."},
+    "anything-else": {"skip": true}
+  },
+  "respondent-2": {
+    "worthwhile": {"v": 3},
+    "pace": {"v": "Too fast"},
+    "rushed-part": {"v": "The second half of the worked example. I was still on step 3 when it moved to step 6."},
+    "level": {"v": "Mostly new, and I got lost", "note": "I had not met half the terms before."},
+    "exercise": {"v": 4},
+    "handout": {"v": 2, "note": "It lists the steps but not why each one is done."},
+    "most-useful": {"v": ["The hands-on exercise", "The question time"]},
+    "length": {"v": "Too short"},
+    "follow": {"v": "Some trouble", "note": "Back row: the lower third of the screen was hidden by heads."},
+    "use-soon": {"v": 5},
+    "suggest": {"v": "Yes, if it changes"},
+    "one-change": {"v": "Split it into two shorter sessions, with the exercise in the second."},
+    "anything-else": {"v": "A one-page glossary would have saved me.\nHappy to try the next version."}
+  },
+  "respondent-3": {
+    "worthwhile": {"v": 2},
+    "pace": {"v": "Too slow"},
+    "level": {"v": "Mostly things I already knew"},
+    "exercise": {"v": 3},
+    "handout": {"v": 4},
+    "most-useful": {"v": ["The question time"]},
+    "length": {"v": "Too long"},
+    "follow": {"v": "No trouble"},
+    "use-soon": {"v": 2},
+    "suggest": {"v": "Yes, if it changes", "note": "For people new to the topic, yes. Not for anyone who already does this every week."},
+    "one-change": {"v": "Offer a fast track: skip the walk-through and start at the exercise."},
+    "anything-else": {"skip": true}
+  }
+}

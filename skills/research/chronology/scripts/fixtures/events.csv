@@ -1,0 +1,20 @@
+event_id,date,date_precision,end_date,time,title,detail,actors,source_id,locator,status,conflicts_with,tags
+B01,2023,year,,,Inspection finds corrosion in the main span,,Harbour authority,S3,para 2,REPORTED,,inspection
+B02,2023-11,month,,,Council commissions a structural survey,,Council,S2,"Minutes, item 7",FACT,,survey; council
+B03,2024-02-14,day,,,Survey report delivered to the council,"Recommends closure to vehicles over 7.5 tonnes. The report calls this ""immediate"" & unconditional.",Council; Surveyor,S2,"Minutes, item 3",FACT,,survey
+B04,2024-03-04,day,,,Closure notice published,,Harbour authority,S1,Notice 2024/11,FACT,B05:announcement,closure; notice
+B05,2024-03-06,day,,,Closure notice published,The paper says the notice came out this week; 6 March is the date of the paper.,Harbour authority,S3,para 1,REPORTED,B04:announcement,closure; notice
+B06,2024-03,month,,,Bridge closed to heavy vehicles,,Harbour authority,S4,item 4,REPORTED,B07:precision,closure
+B07,2024-03-18,day,,06:00 local,Bridge closed to heavy vehicles,,Harbour authority,S1,"Notice 2024/11, para 2",FACT,B06:precision,closure
+B08,2024-04-08,approx,,,Temporary ferry service begins,"The forum says about three weeks after the closure. Resolved from the closure on 18 March 2024, so approximate.",Ferry operator,S5,post 14,REPORTED,,ferry
+B18,2024-05,month,,,Scaffolding goes up on the main span,Inferred from the order for scaffolding in the minutes. No source gives the date it went up.,Contractor,S2,"Minutes, item 9",ASSESSMENT,,works
+B09,2024-05-20,day,2024-08-30,,Repair works on the main span,,Contractor,S6,para 3,FACT,,works
+B10,2024-09-01,day,,23:30 -05:00,Contractor announces completion,Statement issued from the contractor's head office.,Contractor,S6,Statement header,FACT,B11:timezone,works; statement
+B11,2024-09-02,day,,06:30 +02:00,Contractor announces completion,,Contractor,S3,para 5,REPORTED,B10:timezone,works; statement
+B12,2024-09-09,day,,,Bridge reopened to all traffic,,Harbour authority,S1,Notice 2024/31,FACT,B13:disagreement,reopening
+B13,2024-09-16,day,,,Bridge reopened to all traffic,,Harbour authority,S4,item 1,REPORTED,B12:disagreement,reopening
+B19,2024-10-03,day,,,"Harbour authority publishes the final account for the main span repair works, including the temporary ferry service, traffic management, the second structural survey and a test of awkward text: <script>alert(1)</script> | pipe & ampersand, ""quotes""",,Harbour authority,S1,Notice 2024/40,FACT,,cost
+B14,2025-06,month,,,Council reviews the cost of the works,,Council,S2,"Minutes, item 12",FACT,,council; cost
+B15,2025-06-17,day,,,Ferry subsidy paid to the operator,,Residents' association; Ferry operator,S5,post 40,REPORTED,B16,ferry; cost
+B16,2025-07-01,day,,,Ferry subsidy paid to the operator,,Council; Ferry operator,S2,"Minutes, item 4",FACT,B15,ferry; cost
+B17,,undated,,,Complaint lodged about noise from the works,,Residents' association,S5,post 22,REPORTED,,works; complaint

@@ -1,0 +1,29 @@
+harvest run 3: job standards-pages, 13 source(s), offline fixtures: nothing was fetched from the network and waits were simulated
+  FRESH     S1     https://standards.example/index.html
+            stored copy from 2026-10-08T21:17:10.987Z is younger than 7 day(s)
+  FRESH     S2     https://standards.example/standards/hl-101.html
+            stored copy from 2026-10-08T21:17:13.087Z is younger than 7 day(s)
+  FRESH     S3     https://standards.example/standards/hl-102.html
+            stored copy from 2026-10-08T21:17:15.187Z is younger than 7 day(s)
+  FRESH     S4     https://standards.example/standards/hl-103.html
+            stored copy from 2026-10-08T21:17:17.287Z is younger than 7 day(s)
+  FRESH     S5     https://standards.example/standards/hl-104.html
+            stored copy from 2026-10-08T21:17:19.387Z is younger than 7 day(s)
+  FRESH     S6     https://standards.example/committee/minutes-41.html
+            stored copy from 2026-10-08T21:17:21.487Z is younger than 7 day(s)
+  FRESH     S7     https://standards.example/committee/minutes-42.html
+            stored copy from 2026-10-08T21:17:23.587Z is younger than 7 day(s)
+  SKIPPED   S8     https://standards.example/drafts/hl-105-draft.html
+            robots: Disallow: /drafts/ (group *)
+  FRESH     S9     https://standards.example/old/hl-100.html
+            stored copy from 2026-10-08T21:17:27.787Z is younger than 7 day(s)
+  FRESH     S10    https://standards.example/consultations.html
+            stored copy from 2026-10-08T21:17:29.887Z is younger than 7 day(s)
+  ERROR     S11    https://standards.example/archive/2019-index.html
+            timed out after 20 s
+  FRESH     S12    https://standards.example/feed.xml
+            stored copy from 2026-10-08T21:17:53.987Z is younger than 7 day(s)
+  FRESH     S13    https://files.standards.example/hl-register.pdf
+            stored copy from 2026-10-08T21:17:56.187Z is younger than 7 day(s)
+  requests 2 of the cap of 60; bytes 89 of the cap of 20,000,000; waited 2 s in all (simulated)
+RESULT: 11 of 13 source(s) collected or still fresh (11 still fresh); 2 not collected (1 error, 1 skipped by robots). Fetched is not read.

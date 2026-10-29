@@ -1,0 +1,66 @@
+{
+ "file": "model.json",
+ "errors": [],
+ "advisories": [
+  "the reported 90 percent range reaches past the anchor 'approved budget for the year (SYNTHETIC; a threshold, not a hard limit)'. If that anchor is a hard limit, the model contradicts it: fix the model before reporting. If it is a threshold, the count of runs beyond it is how often this model crosses it"
+ ],
+ "result": {
+  "quantity": "Usage charges for the metered text-processing service",
+  "unit": "dollars",
+  "runs": 20000,
+  "seed": 1,
+  "exact": false,
+  "significant_figures": 2,
+  "percentiles": {
+   "5": 2500.0,
+   "25": 6100.0,
+   "50": 11000.0,
+   "75": 20000.0,
+   "95": 49000.0
+  },
+  "mean": 17000.0,
+  "all_inputs_at_median": 12000.0,
+  "range_factor": 19.0,
+  "anchors": [
+   {
+    "name": "approved budget for the year (SYNTHETIC; a threshold, not a hard limit)",
+    "max": 25000,
+    "min": null,
+    "runs_above_max": 3696,
+    "runs_below_min": null,
+    "runs": 20000
+   }
+  ],
+  "sensitivity": [
+   {
+    "input": "requests_per_workday",
+    "rank_correlation": 0.92,
+    "result_at_input_5th": 3000.0,
+    "result_at_input_95th": 45000.0,
+    "swing_factor": 15.0
+   },
+   {
+    "input": "thousand_units_per_request",
+    "rank_correlation": 0.29,
+    "result_at_input_5th": 6600.0,
+    "result_at_input_95th": 17000.0,
+    "swing_factor": 2.5
+   },
+   {
+    "input": "cached_share",
+    "rank_correlation": -0.18,
+    "result_at_input_5th": 15000.0,
+    "result_at_input_95th": 8600.0,
+    "swing_factor": 1.7
+   },
+   {
+    "input": "retry_overhead",
+    "rank_correlation": 0.07,
+    "result_at_input_5th": 11000.0,
+    "result_at_input_95th": 13000.0,
+    "swing_factor": 1.2
+   }
+  ],
+  "clipped": {}
+ }
+}

@@ -1,0 +1,53 @@
+analyse_responses: responses.csv  (Half-day workshop feedback (SYNTHETIC data))
+WHO ANSWERED
+  Respondents (rows): 23. Questions: 12. Respondent ids: replaced by R01 to R23 in file order.
+  Invited: 38. Responded: 23 of 38 invited (61%). The other 15 are not described by anything below.
+  How they were reached: Anonymous form link emailed to all 38 people who attended, with one reminder a week later.
+  Who is missing: 15 attendees did not respond and nothing is known about them. People who left early, and people with nothing to say either way, are probably under-represented.
+  Answered every closed question shown to them: 18 of 23 respondents (78%). Free-text questions are left out of this count.
+  Intervals are 95% Wilson score intervals. They show how far a proportion could move with this many answers; they do not correct for who was reached.
+QUESTIONS  (12; per-question counts left out of this text because --skip-questions was given)
+THEMES  (the analyst's coding of free text, not something the respondents chose. Counts are respondents, never mentions.)
+  All free text together: 20 of 23 respondents wrote something, in 29 passage(s); 1 passage(s) carry no code
+    online_experience  6 of 20 who wrote something (30%, interval 15% to 52%); 6 of 23 respondents (26%) [in 8 coded passage(s); R03, R05, R08, R13, R16, R21]
+    pace_fast          5 of 20 who wrote something (25%, interval 11% to 47%); 5 of 23 respondents (22%) [in 5 coded passage(s); R03, R05, R06, R12, R16]
+    materials          5 of 20 who wrote something (25%, interval 11% to 47%); 5 of 23 respondents (22%) [in 6 coded passage(s); R03, R07, R14, R19, R20]
+    exercise_support   3 of 20 who wrote something (15%, interval 5% to 36%); 3 of 23 respondents (13%) [in 4 coded passage(s); R02, R05, R12]
+    praise             3 of 20 who wrote something (15%, interval 5% to 36%); 3 of 23 respondents (13%) [in 3 coded passage(s); R04, R11, R22]
+    level_mismatch     2 of 20 who wrote something (10%, interval 3% to 30%); 2 of 23 respondents (9%) [in 4 coded passage(s); R10, R20]
+    room_logistics     2 of 20 who wrote something (10%, interval 3% to 30%); 2 of 23 respondents (9%) [in 2 coded passage(s); R01, R17]
+    No code at all: 1 respondent(s) (R15). Read these: a case that fits no theme belongs in the findings.
+  Codebook:
+    online_experience: A problem that only affects people attending online: audio, seeing the room, questions being missed.
+    pace_fast: Says the session, or a named part of it, moved too fast to follow. Not used for wanting more content.
+    materials: Asks for slides, files, the handout, more examples or a recording.
+    exercise_support: Wants more time, slower steps or more help on the hands-on exercise.
+    praise: Positive comment with no request attached.
+    level_mismatch: Says the content was pitched below or above what they needed.
+    room_logistics: Comments on the physical room or the running order: temperature, projector, breaks.
+  q4__note: 3 respondent(s) wrote something (codes nobody used here are not listed)
+    pace_fast          2 of 3 who wrote something (67%, interval 21% to 94%); 2 of 23 respondents (9%) [in 2 coded passage(s); R03, R05]
+    online_experience  1 of 3 who wrote something (33%, interval 6% to 79%); 1 of 23 respondents (4%) [in 1 coded passage(s); R03]
+    exercise_support   1 of 3 who wrote something (33%, interval 6% to 79%); 1 of 23 respondents (4%) [in 1 coded passage(s); R05]
+    level_mismatch     1 of 3 who wrote something (33%, interval 6% to 79%); 1 of 23 respondents (4%) [in 1 coded passage(s); R10]
+  q9__note: 4 respondent(s) wrote something (codes nobody used here are not listed)
+    pace_fast          1 of 4 who wrote something (25%, interval 5% to 70%); 1 of 23 respondents (4%) [in 1 coded passage(s); R12]
+    online_experience  1 of 4 who wrote something (25%, interval 5% to 70%); 1 of 23 respondents (4%) [in 1 coded passage(s); R05]
+    exercise_support   1 of 4 who wrote something (25%, interval 5% to 70%); 1 of 23 respondents (4%) [in 1 coded passage(s); R12]
+    materials          1 of 4 who wrote something (25%, interval 5% to 70%); 1 of 23 respondents (4%) [in 1 coded passage(s); R03]
+    level_mismatch     1 of 4 who wrote something (25%, interval 5% to 70%); 1 of 23 respondents (4%) [in 1 coded passage(s); R20]
+  q11: 16 respondent(s) wrote something (codes nobody used here are not listed)
+    online_experience  6 of 16 who wrote something (38%, interval 18% to 61%); 6 of 23 respondents (26%) [in 6 coded passage(s); R03, R05, R08, R13, R16, R21]
+    materials          3 of 16 who wrote something (19%, interval 7% to 43%); 3 of 23 respondents (13%) [in 3 coded passage(s); R07, R14, R19]
+    pace_fast          2 of 16 who wrote something (13%, interval 3% to 36%); 2 of 23 respondents (9%) [in 2 coded passage(s); R06, R16]
+    exercise_support   2 of 16 who wrote something (13%, interval 3% to 36%); 2 of 23 respondents (9%) [in 2 coded passage(s); R02, R12]
+    level_mismatch     2 of 16 who wrote something (13%, interval 3% to 36%); 2 of 23 respondents (9%) [in 2 coded passage(s); R10, R20]
+    room_logistics     2 of 16 who wrote something (13%, interval 3% to 36%); 2 of 23 respondents (9%) [in 2 coded passage(s); R01, R17]
+  q12: 6 respondent(s) wrote something (codes nobody used here are not listed)
+    praise     3 of 6 who wrote something (50%, interval 19% to 81%); 3 of 23 respondents (13%) [in 3 coded passage(s); R04, R11, R22]
+    materials  2 of 6 who wrote something (33%, interval 10% to 70%); 2 of 23 respondents (9%) [in 2 coded passage(s); R03, R20]
+    No code at all: 1 respondent(s) (R15). Read these: a case that fits no theme belongs in the findings.
+NOTES
+  ADVISORY  1 free-text passage(s) contain what looks like contact details (R20/q12: email address). Remove or mask them before quoting. Names, workplaces and roles are not detected: read every quotation
+  ADVISORY  2 passage(s) in the coded sheet differ from the responses file (edited, redacted, or from a different export)
+RESULT: RAN. 0 errors, 2 advisory note(s). Counts describe the 23 respondents in this file.

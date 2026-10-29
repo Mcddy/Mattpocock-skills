@@ -1,0 +1,6 @@
+interface:
+  display_name: "Model Lab"
+  short_description: "Build auditable predictive baselines with sealed tests"
+  default_prompt: "Use $model-lab for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,4081 @@
+{
+ "tool": "state_gallery",
+ "schema": 1,
+ "title": "Stock count: every state",
+ "page": "http://127.0.0.1:8181/",
+ "states_file": "stock-count.states.json",
+ "built_at": "2026-10-08T20:34:47Z",
+ "widths": [
+  {
+   "width": 390,
+   "height": 844
+  },
+  {
+   "width": 1280,
+   "height": 800
+  }
+ ],
+ "themes": [
+  "paper",
+  "slate",
+  "ember",
+  "night"
+ ],
+ "states": [
+  {
+   "name": "loading",
+   "shows": "ghost rows in the shape of the list, and a tally that says the count is loading",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "empty",
+   "shows": "a sentence saying nothing is on the sheet, and a way to the first action",
+   "page": "http://127.0.0.1:8182/"
+  },
+  {
+   "name": "populated, with low stock",
+   "shows": "twelve rows, four of them low; a low row carries a stripe and the word Low, and the first row is one",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "no search results",
+   "shows": "what was searched for, and a way back to everything",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "validation error",
+   "shows": "the server's reason beside each field, the typed values kept, nothing added",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "refused by a rule",
+   "shows": "the server's reason in the row: the count cannot go below zero, and the count unchanged",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "server down",
+   "shows": "what failed, that nothing was changed, and a retry",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "destructive confirm",
+   "shows": "the question asked in the row, naming the item and the consequence, with Keep it focused",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "long names",
+   "shows": "a 24 character code, an 80 character name with no spaces and a 40 character shelf, all inside the row",
+   "page": "http://127.0.0.1:8181/"
+  },
+  {
+   "name": "busy",
+   "shows": "the pressed control marked as waiting, without losing its place",
+   "page": "http://127.0.0.1:8181/"
+  }
+ ],
+ "thresholds": {
+  "contrast_normal": 4.5,
+  "contrast_large": 3,
+  "target_px": 24
+ },
+ "summary": {
+  "frames": 80,
+  "with_measured_problem": 0,
+  "not_reached": 0,
+  "states_not_reached": []
+ },
+ "frames": [
+  {
+   "state": "loading",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--paper--390.png",
+   "index": 1
+  },
+  {
+   "state": "loading",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--slate--390.png",
+   "index": 2
+  },
+  {
+   "state": "loading",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--ember--390.png",
+   "index": 3
+  },
+  {
+   "state": "loading",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--night--390.png",
+   "index": 4
+  },
+  {
+   "state": "loading",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--paper--1280.png",
+   "index": 5
+  },
+  {
+   "state": "loading",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--slate--1280.png",
+   "index": 6
+  },
+  {
+   "state": "loading",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--ember--1280.png",
+   "index": 7
+  },
+  {
+   "state": "loading",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=Loading the count",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .ghost=4",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 17,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "01-loading--night--1280.png",
+   "index": 8
+  },
+  {
+   "state": "empty",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--paper--390.png",
+   "index": 9
+  },
+  {
+   "state": "empty",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--slate--390.png",
+   "index": 10
+  },
+  {
+   "state": "empty",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--ember--390.png",
+   "index": 11
+  },
+  {
+   "state": "empty",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--night--390.png",
+   "index": 12
+  },
+  {
+   "state": "empty",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--paper--1280.png",
+   "index": 13
+  },
+  {
+   "state": "empty",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--slate--1280.png",
+   "index": 14
+  },
+  {
+   "state": "empty",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--ember--1280.png",
+   "index": 15
+  },
+  {
+   "state": "empty",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#tally=No items yet",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing on the sheet yet",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "02-empty--night--1280.png",
+   "index": 16
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--paper--390.png",
+   "index": 17
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--slate--390.png",
+   "index": 18
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--ember--390.png",
+   "index": 19
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--night--390.png",
+   "index": 20
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--paper--1280.png",
+   "index": 21
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--slate--1280.png",
+   "index": 22
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--ember--1280.png",
+   "index": 23
+  },
+  {
+   "state": "populated, with low stock",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BLADE-TS-254\"] .lowmark=Low",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#tally=4 low",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 107,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "03-populated-with-low-stock--night--1280.png",
+   "index": 24
+  },
+  {
+   "state": "no search results",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--paper--390.png",
+   "index": 25
+  },
+  {
+   "state": "no search results",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--slate--390.png",
+   "index": 26
+  },
+  {
+   "state": "no search results",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--ember--390.png",
+   "index": 27
+  },
+  {
+   "state": "no search results",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--night--390.png",
+   "index": 28
+  },
+  {
+   "state": "no search results",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--paper--1280.png",
+   "index": 29
+  },
+  {
+   "state": "no search results",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--slate--1280.png",
+   "index": 30
+  },
+  {
+   "state": "no search results",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--ember--1280.png",
+   "index": 31
+  },
+  {
+   "state": "no search results",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=torque wrench",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#sheet .blank=Nothing matches",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 22,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "04-no-search-results--night--1280.png",
+   "index": 32
+  },
+  {
+   "state": "validation error",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--paper--390.png",
+   "index": 33
+  },
+  {
+   "state": "validation error",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--slate--390.png",
+   "index": 34
+  },
+  {
+   "state": "validation error",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--ember--390.png",
+   "index": 35
+  },
+  {
+   "state": "validation error",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--night--390.png",
+   "index": 36
+  },
+  {
+   "state": "validation error",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--paper--1280.png",
+   "index": 37
+  },
+  {
+   "state": "validation error",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--slate--1280.png",
+   "index": 38
+  },
+  {
+   "state": "validation error",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--ember--1280.png",
+   "index": 39
+  },
+  {
+   "state": "validation error",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#f-sku=bolt m8",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "fill:#f-qty=lots",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:#add-go",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-qty=must be a whole number",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:#e-name=is required",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=12",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 111,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "422 POST /api/items"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "05-validation-error--night--1280.png",
+   "index": 40
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--paper--390.png",
+   "index": 41
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--slate--390.png",
+   "index": 42
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--ember--390.png",
+   "index": 43
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--night--390.png",
+   "index": 44
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--paper--1280.png",
+   "index": 45
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--slate--1280.png",
+   "index": 46
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--ember--1280.png",
+   "index": 47
+  },
+  {
+   "state": "refused by a rule",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-step=\"10\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "click:[data-sku=\"GLUE-PVA-1L\"] [data-act=\"minus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"GLUE-PVA-1L\"] .rowmsg=cannot go below zero",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-qty=\"GLUE-PVA-1L\"]=3",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 108,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 1,
+    "broken_answers": 0,
+    "answers_list": [
+     "409 POST /api/items/5/adjust"
+    ],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "06-refused-by-a-rule--night--1280.png",
+   "index": 48
+  },
+  {
+   "state": "server down",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--paper--390.png",
+   "index": 49
+  },
+  {
+   "state": "server down",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--slate--390.png",
+   "index": 50
+  },
+  {
+   "state": "server down",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--ember--390.png",
+   "index": 51
+  },
+  {
+   "state": "server down",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--night--390.png",
+   "index": 52
+  },
+  {
+   "state": "server down",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--paper--1280.png",
+   "index": 53
+  },
+  {
+   "state": "server down",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--slate--1280.png",
+   "index": 54
+  },
+  {
+   "state": "server down",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--ember--1280.png",
+   "index": 55
+  },
+  {
+   "state": "server down",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "expect:#sheet .blank=The server did not answer",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 20,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 1,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "07-server-down--night--1280.png",
+   "index": 56
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--paper--390.png",
+   "index": 57
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--slate--390.png",
+   "index": 58
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--ember--390.png",
+   "index": 59
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--night--390.png",
+   "index": 60
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--paper--1280.png",
+   "index": 61
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--slate--1280.png",
+   "index": 62
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--ember--1280.png",
+   "index": 63
+  },
+  {
+   "state": "destructive confirm",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"BOLT-M8\"] [data-act=\"remove\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect:[data-sku=\"BOLT-M8\"] .confirm=cannot be undone",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-focus:[data-sku=\"BOLT-M8\"] [data-act=\"keep\"]",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 110,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "08-destructive-confirm--night--1280.png",
+   "index": 64
+  },
+  {
+   "state": "long names",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--paper--390.png",
+   "index": 65
+  },
+  {
+   "state": "long names",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--slate--390.png",
+   "index": 66
+  },
+  {
+   "state": "long names",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--ember--390.png",
+   "index": 67
+  },
+  {
+   "state": "long names",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--night--390.png",
+   "index": 68
+  },
+  {
+   "state": "long names",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--paper--1280.png",
+   "index": 69
+  },
+  {
+   "state": "long names",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--slate--1280.png",
+   "index": 70
+  },
+  {
+   "state": "long names",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--ember--1280.png",
+   "index": 71
+  },
+  {
+   "state": "long names",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "fill:#q=ZZ-LONG",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-count:#sheet .row=2",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 35,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 0
+   },
+   "problems": [],
+   "png": "09-long-names--night--1280.png",
+   "index": 72
+  },
+  {
+   "state": "busy",
+   "theme": "paper",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--paper--390.png",
+   "index": 73
+  },
+  {
+   "state": "busy",
+   "theme": "slate",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--slate--390.png",
+   "index": 74
+  },
+  {
+   "state": "busy",
+   "theme": "ember",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--ember--390.png",
+   "index": 75
+  },
+  {
+   "state": "busy",
+   "theme": "night",
+   "width": 390,
+   "height": 844,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--night--390.png",
+   "index": 76
+  },
+  {
+   "state": "busy",
+   "theme": "paper",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 5.86,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--paper--1280.png",
+   "index": 77
+  },
+  {
+   "state": "busy",
+   "theme": "slate",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 5.73,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--slate--1280.png",
+   "index": 78
+  },
+  {
+   "state": "busy",
+   "theme": "ember",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 7.35,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--ember--1280.png",
+   "index": 79
+  },
+  {
+   "state": "busy",
+   "theme": "night",
+   "width": 1280,
+   "height": 800,
+   "reached": true,
+   "why_not": "",
+   "steps": [
+    {
+     "step": "click:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "step": "expect-attr:[data-sku=\"NUT-M8\"] [data-act=\"plus\"]@aria-disabled=true",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "facts": {
+    "overflow_px": 0,
+    "overflow_from": [],
+    "clipped_count": 0,
+    "clipped": [],
+    "contrast_measured": 104,
+    "contrast_lowest": 7.99,
+    "contrast_below": 0,
+    "contrast_below_list": [],
+    "contrast_not_measured": 0,
+    "small_targets": 0,
+    "small_targets_list": [],
+    "targets_under_44": 2,
+    "console_errors": 0,
+    "console_messages": [],
+    "failed_requests": 0,
+    "failed_requests_list": [],
+    "refused_answers": 0,
+    "broken_answers": 0,
+    "answers_list": [],
+    "requests_aborted_on_purpose": 0,
+    "requests_held_on_purpose": 1
+   },
+   "problems": [],
+   "png": "10-busy--night--1280.png",
+   "index": 80
+  }
+ ]
+}

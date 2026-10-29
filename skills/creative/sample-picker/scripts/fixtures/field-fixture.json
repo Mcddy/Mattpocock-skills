@@ -1,0 +1,21 @@
+{
+ "id": "plot-field-fixture",
+ "title": "Plot number field for the allotment ledger (test fixture)",
+ "question": "Which field style should the ledger use for the plot number?",
+ "kind": "component",
+ "recommended": {"id": "boxed", "reason": "a full border is the only one of the three that still reads as a field when it is empty."},
+ "options": [
+  {"id": "boxed", "name": "Boxed", "note": "A one pixel border all round with slightly rounded corners; the most familiar.",
+   "sample": {"radius": 4, "border": 1, "pad_y": 10, "pad_x": 12}},
+  {"id": "heavy-square", "name": "Heavy and square", "note": "A two pixel border with square corners; the strongest outline, and the loudest.",
+   "sample": {"radius": 0, "border": 2, "pad_y": 10, "pad_x": 12}},
+  {"id": "roomy-round", "name": "Roomy and round", "note": "More padding and fully rounded ends; the tallest of the three.",
+   "sample": {"radius": 22, "border": 1, "pad_y": 14, "pad_x": 18}}
+ ],
+ "controls": [
+  {"id": "text-size", "label": "Text size", "type": "range", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16}
+ ],
+ "context": {"component": "field", "label": "Plot number", "placeholder": "For example 14B", "value": "14B",
+             "error": "Plot 14B is already in the ledger. Open it, or use another number.",
+             "tokens": {"bg": "#f7f2e6", "surface": "#fffbf2", "text": "#27231d", "muted": "#665c4f", "line": "#b9ad97", "accent": "#2f6a3c", "on-accent": "#fbfff9", "danger": "#96281b"}}
+}

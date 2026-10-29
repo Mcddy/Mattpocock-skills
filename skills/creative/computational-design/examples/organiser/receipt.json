@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "input_sha256": "2d59d744ecacf9a05a5bcc0c5021ce943487d1389ab6a7bc33be74dd6f68d4d0",
+  "script_sha256": "097edba543b574f9afdeca4dadb5862dbe42ed80c4fead2c7d7850f8abdcf36e",
+  "units": "mm",
+  "bounds_mm": [
+    [
+      0,
+      160.0
+    ],
+    [
+      0,
+      100.0
+    ],
+    [
+      0,
+      35.0
+    ]
+  ],
+  "component_volume_sum_mm3": 123840.0,
+  "components": [
+    {
+      "name": "floor",
+      "area_mm2": 16000.0,
+      "perimeter_mm": 520.0,
+      "volume_mm3": 48000.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "front",
+      "area_mm2": 480.0,
+      "perimeter_mm": 326.0,
+      "volume_mm3": 15360.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "back",
+      "area_mm2": 480.0,
+      "perimeter_mm": 326.0,
+      "volume_mm3": 15360.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "left",
+      "area_mm2": 282.0,
+      "perimeter_mm": 194.0,
+      "volume_mm3": 9024.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "right",
+      "area_mm2": 282.0,
+      "perimeter_mm": 194.0,
+      "volume_mm3": 9024.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "divider-1",
+      "area_mm2": 282.0,
+      "perimeter_mm": 194.0,
+      "volume_mm3": 9024.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "divider-2",
+      "area_mm2": 282.0,
+      "perimeter_mm": 194.0,
+      "volume_mm3": 9024.0,
+      "closed_oriented_component": true
+    },
+    {
+      "name": "divider-3",
+      "area_mm2": 282.0,
+      "perimeter_mm": 194.0,
+      "volume_mm3": 9024.0,
+      "closed_oriented_component": true
+    }
+  ],
+  "assembly_is_boolean_union": false,
+  "manufacturing_validated": false
+}

@@ -1,0 +1,73 @@
+{
+ "app": "reading-log",
+ "schema": 1,
+ "content_id": "reading-log@1",
+ "saved_at": "2025-11-02T09:30:00.000Z",
+ "note": "SYNTHETIC sample for testing migration from schema 1. The books are real published titles; the ratings and notes are invented.",
+ "data": {
+  "books": [
+   {
+    "title": "The Dispossessed",
+    "author": "Ursula K. Le Guin",
+    "done": true,
+    "stars": 5,
+    "note": "Reread. The chapters alternate between the two worlds, and the Anarres half is the stronger."
+   },
+   {
+    "title": "Thinking in Systems: A Primer",
+    "author": "Donella H. Meadows",
+    "done": true,
+    "stars": 4,
+    "note": "Stocks, flows and delays. The chapter on leverage points is the one to keep."
+   },
+   {
+    "title": "The Design of Everyday Things",
+    "author": "Don Norman",
+    "done": true,
+    "stars": 4,
+    "note": ""
+   },
+   {
+    "title": "Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed",
+    "author": "James C. Scott",
+    "done": false,
+    "stars": 0,
+    "note": "Recommended twice. Long."
+   },
+   {
+    "title": "A Pattern Language: Towns, Buildings, Construction",
+    "author": "Christopher Alexander, Sara Ishikawa and Murray Silverstein",
+    "done": false,
+    "stars": 0,
+    "note": ""
+   },
+   {
+    "title": "The Mythical Man-Month",
+    "author": "Frederick P. Brooks Jr.",
+    "done": true,
+    "stars": 3,
+    "note": "Dated in places. The surgical team chapter and the essay No Silver Bullet still hold."
+   },
+   {
+    "title": "How Buildings Learn: What Happens After They're Built",
+    "author": "Stewart Brand",
+    "done": false,
+    "stars": 0
+   },
+   {
+    "title": "Zen and the Art of Motorcycle Maintenance: An Inquiry into Values",
+    "author": "Robert M. Pirsig",
+    "done": true,
+    "stars": 2,
+    "note": "Read it for the reputation. The road trip is better than the lectures.\nA second line, to check that notes keep their line breaks."
+   },
+   {
+    "title": "Beowulf",
+    "author": "",
+    "done": true,
+    "stars": 4,
+    "note": "Verse translation."
+   }
+  ]
+ }
+}

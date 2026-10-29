@@ -1,0 +1,20 @@
+fermi: Households paying for a regular lawn-mowing service
+  during 2026; Australia, private households; regular means six or more paid visits a year; excludes body-corporate and commercial contracts
+INPUTS
+  operators                  ASSESSMENT  lognormal, 5th to 95th percentile 15,000 to 70,000, median 32,000; why: GAP: people or businesses running a domestic mowing round. Official business counts for gardening services were not looked up in this session. Assessed from the trade being common in every suburb and town; surprised below 15,000 or above 70,000.
+  regular_customers_each     ASSESSMENT  lognormal, 5th to 95th percentile 25 to 90, median 47; why: A full-time solo operator mows about 5 to 8 lawns a day, five days a week, mostly on a two to four week cycle: 50 to 160 regulars at capacity. Many operators are part-time or take one-off jobs, which pulls the typical book down.
+  share_household_customers  ASSESSMENT  uniform, hard bounds 0.7 to 0.95, median 0.82 [probability]; why: Some regular customers are agents managing rentals, body corporates and small commercial sites, which the quantity excludes. Bounds only.
+FORMULA  operators * regular_customers_each * share_household_customers
+RESULT   median 1,300,000 households; 90 percent range 450,000 to 3,500,000
+  percentiles  5th 450,000 | 25th 840,000 | 50th 1,300,000 | 75th 1,900,000 | 95th 3,500,000
+  mean 1,500,000 (above the median: the upper tail pulls it up. Quote the median and the range, not the mean)
+  every input at its median gives 1,300,000
+  20,000 runs, seed 1; printed to 2 significant figures; high end is about 7.7 times the low end
+ANCHORS
+  cannot exceed the number of occupied separate houses: 6,710,582 at the 2021 Census (ABS QuickStats, read 2026-10-09) scaled up 10 per cent, the top of the assumed growth range. above the max of 7,381,640: 45 of 20,000 runs (under 1%)
+SENSITIVITY  (rank correlation with the result; then the result with this input alone at its 5th and 95th percentile, the rest at their medians)
+  operators                  +0.74  590,000 to 2,700,000   (a factor of 4.7)
+  regular_customers_each     +0.61  670,000 to 2,400,000   (a factor of 3.6)
+  share_household_customers  +0.14  1,100,000 to 1,400,000   (a factor of 1.3)
+  Drives the spread most: operators. Narrowing it narrows the answer more than narrowing any other input.
+RESULT: RAN. 0 errors, 0 advisory note(s). The range is only as good as the input ranges and the decomposition.

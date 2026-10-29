@@ -1,0 +1,11 @@
+ledger_check: 11 source(s), 4 claim(s): 3 FACT, 1 GAP
+  ADVISORY  source S1: is never cited. Remove it or record what it contributed
+  ADVISORY  source S2: is never cited. Remove it or record what it contributed
+  ADVISORY  source S3: is never cited. Remove it or record what it contributed
+  ADVISORY  source S4: has no publication date
+  ADVISORY  source S5: is never cited. Remove it or record what it contributed
+  ADVISORY  source S9: is never cited. Remove it or record what it contributed
+  ADVISORY  source S10: is never cited. Remove it or record what it contributed
+  ADVISORY  source S12: is never cited. Remove it or record what it contributed
+  ADVISORY  source S13: is never cited. Remove it or record what it contributed
+RESULT: PASS. 0 error(s), 9 advisory note(s). This checks the ledger's bookkeeping, not whether the sources are right.

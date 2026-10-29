@@ -1,0 +1,131 @@
+analyse_responses: responses.csv  (Spreadsheet basics quiz (SYNTHETIC data), k7 key corrected to B)
+WHO ANSWERED
+  Respondents (rows): 31. Questions: 12. Respondent ids: replaced by R01 to R31 in file order.
+  Invited: 31. Responded: 31 of 31 invited (100%). Everyone invited responded.
+  How they were reached: Paper quiz sat by everyone present at the end of the session; 31 of 31 handed it in.
+  Who is missing: Nobody present is missing. People enrolled but absent that day did not sit it.
+  Answered every closed question shown to them: 22 of 31 respondents (71%). Free-text questions are left out of this count.
+  Intervals are 95% Wilson score intervals. They show how far a proportion could move with this many answers; they do not correct for who was reached.
+QUESTIONS
+k1 [single] Which symbol starts a formula in a spreadsheet cell?  A) =  B) #  C) @  D) &
+  shown to 31 of 31 respondents; answered 29; skipped 2 = 6% of those shown (R20, R24)
+  * A  29 of 29 who answered (100%, interval 88% to 100%); 29 of 31 shown (94%)
+    B  0 of 29 who answered (0%, interval 0% to 12%); 0 of 31 shown (0%)
+    C  0 of 29 who answered (0%, interval 0% to 12%); 0 of 31 shown (0%)
+    D  0 of 29 who answered (0%, interval 0% to 12%); 0 of 31 shown (0%)
+    * keyed as correct
+k2 [single] What does SUM(A1:A5) add up?  A) A1 and A5 only  B) Cells A1 to A5  C) All of column A  D) Rows 1 to 5 of every column
+  shown to 31 of 31 respondents; answered 30; skipped 1 = 3% of those shown (R01)
+    A  2 of 30 who answered (7%, interval 2% to 21%); 2 of 31 shown (6%)
+  * B  26 of 30 who answered (87%, interval 70% to 95%); 26 of 31 shown (84%)
+    C  1 of 30 who answered (3%, interval 1% to 17%); 1 of 31 shown (3%)
+    D  1 of 30 who answered (3%, interval 1% to 17%); 1 of 31 shown (3%)
+    * keyed as correct
+k3 [single] Which chart suits shares of a whole at one point in time?  A) Line chart  B) Scatter plot  C) Pie or stacked bar  D) Histogram
+  shown to 31 of 31 respondents; answered 31; skipped 0
+    A  1 of 31 who answered (3%, interval 1% to 16%)
+    B  4 of 31 who answered (13%, interval 5% to 29%)
+  * C  25 of 31 who answered (81%, interval 64% to 91%)
+    D  1 of 31 who answered (3%, interval 1% to 16%)
+    * keyed as correct
+k4 [single] What does a filter do to rows that do not match?  A) Deletes them  B) Hides them  C) Sorts them to the bottom  D) Locks them
+  shown to 31 of 31 respondents; answered 31; skipped 0
+    A  3 of 31 who answered (10%, interval 3% to 25%)
+  * B  23 of 31 who answered (74%, interval 57% to 86%)
+    C  3 of 31 who answered (10%, interval 3% to 25%)
+    D  2 of 31 who answered (6%, interval 2% to 21%)
+    * keyed as correct
+k5 [single] What is the mean of 2, 4 and 9?  A) 4  B) 5  C) 7.5  D) 15
+  shown to 31 of 31 respondents; answered 29; skipped 2 = 6% of those shown (R03, R04)
+    A  4 of 29 who answered (14%, interval 5% to 31%); 4 of 31 shown (13%)
+  * B  21 of 29 who answered (72%, interval 54% to 85%); 21 of 31 shown (68%)
+    C  1 of 29 who answered (3%, interval 1% to 17%); 1 of 31 shown (3%)
+    D  3 of 29 who answered (10%, interval 4% to 26%); 3 of 31 shown (10%)
+    * keyed as correct
+k6 [single] Which of these is a relative cell reference?  A) $A$1  B) A1  C) $A1$  D) 'A1'
+  shown to 31 of 31 respondents; answered 31; skipped 0
+    A  2 of 31 who answered (6%, interval 2% to 21%)
+  * B  16 of 31 who answered (52%, interval 35% to 68%)
+    C  7 of 31 who answered (23%, interval 11% to 40%)
+    D  6 of 31 who answered (19%, interval 9% to 36%)
+    * keyed as correct
+k7 [single] Which function gives the middle value of a sorted list?  A) MEAN  B) MEDIAN  C) MODE  D) MAX
+  shown to 31 of 31 respondents; answered 31; skipped 0
+    A  4 of 31 who answered (13%, interval 5% to 29%)
+  * B  19 of 31 who answered (61%, interval 44% to 76%)
+    C  6 of 31 who answered (19%, interval 9% to 36%)
+    D  2 of 31 who answered (6%, interval 2% to 21%)
+    * keyed as correct
+k8 [single] What happens if one column of a table is sorted on its own?  A) Rows stay intact  B) Values no longer line up with their rows  C) Duplicates are removed  D) The header is frozen
+  shown to 31 of 31 respondents; answered 30; skipped 1 = 3% of those shown (R13)
+    A  3 of 30 who answered (10%, interval 3% to 26%); 3 of 31 shown (10%)
+  * B  18 of 30 who answered (60%, interval 42% to 75%); 18 of 31 shown (58%)
+    C  3 of 30 who answered (10%, interval 3% to 26%); 3 of 31 shown (10%)
+    D  6 of 30 who answered (20%, interval 10% to 37%); 6 of 31 shown (19%)
+    * keyed as correct
+k9 [single] What does a pivot table do?  A) Summarises rows by group  B) Rotates the sheet  C) Checks spelling  D) Protects the file
+  shown to 31 of 31 respondents; answered 31; skipped 0
+  * A  11 of 31 who answered (35%, interval 21% to 53%)
+    B  7 of 31 who answered (23%, interval 11% to 40%)
+    C  7 of 31 who answered (23%, interval 11% to 40%)
+    D  6 of 31 who answered (19%, interval 9% to 36%)
+    * keyed as correct
+k10 [single] What does $B$2 do when a formula is copied down a column?  A) Stays on B2  B) Moves down a row each time  C) Moves across a column each time  D) Deletes cell B2
+  shown to 31 of 31 respondents; answered 30; skipped 1 = 3% of those shown (R30)
+  * A  23 of 30 who answered (77%, interval 59% to 88%); 23 of 31 shown (74%)
+    B  5 of 30 who answered (17%, interval 7% to 34%); 5 of 31 shown (16%)
+    C  2 of 30 who answered (7%, interval 2% to 21%); 2 of 31 shown (6%)
+    D  0 of 30 who answered (0%, interval 0% to 11%); 0 of 31 shown (0%)
+    * keyed as correct
+k11 [single] COUNT counts the cells in a range that contain  A) Anything  B) Text  C) Numbers  D) Formulas only
+  shown to 31 of 31 respondents; answered 31; skipped 0
+    A  7 of 31 who answered (23%, interval 11% to 40%)
+    B  7 of 31 who answered (23%, interval 11% to 40%)
+  * C  7 of 31 who answered (23%, interval 11% to 40%)
+    D  10 of 31 who answered (32%, interval 19% to 50%)
+    * keyed as correct
+k12 [single] Where does VLOOKUP look for its lookup value?  A) Any column of the range  B) The first column of the range  C) The last column of the range  D) The header row
+  shown to 31 of 31 respondents; answered 29; skipped 2 = 6% of those shown (R23, R31)
+    A  6 of 29 who answered (21%, interval 10% to 38%); 6 of 31 shown (19%)
+  * B  7 of 29 who answered (24%, interval 12% to 42%); 7 of 31 shown (23%)
+    C  7 of 29 who answered (24%, interval 12% to 42%); 7 of 31 shown (23%)
+    D  9 of 29 who answered (31%, interval 17% to 49%); 9 of 31 shown (29%)
+    * keyed as correct
+QUIZ ITEM ANALYSIS  (descriptive: it shows how each item behaved for these 31 respondents)
+  12 scored items; one point for each keyed answer; an omitted item scores nothing.
+  Total score out of 12: min 2, median 8, max 11, mean 7.3
+  Score: respondents   2: 2  3: 2  4: 1  5: 1  6: 5  7: 4  8: 5  9: 4  10: 5  11: 2
+  Upper group: the 11 respondent(s) scoring 9 or more. Lower group: the 11 scoring 6 or fewer. (Target 8 each, 27% of 31; tied scores are kept together.)
+  With groups this size, one respondent changing one answer moves D by up to 0.09. D is a description of these respondents, not a property of the item.
+  k1  keyed A  correct 29 of 31 shown (94%, interval 79% to 98%); omitted 2; upper 11 of 11, lower 10 of 11, D = +0.09; point-biserial +0.29 with total, +0.19 with rest (n=31)
+      chosen by all / upper / lower:  A* 29 / 11 / 10   B 0 / 0 / 0   C 0 / 0 / 0   D 0 / 0 / 0
+      CANDIDATE  nearly everyone right: 29 of 31 correct. It separates nobody. Check whether it is too easy or the wording gives the answer away
+      CANDIDATE  option nobody chose: 'B' was chosen by 0 of 31. It is not working as a distractor
+      CANDIDATE  option nobody chose: 'C' was chosen by 0 of 31. It is not working as a distractor
+      CANDIDATE  option nobody chose: 'D' was chosen by 0 of 31. It is not working as a distractor
+  k2  keyed B  correct 26 of 31 shown (84%, interval 67% to 93%); omitted 1; upper 11 of 11, lower 7 of 11, D = +0.36; point-biserial +0.46 with total, +0.34 with rest (n=31)
+      chosen by all / upper / lower:  A 2 / 0 / 2   B* 26 / 11 / 7   C 1 / 0 / 1   D 1 / 0 / 1
+  k3  keyed C  correct 25 of 31 shown (81%, interval 64% to 91%); upper 11 of 11, lower 6 of 11, D = +0.45; point-biserial +0.54 with total, +0.41 with rest (n=31)
+      chosen by all / upper / lower:  A 1 / 0 / 1   B 4 / 0 / 3   C* 25 / 11 / 6   D 1 / 0 / 1
+  k4  keyed B  correct 23 of 31 shown (74%, interval 57% to 86%); upper 11 of 11, lower 4 of 11, D = +0.64; point-biserial +0.71 with total, +0.60 with rest (n=31)
+      chosen by all / upper / lower:  A 3 / 0 / 2   B* 23 / 11 / 4   C 3 / 0 / 3   D 2 / 0 / 2
+  k5  keyed B  correct 21 of 31 shown (68%, interval 50% to 81%); omitted 2; upper 10 of 11, lower 4 of 11, D = +0.55; point-biserial +0.46 with total, +0.29 with rest (n=31)
+      chosen by all / upper / lower:  A 4 / 1 / 2   B* 21 / 10 / 4   C 1 / 0 / 1   D 3 / 0 / 3
+  k6  keyed B  correct 16 of 31 shown (52%, interval 35% to 68%); upper 10 of 11, lower 1 of 11, D = +0.82; point-biserial +0.69 with total, +0.56 with rest (n=31)
+      chosen by all / upper / lower:  A 2 / 0 / 2   B* 16 / 10 / 1   C 7 / 1 / 4   D 6 / 0 / 4
+  k7  keyed B  correct 19 of 31 shown (61%, interval 44% to 76%); upper 10 of 11, lower 3 of 11, D = +0.64; point-biserial +0.63 with total, +0.50 with rest (n=31)
+      chosen by all / upper / lower:  A 4 / 0 / 3   B* 19 / 10 / 3   C 6 / 1 / 4   D 2 / 0 / 1
+  k8  keyed B  correct 18 of 31 shown (58%, interval 41% to 74%); omitted 1; upper 7 of 11, lower 5 of 11, D = +0.18; point-biserial +0.27 with total, +0.08 with rest (n=31)
+      chosen by all / upper / lower:  A 3 / 1 / 2   B* 18 / 7 / 5   C 3 / 1 / 2   D 6 / 1 / 2
+  k9  keyed A  correct 11 of 31 shown (35%, interval 21% to 53%); upper 8 of 11, lower 1 of 11, D = +0.64; point-biserial +0.51 with total, +0.35 with rest (n=31)
+      chosen by all / upper / lower:  A* 11 / 8 / 1   B 7 / 1 / 4   C 7 / 1 / 2   D 6 / 1 / 4
+  k10  keyed A  correct 23 of 31 shown (74%, interval 57% to 86%); omitted 1; upper 11 of 11, lower 6 of 11, D = +0.45; point-biserial +0.50 with total, +0.35 with rest (n=31)
+      chosen by all / upper / lower:  A* 23 / 11 / 6   B 5 / 0 / 4   C 2 / 0 / 1   D 0 / 0 / 0
+      CANDIDATE  option nobody chose: 'D' was chosen by 0 of 31. It is not working as a distractor
+  k11  keyed C  correct 7 of 31 shown (23%, interval 11% to 40%); upper 4 of 11, lower 2 of 11, D = +0.18; point-biserial +0.31 with total, +0.15 with rest (n=31)
+      chosen by all / upper / lower:  A 7 / 1 / 3   B 7 / 4 / 2   C* 7 / 4 / 2   D 10 / 2 / 4
+      CANDIDATE  wrong option chosen more by the upper group: 'B': 4 of 11 in the upper group against 2 of 11 in the lower. Possible second right answer or ambiguity
+  k12  keyed B  correct 7 of 31 shown (23%, interval 11% to 40%); omitted 2; upper 4 of 11, lower 0 of 11, D = +0.36; point-biserial +0.37 with total, +0.22 with rest (n=31)
+      chosen by all / upper / lower:  A 6 / 2 / 3   B* 7 / 4 / 0   C 7 / 2 / 3   D 9 / 3 / 4
+  * keyed answer. CANDIDATE lines are items for a person to read against the question. They are not verdicts.
+RESULT: RAN. 0 errors, 0 advisory note(s). Counts describe the 31 respondents in this file.

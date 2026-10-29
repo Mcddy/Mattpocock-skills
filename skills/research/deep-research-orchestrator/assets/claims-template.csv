@@ -1,0 +1,2 @@
+claim_id,question_id,statement,status,source_ids,locator,load_bearing,confidence,conflicts_with,conflict_class,resolution,basis
+C1,Q1,"SYNTHETIC EXAMPLE ROW: replace with one assertion, its value, unit, scope and date",FACT,S1,"section 2, paragraph 3",yes,,,,,documented

@@ -1,0 +1,104 @@
+{
+ "responses": {
+  "https://standards.example/robots.txt": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/plain"
+   },
+   "file": "robots.txt"
+  },
+  "https://standards.example/index.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "index.html"
+  },
+  "https://standards.example/standards/hl-101.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "hl-101.html"
+  },
+  "https://standards.example/standards/hl-102.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "hl-102.html"
+  },
+  "https://standards.example/standards/hl-103.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "hl-103-v2.html"
+  },
+  "https://standards.example/standards/hl-104.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "hl-104.html"
+  },
+  "https://standards.example/committee/minutes-41.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "minutes-41.html"
+  },
+  "https://standards.example/committee/minutes-42.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "minutes-42.html"
+  },
+  "https://standards.example/drafts/hl-105-draft.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "hl-105-draft.html"
+  },
+  "https://standards.example/old/hl-100.html": {
+   "status": 301,
+   "headers": {
+    "Location": "https://standards.example/standards/withdrawn/hl-100.html"
+   }
+  },
+  "https://standards.example/standards/withdrawn/hl-100.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "hl-100-withdrawn.html"
+  },
+  "https://standards.example/consultations.html": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "text/html; charset=utf-8"
+   },
+   "file": "consultation.html"
+  },
+  "https://standards.example/archive/2019-index.html": {
+   "error": "timeout"
+  },
+  "https://standards.example/feed.xml": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "application/rss+xml"
+   },
+   "file": "feed.xml"
+  },
+  "https://files.standards.example/hl-register.pdf": {
+   "status": 200,
+   "headers": {
+    "Content-Type": "application/pdf"
+   },
+   "file": "hl-register.pdf"
+  }
+ }
+}

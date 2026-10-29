@@ -1,0 +1,6 @@
+interface:
+  display_name: "Casefile"
+  short_description: "Explore sourced claims, conflicts and research gaps"
+  default_prompt: "Use $casefile for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

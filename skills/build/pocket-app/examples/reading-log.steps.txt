@@ -1,0 +1,77 @@
+# Primary journey for the reading log, run by delivery_check.py in a tab and in a sandboxed frame.
+# Reload is left out on purpose: the frame cannot store data, and test_demo.py covers that case.
+
+# empty state, and a refused add
+expect:#books=No books in the log yet
+click:#add-go
+expect:#e-a-title=Give the book a title
+expect-focus:#a-title
+
+# add a book with Enter
+fill:#a-title=Middlemarch
+fill:#a-author=George Eliot
+press:#a-author=Enter
+expect:#books=Middlemarch
+expect:#tally=1 book: 1 to read.
+expect-focus:#a-title
+
+# import the schema 1 sample: it is migrated to schema 2 and replaces the one book
+fill:#pk-import-text={"app":"reading-log","schema":1,"content_id":"reading-log@1","saved_at":"2025-11-02T09:30:00.000Z","note":"SYNTHETIC sample for testing migration from schema 1. The books are real published titles; the ratings and notes are invented.","data":{"books":[{"title":"The Dispossessed","author":"Ursula K. Le Guin","done":true,"stars":5,"note":"Reread. The chapters alternate between the two worlds, and the Anarres half is the stronger."},{"title":"Thinking in Systems: A Primer","author":"Donella H. Meadows","done":true,"stars":4,"note":"Stocks, flows and delays. The chapter on leverage points is the one to keep."},{"title":"The Design of Everyday Things","author":"Don Norman","done":true,"stars":4,"note":""},{"title":"Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed","author":"James C. Scott","done":false,"stars":0,"note":"Recommended twice. Long."},{"title":"A Pattern Language: Towns, Buildings, Construction","author":"Christopher Alexander, Sara Ishikawa and Murray Silverstein","done":false,"stars":0,"note":""},{"title":"The Mythical Man-Month","author":"Frederick P. Brooks Jr.","done":true,"stars":3,"note":"Dated in places. The surgical team chapter and the essay No Silver Bullet still hold."},{"title":"How Buildings Learn: What Happens After They're Built","author":"Stewart Brand","done":false,"stars":0},{"title":"Zen and the Art of Motorcycle Maintenance: An Inquiry into Values","author":"Robert M. Pirsig","done":true,"stars":2,"note":"Read it for the reputation. The road trip is better than the lectures.\nA second line, to check that notes keep their line breaks."},{"title":"Beowulf","author":"","done":true,"stars":4,"note":"Verse translation."}]}}
+click:#pk-import
+expect:#pk-import-msg=Imported 9 books, brought up from schema 1 to schema 2
+expect:#tally=9 books: 3 to read, 6 finished.
+
+# move a book to another shelf with the keyboard
+press:#status-7=ArrowUp
+expect:#tally=9 books: 1 being read, 2 to read, 6 finished.
+expect-focus:#status-7
+
+# edit in place, save with Enter, focus returns to Edit
+click:[data-fk="edit-9"]
+expect-focus:#e-title
+fill:#e-author=Unknown poet
+press:#e-author=Enter
+expect:[data-id="9"]=by Unknown poet
+expect-focus:[data-fk="edit-9"]
+
+# an edit that empties the title is refused and keeps the editor open
+click:[data-fk="edit-9"]
+fill:#e-title=
+click:[data-fk="e-save"]
+expect:#e-e-title=Give the book a title
+click:[data-fk="e-cancel"]
+expect:[data-id="9"]=Beowulf
+
+# remove, then undo
+click:[data-fk="remove-3"]
+expect:#status=Removed "The Design of Everyday Things". Undo brings it back.
+expect-focus:#pk-undo
+expect-count:li.book=8
+click:#pk-undo
+expect-count:li.book=9
+
+# shelf filter, a search with no result, and the way back
+click:[data-shelf="finished"]
+expect-count:li.book=6
+fill:#q=zzzz
+expect:#books=Nothing matches "zzzz"
+click:[data-fk="show-all"]
+expect-count:li.book=9
+
+# display choices apply at once and reset
+click:#display-toggle
+click:[data-value="dusk"]
+expect-attr:html@data-theme=dusk
+expect-attr:[data-value="dusk"]@aria-pressed=true
+click:[data-value="compact"]
+expect-attr:html@data-density=compact
+click:[data-value="larger"]
+expect-attr:html@data-text=larger
+click:#display-reset
+expect-attr:html@data-theme=paper
+expect-attr:html@data-density=comfortable
+expect-attr:html@data-text=standard
+
+# export is on the page as text
+click:#pk-export
+expect:#pk-export-text="app":"reading-log","schema":2

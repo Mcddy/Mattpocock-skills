@@ -1,0 +1,80 @@
+# The drawing of the stock-count model: one reading journey, run in a tab and in a sandboxed frame.
+# It loads with the model's real content.
+expect:#system=Stock count reference app
+expect:#tally=13 threats: 9 open, 4 mitigated and verified
+expect-count:#canvas .zone=3
+expect-count:#canvas .node=8
+expect-count:#canvas .chip=9
+expect-count:#canvas .chip.boundary=4
+expect-count:#wires path.wire=9
+expect:#detail-h=All threats (13)
+expect-count:#cards li=13
+# Choose the flow that carries the most open threats.
+click:[data-pick="F4"]
+expect-attr:[data-pick="F4"]@aria-pressed=true
+expect:#detail-h=F4: Another device on the Wi-Fi to API server
+expect-count:#cards .card=4
+expect:[data-threat="T1"] .tag=Open: nothing built
+expect:[data-threat="T6"] .tag=Open: partly mitigated
+expect:[data-threat="T1"]=FAILED on 2026-10-09
+expect:#status=Selected F4
+expect-count:#wires path.wire.hot=1
+# By keyboard: Enter on a store. Focus stays on the control that was used.
+press:[data-pick="E7"]=Enter
+expect-focus:[data-pick="E7"]
+expect:#detail-h=SQLite data file
+expect-count:#cards .card=2
+expect:[data-threat="T11"] .tag=Mitigated and verified
+# Filter to open threats: the store keeps one.
+click:[data-filter="open"]
+expect-attr:[data-filter="open"]@aria-pressed=true
+expect-count:#cards .card=1
+expect:[data-pick="E7"] .ct=1 open threat
+# Unverified: nothing matches, the page says why and offers the way back.
+click:[data-filter="unverified"]
+expect:#blank=Nothing here is unverified
+click:#show-all
+expect-attr:[data-filter="all"]@aria-pressed=true
+expect-focus:[data-filter="all"]
+expect-count:#cards .card=2
+# Jump from the details to a flow: focus moves to its label in the drawing. It has no threats recorded.
+click:[data-jump="F6"]
+expect-focus:#canvas [data-pick="F6"]
+expect:#blank=No threats are recorded here
+# Back to the whole model, then into one threat from the list.
+click:#clear-sel
+expect:#detail-h=All threats (13)
+click:[data-fk="row-T3"]
+expect:#detail-h=API server (server.py)
+expect:[data-threat="T3"]=http.server
+# A zone shows its trust statement.
+click:[data-pick="Z2"]
+expect:#detail-body=Not controlled
+expect-count:#wires path.wire.hot=4
+# The text version carries the same content, and copying answers either way.
+click:#text-toggle
+expect:#text-box=T1 [Open: nothing built]
+click:#text-copy
+expect:#copy-note=Cop
+click:#scope-toggle
+expect:#scope=binds 127.0.0.1 only
+# Display choices apply at once, survive or not as storage allows, and reset.
+click:#display-toggle
+click:[data-val="night"]
+expect-attr:html@data-theme=night
+expect-attr:[data-val="night"]@aria-pressed=true
+click:[data-val="compact"]
+expect-attr:html@data-density=compact
+click:[data-val="large"]
+expect-attr:html@data-text=large
+click:[data-val="still"]
+expect-attr:html@data-motion=still
+expect:#display-note=isplay choices
+reload:
+expect:#detail-h=All threats (13)
+click:#display-toggle
+click:#display-reset
+expect-attr:html@data-theme=paper
+expect-attr:html@data-density=comfortable
+expect-attr:html@data-text=standard
+expect-attr:html@data-motion=smooth

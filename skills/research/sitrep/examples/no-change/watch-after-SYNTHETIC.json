@@ -1,0 +1,280 @@
+{
+ "watch_id": "en-301-549-citation-status",
+ "schema": 1,
+ "title": "EN 301 549 and the European Accessibility Act: citation status",
+ "purpose": "Know when conformity with EN 301 549 starts to carry a presumption of conformity under Directive (EU) 2019/882, so that guidance which describes WCAG 2.2 criteria can say correctly whether they are EU legal requirements.",
+ "requirements": [
+  {
+   "id": "R1",
+   "question": "Has a reference to any harmonised standard been published in the Official Journal in support of Directive (EU) 2019/882, the European Accessibility Act?",
+   "priority": "high"
+  },
+  {
+   "id": "R2",
+   "question": "Which version of EN 301 549 is the harmonised standard under Directive (EU) 2016/2102, and has that changed?",
+   "priority": "medium"
+  },
+  {
+   "id": "R3",
+   "question": "What is the latest published version of EN 301 549, and where is it in its national adoption timetable?",
+   "priority": "medium"
+  },
+  {
+   "id": "R4",
+   "question": "What is the standing of WCAG 2.2 at W3C and at ISO?",
+   "priority": "low"
+  }
+ ],
+ "indicators": [
+  {
+   "id": "I1",
+   "requirement": "R1",
+   "watch_for": "A Commission implementing decision that cites a harmonised standard in support of Directive (EU) 2019/882 is published in the Official Journal, L series.",
+   "where": "EUR-Lex, and the Commission's harmonised standards index (S2)",
+   "would_mean": "Conformity with the cited standard carries a presumption of conformity under the Act from the date the decision applies.",
+   "status": "not seen",
+   "seen_on": null,
+   "evidence": []
+  },
+  {
+   "id": "I2",
+   "requirement": "R1",
+   "watch_for": "The Commission's harmonised standards index lists an entry for Directive (EU) 2019/882.",
+   "where": "The index page (S2)",
+   "would_mean": "A reference has been published or is about to be. Read the decision the entry links to before changing F1 to F4.",
+   "status": "not seen",
+   "seen_on": null,
+   "evidence": []
+  },
+  {
+   "id": "I3",
+   "requirement": "R2",
+   "watch_for": "The Commission's page for Directive (EU) 2016/2102 lists an amendment to Implementing Decision (EU) 2018/2048 dated after 11 August 2021.",
+   "where": "The page for public sector websites and mobile applications (S9)",
+   "would_mean": "The harmonised version for public sector websites has changed. Re-read F5 against the new decision.",
+   "status": "not seen",
+   "seen_on": null,
+   "evidence": []
+  },
+  {
+   "id": "I4",
+   "requirement": "R3",
+   "watch_for": "ETSI's delivery directory for EN 301 549 lists an entry numbered above 04.01.01.",
+   "where": "The directory listing (S3)",
+   "would_mean": "V4.1.1 has been corrected or superseded. Re-read F6 and F8.",
+   "status": "not seen",
+   "seen_on": null,
+   "evidence": []
+  },
+  {
+   "id": "I5",
+   "requirement": "R4",
+   "watch_for": "W3C's WCAG overview states that ISO/IEC 40500:2026 is published or available.",
+   "where": "The overview page (S5)",
+   "would_mean": "The ISO edition has caught up with the December 2024 text of WCAG 2.2.",
+   "status": "not seen",
+   "seen_on": null,
+   "evidence": []
+  }
+ ],
+ "sources": [
+  {
+   "id": "S1",
+   "title": "Commission Implementing Decision (EU) 2021/1339 of 11 August 2021 (EUR-Lex)",
+   "address": "https://eur-lex.europa.eu/eli/dec_impl/2021/1339/oj",
+   "tier": "primary",
+   "check": "each run",
+   "last_checked": "2026-10-16",
+   "last_result": "reached",
+   "note": "On 2026-10-09 the page returned its title and ELI metadata only: document date 2021-08-11, published 2021-08-12. The research ledger this watch was seeded from records a full read of the operative text and annex on 2026-10-08."
+  },
+  {
+   "id": "S2",
+   "title": "Harmonised standards index (European Commission, single market site)",
+   "address": "https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
+   "tier": "primary",
+   "check": "each run",
+   "last_checked": "2026-10-16",
+   "last_result": "reached"
+  },
+  {
+   "id": "S3",
+   "title": "ETSI delivery directory for EN 301 549",
+   "address": "https://www.etsi.org/deliver/etsi_en/301500_301599/301549/",
+   "tier": "primary",
+   "check": "each run",
+   "last_checked": "2026-10-16",
+   "last_result": "reached"
+  },
+  {
+   "id": "S4",
+   "title": "ETSI EN 301 549 V4.1.1 (2026-09), published text",
+   "address": "https://www.etsi.org/deliver/etsi_en/301500_301599/301549/04.01.01_60/en_301549v040101p.pdf",
+   "tier": "primary",
+   "check": "monthly",
+   "last_checked": "2026-10-09",
+   "last_result": "reached",
+   "note": "Cover and foreword read. The fetch stopped before the change history annex."
+  },
+  {
+   "id": "S5",
+   "title": "WCAG 2 Overview (W3C Web Accessibility Initiative)",
+   "address": "https://www.w3.org/WAI/standards-guidelines/wcag/",
+   "tier": "primary",
+   "check": "each run",
+   "last_checked": "2026-10-16",
+   "last_result": "reached",
+   "note": "The page states it was updated on 17 September 2026."
+  },
+  {
+   "id": "S6",
+   "title": "European Accessibility Act: ICT standards update (Davis Wright Tremaine, law firm note dated 18 September 2026)",
+   "address": "https://www.dwt.com/insights/2026/09/european-accessibility-act-ict-standards-update",
+   "tier": "secondary",
+   "check": "each run",
+   "last_checked": "2026-10-16",
+   "last_result": "reached"
+  },
+  {
+   "id": "S7",
+   "title": "Article on harmonised standards under the European Accessibility Act (Legalithm)",
+   "address": "",
+   "tier": "secondary",
+   "check": "monthly",
+   "last_checked": "2026-10-08",
+   "last_result": "reached",
+   "note": "Read on 2026-10-08 by the research session whose ledger seeded this watch. Its address was not kept, so it cannot be read again until it is found."
+  },
+  {
+   "id": "S8",
+   "title": "Web Accessibility Directive: standards and harmonisation (European Commission, digital strategy site)",
+   "address": "https://digital-strategy.ec.europa.eu/en/policies/web-accessibility-directive-standards-and-harmonisation",
+   "tier": "secondary",
+   "check": "monthly",
+   "last_checked": "2026-10-09",
+   "last_result": "reached",
+   "note": "Last updated 5 May 2025 by its own footer. Its body text and its table give different dates for the 2021 harmonisation (18 and 12 August 2021); the table agrees with EUR-Lex."
+  },
+  {
+   "id": "S9",
+   "title": "Harmonised standards: websites and mobile applications of public sector bodies (European Commission, single market site)",
+   "address": "https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/accessibility-websites-and-mobile-applications_en",
+   "tier": "primary",
+   "check": "each run",
+   "last_checked": "2026-10-16",
+   "last_result": "reached"
+  }
+ ],
+ "state": [
+  {
+   "id": "F1",
+   "requirement": "R1",
+   "statement": "A law firm note dated 18 September 2026 says EN 301 549 V4.1.1 is an official European standard whose main legal effect will not occur until it is cited in the Official Journal. On that account it had not been cited by that date.",
+   "status": "REPORTED",
+   "source_ids": [
+    "S6"
+   ],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F2",
+   "requirement": "R1",
+   "statement": "As of August 2026 no harmonised standard had been cited in the Official Journal in support of Directive (EU) 2019/882.",
+   "status": "REPORTED",
+   "source_ids": [
+    "S7"
+   ],
+   "as_of": "2026-10-08"
+  },
+  {
+   "id": "F3",
+   "requirement": "R1",
+   "statement": "The Commission's harmonised standards index lists one entry under Accessibility, for websites and mobile applications of public sector bodies, and no entry for Directive (EU) 2019/882.",
+   "status": "FACT",
+   "source_ids": [
+    "S2"
+   ],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F4",
+   "requirement": "R1",
+   "statement": "Whether the Official Journal itself now carries a reference under Directive (EU) 2019/882 is not established. The Official Journal was not searched, and an index page with no entry is not proof that nothing has been published.",
+   "status": "GAP",
+   "source_ids": [],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F5",
+   "requirement": "R2",
+   "statement": "EN 301 549 V3.2.1 (2021-03) is the harmonised standard for websites and mobile applications under Directive (EU) 2016/2102, by Implementing Decision (EU) 2021/1339 of 11 August 2021. The Commission's page lists that decision as the only amendment to Implementing Decision (EU) 2018/2048.",
+   "status": "FACT",
+   "source_ids": [
+    "S1",
+    "S9"
+   ],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F6",
+   "requirement": "R3",
+   "statement": "The latest published version is EN 301 549 V4.1.1 (2026-09). Its foreword gives 24 August 2026 as the date of adoption, and ETSI's delivery server lists its PDF dated 2 September 2026.",
+   "status": "FACT",
+   "source_ids": [
+    "S3",
+    "S4"
+   ],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F7",
+   "requirement": "R3",
+   "statement": "The law firm note says V4.1.1 aligns its web requirements with WCAG 2.2 and adds a compliance framework that maps to the essential requirements of the European Accessibility Act.",
+   "status": "REPORTED",
+   "source_ids": [
+    "S6"
+   ],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F8",
+   "requirement": "R3",
+   "statement": "The V4.1.1 foreword sets 30 November 2026 as the latest date of announcement, 31 May 2027 for national publication or endorsement, and 31 May 2028 for withdrawal of conflicting national standards.",
+   "status": "FACT",
+   "source_ids": [
+    "S4"
+   ],
+   "as_of": "2026-10-09"
+  },
+  {
+   "id": "F9",
+   "requirement": "R4",
+   "statement": "W3C states that WCAG 2.2 was published on 5 October 2023 and updated on 12 December 2024, that it is approved as ISO/IEC 40500:2025, and that it expects the December 2024 version to be available as ISO/IEC 40500:2026 by late 2026.",
+   "status": "FACT",
+   "source_ids": [
+    "S5"
+   ],
+   "as_of": "2026-10-16"
+  },
+  {
+   "id": "F10",
+   "requirement": "R1",
+   "statement": "Until a reference is cited under Directive (EU) 2019/882, guidance should describe WCAG 2.2 criteria as W3C criteria and not as EU legal requirements. Confidence: moderate, because F4 is open.",
+   "status": "ASSESSMENT",
+   "source_ids": [],
+   "as_of": "2026-10-16"
+  }
+ ],
+ "runs": [
+  {
+   "date": "2026-10-09",
+   "summary": "Baseline. Seeded from a research ledger dated 2026-10-08. Eight of nine sources were read on 2026-10-09; S7 has no address and was not read again.",
+   "changes": 0
+  },
+  {
+   "date": "2026-10-16",
+   "summary": "SYNTHETIC run for demonstration: every source to be checked each run is marked reached and nothing differs.",
+   "changes": 0
+  }
+ ]
+}

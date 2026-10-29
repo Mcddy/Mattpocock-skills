@@ -1,0 +1,12 @@
+interface:
+  display_name: animation studio
+  short_description: Build and review animation with timed beats and measured checks
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

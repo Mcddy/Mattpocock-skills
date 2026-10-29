@@ -1,0 +1,92 @@
+# Primary journey for the EAA example casefile, run by delivery_check.py in a tab and in a
+# sandboxed frame, at a phone width and a desktop width. Every move from one item to another is
+# one click on the line of support, so the same steps work where the list is hidden on a phone.
+# Reload is left out on purpose: the frame cannot store data, and test_casefile.py covers that.
+
+# lineage: assessment to claim to source, and back up to the assessment
+click:[data-open="assessment:A1"]
+expect:#detail=Assessment A1
+expect-focus:#detail-h
+expect:#weakest=Weakest support: 1 REPORTED claim (C2)
+click:#rests-on [data-go="claim:C1"]
+expect:#detail=Claim C1
+click:#rests-on [data-go="source:S1"]
+expect:#detail=Source S1
+expect:#detail=read in full
+expect:#dependents=EN 301 549 V3.2.1
+click:#dependents [data-go="assessment:A1"]
+expect:#detail=Assessment A1
+
+# if this source falls
+click:#rests-on [data-go="source:S3"]
+expect:#falls=C2 (REPORTED, load-bearing) would be left with no source at all.
+expect:#falls=Assessment A1 rests on C2
+expect:#falls=C8 would still rest on S4
+
+# a status change the rules refuse: nothing changes, and the reason is the checker's
+click:#dependents [data-go="claim:C2"]
+click:#detail [data-status="FACT"]
+expect:#refusal=claim C2: cannot be a FACT: no source has an address. Use REPORTED, or open a better source
+expect-attr:#detail [data-status="REPORTED"]@aria-pressed=true
+expect-focus:#detail [data-status="FACT"]
+
+# give the source an address, try again, then undo
+click:#rests-on [data-go="source:S3"]
+click:#edit-item
+fill:#f-address=https://example.org/found-again
+press:#f-address=Enter
+expect:#detail=https://example.org/found-again
+click:#detail-prev
+expect:#detail=Claim C2
+click:#detail [data-status="FACT"]
+expect-attr:#detail [data-status="FACT"]@aria-pressed=true
+expect:#status=C2 is now FACT. Undo puts it back to REPORTED.
+click:#pk-undo
+expect-attr:#detail [data-status="REPORTED"]@aria-pressed=true
+
+# model output can never be load-bearing
+click:#detail [data-go="claim:C5"]
+click:#lb-toggle
+expect:#refusal=claim C5: MODEL_OUTPUT cannot be load-bearing. Open what it cites and record that as a new claim
+expect-attr:#lb-toggle@aria-pressed=false
+
+# record a direct conflict, see it counted, settle it
+click:#to-conflicts
+fill:#cf-a=C3
+fill:#cf-b=C8
+click:#cf-go
+expect:#cf-msg=Recorded on both C3 and C8, classed as direct conflict.
+expect:#att-conflicts=1 open conflict (1 direct)
+expect-count:[data-pair]=2
+fill:[data-pair="C3|C8"] textarea=Different subjects: the standard's publication and the date the Directive applies.
+click:[data-pair="C3|C8"] [data-act="settle"]
+expect:#att-conflicts=0 open conflicts
+
+# files out: the two CSVs, the brief and the casefile itself
+click:[data-view="keep"]
+click:#csv-export-go
+expect:#csv-out-claims=conflicts_with,conflict_class,resolution
+expect:#csv-out-claims=C3,Q2,
+click:#brief-go
+expect:#brief-text=## Answer
+click:#pk-export
+expect:#pk-export-text="app":"casefile","schema":1
+
+# another tool's file is refused and nothing changes
+fill:#pk-import-text={"app":"reading-log","schema":2,"content_id":"reading-log@1","saved_at":"2026-10-09T02:00:00.000Z","data":{"books":[],"nextId":1}}
+click:#pk-import
+expect:#pk-import-msg=Not imported. This file was saved by "reading-log"
+expect:#tally=5 sources, 8 claims and 1 assessment
+
+# display choices apply at once and reset
+click:#display-toggle
+click:[data-value="night"]
+expect-attr:html@data-theme=night
+click:[data-value="compact"]
+expect-attr:html@data-density=compact
+click:[data-value="large"]
+expect-attr:html@data-text=large
+click:#display-reset
+expect-attr:html@data-theme=manila
+expect-attr:html@data-density=comfortable
+expect-attr:html@data-text=standard

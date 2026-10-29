@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HL-104 Backup power (edition 1)</title>
+<style>body{font-family:serif;max-width:40em}nav a{margin-right:1em}</style>
+</head>
+<body>
+<nav><a href="/index.html">Home</a><a href="/standards/">Standards</a><a href="/committee/">Committee</a></nav>
+<h1>HL-104 Backup power</h1>
+<p>Edition 1, in force from 1 March 2026.</p>
+<h2>2 Requirement</h2>
+<p>An entrance light shall keep working for at least 24 hours after mains power is lost.</p>
+<footer><p>SYNTHETIC: this page was invented for the harvest skill's example. The Harbour Lighting Standards Board does not exist.</p></footer>
+<script>document.title = document.title + ' (viewed)';</script>
+</body>
+</html>

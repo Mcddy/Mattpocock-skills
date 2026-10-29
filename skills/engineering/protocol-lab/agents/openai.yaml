@@ -1,0 +1,6 @@
+interface:
+  display_name: "Protocol Lab"
+  short_description: "Explore finite protocol states and replay bad traces"
+  default_prompt: "Use $protocol-lab for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

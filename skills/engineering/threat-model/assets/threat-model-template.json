@@ -1,0 +1,353 @@
+{
+ "system": "SAMPLE, replace every value: a notes app with a summarise button",
+ "schema": 1,
+ "as_of": "2026-10-09",
+ "notes": "A filled-in sample to copy and overwrite. Every verification here is not_run with no date, so every threat is open. Nothing in this file was tested against anything. Set as_of to the day the model was last made true.",
+ "assumptions": [
+  "The server is reachable from the internet over HTTPS only.",
+  "The model provider is a separate company reached over its public API."
+ ],
+ "out_of_scope": [
+  "The hosting provider's own platform and staff.",
+  "The user's device and browser."
+ ],
+ "assets": [
+  {
+   "id": "A1",
+   "name": "notes",
+   "sensitivity": "high",
+   "why": "Private text written by each user; a leak or a silent edit cannot be undone."
+  },
+  {
+   "id": "A2",
+   "name": "session tokens",
+   "sensitivity": "high",
+   "why": "Whoever holds one can act as that user until it expires."
+  },
+  {
+   "id": "A3",
+   "name": "model API key",
+   "sensitivity": "high",
+   "why": "It spends money on the owner's account and reaches every prompt sent with it."
+  },
+  {
+   "id": "A4",
+   "name": "request log",
+   "sensitivity": "medium",
+   "why": "Shows who did what and when; it must not also hold note text or keys."
+  }
+ ],
+ "actors": [
+  {
+   "id": "U1",
+   "name": "signed-in user",
+   "trust": "authenticated"
+  },
+  {
+   "id": "U2",
+   "name": "anonymous visitor",
+   "trust": "anonymous"
+  },
+  {
+   "id": "U3",
+   "name": "author of a web page that a user pastes into a note",
+   "trust": "external"
+  },
+  {
+   "id": "U4",
+   "name": "operator",
+   "trust": "operator"
+  }
+ ],
+ "zones": [
+  {
+   "id": "Z1",
+   "name": "Browser",
+   "trust": "Controlled by the person using it. Nothing it sends is trusted until the server has checked it."
+  },
+  {
+   "id": "Z2",
+   "name": "Server",
+   "trust": "Controlled by the operator. The only place rules are enforced."
+  },
+  {
+   "id": "Z3",
+   "name": "Model provider",
+   "trust": "A third party. What it returns is input to validate, not an instruction."
+  }
+ ],
+ "elements": [
+  {
+   "id": "E1",
+   "kind": "process",
+   "name": "Notes page",
+   "zone": "Z1"
+  },
+  {
+   "id": "E2",
+   "kind": "process",
+   "name": "API server",
+   "zone": "Z2",
+   "holds": [
+    "A3"
+   ]
+  },
+  {
+   "id": "E3",
+   "kind": "store",
+   "name": "Notes database",
+   "zone": "Z2",
+   "holds": [
+    "A1",
+    "A2"
+   ]
+  },
+  {
+   "id": "E4",
+   "kind": "store",
+   "name": "Request log file",
+   "zone": "Z2",
+   "holds": [
+    "A4"
+   ]
+  },
+  {
+   "id": "E5",
+   "kind": "external",
+   "name": "Language model API",
+   "zone": "Z3"
+  }
+ ],
+ "flows": [
+  {
+   "id": "F1",
+   "from": "E1",
+   "to": "E2",
+   "data": [
+    "A1",
+    "A2"
+   ],
+   "protocol": "HTTPS, JSON",
+   "authenticated": true,
+   "crosses": [
+    "Z1",
+    "Z2"
+   ]
+  },
+  {
+   "id": "F2",
+   "from": "E2",
+   "to": "E3",
+   "data": [
+    "A1",
+    "A2"
+   ],
+   "protocol": "SQL over a local socket",
+   "authenticated": true,
+   "crosses": []
+  },
+  {
+   "id": "F3",
+   "from": "E2",
+   "to": "E5",
+   "data": [
+    "A1",
+    "A3"
+   ],
+   "protocol": "HTTPS, JSON",
+   "authenticated": true,
+   "crosses": [
+    "Z2",
+    "Z3"
+   ]
+  },
+  {
+   "id": "F4",
+   "from": "E5",
+   "to": "E2",
+   "data": [
+    "A1"
+   ],
+   "protocol": "HTTPS, JSON",
+   "authenticated": true,
+   "crosses": [
+    "Z3",
+    "Z2"
+   ]
+  },
+  {
+   "id": "F5",
+   "from": "E2",
+   "to": "E4",
+   "data": [
+    "A4"
+   ],
+   "protocol": "file append",
+   "authenticated": true,
+   "crosses": []
+  }
+ ],
+ "threats": [
+  {
+   "id": "T1",
+   "target": "F1",
+   "category": "elevation_of_privilege",
+   "actor": "U1",
+   "asset": "A1",
+   "scenario": "A signed-in user changes the note id in a request and reads or overwrites another user's notes, because the server checks that someone is signed in but not that the note is theirs.",
+   "impact": "Any user's private notes are readable and editable by any other user.",
+   "likelihood": "likely if the check is missing: it needs only a changed number in a request",
+   "status": "open",
+   "mitigations": [
+    "M1"
+   ],
+   "accepted_by": null,
+   "accepted_why": null
+  },
+  {
+   "id": "T2",
+   "target": "F4",
+   "category": "tampering",
+   "actor": "U3",
+   "asset": "A1",
+   "scenario": "The author of a web page that a user pastes into a note hides an instruction in the text, the model follows it, and its reply asks the server to delete or rewrite notes.",
+   "impact": "Notes are changed or removed without the user asking for it.",
+   "likelihood": "unknown",
+   "status": "open",
+   "mitigations": [
+    "M2"
+   ],
+   "accepted_by": null,
+   "accepted_why": null
+  },
+  {
+   "id": "T3",
+   "target": "F3",
+   "category": "denial_of_service",
+   "actor": "U2",
+   "asset": "A3",
+   "scenario": "An anonymous visitor finds the summarise route and calls it in a loop, so the model API key is charged until the account limit is reached and the feature stops for everyone.",
+   "impact": "A bill nobody planned for, and the summarise button fails for every user.",
+   "likelihood": "unknown",
+   "status": "open",
+   "mitigations": [
+    "M3"
+   ],
+   "accepted_by": null,
+   "accepted_why": null
+  },
+  {
+   "id": "T4",
+   "target": "E4",
+   "category": "information_disclosure",
+   "actor": "U4",
+   "asset": "A3",
+   "scenario": "The server logs each outbound request with its headers, so the model API key and note text sit in the request log file where an operator or a backup reader can copy them.",
+   "impact": "The key is exposed to everyone who can read logs or backups.",
+   "likelihood": "likely if request logging was added without a redaction list",
+   "status": "open",
+   "mitigations": [
+    "M4"
+   ],
+   "accepted_by": null,
+   "accepted_why": null
+  },
+  {
+   "id": "T5",
+   "target": "E3",
+   "category": "information_disclosure",
+   "actor": "U4",
+   "asset": "A1",
+   "scenario": "An operator with database access reads users' notes, because they are stored as plain text.",
+   "impact": "Private notes are visible to whoever administers the database.",
+   "likelihood": "low",
+   "likelihood_why": "One operator, who is also the owner.",
+   "status": "open",
+   "mitigations": [],
+   "accepted_by": null,
+   "accepted_why": null
+  },
+  {
+   "id": "T6",
+   "target": "F1",
+   "category": "spoofing",
+   "actor": "U2",
+   "asset": "A2",
+   "scenario": "An anonymous visitor guesses passwords at the sign-in route without limit and obtains a session token for a real account.",
+   "impact": "Full access to that user's notes.",
+   "likelihood": "unknown",
+   "status": "open",
+   "mitigations": [],
+   "accepted_by": null,
+   "accepted_why": null
+  }
+ ],
+ "mitigations": [
+  {
+   "id": "M1",
+   "what": "Every note query filters by the signed-in user's id, taken from the session and never from the request.",
+   "where": "REPLACE: file and function, for example notes.py get_note()",
+   "built": true,
+   "verified_by": [
+    "V1"
+   ]
+  },
+  {
+   "id": "M2",
+   "what": "The model's reply is parsed, checked against a schema and mapped to a fixed list of actions; it can only return summary text, and no reply can trigger a write.",
+   "where": "REPLACE: file and function",
+   "built": true,
+   "verified_by": [
+    "V2"
+   ]
+  },
+  {
+   "id": "M3",
+   "what": "The summarise route requires a session and allows a fixed number of calls per user per hour, with a daily ceiling for the whole account.",
+   "where": "REPLACE: file and function, and the config key holding the limits",
+   "built": false,
+   "verified_by": [
+    "V3"
+   ]
+  },
+  {
+   "id": "M4",
+   "what": "The logger writes method, path, status and request id only; headers and bodies are never logged.",
+   "where": "REPLACE: logging setup",
+   "built": true,
+   "verified_by": [
+    "V4"
+   ]
+  }
+ ],
+ "verifications": [
+  {
+   "id": "V1",
+   "kind": "automated_test",
+   "how": "Test: user B requests user A's note id and gets 404; user A requests the same id and gets 200.",
+   "last_result": "not_run",
+   "last_run": null
+  },
+  {
+   "id": "V2",
+   "kind": "automated_test",
+   "how": "Test: replies that are not JSON, lack a field, carry an unknown key or name an action outside the list are each refused and no note changes.",
+   "last_result": "not_run",
+   "last_run": null
+  },
+  {
+   "id": "V3",
+   "kind": "automated_test",
+   "how": "Test: the call at the limit succeeds, the next is refused with 429 and a Retry-After header, and no model request is sent for it.",
+   "last_result": "not_run",
+   "last_run": null
+  },
+  {
+   "id": "V4",
+   "kind": "automated_test",
+   "how": "Test: send a request carrying a marker string in a header and in the body, then search the log file for the marker; it must not appear.",
+   "last_result": "not_run",
+   "last_run": null
+  }
+ ]
+}

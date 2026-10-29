@@ -1,0 +1,3 @@
+build_timeline: wrote examples/standard-adoption-timeline/timeline.html (69032 bytes)
+  30 event(s): 29 dated, 1 undated. 13 source(s). 5 conflict pair(s): 1 disagreement, 1 announcement, 3 precision, 0 timezone, 0 not classed.
+RESULT: BUILT. The page is a view of the CSV; it has not been opened or looked at by this script.

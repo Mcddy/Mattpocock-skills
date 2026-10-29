@@ -1,0 +1,85 @@
+# Stock count: one flow through the page, the API and the database.
+# Start from an empty data file. The flow ends empty, so it can run twice in a row.
+expect:#tally=No items yet
+expect-count:#sheet .row=0
+# A bad count: the server's own message appears beside the field, and nothing is created.
+fill:#f-sku=bolt-m8
+fill:#f-name=M8 bolts
+fill:#f-qty=lots
+click:#add-go
+expect:#e-qty=must be a whole number
+expect-attr:#f-qty@aria-invalid=true
+expect-count:#sheet .row=0
+# Fix it and add with the Enter key.
+fill:#f-qty=12
+fill:#f-location=A3
+fill:#f-low_at=10
+press:#f-low_at=Enter
+expect:#status=Added M8 bolts
+expect-count:#sheet .row=1
+expect:[data-qty="BOLT-M8"]=12
+# The same code again is refused by the server.
+fill:#f-sku=BOLT-M8
+fill:#f-name=Other bolts
+fill:#f-qty=1
+click:#add-go
+expect:#e-sku=already in use
+expect-count:#sheet .row=1
+# Take 5: 12 becomes 7, which is at or below 10, so it is marked low.
+click:[data-step="5"]
+click:[data-sku="BOLT-M8"] [data-act="minus"]
+expect:[data-qty="BOLT-M8"]=7
+expect:[data-sku="BOLT-M8"] .lowmark=Low
+# Take 10 from 7: refused, and the count does not move.
+click:[data-step="10"]
+click:[data-sku="BOLT-M8"] [data-act="minus"]
+expect:[data-sku="BOLT-M8"] .rowmsg=cannot go below zero
+expect:[data-qty="BOLT-M8"]=7
+# By keyboard: add 10, and focus stays on the control that was used.
+press:[data-sku="BOLT-M8"] [data-act="plus"]=Enter
+expect:[data-qty="BOLT-M8"]=17
+expect-focus:[data-sku="BOLT-M8"] [data-act="plus"]
+press:[data-sku="BOLT-M8"] [data-act="minus"]=Enter
+expect:[data-qty="BOLT-M8"]=7
+expect-focus:[data-sku="BOLT-M8"] [data-act="minus"]
+# The count is on the server, not in the page: it is still 7 after a reload.
+reload:
+expect:[data-qty="BOLT-M8"]=7
+# A second item, then search and the low filter.
+fill:#f-sku=NUT-M8
+fill:#f-name=M8 nuts
+fill:#f-qty=200
+click:#add-go
+expect-count:#sheet .row=2
+fill:#q=nut
+expect-count:#sheet .row=1
+fill:#q=zzz
+expect:#sheet .blank=Nothing matches
+click:#sheet .blank button
+expect-count:#sheet .row=2
+click:#low-only
+expect-count:#sheet .row=1
+click:#low-only
+expect-count:#sheet .row=2
+# Display choices work and reset.
+click:#display-toggle
+click:[data-theme-choice="ember"]
+expect-attr:html@data-theme=ember
+click:[data-density-choice="compact"]
+expect-attr:html@data-density=compact
+click:#display-reset
+expect-attr:html@data-theme=paper
+expect-attr:html@data-density=comfortable
+# Removal is confirmed in the row. Keep first, then remove both.
+click:[data-sku="NUT-M8"] [data-act="remove"]
+expect-focus:[data-sku="NUT-M8"] [data-act="keep"]
+click:[data-sku="NUT-M8"] [data-act="keep"]
+expect-focus:[data-sku="NUT-M8"] [data-act="remove"]
+expect-count:#sheet .row=2
+click:[data-sku="NUT-M8"] [data-act="remove"]
+click:[data-sku="NUT-M8"] [data-act="confirm-remove"]
+expect:#status=Removed M8 nuts
+expect-count:#sheet .row=1
+click:[data-sku="BOLT-M8"] [data-act="remove"]
+click:[data-sku="BOLT-M8"] [data-act="confirm-remove"]
+expect:#tally=No items yet

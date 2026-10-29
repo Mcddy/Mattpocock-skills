@@ -1,0 +1,145 @@
+{
+ "today": "2026-10-09",
+ "made_with": "deep-research-orchestrator scripts/ledger_check.py --json --today 2026-10-09, run by the authoring session",
+ "cases": {
+  "eaa": {
+   "exit": 0,
+   "sources": 5,
+   "claims": 8,
+   "by_status": {
+    "FACT": 2,
+    "REPORTED": 3,
+    "ASSESSMENT": 1,
+    "MODEL_OUTPUT": 1,
+    "GAP": 1
+   },
+   "errors": [],
+   "advisories": [
+    "claim C2: the answer depends on a claim that is only REPORTED; say so where it is used",
+    "source S1: is 1884 days old and supports a load-bearing claim; recheck if the subject changes over time",
+    "source S2: has no publication date",
+    "source S3: has no address, so it cannot be found again",
+    "source S3: has no publication date",
+    "source S4: has no publication date",
+    "source S5: has no address, so it cannot be found again",
+    "source S5: has no publication date"
+   ]
+  },
+  "bad": {
+   "exit": 1,
+   "sources": 5,
+   "claims": 8,
+   "by_status": {
+    "FACT": 4,
+    "REPORTED": 1,
+    "ASSESSMENT": 1,
+    "MODEL_OUTPUT": 1,
+    "GAP": 0
+   },
+   "errors": [
+    "source S3 (line 4): published '20260901' is not a real date written YYYY-MM-DD",
+    "source S4 (line 5): published '2026-02-30' is not a real date written YYYY-MM-DD",
+    "source S4 (line 6): duplicate source_id",
+    "source S6 (line 7): tier 'gold' is not one of primary, peer_reviewed, secondary, aggregator, unverified",
+    "claim C1: cannot be a FACT: no source was opened (only snippet or relayed). Use REPORTED, or open a better source",
+    "claim C2: cannot be a FACT: no source was opened (only snippet or relayed); every source is aggregator or unverified tier; no source has an address. Use REPORTED, or open a better source",
+    "claim C3: cannot be a FACT: every source is aggregator or unverified tier. Use REPORTED, or open a better source",
+    "claim C4: is a FACT with no locator. Record where in the source it is",
+    "claim C5: MODEL_OUTPUT cannot be load-bearing. Open what it cites and record that as a new claim",
+    "claim C6: is an ASSESSMENT with no confidence",
+    "claim C7: cites unknown source(s) S9",
+    "claim C7: conflict with C4 is recorded on one side only",
+    "claim C8: status 'VERIFIED' is not one of FACT, REPORTED, ASSESSMENT, MODEL_OUTPUT, GAP"
+   ],
+   "advisories": [
+    "source S2: has no address, so it cannot be found again",
+    "source S2: has no publication date",
+    "source S6: is never cited. Remove it or record what it contributed"
+   ]
+  },
+  "edge": {
+   "exit": 1,
+   "sources": 13,
+   "claims": 28,
+   "by_status": {
+    "FACT": 7,
+    "REPORTED": 13,
+    "ASSESSMENT": 2,
+    "MODEL_OUTPUT": 4,
+    "GAP": 1
+   },
+   "errors": [
+    "source S7 (line 8): published after it was accessed",
+    "source S8 (line 9): accessed date is missing",
+    "source S9 (line 10): published 2027-01-01 is in the future",
+    "source S9 (line 10): published after it was accessed",
+    "source S12 (line 13): tier \"o'k\" is not one of primary, peer_reviewed, secondary, aggregator, unverified",
+    "source S12 (line 13): read_level 'a\\'b\"c' is not one of full, section, snippet, relayed",
+    "source S12 (line 13): published '2026-02-30' is not a real date written YYYY-MM-DD",
+    "source ? (line 14): has no source_id",
+    "source S1 (line 15): duplicate source_id",
+    "source S13 (line 16): published '20260901' is not a real date written YYYY-MM-DD",
+    "source S13 (line 16): accessed '09/10/2026' is not a real date written YYYY-MM-DD",
+    "claim C1 (line 25): duplicate claim_id",
+    "claim ? (line 26): has no claim_id",
+    "claim C3: cannot be a FACT: every source is aggregator or unverified tier. Use REPORTED, or open a better source",
+    "claim C4: cannot be a FACT: no source was opened (only snippet or relayed). Use REPORTED, or open a better source",
+    "claim C5: cannot be a FACT: no source has an address. Use REPORTED, or open a better source",
+    "claim C6: cannot be a FACT: no single source is opened, addressed and at secondary tier or better. Use REPORTED, or open a better source",
+    "claim C7: is a FACT with no source",
+    "claim C7: is a FACT with no locator. Record where in the source it is",
+    "claim C8: is REPORTED with no source. If nothing was found it is a GAP",
+    "claim C10: MODEL_OUTPUT cannot be load-bearing. Open what it cites and record that as a new claim",
+    "claim C11: is an ASSESSMENT with no confidence",
+    "claim C12: confidence 'hi\\\\gh' is not one of high, moderate, low",
+    "claim C16: is recorded as conflicting with itself",
+    "claim C17: conflicts_with is set, so conflict_class must be one of scope_mismatch, time_supersession, method_difference, direct_conflict, insufficient_evidence",
+    "claim C17: conflicts_with unknown claim C99",
+    "claim C18: conflict with C1 is recorded on one side only",
+    "claim C19: conflict_class is set but conflicts_with is empty",
+    "claim C20: status 'Fact' is not one of FACT, REPORTED, ASSESSMENT, MODEL_OUTPUT, GAP",
+    "claim C21: load_bearing must be yes or no, got 'maybe'",
+    "claim C22: has no statement",
+    "claim C23: cites unknown source(s) S77, S78"
+   ],
+   "advisories": [
+    "claim C2: load-bearing FACT rests on one independent source family, none of it primary",
+    "claim C8: the answer depends on a claim that is only REPORTED; say so where it is used",
+    "claim C13: is a GAP but cites sources; if they say something, record that as its own claim",
+    "claim C14: open direct conflict with C15: show both in the write-up and name what would settle it",
+    "claim C15: the answer depends on a claim that is only REPORTED; say so where it is used",
+    "claim C15: open direct conflict with C14: show both in the write-up and name what would settle it",
+    "claim C28: open insufficient evidence with C29: show both in the write-up and name what would settle it",
+    "source S1: is 2473 days old and supports a load-bearing claim; recheck if the subject changes over time",
+    "source S2: has no publication date",
+    "source S4: has no publication date",
+    "source S5: has no address, so it cannot be found again",
+    "source S5: has no publication date",
+    "source S6: has no publication date",
+    "source S8: has no publication date",
+    "source S10: is never cited. Remove it or record what it contributed",
+    "source S11: has no address, so it cannot be found again",
+    "source S11: has no publication date"
+   ]
+  },
+  "near": {
+   "exit": 0,
+   "sources": 3,
+   "claims": 7,
+   "by_status": {
+    "FACT": 2,
+    "REPORTED": 2,
+    "ASSESSMENT": 1,
+    "MODEL_OUTPUT": 1,
+    "GAP": 1
+   },
+   "errors": [],
+   "advisories": [
+    "claim C1: load-bearing FACT rests on one independent source family, none of it primary",
+    "source S2: has no publication date",
+    "source S3: has no address, so it cannot be found again",
+    "source S3: has no publication date"
+   ]
+  }
+ }
+}

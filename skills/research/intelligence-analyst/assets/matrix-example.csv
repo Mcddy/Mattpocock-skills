@@ -1,0 +1,9 @@
+evidence,credibility,relevance,H1 tracking broke,H2 pricing page change,H3 seasonal dip,H4 competitor launch
+E1 billing system shows paid sign-ups down 38 percent (SYNTHETIC),high,high,II,C,C,C
+E2 analytics tag error rate is normal,medium,medium,I,N,N,N
+E3 the drop began the day the pricing page changed,high,high,N,CC,I,I
+E4 the same week last year dipped 5 percent,medium,medium,N,N,C,N
+E5 the competitor launched three weeks before the drop,medium,medium,N,N,N,I
+E6 site traffic is unchanged,high,medium,N,C,I,I
+E7 three support tickets say the monthly plan is hard to find,low,medium,N,C,N,N
+E8 the team is worried about the numbers,high,low,N,N,N,N

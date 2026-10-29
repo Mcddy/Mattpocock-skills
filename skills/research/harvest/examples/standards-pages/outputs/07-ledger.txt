@@ -1,0 +1,4 @@
+harvest ledger: 11 row(s) written to sources.csv
+  OMITTED   S8 was never collected (robots: Disallow: /drafts/ (group *))
+  OMITTED   S11 was never collected (timed out after 20 s)
+RESULT: PASS. Every row has read_level snippet: fetched is not read. Open and read a source, then raise its read_level by hand.

@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-density="comfortable" data-api="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stock count</title>
+<!--
+  The page for the Stock count reference slice. One file, no build step, no outside requests.
+  It asks the server for everything and decides nothing: validation, uniqueness and the
+  "cannot go below zero" rule live in server.py. This page shows what the server said.
+
+  Delivery notes (each is exercised by scripts/delivery_check.py):
+  - No form element and no submit event. Buttons are type=button with click handlers, and Enter
+    in a field calls the same function. A sandboxed frame without allow-forms drops form submits.
+  - No alert, confirm or prompt. Removal is confirmed in the row.
+  - Browser storage is optional. Display choices are kept if storage works and still apply for the
+    visit if it does not.
+  - The API address is the page's own origin. To show this page from somewhere else, set data-api
+    on the html element to the server's address.
+-->
+<style>
+:root{
+  --bg:#f5efe4;--surface:#fffaf1;--raised:#fbf4e6;--ink:#2a2320;--muted:#655a50;--line:#d8ccba;
+  --accent:#8f4319;--on-accent:#fffaf1;--accent-soft:#f0dccb;
+  --warn:#8e2a1c;--warn-soft:#f6ddd3;--ok:#2c6446;--focus:#1f5c8a;
+  --row-pad:14px;--gap:14px;--target:44px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="slate"]{
+  --bg:#eef1f3;--surface:#fbfcfd;--raised:#f3f6f8;--ink:#1f2a30;--muted:#51606a;--line:#c8d2d8;
+  --accent:#245a7a;--on-accent:#fbfcfd;--accent-soft:#d6e4ec;
+  --warn:#8a2a22;--warn-soft:#f3dcd8;--ok:#27634a;--focus:#7a3c12;
+}
+:root[data-theme="ember"]{
+  --bg:#231c18;--surface:#2d2520;--raised:#372d27;--ink:#f3e9dc;--muted:#c2b3a2;--line:#54463c;
+  --accent:#f0a36b;--on-accent:#231c18;--accent-soft:#4a3528;
+  --warn:#ffac99;--warn-soft:#4c2a23;--ok:#9ed6b3;--focus:#9fd0f2;
+}
+:root[data-theme="night"]{
+  --bg:#12171c;--surface:#1a2128;--raised:#222b33;--ink:#e8eef2;--muted:#a9b8c2;--line:#3a4853;
+  --accent:#8cc4e8;--on-accent:#12171c;--accent-soft:#243846;
+  --warn:#ffb0a3;--warn-soft:#452622;--ok:#9bd8b6;--focus:#f2c08a;
+}
+:root[data-density="compact"]{--row-pad:8px;--gap:10px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
+.wrap{max-width:920px;margin:0 auto;padding:20px 16px 56px}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+h1{font:600 1.75rem/1.15 var(--serif);margin:0;letter-spacing:-.01em}
+.tally{color:var(--muted);margin:4px 0 0;font-size:.95rem}
+.tally b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled,button[aria-disabled="true"]{cursor:default;opacity:.55}
+.btn{min-height:var(--target);padding:0 16px;border:1px solid var(--line);background:var(--surface);border-radius:6px}
+.btn:hover:not(:disabled){border-color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.btn.danger{border-color:var(--warn);color:var(--warn)}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+input[type=text],input[type=search]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:var(--target);padding:0 12px;width:100%}
+input[aria-invalid="true"]{border-color:var(--warn);border-width:2px}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+
+.display{margin-top:12px;background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:14px}
+.display[hidden]{display:none}
+.display h2{font:600 1rem var(--sans);margin:0}
+.choice{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.choice .lab{width:76px;color:var(--muted);font-size:.9rem}
+.seg{min-height:var(--target);padding:0 14px;border:1px solid var(--line);background:var(--surface);border-radius:6px}
+.seg[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);font-weight:600}
+
+.tools{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:end;margin:18px 0 6px}
+.step{display:flex;gap:6px;align-items:center}
+.step .lab{font-size:.85rem;color:var(--muted);margin-right:2px}
+.status{min-height:1.6em;margin:8px 0;color:var(--muted);font-size:.95rem}
+.status.bad{color:var(--warn);font-weight:600}
+
+.sheet{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--gap);align-items:center;padding:var(--row-pad) 4px;border-bottom:1px solid var(--line)}
+.row.low{box-shadow:inset 4px 0 0 var(--warn);padding-left:14px}
+.what{min-width:0}
+.name{font-weight:600;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
+.sku{font-family:var(--mono);font-size:.84rem;letter-spacing:.02em}
+.lowmark{color:var(--warn);font-weight:600}
+.count{display:flex;align-items:center;gap:6px}
+.pm{width:var(--target);height:var(--target);border:1px solid var(--line);background:var(--surface);border-radius:6px;font-size:1.25rem;line-height:1;display:grid;place-items:center}
+.pm:hover:not(:disabled){border-color:var(--ink)}
+.qty{min-width:3.4ch;text-align:center;font:600 1.4rem/1 var(--mono);font-variant-numeric:tabular-nums}
+.rowmsg{grid-column:1/-1;color:var(--warn);font-size:.9rem;font-weight:600}
+.confirm{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--warn-soft);border-radius:6px;padding:10px 12px}
+.confirm span{flex:1 1 200px}
+
+.blank{padding:36px 12px;text-align:center;border-bottom:1px solid var(--line)}
+.blank h2{font:600 1.2rem var(--serif);margin:0 0 6px}
+.blank p{margin:0 auto 14px;color:var(--muted);max-width:44ch}
+.ghost{height:calc(var(--target) + var(--row-pad) * 2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 4px}
+.ghost i{display:block;height:12px;border-radius:6px;background:var(--line)}
+
+.add{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+.add h2{font:600 1.15rem var(--serif);margin:0 0 12px}
+.fields{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.f-sku{grid-column:span 3}.f-name{grid-column:span 5}.f-qty{grid-column:span 2}.f-loc{grid-column:span 2}
+.f-low{grid-column:span 4}.f-go{grid-column:span 8;display:flex;align-items:end;justify-content:flex-end;gap:10px}
+.err{color:var(--warn);font-size:.85rem;font-weight:600;margin-top:4px;min-height:0}
+.foot{margin-top:26px;color:var(--muted);font-size:.85rem}
+@media (max-width:640px){
+  h1{font-size:1.45rem}
+  .tools{grid-template-columns:minmax(0,1fr) auto}
+  .tools>div:first-child{grid-column:1/-1}
+  .tools #low-only{justify-self:start}
+  .row{grid-template-columns:minmax(0,1fr) auto}
+  .row .what{grid-column:1/-1}
+  .row .count{justify-self:start}
+  .row .remove{justify-self:end}
+  .f-sku,.f-name,.f-loc,.f-low,.f-qty{grid-column:span 12}
+  .f-go{grid-column:span 12;justify-content:stretch}.f-go .btn{flex:1}
+}
+@media (prefers-reduced-motion:no-preference){.row,.btn,.pm,.seg{transition:border-color .12s ease,background-color .12s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Stock count</h1>
+      <p class="tally" id="tally">Loading the count.</p>
+    </div>
+    <button type="button" class="btn" id="display-toggle" aria-expanded="false" aria-controls="display">Display</button>
+  </header>
+
+  <section class="display" id="display" hidden aria-label="Display choices">
+    <div class="choice" role="group" aria-label="Theme">
+      <span class="lab">Theme</span>
+      <button type="button" class="seg" data-theme-choice="paper">Paper</button>
+      <button type="button" class="seg" data-theme-choice="slate">Slate</button>
+      <button type="button" class="seg" data-theme-choice="ember">Ember</button>
+      <button type="button" class="seg" data-theme-choice="night">Night</button>
+    </div>
+    <div class="choice" role="group" aria-label="Row spacing">
+      <span class="lab">Rows</span>
+      <button type="button" class="seg" data-density-choice="comfortable">Comfortable</button>
+      <button type="button" class="seg" data-density-choice="compact">Compact</button>
+    </div>
+    <div class="choice">
+      <button type="button" class="btn quiet" id="display-reset">Reset display</button>
+      <span class="lab" id="display-note" style="width:auto"></span>
+    </div>
+  </section>
+
+  <div class="tools" role="search">
+    <div>
+      <label for="q">Find by code, name or shelf</label>
+      <input type="search" id="q" autocomplete="off" spellcheck="false">
+    </div>
+    <button type="button" class="seg" id="low-only" aria-pressed="false">Low stock only</button>
+    <div class="step" role="group" aria-label="Count step">
+      <span class="lab">Step</span>
+      <button type="button" class="seg" data-step="1">1</button>
+      <button type="button" class="seg" data-step="5">5</button>
+      <button type="button" class="seg" data-step="10">10</button>
+    </div>
+  </div>
+
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <ul class="sheet" id="sheet" aria-label="Items"></ul>
+
+  <section class="add" aria-labelledby="add-h">
+    <h2 id="add-h">Add an item</h2>
+    <div class="fields" id="add-fields">
+      <div class="f-sku"><label for="f-sku">Code</label><input type="text" id="f-sku" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="e-sku"><div class="err" id="e-sku"></div></div>
+      <div class="f-name"><label for="f-name">Name</label><input type="text" id="f-name" autocomplete="off" aria-describedby="e-name"><div class="err" id="e-name"></div></div>
+      <div class="f-qty"><label for="f-qty">Count</label><input type="text" id="f-qty" inputmode="numeric" autocomplete="off" aria-describedby="e-qty"><div class="err" id="e-qty"></div></div>
+      <div class="f-loc"><label for="f-location">Shelf</label><input type="text" id="f-location" autocomplete="off" aria-describedby="e-location"><div class="err" id="e-location"></div></div>
+      <div class="f-low"><label for="f-low_at">Flag as low at or below</label><input type="text" id="f-low_at" inputmode="numeric" autocomplete="off" value="0" aria-describedby="e-low_at"><div class="err" id="e-low_at"></div></div>
+      <div class="f-go"><button type="button" class="btn primary" id="add-go">Add item</button></div>
+    </div>
+  </section>
+
+  <p class="foot">Counts are kept by the server. This page keeps only your display choices, and only if the browser allows it.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var API = (document.documentElement.getAttribute('data-api') || '').replace(/\/+$/, '');
+  var FIELDS = ['sku', 'name', 'qty', 'location', 'low_at'];
+  var DEFAULTS = {theme: 'paper', density: 'comfortable'};
+  var S = {
+    items: [], total: 0, phase: 'loading', loadError: '', q: '', low: false, step: 1,
+    busy: {}, rowMsg: {}, confirming: null, saving: false, draftKey: null, seq: 0
+  };
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---------- display choices: storage is optional ----------
+  var store = {
+    ok: false,
+    read: function () { try { var v = JSON.parse(localStorage.getItem('stockcount:display') || 'null'); this.ok = true; return v; } catch (e) { this.ok = false; return null; } },
+    write: function (v) { try { localStorage.setItem('stockcount:display', JSON.stringify(v)); this.ok = true; } catch (e) { this.ok = false; } },
+    clear: function () { try { localStorage.removeItem('stockcount:display'); this.ok = true; } catch (e) { this.ok = false; } }
+  };
+  var display = {theme: DEFAULTS.theme, density: DEFAULTS.density};
+  function applyDisplay() {
+    var root = document.documentElement;
+    root.setAttribute('data-theme', display.theme);
+    root.setAttribute('data-density', display.density);
+    document.querySelectorAll('[data-theme-choice]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-choice') === display.theme)); });
+    document.querySelectorAll('[data-density-choice]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-density-choice') === display.density)); });
+    $('display-note').textContent = store.ok ? 'Saved in this browser.' : 'This browser is not keeping settings, so these last for this visit.';
+  }
+  function loadDisplay() {
+    var v = store.read();
+    if (v && ['paper', 'slate', 'ember', 'night'].indexOf(v.theme) >= 0) display.theme = v.theme;
+    if (v && ['comfortable', 'compact'].indexOf(v.density) >= 0) display.density = v.density;
+    applyDisplay();
+  }
+
+  // ---------- one way to talk to the server ----------
+  function api(method, path, body, headers) {
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, 8000) : null;
+    var h = headers || {};
+    if (body !== undefined) h['Content-Type'] = 'application/json';
+    return fetch(API + path, {method: method, headers: h, body: body === undefined ? undefined : JSON.stringify(body), signal: ctl ? ctl.signal : undefined})
+      .then(function (res) {
+        if (res.status === 204) return null;
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (res.ok) return data;
+          var e = (data && data.error) || {};
+          throw {status: res.status, code: e.code || 'unknown', message: e.message || 'The server refused the request.', fields: e.fields || {}};
+        });
+      }, function () {
+        throw {network: true, code: 'network', message: 'Could not reach the server.', fields: {}};
+      })
+      .finally(function () { if (timer) clearTimeout(timer); });
+  }
+  function newKey() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'k-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+  }
+
+  // ---------- reading ----------
+  function load(quiet) {
+    var mine = ++S.seq;
+    if (!quiet) { S.phase = 'loading'; render(); }
+    var qs = [];
+    if (S.q) qs.push('q=' + encodeURIComponent(S.q));
+    if (S.low) qs.push('low=1');
+    return api('GET', '/api/items' + (qs.length ? '?' + qs.join('&') : '')).then(function (data) {
+      if (mine !== S.seq) return;            // a newer request has been sent; drop this answer
+      S.items = data.items; S.total = data.total; S.phase = 'ready'; S.loadError = '';
+      render();
+    }, function (err) {
+      if (mine !== S.seq) return;
+      S.phase = 'error'; S.loadError = err.message;
+      render();
+    });
+  }
+
+  // ---------- writing ----------
+  function adjust(item, delta) {
+    if (S.busy[item.id]) return;
+    S.busy[item.id] = true; delete S.rowMsg[item.id]; render();
+    api('POST', '/api/items/' + item.id + '/adjust', {delta: delta}).then(function (updated) {
+      replaceItem(updated);
+      say(updated.name + ': ' + updated.qty + '.');
+    }, function (err) {
+      if (err.network) {
+        // Adjust is not safe to repeat blindly: the change may or may not have applied.
+        S.rowMsg[item.id] = 'No answer from the server, so this change is unconfirmed. The count below has been re-read.';
+        return load(true);
+      }
+      if (err.status === 404) { say(item.name + ' no longer exists. The list has been re-read.', true); return load(true); }
+      S.rowMsg[item.id] = err.message;
+    }).finally(function () { delete S.busy[item.id]; render(); });
+  }
+  function remove(item) {
+    S.busy[item.id] = true; render();
+    api('DELETE', '/api/items/' + item.id).then(function () {
+      S.confirming = null;
+      say('Removed ' + item.name + '.');
+      return load(true).then(function () { $('q').focus(); });
+    }, function (err) {
+      S.confirming = null;
+      if (err.status === 404) { say(item.name + ' was already removed.'); return load(true); }
+      S.rowMsg[item.id] = err.message + ' Nothing was removed.';
+    }).finally(function () { delete S.busy[item.id]; render(); });
+  }
+  function readDraft() {
+    var d = {};
+    FIELDS.forEach(function (f) { d[f] = $('f-' + f).value.trim(); });
+    d.sku = d.sku.toUpperCase();
+    // Whole numbers are sent as numbers. Anything else is sent as typed, so the server's rule
+    // (and its message) is the one the user sees.
+    ['qty', 'low_at'].forEach(function (f) { if (/^\d{1,7}$/.test(d[f])) d[f] = parseInt(d[f], 10); });
+    return d;
+  }
+  function showFieldErrors(fields) {
+    var first = null;
+    FIELDS.forEach(function (f) {
+      var msg = fields[f] || '';
+      $('e-' + f).textContent = msg;
+      $('f-' + f).setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (msg && !first) first = $('f-' + f);
+    });
+    return first;
+  }
+  function add() {
+    if (S.saving) return;
+    var draft = readDraft();
+    // One key per attempt to add this draft. A retry after a lost answer reuses it, so the
+    // server returns the first result and never creates the item twice.
+    if (!S.draftKey) S.draftKey = newKey();
+    S.saving = true; $('add-go').disabled = true; $('add-go').textContent = 'Adding';
+    showFieldErrors({});
+    api('POST', '/api/items', draft, {'Idempotency-Key': S.draftKey}).then(function (created) {
+      S.draftKey = null;
+      FIELDS.forEach(function (f) { $('f-' + f).value = f === 'low_at' ? '0' : ''; });
+      say('Added ' + created.name + ' with a count of ' + created.qty + '.');
+      return load(true).then(function () { $('f-sku').focus(); });
+    }, function (err) {
+      if (err.network) { say('Could not reach the server. Nothing has been lost: press Add item to try again.', true); return; }
+      S.draftKey = null;                       // the server answered; a changed draft is a new attempt
+      var first = showFieldErrors(err.fields);
+      say(err.message, true);
+      if (first) first.focus();
+    }).finally(function () { S.saving = false; $('add-go').disabled = false; $('add-go').textContent = 'Add item'; });
+  }
+
+  // ---------- helpers ----------
+  function replaceItem(updated) {
+    for (var i = 0; i < S.items.length; i++) if (S.items[i].id === updated.id) S.items[i] = updated;
+    if (S.low && !updated.low) S.items = S.items.filter(function (x) { return x.id !== updated.id; });
+  }
+  function say(text, bad) { var el = $('status'); el.textContent = text; el.className = 'status' + (bad ? ' bad' : ''); }
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'on') Object.keys(attrs.on).forEach(function (ev) { n.addEventListener(ev, attrs.on[ev]); });
+      else if (attrs[k] !== false && attrs[k] != null) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+
+  // ---------- drawing (text is always set as text, never as markup) ----------
+  function render() {
+    var keep = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-fk');
+    var sheet = $('sheet');
+    sheet.textContent = '';
+    sheet.setAttribute('aria-busy', String(S.phase === 'loading'));
+    var lowCount = S.items.filter(function (x) { return x.low; }).length;
+
+    if (S.phase === 'loading') {
+      $('tally').textContent = 'Loading the count.';
+      for (var g = 0; g < 4; g++) sheet.appendChild(el('li', {class: 'ghost', 'aria-hidden': 'true'}, [el('i', {style: 'width:' + (34 - g * 5) + '%'}), el('i', {style: 'width:14%'})]));
+    } else if (S.phase === 'error') {
+      $('tally').textContent = 'The count could not be loaded.';
+      sheet.appendChild(el('li', {class: 'blank'}, [
+        el('h2', {text: 'The server did not answer'}),
+        el('p', {text: S.loadError + ' Nothing on the server has changed. Check that it is running, then try again.'}),
+        el('button', {type: 'button', class: 'btn primary', 'data-fk': 'retry', text: 'Try again', on: {click: function () { load(); }}})
+      ]));
+    } else {
+      var t = $('tally'); t.textContent = '';
+      if (S.total === 0) t.textContent = 'No items yet.';
+      else {
+        t.appendChild(el('b', {text: String(S.total)}));
+        t.appendChild(document.createTextNode(S.total === 1 ? ' item on the sheet' : ' items on the sheet'));
+        if (S.q || S.low) { t.appendChild(document.createTextNode(', showing ')); t.appendChild(el('b', {text: String(S.items.length)})); }
+        if (lowCount) { t.appendChild(document.createTextNode(', ')); t.appendChild(el('b', {text: String(lowCount)})); t.appendChild(document.createTextNode(' low')); }
+      }
+      if (S.total === 0) {
+        sheet.appendChild(el('li', {class: 'blank'}, [
+          el('h2', {text: 'Nothing on the sheet yet'}),
+          el('p', {text: 'Add the first item below. Give it the code you write on the shelf label, so you can find it again by typing that code.'}),
+          el('button', {type: 'button', class: 'btn', 'data-fk': 'first', text: 'Go to Add an item', on: {click: function () { $('f-sku').focus(); }}})
+        ]));
+      } else if (S.items.length === 0) {
+        sheet.appendChild(el('li', {class: 'blank'}, [
+          el('h2', {text: S.q ? 'Nothing matches "' + S.q + '"' : 'Nothing is low'}),
+          el('p', {text: S.q ? 'The search looks at codes, names and shelves. ' + (S.low ? 'It is also limited to low stock.' : '') : 'Every item is above the level you set for it.'}),
+          el('button', {type: 'button', class: 'btn', 'data-fk': 'clear', text: 'Show everything', on: {click: clearFilters}})
+        ]));
+      } else {
+        S.items.forEach(function (item) { sheet.appendChild(rowFor(item)); });
+      }
+    }
+    if (keep) { var again = document.querySelector('[data-fk="' + keep + '"]'); if (again) again.focus(); }
+  }
+  function rowFor(item) {
+    // A waiting control is marked aria-disabled and ignores clicks. It is not given the disabled
+    // attribute, because a disabled button drops keyboard focus and the user loses their place.
+    var busy = !!S.busy[item.id];
+    var meta = [el('span', {class: 'sku', text: item.sku})];
+    if (item.location) meta.push(el('span', {text: 'Shelf ' + item.location}));
+    if (item.low) meta.push(el('span', {class: 'lowmark', text: 'Low: at or below ' + item.low_at}));
+    var kids = [
+      el('div', {class: 'what'}, [el('div', {class: 'name', text: item.name}), el('div', {class: 'meta'}, meta)]),
+      el('div', {class: 'count', role: 'group', 'aria-label': 'Count for ' + item.name}, [
+        el('button', {type: 'button', class: 'pm', 'data-fk': 'minus-' + item.id, 'data-act': 'minus', 'aria-disabled': busy ? 'true' : null, 'aria-label': 'Take ' + S.step + ' from ' + item.name, text: '−', on: {click: function () { adjust(item, -S.step); }}}),
+        el('span', {class: 'qty', 'data-qty': item.sku, text: String(item.qty)}),
+        el('button', {type: 'button', class: 'pm', 'data-fk': 'plus-' + item.id, 'data-act': 'plus', 'aria-disabled': busy ? 'true' : null, 'aria-label': 'Add ' + S.step + ' to ' + item.name, text: '+', on: {click: function () { adjust(item, S.step); }}})
+      ]),
+      el('button', {type: 'button', class: 'btn quiet remove', 'data-fk': 'remove-' + item.id, 'data-act': 'remove', 'aria-disabled': busy ? 'true' : null, 'aria-label': 'Remove ' + item.name, text: 'Remove', on: {click: function () { if (S.busy[item.id]) return; S.confirming = item.id; render(); var k = document.querySelector('[data-fk="keep-' + item.id + '"]'); if (k) k.focus(); }}})
+    ];
+    if (S.rowMsg[item.id]) kids.push(el('div', {class: 'rowmsg', role: 'alert', text: S.rowMsg[item.id]}));
+    if (S.confirming === item.id) kids.push(el('div', {class: 'confirm'}, [
+      el('span', {text: 'Remove ' + item.name + ' and its count of ' + item.qty + '? This cannot be undone.'}),
+      el('button', {type: 'button', class: 'btn', 'data-fk': 'keep-' + item.id, 'data-act': 'keep', text: 'Keep it', on: {click: function () { S.confirming = null; render(); var r = document.querySelector('[data-fk="remove-' + item.id + '"]'); if (r) r.focus(); }}}),
+      el('button', {type: 'button', class: 'btn danger', 'data-fk': 'gone-' + item.id, 'data-act': 'confirm-remove', 'aria-disabled': busy ? 'true' : null, text: 'Remove', on: {click: function () { if (!S.busy[item.id]) remove(item); }}})
+    ]));
+    return el('li', {class: 'row' + (item.low ? ' low' : ''), 'data-sku': item.sku}, kids);
+  }
+  function clearFilters() { S.q = ''; S.low = false; $('q').value = ''; $('low-only').setAttribute('aria-pressed', 'false'); load(true).then(function () { $('q').focus(); }); }
+  function setStep(n) {
+    S.step = n;
+    document.querySelectorAll('[data-step]').forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.getAttribute('data-step')) === n)); });
+    render();
+  }
+
+  // ---------- wiring ----------
+  var searchTimer = null;
+  $('q').addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    var v = this.value.trim();
+    searchTimer = setTimeout(function () { S.q = v; load(true); }, 180);
+  });
+  $('low-only').addEventListener('click', function () { S.low = !S.low; this.setAttribute('aria-pressed', String(S.low)); load(true); });
+  document.querySelectorAll('[data-step]').forEach(function (b) { b.addEventListener('click', function () { setStep(Number(b.getAttribute('data-step'))); }); });
+  $('add-go').addEventListener('click', add);
+  $('add-fields').addEventListener('keydown', function (ev) { if (ev.key === 'Enter' && ev.target.tagName === 'INPUT') { ev.preventDefault(); add(); } });
+  FIELDS.forEach(function (f) { $('f-' + f).addEventListener('input', function () { S.draftKey = null; }); });
+  $('display-toggle').addEventListener('click', function () {
+    var open = this.getAttribute('aria-expanded') !== 'true';
+    this.setAttribute('aria-expanded', String(open));
+    $('display').hidden = !open;
+  });
+  document.querySelectorAll('[data-theme-choice]').forEach(function (b) { b.addEventListener('click', function () { display.theme = b.getAttribute('data-theme-choice'); store.write(display); applyDisplay(); }); });
+  document.querySelectorAll('[data-density-choice]').forEach(function (b) { b.addEventListener('click', function () { display.density = b.getAttribute('data-density-choice'); store.write(display); applyDisplay(); }); });
+  $('display-reset').addEventListener('click', function () { display = {theme: DEFAULTS.theme, density: DEFAULTS.density}; store.clear(); applyDisplay(); });
+
+  loadDisplay();
+  setStep(1);
+  load();
+})();
+</script>
+</body>
+</html>

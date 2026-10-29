@@ -1,0 +1,121 @@
+{
+ "job_id": "standards-pages",
+ "description": "SYNTHETIC example. Collect the Board's four published standards, its last two sets of minutes, its notices feed and its register file, to record what each standard required on the day it was fetched.",
+ "people": "none",
+ "user_agent": "harvest/1.0 (standards collection example; contact: reviewer@harvest-example.invalid)",
+ "delay_seconds": 2,
+ "max_requests": 60,
+ "max_bytes": 20000000,
+ "timeout_seconds": 20,
+ "sources": [
+  {
+   "id": "S1",
+   "address": "https://standards.example/index.html",
+   "title": "Published standards (index)",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page"
+  },
+  {
+   "id": "S2",
+   "address": "https://standards.example/standards/hl-101.html",
+   "title": "HL-101 Mounting heights",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page",
+   "published": "2026-03-01"
+  },
+  {
+   "id": "S3",
+   "address": "https://standards.example/standards/hl-102.html",
+   "title": "HL-102 Lamp colour",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page",
+   "published": "2026-03-01"
+  },
+  {
+   "id": "S4",
+   "address": "https://standards.example/standards/hl-103.html",
+   "title": "HL-103 Inspection intervals",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page"
+  },
+  {
+   "id": "S5",
+   "address": "https://standards.example/standards/hl-104.html",
+   "title": "HL-104 Backup power",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page",
+   "published": "2026-03-01"
+  },
+  {
+   "id": "S6",
+   "address": "https://standards.example/committee/minutes-41.html",
+   "title": "Committee meeting 41: minutes",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page",
+   "published": "2026-08-12"
+  },
+  {
+   "id": "S7",
+   "address": "https://standards.example/committee/minutes-42.html",
+   "title": "Committee meeting 42: minutes",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page",
+   "published": "2026-09-23"
+  },
+  {
+   "id": "S8",
+   "address": "https://standards.example/drafts/hl-105-draft.html",
+   "title": "HL-105 Solar units (working draft)",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page"
+  },
+  {
+   "id": "S9",
+   "address": "https://standards.example/old/hl-100.html",
+   "title": "HL-100 General requirements (old address)",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page"
+  },
+  {
+   "id": "S10",
+   "address": "https://standards.example/consultations.html",
+   "title": "Consultations",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "page"
+  },
+  {
+   "id": "S11",
+   "address": "https://standards.example/archive/2019-index.html",
+   "title": "Archive index 2019",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "secondary",
+   "kind": "page"
+  },
+  {
+   "id": "S12",
+   "address": "https://standards.example/feed.xml",
+   "title": "Notices feed",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "feed"
+  },
+  {
+   "id": "S13",
+   "address": "https://files.standards.example/hl-register.pdf",
+   "title": "Register of standards (file)",
+   "publisher": "Harbour Lighting Standards Board (SYNTHETIC)",
+   "tier": "primary",
+   "kind": "file"
+  }
+ ]
+}

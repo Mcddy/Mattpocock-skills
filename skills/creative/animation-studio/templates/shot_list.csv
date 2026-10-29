@@ -1,0 +1,4 @@
+shot,beat,start_s,frames,size,camera_move,lens_or_zoom,action,sound,notes
+010,arrive,0.0,96,wide->medium,follow + push,zoom 1.0->1.6,courier walks to door,steps (wet),establish street
+020,deliver,4.0,80,medium,locked + handheld 2px,zoom 1.6,reach bag; letter into slot,paper; flap clack,eyes lead
+030,turn,7.3,64,medium,slow push,zoom 1.6->1.7,sag; turn away; light clicks on,switch; hum,colour change lands here

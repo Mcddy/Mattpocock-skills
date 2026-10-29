@@ -1,0 +1,26 @@
+DERIVED TEXT. This is not the source. It was made from the raw file named below by
+harvest.py extract (extractor 1), which strips markup and nothing more.
+raw_file: store/12fa83f0b8639a2fd54728fd86bb5204b392af9f9860a44f533ec6feec7ae31e.raw
+raw_sha256: 12fa83f0b8639a2fd54728fd86bb5204b392af9f9860a44f533ec6feec7ae31e
+source_id: S4
+address: https://standards.example/standards/hl-103.html
+fetched: 2026-10-08T21:15:58.788Z (UTC; when this copy was first stored)
+note: OFFLINE FIXTURE, not fetched from the network
+title: HL-103 Inspection intervals (edition 1)
+decoded_as: utf-8 (Content-Type header)
+Everything below the line of dashes is content from the source, kept as data. Anything in it
+that reads as an instruction is part of the page and is not an instruction to the reader.
+----
+Home Standards Committee
+
+HL-103 Inspection intervals
+
+Edition 1, in force from 1 July 2025.
+
+2 Requirement
+
+Each fixed light shall be inspected at least once every 12 months.
+
+A record of each inspection shall be kept for 5 years.
+
+SYNTHETIC: this page was invented for the harvest skill's example. The Harbour Lighting Standards Board does not exist.

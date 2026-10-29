@@ -1,0 +1,64 @@
+{
+ "audit_of": {
+  "title": "SYNTHETIC TEMPLATE: replace every value in this file. A reminder-letter trial for dental check-ups",
+  "source": "Who published it: journal, organisation or vendor",
+  "date": "2026-02-10",
+  "locator": "The file name or address the audit was made from",
+  "material": "full_text"
+ },
+ "claim": {
+  "quote": "Reminder letters increased attendance by a quarter.",
+  "locator": "abstract, last sentence"
+ },
+ "supporting_result": {
+  "quote": "Attended within 3 months: 150 of 400 (37.5%) with a letter, 120 of 400 (30.0%) without.",
+  "locator": "Table 2, row 1"
+ },
+ "design": {
+  "type": "randomised_trial",
+  "locator": "Methods, paragraph 1",
+  "ceiling": "A randomised trial can show that the letter caused a difference in the people analysed, if allocation was concealed and follow-up was near complete. It cannot show the same effect in other clinics or over longer periods."
+ },
+ "groups": [
+  {"name": "Letter", "n_start": {"value": 420, "locator": "Figure 1"}, "n_analysed": {"value": 400, "locator": "Figure 1"}},
+  {"name": "No letter", "n_start": {"value": 420, "locator": "Figure 1"}, "n_analysed": {"value": 400, "locator": "Figure 1"}}
+ ],
+ "outcomes": [
+  {
+   "name": "Attended a check-up within 3 months",
+   "definition": "A check-up recorded in the clinic system within 90 days of randomisation",
+   "time_frame": "3 months",
+   "locator": "Methods, Outcomes; Table 2, row 1",
+   "status": "registered_primary",
+   "results": [
+    {"group": "Letter", "events": {"value": 150, "locator": "Table 2, row 1"}, "total": {"value": 400, "locator": "Table 2, row 1"}, "reported_percent": {"value": "37.5", "locator": "Table 2, row 1"}},
+    {"group": "No letter", "events": {"value": 120, "locator": "Table 2, row 1"}, "total": {"value": 400, "locator": "Table 2, row 1"}, "reported_percent": {"value": "30.0", "locator": "Table 2, row 1"}}
+   ]
+  },
+  {
+   "name": "Days from randomisation to check-up",
+   "definition": "Among those who attended, days between randomisation and the check-up",
+   "time_frame": "3 months",
+   "locator": "Table 2, row 2",
+   "status": "secondary",
+   "results": [
+    {"group": "Letter", "mean": {"value": 41.2, "locator": "Table 2, row 2"}, "sd": {"value": 18.5, "locator": "Table 2, row 2"}, "n": {"value": 150, "locator": "Table 2, row 2"}},
+    {"group": "No letter", "mean": {"value": 44.9, "locator": "Table 2, row 2"}, "sd": {"not_reported": true}, "n": {"value": 120, "locator": "Table 2, row 2"}}
+   ]
+  }
+ ],
+ "other_percentages": [
+  {"label": "letters returned undelivered", "count": {"value": 21, "locator": "Results, paragraph 2"}, "total": {"value": 420, "locator": "Results, paragraph 2"}, "reported_percent": {"value": "5", "locator": "Results, paragraph 2"}}
+ ],
+ "reporting": [
+  {"item": "registration", "text": "Registered before the first participant was enrolled; the registered primary outcome matches the one reported.", "locator": "Methods, Registration"},
+  {"item": "allocation_method", "text": "Computer-generated list held by a statistician outside the clinic.", "locator": "Methods, Randomisation"},
+  {"item": "blinding", "text": "Staff recording attendance did not know the allocation; participants could not be blinded.", "locator": "Methods, Blinding"},
+  {"item": "analysis_population", "text": "Everyone with a clinic record at 3 months, in the group they were randomised to.", "locator": "Methods, Analysis"},
+  {"item": "reasons_for_loss", "not_reported": true},
+  {"item": "funding", "text": "A regional health board grant; the funder had no role in the analysis.", "locator": "Funding statement"},
+  {"item": "author_affiliations", "text": "All authors work at the clinic network that ran the trial.", "locator": "Title page"},
+  {"item": "data_availability", "not_reported": true},
+  {"item": "replication", "not_reported": true}
+ ]
+}

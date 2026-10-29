@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Committee meeting 42: minutes</title>
+<style>body{font-family:serif;max-width:40em}nav a{margin-right:1em}</style>
+</head>
+<body>
+<nav><a href="/index.html">Home</a><a href="/standards/">Standards</a><a href="/committee/">Committee</a></nav>
+<h1>Meeting 42</h1>
+<p>Held 23 September 2026.</p>
+<ol>
+<li>Edition 2 of HL-103 was approved, in force from 1 October 2026.</li>
+<li>A public consultation on HL-105 will open in November 2026.</li>
+</ol>
+<footer><p>SYNTHETIC: this page was invented for the harvest skill's example. The Harbour Lighting Standards Board does not exist.</p></footer>
+<script>document.title = document.title + ' (viewed)';</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+# Primary journey for project-intake.html: answer, note, Back, Skip, a required refusal,
+# a conditional question, review, edit from review, finish, export, then a refused import,
+# a theme change with reset, and a confirmed reset with undo.
+click:#btn-start
+fill:#in-job-one-line=See which tools are out and who has them
+click:#btn-next
+check:#in-current-method-0
+fill:#note-current-method=A bound book at the desk.
+click:#btn-next
+check:#in-pain-1
+check:#in-pain-3
+click:#btn-next
+click:#btn-back
+click:#btn-back
+expect:#note-current-method=A bound book at the desk.
+click:#btn-next
+click:#btn-next
+click:#btn-skip
+fill:#in-time-per-run=3
+press:#in-time-per-run=Enter
+click:#btn-skip
+check:#in-other-users-0
+click:#btn-next
+expect:#qt-user-count=How many people will use it in total?
+click:#btn-skip
+click:#btn-skip
+check:#in-devices-0
+click:#btn-next
+expect:#qt-phone-conditions=On the phone, which of these apply?
+click:#btn-skip
+check:#in-comfort-1
+click:#btn-next
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:label[for='in-loss-cost-7']
+click:#btn-next
+click:#down-priorities-0
+expect-focus:#down-priorities-1
+click:#btn-next
+click:#btn-next
+expect:#qe-must-have=This question needs an answer before you go on.
+expect-gone:#btn-skip
+fill:#in-must-have=Sign a tool out in under 30 seconds
+click:#btn-next
+click:#btn-skip
+check:#in-deadline-0
+click:#btn-next
+fill:#in-deadline-date=The open day, when the desk is busiest
+click:#btn-next
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+expect:#review-counts=28 shown: 12 answered, 16 skipped, 0 with no answer.
+click:#edit-comfort
+check:#in-comfort-3
+click:#btn-next
+expect:#rv-comfort=4 of 5, Agree
+click:#btn-finish
+expect:#export-text=Answer: 4 of 5, Agree
+expect:#export-text=> A bound book at the desk.
+expect:#export-text=Answer: (skipped)
+expect:#export-text=End of export: 28 questions.
+click:#copy-export
+expect:#copy-status=Copied. Paste it into the chat.
+click:#panel-toggle
+expect-focus:#panel-h
+click:#import-open
+fill:#import-text=not a resume code
+click:#import-go
+expect:#import-msg=Nothing was changed: your current answers are as they were.
+expect-focus:#import-text
+click:[data-set='theme'][data-val='dusk']
+expect-attr:html@data-theme=dusk
+click:#display-reset
+expect-attr:html@data-theme=paper
+click:#reset-ask
+expect-focus:#reset-cancel
+expect:#reset-text=Starting again clears 12 answers, 16 skip marks and 1 note
+click:#reset-go
+expect:#btn-start=Start
+click:#undo
+expect:#export-text=End of export: 28 questions.

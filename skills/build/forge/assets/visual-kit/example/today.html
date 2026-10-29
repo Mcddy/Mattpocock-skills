@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-AU" data-dir="warm-pop">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today: grooming book (kit example)</title>
+<!-- Identity note. House: default warm light. Direction: switchable with data-dir on <html>.
+     Signature hue: the dog on the table now. Governing rule: the day drawn in real time order, free time bookable in place. -->
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../kit.css">
+<link rel="stylesheet" href="../kit2.css">
+<link rel="stylesheet" href="../kit3.css">
+<script src="../kit-dir.js"></script>
+<style>
+  html, body { margin: 0; }
+  body.screen { min-height: 100vh; }
+  .page { max-width: 1240px; margin: 0 auto; padding-bottom: 110px; }
+  .page .nav { position: fixed; }
+  .sched-card { margin: 0; }
+  @media (min-width: 900px) {
+    .page { display: grid; grid-template-columns: 440px 1fr; gap: 8px 28px; padding: 24px 28px 32px; }
+    .page .nav { display: none; }
+    .left .topbar, .left .week { padding-left: 0; padding-right: 0; }
+    .left .hero, .left .next, .left .stats { margin-left: 0; margin-right: 0; }
+    .right { padding-top: 8px; }
+    .right .card { padding: 6px 16px 16px; border-radius: 32px; }
+    .right .section-h { margin-left: 4px; margin-right: 4px; }
+    .right .sched { margin: 0; }
+    .deskbar { display: flex !important; }
+  }
+  .deskbar { display: none; justify-content: flex-end; gap: 10px; margin-bottom: 8px; }
+</style>
+</head>
+<body class="screen">
+<div class="page">
+  <div class="left">
+    <div class="topbar"><div><div class="eyebrow">Tuesday 2 March</div><h1 class="display title">Today</h1></div>
+      <button class="iconbtn" type="button" aria-label="Pick a date" id="cal"></button></div>
+    <div class="week" id="week"></div>
+    <section class="hero" aria-label="On the table now" id="hero"></section>
+    <div class="card next" id="next"></div>
+    <div class="stats"><div class="stat"><b>5</b><span>dogs booked</span></div><div class="stat"><b>6h 15</b><span>of grooming</span></div><div class="stat"><b>$400</b><span>expected</span></div></div>
+  </div>
+  <div class="right">
+    <div class="deskbar"><button class="btn btn-ghost" type="button">Clients</button><button class="btn btn-ink" type="button" id="newb">New booking</button></div>
+    <div class="card sched-card"><div class="section-h"><h2>Schedule</h2><a href="#cancelled">1 cancelled</a></div><div class="sched" id="sched"></div></div>
+  </div>
+  <nav class="nav" aria-label="Main" id="nav"></nav>
+</div>
+<script src="../illustrations.js"></script>
+<script>
+  const ICON = {
+    cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>',
+    users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.3 2.8 17.5A2 2 0 0 0 4.5 20.5h15a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg>',
+  };
+  // Sample data, as the server would return it.
+  const DAY = [
+    { t: '08:00', end: '09:00', dog: 'rusty', name: 'Rusty', svc: 'Bath & brush', price: 70, state: 'done' },
+    { t: '09:15', end: '11:15', dog: 'max', name: 'Max', svc: 'Full groom', price: 120, state: 'now' },
+    { t: '11:15', end: '11:30', dog: 'mochi', name: 'Mochi', svc: 'Nail trim', price: 20 },
+    { t: '11:30', end: '13:00', free: '1h 30m' },
+    { t: '13:00', end: '15:00', dog: 'reggie', name: 'Sir Reginald Fluffington III', svc: 'Full groom', price: 120 },
+    { t: '15:00', end: '15:30', free: '30m' },
+    { t: '15:30', end: '16:30', dog: 'biscuit', name: 'Biscuit', svc: 'Bath & brush', price: 70 },
+  ];
+  const $ = id => document.getElementById(id);
+  $('cal').innerHTML = ICON.cal;
+  $('week').innerHTML = [['Mon', 1, 'Closed', 'is-closed'], ['Tue', 2, '5 dogs', 'is-on'], ['Wed', 3, '1 dog', ''], ['Thu', 4, '1 dog', ''], ['Fri', 5, 'Free', ''], ['Sat', 6, 'Free', '']]
+    .map(([d, n, s, c]) => `<div class="day ${c}"><small>${d}</small><b>${n}</b><small>${s}</small></div>`).join('');
+  $('hero').innerHTML = `<div class="hero-top"><div><div class="eyebrow">On the table now</div><div class="display hero-name">Max</div>
+    <div class="hero-meta">Full groom · until 11:15</div></div><div class="hero-avatar">${clayDog('max', { bg: 'var(--surface)' })}</div></div>
+    <div class="meter"><i style="width:12.5%"></i></div><div class="hero-foot"><span>15 min in</span><span>1 h 45 min left</span></div>
+    <div class="hero-note">${ICON.alert}<span>Nervous of the dryer; use the quiet one</span></div>`;
+  $('next').innerHTML = `${clayDog('mochi', { bg: 'var(--surface-2)' })}<div style="min-width:0"><div class="eyebrow">Next · 11:15</div><h3>Mochi</h3>
+    <div class="row" style="margin-top:6px;gap:6px;flex-wrap:wrap"><span class="tag tag-soft">Nail trim · 15 min</span><span class="tag tag-warn">${ICON.alert}Muzzle: bites at nails</span></div></div>`;
+  $('sched').innerHTML = DAY.map(s => s.free
+    ? `<div class="t">${s.t}</div><div class="slot free"><div><h4>Free ${s.t} to ${s.end}</h4><p>${s.free} open</p></div><button type="button" class="btn btn-sig" style="margin-left:auto;min-height:44px;padding:9px 16px;font-size:13.5px">Book ${s.t}</button></div>`
+    : `<div class="t">${s.t}</div><div class="slot ${s.state === 'done' ? 'is-done' : ''} ${s.state === 'now' ? 'is-now' : ''}">${clayDog(s.dog, { bg: 'var(--surface-2)' })}<div style="min-width:0"><h4>${s.name}</h4><p>${s.svc} · to ${s.end}</p></div><span class="price">$${s.price}</span></div>`).join('');
+  $('nav').innerHTML = `<a class="is-on" href="#today">${ICON.cal}Today</a><span class="fab" role="button" tabindex="0" aria-label="New booking">${ICON.plus}</span><a href="#clients">${ICON.users}Clients</a>`;
+</script>
+</body>
+</html>

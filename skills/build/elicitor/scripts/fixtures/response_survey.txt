@@ -1,0 +1,14 @@
+=== elicitor response ===
+instrument: fixture-survey
+version: 1
+finished: 2026-10-08T16:25:54Z
+useful = 1
+useful.note = "Note on useful: \"quoted\", 100% & <tag>?\nSecond line of the note."
+pace = "About right"
+pace-where = HIDDEN
+kept = ["The group exercise","The questions at the end"]
+kept.note = "Note on kept: \"quoted\", 100% & <tag>?\nSecond line of the note."
+recommend = SKIPPED
+one-change = "Text for one-change: 50% sure & <not> certain.\n\n  An indented second paragraph.\nThird line."
+tally:rated-high = [0,2]
+=== end elicitor response: 6 questions, 2 notes ===

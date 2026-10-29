@@ -1,0 +1,16 @@
+{
+ "id": "upload-progress-fixture",
+ "title": "Progress display for the photo upload (test fixture)",
+ "question": "How should the page show that 3 of 8 photos have uploaded?",
+ "kind": "custom",
+ "recommended": {"id": "plain-count", "reason": "the count in words is the only one that needs no decoding."},
+ "options": [
+  {"id": "plain-count", "name": "A sentence", "note": "States the count in words and names the file in progress; no graphic at all."},
+  {"id": "filled-bar", "name": "A bar", "note": "One bar filled in proportion, with the count beside it; familiar and compact."},
+  {"id": "eight-steps", "name": "Eight steps", "note": "One block per photo, filled as each arrives; shows the total at a glance."}
+ ],
+ "controls": [
+  {"id": "show-file", "label": "Name the file in progress", "type": "toggle", "default": true}
+ ],
+ "context": {"done": 3, "total": 8, "task": "Uploading photos of plot 14", "current": "north-fence-broad-beans.jpg"}
+}

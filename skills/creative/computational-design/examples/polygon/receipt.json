@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "input_sha256": "1853b7b5b70af526aeb1a36d864bea45207a1021d4f1d962ec2c524e22bf6e03",
+  "script_sha256": "097edba543b574f9afdeca4dadb5862dbe42ed80c4fead2c7d7850f8abdcf36e",
+  "units": "mm",
+  "bounds_mm": [
+    [
+      0.0,
+      101.6
+    ],
+    [
+      0.0,
+      76.19999999999999
+    ],
+    [
+      0,
+      6.35
+    ]
+  ],
+  "component_volume_sum_mm3": 32774.128,
+  "components": [
+    {
+      "name": "polygon",
+      "area_mm2": 5161.279999999999,
+      "perimeter_mm": 355.59999999999997,
+      "volume_mm3": 32774.128,
+      "closed_oriented_component": true
+    }
+  ],
+  "assembly_is_boolean_union": false,
+  "manufacturing_validated": false
+}

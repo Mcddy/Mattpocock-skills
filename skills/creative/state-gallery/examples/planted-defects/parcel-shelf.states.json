@@ -1,0 +1,27 @@
+{
+ "page": "parcel-shelf.html",
+ "title": "Parcel shelf: every state (planted defects)",
+ "widths": [390, 1280],
+ "themes": [
+  {"name": "paper", "steps": ["click:[data-theme-choice=\"paper\"]"]},
+  {"name": "dusk", "steps": ["click:[data-theme-choice=\"dusk\"]"]}
+ ],
+ "states": [
+  {"name": "empty",
+   "shows": "a sentence saying nothing is waiting, and how to log the first parcel",
+   "steps": ["expect-count:#shelf li=0"]},
+  {"name": "populated",
+   "shows": "four parcels, each with its unit, reference and how long it has waited",
+   "steps": ["click:#load-sample", "expect-count:#shelf li=4"]},
+  {"name": "validation error",
+   "shows": "the reason beside each empty field, and nothing added to the shelf",
+   "steps": ["click:#add-go", "expect:#e-unit=Enter the unit", "expect-count:#shelf li=0"],
+   "scroll_to": "#add-go"},
+  {"name": "long reference",
+   "shows": "a 51 character carrier reference that stays inside its row",
+   "steps": ["fill:#f-unit=Unit 12", "fill:#f-ref=JD014600009876543210AU-RETURN-TO-SENDER-0000042-B", "click:#add-go", "expect-count:#shelf li=1"]},
+  {"name": "collected parcels",
+   "shows": "parcels already collected, behind a control that this page does not have",
+   "steps": ["click:#show-collected"]}
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "id": "invoice-list-layout",
+ "version": 1,
+ "title": "Layout for the invoice list",
+ "question": "How should the October invoices be laid out, on a phone and on a wide screen?",
+ "kind": "layout",
+ "recommended": {"id": "compact-list", "reason": "it is the shorter of the two that need no sideways scrolling on a phone (about one screen against two for the cards), and it still leads with the client and the amount."},
+ "options": [
+  {"id": "table", "name": "Table",
+   "note": "Every column in a grid; the quickest to scan down one column, and it scrolls sideways on a phone.",
+   "sample": {"layout": "table"}},
+  {"id": "cards", "name": "Cards",
+   "note": "One card per invoice with the amount large; nothing scrolls sideways, and it is the longest page.",
+   "sample": {"layout": "cards"}},
+  {"id": "compact-list", "name": "Compact list",
+   "note": "Two lines per invoice on a phone and one on a wide screen; client and amount lead, the rest is small.",
+   "sample": {"layout": "list"}}
+ ],
+ "controls": [
+  {"id": "density", "label": "Density", "type": "choice", "options": [{"value": "compact", "label": "Compact"}, {"value": "comfortable", "label": "Comfortable"}], "default": "comfortable"},
+  {"id": "stripes", "label": "Shade alternate rows", "type": "toggle", "default": false}
+ ],
+ "context": {
+  "title": "Invoices, October",
+  "columns": [
+   {"key": "client", "label": "Client", "role": "title"},
+   {"key": "number", "label": "Invoice"},
+   {"key": "due", "label": "Due"},
+   {"key": "amount", "label": "Amount", "role": "value"},
+   {"key": "status", "label": "Status", "role": "status", "alert": ["Overdue"]}
+  ],
+  "rows": [
+   {"client": "Fennel & Rye Bakehouse", "number": "INV-2041", "due": "12 Oct", "amount": "$1,284.50", "status": "Awaiting payment"},
+   {"client": "Tidewater Canoe Hire", "number": "INV-2038", "due": "9 Oct", "amount": "$460.00", "status": "Overdue"},
+   {"client": "Marlow Street Veterinary Clinic", "number": "INV-2044", "due": "16 Oct", "amount": "$2,915.75", "status": "Awaiting payment"},
+   {"client": "Copperline Brewing Co-operative", "number": "INV-2035", "due": "2 Oct", "amount": "$7,020.00", "status": "Overdue"},
+   {"client": "Little Wren Early Learning", "number": "INV-2047", "due": "21 Oct", "amount": "$388.20", "status": "Draft"},
+   {"client": "Northgate Community Tool Library", "number": "INV-2046", "due": "20 Oct", "amount": "$95.00", "status": "Awaiting payment"},
+   {"client": "Harbour Lane Framing", "number": "INV-2043", "due": "15 Oct", "amount": "$1,150.00", "status": "Paid"},
+   {"client": "Saltbush Native Plant Nursery and Landscape Supplies", "number": "INV-2049", "due": "23 Oct", "amount": "$12,480.90", "status": "Awaiting payment"}
+  ]
+ }
+}

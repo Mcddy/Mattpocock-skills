@@ -1,0 +1,4 @@
+# SYNTHETIC robots.txt for the harvest example
+User-agent: *
+Disallow: /drafts/
+Allow: /

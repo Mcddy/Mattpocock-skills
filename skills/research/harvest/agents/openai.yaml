@@ -1,0 +1,6 @@
+interface:
+  display_name: "Harvest"
+  short_description: "Collect approved sources with provenance and limits"
+  default_prompt: "Use $harvest for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

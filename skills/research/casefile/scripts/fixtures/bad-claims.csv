@@ -1,0 +1,9 @@
+claim_id,question_id,statement,status,source_ids,locator,load_bearing,confidence,conflicts_with,conflict_class,resolution
+C1,Q1,Market share is 41 percent.,FACT,S1,headline,yes,,,,
+C2,Q1,The product launched in March.,FACT,S2,summary,yes,,,,
+C3,Q1,Users prefer the new plan.,FACT,S3,post 4,no,,,,
+C4,Q2,"The agency counted 1,200 sites.",FACT,S4,,yes,,,,
+C5,Q2,The assistant said revenue doubled.,MODEL_OUTPUT,,,yes,,,,
+C6,Q2,Growth will probably continue.,ASSESSMENT,,,yes,,,,
+C7,Q3,The count was 900.,REPORTED,S9,p2,no,,C4,direct_conflict,
+C8,Q3,Nothing found.,VERIFIED,,,maybe,,,,

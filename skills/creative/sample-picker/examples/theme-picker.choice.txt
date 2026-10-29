@@ -1,0 +1,22 @@
+=== sample-picker choice v1 ===
+picker: notes-theme@1
+kind: theme
+status: final
+chosen: slate-night
+chosen-name: "Slate night"
+control: density = "compact"
+control: text-size = 16
+shortlist: ember, slate-night
+rejected: (none)
+note: slate-night = "Like the colour, not the weight. \"Calmer\" would suit; caf\u00e9 menu test\nsecond line"
+fact: "heading, body text contrast" = 15.25
+fact: "status message contrast" = 10.98
+fact: "link contrast" = 9.69
+fact: "label on surface, muted text on surface contrast" = 7.82
+fact: "input text, text on surface, secondary button label contrast" = 13.73
+fact: "error text contrast" = 9.26
+fact: "button label contrast" = 9.87
+fact: "muted text contrast" = 8.69
+fact: "button label on hover contrast" = 11.78
+saved: 2026-10-08T21:16:01Z
+=== end ===

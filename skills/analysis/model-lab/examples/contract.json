@@ -1,0 +1,1 @@
+{"schema_version":1,"task":"regression","features":["x"],"target":"y","feature_availability":{"x":"known_at_prediction"},"split":"group_time","group_field":"entity","time_field":"time"}

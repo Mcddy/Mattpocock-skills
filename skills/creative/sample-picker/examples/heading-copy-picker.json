@@ -1,0 +1,36 @@
+{
+ "id": "stallbook-heading",
+ "version": 1,
+ "title": "Heading for the Stallbook product page",
+ "question": "Which heading and sub-line should open the product page?",
+ "kind": "copy",
+ "recommended": {"id": "outcome-first", "reason": "it is the only one that tells a stallholder what they get, in their own terms, before it says how."},
+ "options": [
+  {"id": "plain-description", "name": "Says what it is",
+   "note": "A plain label for the product; the shortest heading, and the least to react to.",
+   "sample": {"heading": "Bookkeeping for market stalls", "sub": "Record each sale as you make it, and see what every market day earned after stall fees and stock."}},
+  {"id": "outcome-first", "name": "Leads with the result",
+   "note": "Opens on the moment the product pays off: knowing the day's profit at closing time.",
+   "sample": {"heading": "Know what Saturday earned before you pack up", "sub": "Stallbook adds up sales, stall fees and stock as you go, so the day's profit is on your phone at closing time."}},
+  {"id": "problem-first", "name": "Names the pain",
+   "note": "Starts from the mess it replaces; warmer and more casual, and vaguer about what the product does.",
+   "sample": {"heading": "No more shoebox of receipts", "sub": "Photograph a receipt, tap a sale, and Stallbook keeps the books a market stall needs."}},
+  {"id": "speed-claim", "name": "One concrete claim",
+   "note": "Commits to a single measurable promise about speed and signal; the longest heading.",
+   "sample": {"heading": "Record a sale in two taps, with or without signal", "sub": "Built for a busy stall: large buttons, works offline, and a total for each market day."}}
+ ],
+ "controls": [
+  {"id": "align", "label": "Alignment", "type": "choice", "options": [{"value": "left", "label": "Left"}, {"value": "centre", "label": "Centred"}], "default": "left"},
+  {"id": "heading-size", "label": "Heading size", "type": "range", "min": 24, "max": 40, "step": 2, "unit": "px", "default": 30},
+  {"id": "action", "label": "Show the buttons", "type": "toggle", "default": true}
+ ],
+ "context": {
+  "component": "header",
+  "brand": "Stallbook",
+  "nav": ["How it works", "Pricing", "Sign in"],
+  "action": "Start a free month",
+  "secondary": "See a sample market day",
+  "footnote": "No card needed. Works offline at the stall.",
+  "tokens": {"bg": "#fbf7ef", "surface": "#ffffff", "text": "#26211c", "muted": "#5f554a", "line": "#d9cfbf", "accent": "#1f5f4a", "on-accent": "#f8fbf8"}
+ }
+}

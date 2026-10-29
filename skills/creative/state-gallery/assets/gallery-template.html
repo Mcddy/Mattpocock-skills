@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en" data-theme="paper" data-frames="medium" data-captions="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>State gallery</title>
+<!--
+  Contact sheet written by scripts/state_gallery.py. One file, no outside requests: every capture
+  is embedded as data. States run down the side, widths and themes across the top.
+
+  Delivery notes:
+  - No form element, no submit event, no alert, confirm or prompt. Buttons are type=button.
+  - Browser storage is optional. Display choices are kept if storage works and still apply for the
+    visit if it does not, and the page says which.
+  - Text is always set as text. Nothing from the captured page is assembled as markup.
+  - The measured facts beside each frame are aids. A frame with none can still be wrong.
+-->
+<style>
+:root{
+  --bg:#f5efe4;--surface:#fffaf1;--raised:#fbf4e6;--ink:#2a2320;--muted:#655a50;--line:#d8ccba;
+  --accent:#8f4319;--on-accent:#fffaf1;--warn:#8e2a1c;--warn-soft:#f6ddd3;--ok:#2c6446;--focus:#1f5c8a;
+  --mat:#e9e0cf;--target:44px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+}
+:root[data-theme="slate"]{
+  --bg:#eef1f3;--surface:#fbfcfd;--raised:#f3f6f8;--ink:#1f2a30;--muted:#51606a;--line:#c8d2d8;
+  --accent:#245a7a;--on-accent:#fbfcfd;--warn:#8a2a22;--warn-soft:#f3dcd8;--ok:#27634a;--focus:#7a3c12;--mat:#dfe5e9;
+}
+:root[data-theme="ember"]{
+  --bg:#231c18;--surface:#2d2520;--raised:#372d27;--ink:#f3e9dc;--muted:#c2b3a2;--line:#54463c;
+  --accent:#f0a36b;--on-accent:#231c18;--warn:#ffac99;--warn-soft:#4c2a23;--ok:#9ed6b3;--focus:#9fd0f2;--mat:#171210;
+}
+:root[data-theme="night"]{
+  --bg:#12171c;--surface:#1a2128;--raised:#222b33;--ink:#e8eef2;--muted:#a9b8c2;--line:#3a4853;
+  --accent:#8cc4e8;--on-accent:#12171c;--warn:#ffb0a3;--warn-soft:#452622;--ok:#9bd8b6;--focus:#f2c08a;--mat:#0b0f13;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
+.wrap{padding:20px 16px 64px;max-width:none}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+.lead{flex:1 1 420px;min-width:0}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+[hidden]{display:none !important}
+h1{font:600 1.6rem/1.2 var(--serif);margin:0;letter-spacing:-.01em;overflow-wrap:anywhere}
+.sum{color:var(--muted);margin:6px 0 0;max-width:78ch}
+.sum b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn,.seg{min-height:var(--target);padding:0 14px;border:1px solid var(--line);background:var(--surface);border-radius:6px}
+.btn:hover,.seg:hover{border-color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.seg[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);font-weight:600}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.panel{margin-top:12px;background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:12px}
+.panel[hidden]{display:none}
+.choice{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.choice .lab{min-width:76px;color:var(--muted);font-size:.9rem}
+.note{color:var(--muted);font-size:.9rem;margin:0}
+.foot{margin-top:18px}
+.status{min-height:1.5em;margin:12px 0 0;color:var(--muted);font-size:.9rem}
+.status.bad{color:var(--warn);font-weight:600}
+.caveat{margin:6px 0 0;font-size:.92rem;max-width:78ch}
+
+.blank{padding:32px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:14px}
+.blank h2{font:600 1.2rem var(--serif);margin:0 0 6px}
+.blank p{margin:0 0 14px;color:var(--muted);max-width:60ch}
+
+.sheet{margin-top:16px;border-top:2px solid var(--ink)}
+.cols{display:none}
+.state{border-bottom:1px solid var(--line);padding:14px 0 12px}
+.state-head{padding:0 0 10px}
+.num{font:600 .8rem var(--mono);color:var(--muted);letter-spacing:.06em}
+.state-head h2{font:600 1.15rem/1.25 var(--serif);margin:0;overflow-wrap:anywhere}
+.shows{margin:4px 0 0;font-size:.9rem;color:var(--ink)}
+.rowsum{margin:4px 0 0;font-size:.85rem;color:var(--muted)}
+.rowsum.bad{color:var(--warn);font-weight:600}
+.strip{display:flex;gap:14px;align-items:flex-start;overflow-x:auto;padding:4px 4px 10px;scroll-snap-type:x proximity}
+.frame{flex:none;scroll-snap-align:start}
+.frame.group-start{margin-left:0}
+.thumb{display:block;padding:0;border:1px solid var(--line);background:var(--mat);border-radius:3px;overflow:hidden;min-width:var(--target);min-height:var(--target);max-width:100%}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
+.thumb:hover{border-color:var(--ink)}
+.frame.problem .thumb{border:3px solid var(--warn)}
+.thumb.none,.frame.problem .thumb.none{border:2px dashed var(--warn);display:grid;place-content:center;gap:2px;padding:8px;text-align:center;background:var(--raised)}
+.thumb.none b{font:600 .95rem var(--sans)}
+.thumb.none span{font-size:.8rem;color:var(--muted)}
+.cap{margin-top:6px;font-size:.82rem;line-height:1.4}
+.cap .where{font:600 .78rem var(--mono);letter-spacing:.02em;color:var(--ink)}
+.cap .flag{display:block;margin-top:2px;font-weight:700;color:var(--warn)}
+.cap ul{margin:2px 0 0;padding:0 0 0 1.1em;color:var(--warn);font-weight:600}
+.cap .fine{color:var(--ok);font-weight:600;display:block;margin-top:2px}
+.cap .facts{display:block;margin-top:3px;color:var(--muted);font-size:.76rem;line-height:1.45}
+:root[data-captions="short"] .cap .facts{display:none}
+
+@media (min-width:900px){
+  .wrap{padding:24px 28px 72px}
+  .sheet{overflow-x:auto}
+  .cols,.state{display:grid;grid-template-columns:230px max-content;width:max-content;min-width:100%}
+  .cols{border-bottom:1px solid var(--line);padding:8px 0}
+  .cols .strip{padding-bottom:0}
+  .colhead{flex:none;font:600 .8rem var(--mono);letter-spacing:.02em}
+  .colhead span{display:block;font-weight:400;color:var(--muted)}
+  .state-head,.cols .corner{position:sticky;left:0;z-index:1;background:var(--bg);padding:0 16px 0 0}
+  .strip{overflow:visible;scroll-snap-type:none}
+  .frame.group-start,.colhead.group-start{margin-left:18px}
+  .cols.off{display:none}
+}
+
+.viewer{position:fixed;inset:0;z-index:10;background:var(--bg);display:flex;flex-direction:column}
+.viewer[hidden]{display:none}
+.v-head{padding:12px 16px;border-bottom:1px solid var(--line)}
+.v-head h2{font:600 1.1rem/1.3 var(--serif);margin:0;overflow-wrap:anywhere}
+.v-head p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.v-body{flex:1;min-height:0;overflow:auto;display:block}
+.v-shot{overflow-x:auto;background:var(--mat);padding:12px}
+.v-shot img{display:block;border:1px solid var(--line);max-width:none}
+.v-shot.fit img{max-width:100%;height:auto}
+.v-none{padding:28px 16px;max-width:60ch}
+.v-facts{padding:14px 16px;border-top:1px solid var(--line);font-size:.92rem}
+.v-facts h3{font:600 .95rem var(--sans);margin:0 0 6px}
+.v-facts ul{margin:0 0 12px;padding-left:1.2em}
+.v-facts li{overflow-wrap:anywhere}
+.v-facts .bad{color:var(--warn);font-weight:600}
+.v-facts .mono{font-family:var(--mono);font-size:.85rem}
+.v-bar{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px;border-top:2px solid var(--ink);background:var(--raised)}
+.v-bar .gap{flex:1}
+@media (min-width:900px){
+  .v-body{display:grid;grid-template-columns:minmax(0,1fr) 360px;overflow:hidden}
+  .v-shot{min-height:0;overflow:auto}
+  .v-facts{border-top:0;border-left:1px solid var(--line);overflow:auto}
+}
+@media (max-width:480px){
+  .tools{display:grid;grid-template-columns:minmax(0,1fr) auto auto;width:100%}
+  .tools .btn,.tools .seg,.v-bar .btn,.v-bar .seg{padding:0 10px}
+  .choice .lab{flex-basis:100%}
+}
+@media (prefers-reduced-motion:no-preference){.btn,.seg,.thumb{transition:border-color .12s ease}}
+</style>
+</head>
+<body>
+<div class="wrap" id="page">
+  <header class="top">
+    <div class="lead">
+      <h1 id="title">State gallery</h1>
+      <p class="sum" id="summary"></p>
+      <p class="caveat" id="caveat" hidden>The facts beside each frame are measurements, not a verdict. A frame with none can still be wrong, so look at every row.</p>
+    </div>
+    <div class="tools">
+      <button type="button" class="seg" id="show-problems" aria-pressed="false" hidden>Problems only</button>
+      <button type="button" class="btn" id="columns-toggle" aria-expanded="false" aria-controls="columns" hidden>Columns</button>
+      <button type="button" class="btn" id="display-toggle" aria-expanded="false" aria-controls="display">Display</button>
+    </div>
+  </header>
+
+  <section class="panel" id="columns" hidden aria-label="Columns shown">
+    <div class="choice" role="group" aria-label="Widths shown" id="width-chips"><span class="lab">Widths</span></div>
+    <div class="choice" role="group" aria-label="Themes shown" id="theme-chips"><span class="lab">Themes</span></div>
+    <div class="choice"><button type="button" class="btn quiet" id="filters-reset">Show every width and theme</button></div>
+  </section>
+
+  <section class="panel" id="display" hidden aria-label="Display choices">
+    <div class="choice" role="group" aria-label="Sheet theme">
+      <span class="lab">Sheet theme</span>
+      <button type="button" class="seg" data-theme-choice="paper">Paper</button>
+      <button type="button" class="seg" data-theme-choice="slate">Slate</button>
+      <button type="button" class="seg" data-theme-choice="ember">Ember</button>
+      <button type="button" class="seg" data-theme-choice="night">Night</button>
+    </div>
+    <div class="choice" role="group" aria-label="Frame size">
+      <span class="lab">Frame size</span>
+      <button type="button" class="seg" data-frames-choice="small">Small</button>
+      <button type="button" class="seg" data-frames-choice="medium">Medium</button>
+      <button type="button" class="seg" data-frames-choice="large">Large</button>
+    </div>
+    <div class="choice" role="group" aria-label="Captions">
+      <span class="lab">Captions</span>
+      <button type="button" class="seg" data-captions-choice="full">Every fact</button>
+      <button type="button" class="seg" data-captions-choice="short">Problems only</button>
+    </div>
+    <div class="choice">
+      <button type="button" class="btn quiet" id="display-reset">Reset display</button>
+      <span class="note" id="display-note"></span>
+    </div>
+  </section>
+
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <div id="blank"></div>
+  <div class="sheet" id="sheet" hidden></div>
+  <p class="note foot" id="foot"></p>
+</div>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="v-title">
+  <div class="v-head">
+    <h2 id="v-title" tabindex="-1"></h2>
+    <p id="v-sub"></p>
+  </div>
+  <div class="v-body">
+    <div class="v-shot" id="v-shot" tabindex="0" aria-label="The capture. Scroll to see all of it."></div>
+    <div class="v-facts" id="v-facts"></div>
+  </div>
+  <div class="v-bar">
+    <button type="button" class="btn" id="v-prev">Previous</button>
+    <button type="button" class="btn" id="v-next">Next</button>
+    <button type="button" class="seg" id="v-fit" aria-pressed="false">Fit width</button>
+    <span class="gap"></span>
+    <button type="button" class="btn primary" id="v-close">Close</button>
+  </div>
+</div>
+
+<script>
+var GALLERY = /*GALLERY-DATA:START*/null/*GALLERY-DATA:END*/;
+</script>
+<script>
+(function () {
+  'use strict';
+  var D = GALLERY;
+  var DEFAULTS = {theme: 'paper', frames: 'medium', captions: 'full'};
+  var SCALE = {small: 0.22, medium: 0.34, large: 0.5};
+  var MIN_CELL = 176;
+  var $ = function (id) { return document.getElementById(id); };
+  var F = {problemsOnly: false, widths: {}, themes: {}};
+  var visible = [];          // frames currently on the sheet, in reading order
+  var openIndex = -1, opener = null;
+
+  // ---------- display choices: storage is optional ----------
+  var store = {
+    ok: false, mem: null,
+    read: function () { try { var v = JSON.parse(localStorage.getItem('state-gallery:display') || 'null'); this.ok = true; return v; } catch (e) { this.ok = false; return this.mem; } },
+    write: function (v) { this.mem = v; try { localStorage.setItem('state-gallery:display', JSON.stringify(v)); this.ok = true; } catch (e) { this.ok = false; } },
+    clear: function () { this.mem = null; try { localStorage.removeItem('state-gallery:display'); this.ok = true; } catch (e) { this.ok = false; } }
+  };
+  var display = {theme: DEFAULTS.theme, frames: DEFAULTS.frames, captions: DEFAULTS.captions};
+  function applyDisplay() {
+    var root = document.documentElement;
+    ['theme', 'frames', 'captions'].forEach(function (k) {
+      root.setAttribute('data-' + k, display[k]);
+      document.querySelectorAll('[data-' + k + '-choice]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-' + k + '-choice') === display[k])); });
+    });
+    $('display-note').textContent = store.ok ? 'Saved in this browser.' : 'Not saved: this page cannot store choices here, so they last for this visit.';
+  }
+  function loadDisplay() {
+    var v = store.read();
+    if (v && ['paper', 'slate', 'ember', 'night'].indexOf(v.theme) >= 0) display.theme = v.theme;
+    if (v && SCALE[v.frames]) display.frames = v.frames;
+    if (v && ['full', 'short'].indexOf(v.captions) >= 0) display.captions = v.captions;
+    applyDisplay();
+  }
+
+  // ---------- helpers ----------
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'on') Object.keys(attrs.on).forEach(function (ev) { n.addEventListener(ev, attrs.on[ev]); });
+      else if (attrs[k] !== false && attrs[k] != null) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+  function say(text, bad) { var s = $('status'); s.textContent = text; s.className = 'status' + (bad ? ' bad' : ''); }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function keyOf(f) { return f.state + ' / ' + f.theme + ' / ' + f.width; }
+  var uriCache = {};
+  function uriOf(f) {
+    if (!f.img) return '';
+    var k = f.index;
+    if (uriCache[k]) return uriCache[k];
+    var data = f.img.data;
+    if (f.img.enc === 'hex') {
+      var bin = '';
+      for (var i = 0; i < data.length; i += 2) bin += String.fromCharCode(parseInt(data.substr(i, 2), 16));
+      data = btoa(bin);
+    }
+    uriCache[k] = 'data:' + f.img.mime + ';base64,' + data;
+    return uriCache[k];
+  }
+  function factLine(f) {
+    var x = f.facts, dot = ' ' + String.fromCharCode(183) + ' ';
+    var parts = [
+      x.contrast_lowest == null ? 'no text measured' : 'contrast ' + x.contrast_lowest.toFixed(2) + ' lowest',
+      'overflow ' + (x.overflow_px > 1 ? x.overflow_px + ' px' : 'none'),
+      'cut off ' + x.clipped_count,
+      'small targets ' + x.small_targets,
+      'errors ' + (x.console_errors + x.failed_requests + x.broken_answers)
+    ];
+    if (x.refused_answers) parts.push('refused by server ' + x.refused_answers);
+    return parts.join(dot);
+  }
+
+  // ---------- the sheet ----------
+  function shownFrames() {
+    return D.frames.filter(function (f) {
+      if (!F.widths[f.width] || !F.themes[f.theme]) return false;
+      if (F.problemsOnly && !f.problems.length) return false;
+      return true;
+    });
+  }
+  function frameCell(f, firstOfWidth) {
+    var k = SCALE[display.frames];
+    var tw = Math.round(f.width * k), th = Math.round(f.height * k);
+    var cellW = Math.max(tw, MIN_CELL);
+    var label = f.state + ', ' + f.theme + ', ' + f.width + ' wide';
+    var thumb;
+    if (f.reached && f.img) {
+      thumb = el('button', {type: 'button', class: 'thumb', 'data-key': keyOf(f), 'aria-label': label + '. Open at full size.'},
+        [el('img', {src: uriOf(f), alt: '', width: f.img.w, height: f.img.h})]);
+    } else {
+      thumb = el('button', {type: 'button', class: 'thumb none', 'data-key': keyOf(f), 'aria-label': label + '. Not reached. Open the details.'},
+        [el('b', {text: 'Not reached'}), el('span', {text: 'No capture'})]);
+    }
+    thumb.style.width = tw + 'px';
+    thumb.style.height = th + 'px';
+    thumb.addEventListener('click', function () { openViewer(keyOf(f), thumb); });
+    var cap = el('div', {class: 'cap'}, [el('span', {class: 'where', text: f.theme + ', ' + f.width + ' by ' + f.height})]);
+    if (f.problems.length) {
+      cap.appendChild(el('span', {class: 'flag', text: f.reached ? 'Measured problem' : 'Not reached'}));
+      cap.appendChild(el('ul', {}, f.problems.map(function (p) { return el('li', {text: p}); })));
+    } else {
+      cap.appendChild(el('span', {class: 'fine', text: 'No measured problem'}));
+    }
+    if (f.reached) cap.appendChild(el('span', {class: 'facts', text: factLine(f)}));
+    var cell = el('div', {class: 'frame' + (f.problems.length ? ' problem' : '') + (firstOfWidth ? ' group-start' : ''), 'data-frame': keyOf(f)}, [thumb, cap]);
+    cell.style.width = cellW + 'px';
+    return cell;
+  }
+  function render() {
+    var sheet = $('sheet'), blank = $('blank');
+    sheet.textContent = ''; blank.textContent = '';
+    visible = shownFrames();
+    $('show-problems').setAttribute('aria-pressed', String(F.problemsOnly));
+    if (!visible.length) {
+      sheet.hidden = true;
+      var why = F.problemsOnly && D.summary.with_measured_problem === 0
+        ? 'No frame has a measured problem. That is a measurement, not a verdict: the frames still need looking at.'
+        : 'No frame matches the widths, themes and filter that are switched on.';
+      blank.appendChild(el('div', {class: 'blank'}, [
+        el('h2', {text: 'Nothing to show with these filters'}),
+        el('p', {text: why}),
+        el('button', {type: 'button', class: 'btn', id: 'blank-reset', text: 'Show every frame', on: {click: function () { resetFilters(); $('show-problems').focus(); }}})
+      ]));
+      say('0 of ' + plural(D.frames.length, 'frame', 'frames') + ' shown.');
+      return;
+    }
+    sheet.hidden = false;
+    var k = SCALE[display.frames];
+    // column heads: only when every row has the same columns, which is when nothing is filtered by problem
+    var cols = el('div', {class: 'cols' + (F.problemsOnly ? ' off' : ''), 'aria-hidden': 'true'}, [el('div', {class: 'corner'})]);
+    var headStrip = el('div', {class: 'strip'});
+    D.widths.forEach(function (w) {
+      if (!F.widths[w.width]) return;
+      var first = true;
+      D.themes.forEach(function (t) {
+        if (!F.themes[t]) return;
+        var h = el('div', {class: 'colhead' + (first && headStrip.childNodes.length ? ' group-start' : '')}, [document.createTextNode(w.width + ' wide'), el('span', {text: t})]);
+        h.style.width = Math.max(Math.round(w.width * k), MIN_CELL) + 'px';
+        headStrip.appendChild(h); first = false;
+      });
+    });
+    cols.appendChild(headStrip);
+    sheet.appendChild(cols);
+    D.states.forEach(function (s, i) {
+      var all = D.frames.filter(function (f) { return f.state === s.name; });
+      var mine = visible.filter(function (f) { return f.state === s.name; });
+      if (!mine.length) return;
+      var bad = all.filter(function (f) { return f.problems.length; }).length;
+      var missed = all.filter(function (f) { return !f.reached; }).length;
+      var sum = plural(all.length, 'frame', 'frames') + '. ' + (bad ? bad + ' with a measured problem' + (missed ? ', ' + missed + ' not reached' : '') + '.' : 'None with a measured problem.');
+      var head = el('div', {class: 'state-head'}, [
+        el('span', {class: 'num', text: (i < 9 ? '0' : '') + (i + 1)}),
+        el('h2', {id: 'state-' + (i + 1), text: s.name}),
+        s.shows ? el('p', {class: 'shows', text: 'Should show: ' + s.shows}) : null,
+        el('p', {class: 'rowsum' + (bad ? ' bad' : ''), text: sum})
+      ]);
+      var strip = el('div', {class: 'strip', tabindex: '0', role: 'group', 'aria-label': 'Frames for ' + s.name});
+      var lastW = null;
+      mine.forEach(function (f) { strip.appendChild(frameCell(f, lastW !== null && lastW !== f.width)); lastW = f.width; });
+      sheet.appendChild(el('section', {class: 'state', 'aria-labelledby': 'state-' + (i + 1)}, [head, strip]));
+    });
+    say(visible.length === D.frames.length ? 'Showing all ' + plural(D.frames.length, 'frame', 'frames') + '.' : 'Showing ' + visible.length + ' of ' + plural(D.frames.length, 'frame', 'frames') + '.');
+  }
+  function resetFilters() {
+    F.problemsOnly = false;
+    D.widths.forEach(function (w) { F.widths[w.width] = true; });
+    D.themes.forEach(function (t) { F.themes[t] = true; });
+    syncChips(); render();
+  }
+  function syncChips() {
+    document.querySelectorAll('[data-width-chip]').forEach(function (b) { b.setAttribute('aria-pressed', String(!!F.widths[b.getAttribute('data-width-chip')])); });
+    document.querySelectorAll('[data-theme-chip]').forEach(function (b) { b.setAttribute('aria-pressed', String(!!F.themes[b.getAttribute('data-theme-chip')])); });
+  }
+
+  // ---------- one frame at full size ----------
+  function list(title, items, cls) {
+    if (!items.length) return [];
+    return [el('h3', {text: title}), el('ul', {class: cls || ''}, items.map(function (t) { return el('li', {text: t}); }))];
+  }
+  function showFrame(i) {
+    openIndex = i;
+    var f = visible[i];
+    $('v-title').textContent = f.state + ', ' + f.theme + ', ' + f.width + ' by ' + f.height;
+    var shot = $('v-shot'), facts = $('v-facts');
+    shot.textContent = ''; facts.textContent = '';
+    var sub = 'Frame ' + (i + 1) + ' of ' + visible.length + ' shown.';
+    if (f.reached && f.img) {
+      shot.appendChild(el('img', {src: uriOf(f), width: f.img.w, height: f.img.h, alt: 'Capture of ' + f.state + ' in the ' + f.theme + ' theme at ' + f.width + ' pixels wide.'}));
+      sub += f.img.scale < 0.999 ? ' Shown at ' + Math.round(f.img.scale * 100) + ' percent of the captured size; the full capture is frames/' + f.png + '.' : ' Shown at the captured size.';
+    } else {
+      shot.appendChild(el('div', {class: 'v-none'}, [
+        el('h3', {text: 'This state was not reached'}),
+        el('p', {text: (f.why_not || 'A step failed.') + ' Nothing was measured, because the page was not in the state the name promises.'}),
+        f.png ? el('p', {text: 'The page as it stood when the run stopped is saved as frames/' + f.png + '.'}) : null
+      ]));
+    }
+    $('v-sub').textContent = sub;
+    var kids = [];
+    if (f.problems.length) kids = kids.concat(list(f.reached ? 'Measured problems' : 'Why there is no capture', f.problems, 'bad'));
+    else kids.push(el('h3', {text: 'No measured problem'}), el('ul', {}, [el('li', {text: 'That is a measurement. Whether the frame is right is for the person looking at it.'})]));
+    if (f.reached) {
+      var x = f.facts;
+      kids = kids.concat(list('Facts', [
+        'Text contrast: ' + (x.contrast_lowest == null ? 'no text measured' : 'lowest ' + x.contrast_lowest.toFixed(2) + ' across ' + plural(x.contrast_measured, 'element', 'elements') + ', ' + x.contrast_below + ' below the AA threshold') + (x.contrast_not_measured ? ', ' + x.contrast_not_measured + ' over an image or gradient not measured' : ''),
+        'Sideways overflow: ' + (x.overflow_px > 1 ? x.overflow_px + ' px wider than the viewport' : 'none'),
+        'Cut-off text: ' + x.clipped_count,
+        'Targets under 24 by 24 with no spacing: ' + x.small_targets + ' (under 44 by 44: ' + x.targets_under_44 + ')',
+        'Console errors: ' + x.console_errors,
+        'Requests: ' + x.failed_requests + ' failed, ' + x.broken_answers + ' answered with a server error or a missing file, ' + x.refused_answers + ' refused with 400 to 499 (a refusal is not counted as a problem)',
+        (x.requests_aborted_on_purpose || x.requests_held_on_purpose) ? 'Requests interfered with on purpose: ' + x.requests_aborted_on_purpose + ' aborted, ' + x.requests_held_on_purpose + ' held' : null
+      ].filter(Boolean)));
+      kids = kids.concat(list('Below contrast', x.contrast_below_list.map(function (r) { return r.ratio.toFixed(2) + ' (needs ' + r.need + '): ' + r.fg + ' on ' + r.bg + ', ' + r.el + ' "' + r.text + '"'; }), 'mono'));
+      kids = kids.concat(list('Overflowing', x.overflow_from, 'mono'));
+      kids = kids.concat(list('Cut off', x.clipped.map(function (c) { return c.el + ' (' + c.how + '): "' + c.text + '"'; }), 'mono'));
+      kids = kids.concat(list('Small targets', x.small_targets_list, 'mono'));
+      kids = kids.concat(list('Console', x.console_messages, 'mono'));
+      kids = kids.concat(list('Requests that failed', x.failed_requests_list, 'mono'));
+      kids = kids.concat(list('Error answers', x.answers_list, 'mono'));
+    }
+    kids = kids.concat(list('Steps', f.steps.map(function (s) { return (s.ok ? 'ok: ' : 'FAILED: ') + s.step + (s.detail ? ' (' + s.detail + ')' : ''); }), 'mono'));
+    kids.forEach(function (n) { facts.appendChild(n); });
+    $('v-prev').setAttribute('aria-disabled', String(i === 0));
+    $('v-next').setAttribute('aria-disabled', String(i === visible.length - 1));
+    shot.scrollTop = 0; shot.scrollLeft = 0;
+  }
+  function openViewer(key, from) {
+    var i = -1;
+    visible.forEach(function (f, n) { if (keyOf(f) === key) i = n; });
+    if (i < 0) return;
+    opener = from || null;
+    $('viewer').hidden = false;
+    $('page').setAttribute('aria-hidden', 'true');
+    $('page').inert = true;
+    showFrame(i);
+    $('v-title').focus();
+  }
+  function closeViewer() {
+    var key = openIndex >= 0 && visible[openIndex] ? keyOf(visible[openIndex]) : null;
+    $('viewer').hidden = true;
+    $('page').removeAttribute('aria-hidden');
+    $('page').inert = false;
+    openIndex = -1;
+    var back = null;
+    if (key) document.querySelectorAll('.thumb').forEach(function (b) { if (b.getAttribute('data-key') === key) back = b; });
+    (back || opener || $('show-problems')).focus();
+  }
+  function step(d) {
+    var n = openIndex + d;
+    if (n < 0 || n >= visible.length) return;
+    showFrame(n);
+  }
+
+  // ---------- start ----------
+  function fail(title, text) {
+    $('blank').appendChild(el('div', {class: 'blank', role: 'alert'}, [el('h2', {text: title}), el('p', {text: text})]));
+    say('');
+  }
+  function start() {
+    loadDisplay();
+    if (!D || !D.frames) { fail('No gallery in this file', 'This is the empty template. Run scripts/state_gallery.py with a states file to capture a page and fill it in.'); return; }
+    if (!D.frames.length) { fail('The gallery holds no frames', 'The states file produced nothing to capture. Nothing was measured.'); return; }
+    $('title').textContent = D.title;
+    var s = D.summary, sum = $('summary');
+    sum.appendChild(el('b', {text: String(s.frames)}));
+    sum.appendChild(document.createTextNode(' frames of ' + D.page + ': ' + plural(D.states.length, 'state', 'states') + ', ' + plural(D.themes.length, 'theme', 'themes') + ', ' + plural(D.widths.length, 'width', 'widths') + '. '));
+    sum.appendChild(el('b', {text: String(s.with_measured_problem)}));
+    sum.appendChild(document.createTextNode(s.with_measured_problem === 1 ? ' has a measured problem' : ' have a measured problem'));
+    if (s.not_reached) sum.appendChild(document.createTextNode(', ' + s.not_reached + ' of them not reached'));
+    sum.appendChild(document.createTextNode('.'));
+    $('foot').textContent = 'Captured ' + D.built_at.replace('T', ' ').replace('Z', ' UTC') + ' by state_gallery.py from ' + D.states_file + '. Widths are emulated viewports, not devices.';
+    $('show-problems').textContent = 'Problems only (' + s.with_measured_problem + ')';
+    $('show-problems').setAttribute('aria-label', 'Show only the ' + plural(s.with_measured_problem, 'frame', 'frames') + ' with a measured problem');
+    $('show-problems').hidden = false; $('columns-toggle').hidden = false;
+    D.widths.forEach(function (w) {
+      F.widths[w.width] = true;
+      $('width-chips').appendChild(el('button', {type: 'button', class: 'seg', 'data-width-chip': String(w.width), 'aria-pressed': 'true', text: String(w.width), on: {click: function () { F.widths[w.width] = !F.widths[w.width]; syncChips(); render(); }}}));
+    });
+    D.themes.forEach(function (t) {
+      F.themes[t] = true;
+      $('theme-chips').appendChild(el('button', {type: 'button', class: 'seg', 'data-theme-chip': t, 'aria-pressed': 'true', text: t, on: {click: function () { F.themes[t] = !F.themes[t]; syncChips(); render(); }}}));
+    });
+    $('caveat').hidden = false;
+    say('Laying out ' + plural(D.frames.length, 'frame', 'frames') + '.');
+    setTimeout(render, 0);
+  }
+
+  ['display', 'columns'].forEach(function (name) {
+    $(name + '-toggle').addEventListener('click', function () {
+      var open = this.getAttribute('aria-expanded') !== 'true';
+      this.setAttribute('aria-expanded', String(open));
+      $(name).hidden = !open;
+    });
+  });
+  ['theme', 'frames', 'captions'].forEach(function (k) {
+    document.querySelectorAll('[data-' + k + '-choice]').forEach(function (b) {
+      b.addEventListener('click', function () { display[k] = b.getAttribute('data-' + k + '-choice'); store.write(display); applyDisplay(); if (k === 'frames' && D && D.frames && D.frames.length) render(); });
+    });
+  });
+  $('display-reset').addEventListener('click', function () { display = {theme: DEFAULTS.theme, frames: DEFAULTS.frames, captions: DEFAULTS.captions}; store.clear(); applyDisplay(); if (D && D.frames && D.frames.length) render(); });
+  $('show-problems').addEventListener('click', function () { F.problemsOnly = !F.problemsOnly; render(); });
+  $('filters-reset').addEventListener('click', resetFilters);
+  $('v-close').addEventListener('click', closeViewer);
+  $('v-prev').addEventListener('click', function () { step(-1); });
+  $('v-next').addEventListener('click', function () { step(1); });
+  $('v-fit').addEventListener('click', function () {
+    var on = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', String(on));
+    $('v-shot').classList.toggle('fit', on);
+  });
+  document.addEventListener('keydown', function (ev) {
+    if ($('viewer').hidden) return;
+    if (ev.key === 'Escape') { ev.preventDefault(); closeViewer(); }
+    else if (ev.key === 'ArrowLeft' && ev.target.id !== 'v-shot') step(-1);
+    else if (ev.key === 'ArrowRight' && ev.target.id !== 'v-shot') step(1);
+    else if (ev.key === 'Tab') {
+      // keep focus inside the viewer while it is open
+      var f = [].slice.call($('viewer').querySelectorAll('button,[tabindex="0"]'));
+      var first = f[0], last = f[f.length - 1];
+      if (ev.shiftKey && (document.activeElement === first || document.activeElement === $('v-title'))) { ev.preventDefault(); last.focus(); }
+      else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+    }
+  });
+  start();
+})();
+</script>
+</body>
+</html>

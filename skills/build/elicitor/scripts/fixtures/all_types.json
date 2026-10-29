@@ -1,0 +1,35 @@
+{
+  "id": "fixture-all-types",
+  "version": 1,
+  "mode": "intake",
+  "title": "Fixture: every question type (SYNTHETIC)",
+  "purpose": "Test input for the engine. Every question type, a conditional question of each kind, and two tallies.",
+  "intro": "This instrument exists so that the engine tests have one of everything to exercise.",
+  "sections": [
+    {"id": "basics", "title": "Basics"},
+    {"id": "detail", "title": "Detail"},
+    {"id": "checks", "title": "Checks"}
+  ],
+  "questions": [
+    {"id": "purpose", "section": "basics", "type": "single", "text": "What is the shelf mainly for?", "options": ["Books", "Tools", "Plants", "Mixed use"]},
+    {"id": "rooms", "section": "basics", "type": "multi", "text": "Which rooms could it go in?", "options": ["Hallway", "Kitchen", "Workshop", "Bedroom", "Somewhere else"]},
+    {"id": "other-room", "section": "basics", "type": "text", "text": "Which other room?", "show_if": {"q": "rooms", "includes": "Somewhere else"}},
+    {"id": "width", "section": "basics", "type": "number", "text": "How wide is the space?", "min": 20, "max": 400, "unit": "cm", "required": true},
+    {"id": "load", "section": "detail", "type": "number", "text": "What is the heaviest single item, roughly?", "min": 0, "max": 80, "unit": "kg", "integer": false, "note": true},
+    {"id": "sturdy", "section": "detail", "type": "likert", "text": "It has to feel solid when leaned on.", "labels": ["Strongly disagree", "Disagree", "Neither", "Agree", "Strongly agree"], "tags": ["quality"]},
+    {"id": "finish", "section": "detail", "type": "likert", "text": "The surface finish matters to me.", "labels": ["Not at all", "A little", "Quite a lot", "A great deal"], "tags": ["quality"]},
+    {"id": "urgency", "section": "detail", "type": "scale", "text": "How soon is it needed?", "min": 0, "max": 10, "min_label": "No hurry", "max_label": "This week", "tags": ["quality"]},
+    {"id": "budget", "section": "detail", "type": "scale", "text": "What is the most you would spend?", "min": 0, "max": 500, "step": 25, "min_label": "Nothing", "max_label": "500", "note": false},
+    {"id": "why-rush", "section": "detail", "type": "text", "long": true, "text": "What is driving the deadline?", "show_if": {"q": "urgency", "equals": 9}},
+    {"id": "order", "section": "checks", "type": "rank", "text": "Put these in order, most important first.", "options": ["Cost", "Looks", "Strength", "Speed of delivery"]},
+    {"id": "wall", "section": "checks", "type": "single", "text": "Can it be fixed to the wall?", "options": ["Yes", "No", "Not sure"], "tags": ["site"]},
+    {"id": "wall-type", "section": "checks", "type": "single", "text": "What is the wall made of?", "options": ["Brick or block", "Plasterboard on studs", "Timber", "Not sure"], "show_if": {"q": "wall", "equals": "Yes"}, "tags": ["site"]},
+    {"id": "power", "section": "checks", "type": "single", "text": "Is there a power point within a metre?", "options": ["Yes", "No", "Not sure"], "tags": ["site"]},
+    {"id": "anything", "section": "checks", "type": "text", "long": true, "text": "What else should be known?"},
+    {"id": "follow-up", "section": "checks", "type": "single", "text": "Did the last answer raise something to follow up?", "options": ["Yes", "No"], "show_if": {"q": "anything", "answered": true}}
+  ],
+  "tallies": [
+    {"id": "site-yes", "label": "Site checks answered Yes", "tag": "site", "when": {"equals": "Yes"}},
+    {"id": "quality-high", "label": "Quality statements rated 4 or above", "tag": "quality", "when": {"at_least": 4}}
+  ]
+}

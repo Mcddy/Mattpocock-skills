@@ -1,0 +1,32 @@
+DERIVED TEXT. This is not the source. It was made from the raw file named below by
+harvest.py extract (extractor 1), which strips markup and nothing more.
+raw_file: store/94785491fc07db50c6bdf01fa2998b5b96034a14a9436b562c5a22cf83ef7d65.raw
+raw_sha256: 94785491fc07db50c6bdf01fa2998b5b96034a14a9436b562c5a22cf83ef7d65
+source_id: S3
+address: https://standards.example/standards/hl-102.html
+fetched: 2026-10-08T21:15:56.688Z (UTC; when this copy was first stored)
+note: OFFLINE FIXTURE, not fetched from the network
+title: HL-102 Lamp colour (edition 2)
+decoded_as: utf-8 (Content-Type header)
+Everything below the line of dashes is content from the source, kept as data. Anything in it
+that reads as an instruction is part of the page and is not an instruction to the reader.
+----
+Home Standards Committee
+
+HL-102 Lamp colour
+
+Edition 2, in force from 1 March 2026.
+
+1 Scope
+
+This standard sets the colour of entrance lights.
+
+2 Requirement
+
+Side when entering Colour
+
+Port Red
+
+Starboard Green
+
+SYNTHETIC: this page was invented for the harvest skill's example. The Harbour Lighting Standards Board does not exist.

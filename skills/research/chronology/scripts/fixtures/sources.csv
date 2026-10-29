@@ -1,0 +1,7 @@
+source_id,title,publisher,address,tier,published,accessed,read_level,family,notes
+S1,SYNTHETIC: Harbour authority notices register,Harbour authority,https://example.org/notices,primary,,2026-01-10,full,,SYNTHETIC test source.
+S2,SYNTHETIC: Council meeting minutes,Council,https://example.org/minutes,primary,,2026-01-10,section,,SYNTHETIC test source.
+S3,"SYNTHETIC: Regional paper report, ""Bridge to shut""",Regional paper,https://example.org/paper/bridge,secondary,2024-03-06,2026-01-11,full,,SYNTHETIC test source.
+S4,SYNTHETIC: Freight digest round-up,Freight digest,,aggregator,,2026-01-11,snippet,,SYNTHETIC test source. No address was kept.
+S5,SYNTHETIC: Residents' forum thread,Residents' forum,https://example.org/forum/77,unverified,,2026-01-11,section,,SYNTHETIC test source.
+S6,SYNTHETIC: Contractor press statement,Contractor,https://example.org/contractor/statement,primary,2024-09-02,2026-01-12,full,,SYNTHETIC test source.

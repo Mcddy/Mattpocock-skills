@@ -1,0 +1,20 @@
+{
+ "id": "save-button-fixture",
+ "title": "Save button for the allotment ledger (test fixture)",
+ "question": "Which button style should the ledger use for its main action?",
+ "kind": "component",
+ "recommended": {"id": "solid-square", "reason": "a filled button is the only one of the three that reads as the main action next to a text field."},
+ "options": [
+  {"id": "solid-square", "name": "Solid, squared", "note": "Filled with the accent colour and barely rounded; the heaviest of the three.",
+   "sample": {"variant": "solid", "radius": 3, "weight": 600, "pad_y": 11, "pad_x": 18}},
+  {"id": "outline-medium", "name": "Outline", "note": "A two pixel accent outline with no fill; lighter, and easier to miss.",
+   "sample": {"variant": "outline", "radius": 6, "border": 2, "weight": 600, "pad_y": 10, "pad_x": 18}},
+  {"id": "soft-rounded", "name": "Soft, rounded", "note": "A pale surface with dark text and round corners; reads as a secondary action.",
+   "sample": {"variant": "soft", "radius": 12, "weight": 500, "pad_y": 10, "pad_x": 16}}
+ ],
+ "controls": [
+  {"id": "density", "label": "Density", "type": "choice", "options": ["compact", "comfortable", "roomy"], "default": "comfortable"}
+ ],
+ "context": {"component": "button", "label": "Save entry", "busy_label": "Saving entry",
+             "tokens": {"bg": "#f7f2e6", "surface": "#fffbf2", "text": "#27231d", "muted": "#665c4f", "line": "#dbd0bc", "accent": "#2f6a3c", "on-accent": "#fbfff9"}}
+}

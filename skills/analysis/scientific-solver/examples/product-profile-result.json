@@ -1,0 +1,245 @@
+{
+  "schema": 1,
+  "operation": "profile",
+  "status": "GRID_RESULT",
+  "model": "product-decay",
+  "noise_contract": "independent Gaussian, supplied known sigma",
+  "sigma": 0.02,
+  "minimum_chi_square": 0.0,
+  "best_grid_a": 0.5,
+  "best_grid_b": 2.0,
+  "best_identifiable_rate": 1.0,
+  "minimum_on_boundary": true,
+  "structural_identifiability": "only a*b, not individual factors",
+  "profile": [
+    {
+      "a": 0.5,
+      "profile_chi_square": 0.0,
+      "best_grid_b": 2.0
+    },
+    {
+      "a": 0.55,
+      "profile_chi_square": 0.052860403345147536,
+      "best_grid_b": 1.8
+    },
+    {
+      "a": 0.6,
+      "profile_chi_square": 0.052860403345149326,
+      "best_grid_b": 1.65
+    },
+    {
+      "a": 0.65,
+      "profile_chi_square": 0.02903876247645199,
+      "best_grid_b": 1.55
+    },
+    {
+      "a": 0.7,
+      "profile_chi_square": 0.11498937492141753,
+      "best_grid_b": 1.45
+    },
+    {
+      "a": 0.75,
+      "profile_chi_square": 0.08012237495415092,
+      "best_grid_b": 1.35
+    },
+    {
+      "a": 0.8,
+      "profile_chi_square": 0.0,
+      "best_grid_b": 1.25
+    },
+    {
+      "a": 0.85,
+      "profile_chi_square": 0.20305916246959677,
+      "best_grid_b": 1.2
+    },
+    {
+      "a": 0.9,
+      "profile_chi_square": 0.052860403345147536,
+      "best_grid_b": 1.1
+    },
+    {
+      "a": 0.95,
+      "profile_chi_square": 0.0032703758503452073,
+      "best_grid_b": 1.05
+    },
+    {
+      "a": 1.0,
+      "profile_chi_square": 0.0,
+      "best_grid_b": 1.0
+    },
+    {
+      "a": 1.05,
+      "profile_chi_square": 0.0032703758503452073,
+      "best_grid_b": 0.95
+    },
+    {
+      "a": 1.1,
+      "profile_chi_square": 0.052860403345147536,
+      "best_grid_b": 0.9
+    },
+    {
+      "a": 1.15,
+      "profile_chi_square": 0.2721958031109766,
+      "best_grid_b": 0.85
+    },
+    {
+      "a": 1.2,
+      "profile_chi_square": 0.20305916246959677,
+      "best_grid_b": 0.85
+    },
+    {
+      "a": 1.25,
+      "profile_chi_square": 0.0,
+      "best_grid_b": 0.8
+    },
+    {
+      "a": 1.3,
+      "profile_chi_square": 0.3371928024511751,
+      "best_grid_b": 0.75
+    },
+    {
+      "a": 1.35,
+      "profile_chi_square": 0.08012237495415092,
+      "best_grid_b": 0.75
+    },
+    {
+      "a": 1.4,
+      "profile_chi_square": 0.21433646438315973,
+      "best_grid_b": 0.7
+    },
+    {
+      "a": 1.45,
+      "profile_chi_square": 0.11498937492141753,
+      "best_grid_b": 0.7
+    },
+    {
+      "a": 1.5,
+      "profile_chi_square": 0.3371928024511751,
+      "best_grid_b": 0.65
+    },
+    {
+      "a": 1.55,
+      "profile_chi_square": 0.02903876247645199,
+      "best_grid_b": 0.65
+    },
+    {
+      "a": 1.6,
+      "profile_chi_square": 0.7908479541243476,
+      "best_grid_b": 0.65
+    },
+    {
+      "a": 1.65,
+      "profile_chi_square": 0.052860403345149326,
+      "best_grid_b": 0.6
+    },
+    {
+      "a": 1.7,
+      "profile_chi_square": 0.20305916246959677,
+      "best_grid_b": 0.6
+    },
+    {
+      "a": 1.75,
+      "profile_chi_square": 0.7717807688241296,
+      "best_grid_b": 0.55
+    },
+    {
+      "a": 1.8,
+      "profile_chi_square": 0.052860403345147536,
+      "best_grid_b": 0.55
+    },
+    {
+      "a": 1.85,
+      "profile_chi_square": 0.1559890921278214,
+      "best_grid_b": 0.55
+    },
+    {
+      "a": 1.9,
+      "profile_chi_square": 0.9942960940594916,
+      "best_grid_b": 0.55
+    },
+    {
+      "a": 1.95,
+      "profile_chi_square": 0.33719280245117966,
+      "best_grid_b": 0.5
+    },
+    {
+      "a": 2.0,
+      "profile_chi_square": 0.0,
+      "best_grid_b": 0.5
+    }
+  ],
+  "approximate_95_percent_support_a_values": [
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0,
+    1.05,
+    1.1,
+    1.15,
+    1.2,
+    1.25,
+    1.3,
+    1.35,
+    1.4,
+    1.45,
+    1.5,
+    1.55,
+    1.6,
+    1.65,
+    1.7,
+    1.75,
+    1.8,
+    1.85,
+    1.9,
+    1.95,
+    2.0
+  ],
+  "support_hull": [
+    0.5,
+    2.0
+  ],
+  "grid_resolution_a": 0.050000000000000044,
+  "limitation": "Finite-grid likelihood under a declared noise model; not arbitrary calibration or model validation.",
+  "input_contract": {
+    "schema": 1,
+    "operation": "profile",
+    "model": "product-decay",
+    "amplitude": 1,
+    "sigma": 0.02,
+    "time_unit": "s",
+    "observation_unit": "1",
+    "a_grid": [
+      0.5,
+      2,
+      31
+    ],
+    "b_grid": [
+      0.5,
+      2,
+      31
+    ],
+    "observations": [
+      {
+        "t": 0,
+        "y": 1
+      },
+      {
+        "t": 1,
+        "y": 0.36787944117144233
+      },
+      {
+        "t": 2,
+        "y": 0.1353352832366127
+      }
+    ]
+  },
+  "input_sha256": "ee8f1ca8df74fb4b7c601911156952c50735bb7e6167ee75f5282ab0e7a2decb",
+  "solver_sha256": "29fb2ba34c29b369c411e563b6449baa838483697e4ed6542b304d0eb9b307e0"
+}

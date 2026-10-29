@@ -1,0 +1,6 @@
+interface:
+  display_name: "Sitrep"
+  short_description: "Track sourced changes without inventing fresh evidence"
+  default_prompt: "Use $sitrep for this task; state the supported method, execute inspected helpers and verify actual outputs."
+policy:
+  allow_implicit_invocation: true

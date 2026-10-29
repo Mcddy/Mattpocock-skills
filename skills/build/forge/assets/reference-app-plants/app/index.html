@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en-AU" data-dir="fresh-green">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today's watering: Plants</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 14V7' stroke='%231E4A34' stroke-width='1.6'/%3E%3Cpath d='M8 8C4 8 3 5 3 2c3 0 5 2 5 6Zm0 0c3 0 5-2 5-5-3 0-5 2-5 5Z' fill='%231E4A34'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="kit/fonts.css">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="kit/kit2.css">
+<link rel="stylesheet" href="kit/kit3.css">
+<script src="kit/kit-dir.js"></script>
+<style>
+/* Identity note
+   Direction: fresh-green (chosen unattended: "garden, food, outdoors ... calm admin with character" fits
+              indoor plants and a calm daily round; the board in board/ shows the other seven).
+   Signature: deep green (--sig) floods one object only: today's round, with the number still to water at
+              display size. Buttons use --pop (yellow) or ink, so the green stays on the thing that matters.
+   Faces:     Fraunces for the count and names of days, DM Sans for the work; tabular numerals.
+   Bold move: flooded hero object (the round), the list beside it as ruled rows, not cards.
+   Rule:      the count is set larger than any name, and every row puts the two facts that decide
+              "water it or not" (last watered, how often) beside its one action.
+   Imagery:   flat plant drawings in this direction (clay in the clay directions), one per plant shape.
+   Raw colours live only in the kit's token blocks; everything below reads tokens. */
+:root { --dur-instant: 80ms; --dur-quick: 160ms; --dur-settle: 280ms; --ease-out: cubic-bezier(0.25, 1, 0.5, 1); }
+html, body { margin: 0; }
+[hidden] { display: none !important; }  /* the kit's components set display, which would override the hidden attribute */
+body.screen { min-height: 100vh; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.page { max-width: 1240px; margin: 0 auto; padding: 0 0 48px; }
+.banner { background: var(--warn-soft); color: var(--warn); font-weight: 700; font-size: 14px; padding: 10px 20px; }
+.zone { margin: 4px 20px 0; font-size: 13px; color: var(--ink-2); font-weight: 600; }
+
+/* Top bar */
+.topbar { gap: 8px 12px; flex-wrap: wrap; }
+.topbar .title { font-size: 2.4rem; }
+.addbtn { min-height: 44px; padding: 10px 16px; font-size: 14.5px; white-space: nowrap; flex: none; }
+
+/* Seven-day strip: the kit's week takes any number of days */
+.week { gap: 6px; }
+.day small:last-child { font-variant-numeric: tabular-nums; }
+
+/* Hero: today's round */
+.hero-value { margin: 0; }
+.hero-value.is-word { font-size: clamp(2.6rem, 11vw, 3.2rem); line-height: 1; margin-top: 4px; }
+.hero-meta { margin-top: 6px; }
+.hero-avatar .av { width: 104px; height: 104px; }
+.hero .spot { width: 150px; height: auto; flex: none; margin: -8px -10px -6px 0; }
+.hero-note { font-size: 14px; background: color-mix(in srgb, var(--surface) 82%, var(--sig)); }  /* opaque, so its contrast can be measured */
+.hero-note svg { color: var(--ink-2); }
+
+/* The round: rows */
+.round { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.slot { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; grid-template-areas: "av who act" "av facts act" "av msg msg"; gap: 4px 12px; align-items: center; transition: background-color 600ms var(--ease-out); }
+.slot > .av { grid-area: av; align-self: start; }
+.slot > .who { grid-area: who; min-width: 0; }
+.slot > .facts { grid-area: facts; }
+.slot > .act { grid-area: act; }
+.slot > .rowmsg { grid-area: msg; }
+.slot .av { width: 56px; height: 56px; }
+.slot h4 { font-size: 1.05rem; overflow-wrap: anywhere; }
+.slot p { font-size: 0.875rem; }
+.slot .facts { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.slot .tag { white-space: nowrap; }
+.slot .tag-ok { color: var(--ink); background: color-mix(in srgb, var(--ok) 16%, var(--surface)); }  /* the kit's green-on-green tag-ok measured below 4.5:1 */
+.slot .last { color: var(--ink); font-weight: 600; }
+.slot .act { min-height: 44px; padding: 10px 16px; font-size: 14.5px; }
+.slot .rowmsg { margin: 4px 0 0; color: var(--warn); font-weight: 700; font-size: 0.875rem; }
+.slot.tint { background: var(--sig-soft); }
+.slot.is-done { opacity: 1; }
+.slot.is-done h4, .slot.is-done .last { color: var(--ink-2); }
+.listcard { padding: 4px 14px 16px; }
+.listcard + .listcard { margin-top: 12px; }
+.section-h { margin: 14px 4px 10px; }
+.section-h .n { font: var(--display-weight) 1.25rem/1 var(--font-display); color: var(--ink-2); }
+
+/* Empty, error, loading */
+.blank { margin: 14px 16px 0; text-align: center; padding: 8px 18px 20px; }
+.blank .spot { width: min(260px, 70vw); height: auto; display: block; margin: 0 auto; }
+.blank h2 { margin: 2px 0 6px; font: var(--display-weight) 1.75rem/1.05 var(--font-display); letter-spacing: var(--display-track); }
+.blank p { margin: 0 auto 14px; max-width: 34ch; color: var(--ink-2); font-weight: 600; }
+.sk { background: var(--surface-2); border-radius: 12px; }
+.sk-row { height: 76px; border-radius: 22px; }
+.sk-hero { height: 214px; border-radius: 32px; margin: 14px 16px 0; }
+
+/* Add a plant */
+.addcard { margin: 14px 16px 0; padding: 16px 16px 18px; }
+.addcard h2 { margin: 0 0 4px; font: var(--display-weight) 1.5rem/1.05 var(--font-display); letter-spacing: var(--display-track); }
+.addcard .lead { margin: 0 0 12px; color: var(--ink-2); font-size: 0.9rem; font-weight: 600; }
+.field { margin-top: 12px; }
+.field label, .field legend { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; padding: 0; }
+.field input[type=text] { width: 100%; min-height: 48px; border-radius: 14px; border: 0; box-shadow: inset 0 0 0 1.5px var(--line); background: var(--surface);
+  color: var(--ink); font: 600 1rem var(--font-body); padding: 10px 14px; }
+.field input[type=text]:focus-visible { outline: 3px solid var(--sig); outline-offset: 2px; }
+.field input[aria-invalid=true] { box-shadow: inset 0 0 0 2px var(--warn); }
+.ferr { margin: 6px 0 0; color: var(--warn); font-weight: 700; font-size: 0.875rem; }
+.ferr:empty { display: none; }
+.every { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.every input[type=text] { width: 5.5rem; text-align: center; font-size: 1.15rem; }
+.every .unit { font-weight: 700; margin-right: 4px; }
+.every .chip { min-height: 44px; padding: 8px 14px; cursor: pointer; }
+.every .chip[aria-pressed=true] { background: var(--pop); color: var(--pop-ink); box-shadow: inset 0 0 0 2px var(--ink); }
+fieldset.field { border: 0; margin: 12px 0 0; padding: 0; min-width: 0; }
+.shapes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.shape { position: relative; }
+.shape input { position: absolute; opacity: 0; inset: 0; margin: 0; width: 100%; height: 100%; cursor: pointer; }
+.shape label { display: grid; justify-items: center; gap: 2px; padding: 6px 4px 8px; border-radius: 18px; background: var(--surface-2); text-align: center; margin: 0; cursor: pointer; min-height: 44px; }
+.shape .av { width: 54px; height: 54px; }
+.shape b { font-size: 0.8rem; line-height: 1.15; }
+.shape small { font-size: 0.75rem; color: var(--ink-2); font-weight: 600; line-height: 1.15; }
+.shape input:checked + label { background: var(--pop); color: var(--pop-ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.shape input:checked + label small { color: inherit; }
+.shape input:focus-visible + label { outline: 3px solid var(--sig); outline-offset: 2px; }
+.formmsg { margin: 12px 0 0; padding: 10px 12px; border-radius: 14px; background: var(--warn-soft); color: var(--warn); font-weight: 700; font-size: 0.9rem; }
+.formmsg:empty { display: none; }
+.formok { margin: 12px 0 0; font-weight: 700; color: var(--ok); }
+.formok:empty { display: none; }
+.formbar { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.formbar .btn-ink { flex: 1 1 200px; }
+[aria-disabled=true] { opacity: .6; cursor: progress; }
+
+@media (min-width: 900px) {
+  .page { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 8px 32px; padding: 24px 28px 40px; align-items: start; }
+  .banner, .zone { grid-column: 1 / -1; }
+  .left .topbar, .left .week { padding-left: 0; padding-right: 0; }
+  .topbar { flex-wrap: nowrap; }
+  .topbar .title { font-size: 2rem; }
+  .left .hero, .left .addcard, .left .blank, .left .sk-hero { margin-left: 0; margin-right: 0; }
+  .right { padding-top: 6px; }
+  .listcard { border-radius: 32px; padding: 6px 18px 18px; }
+  #left-extra .listcard { margin-top: 16px; }
+}
+@media (max-width: 899px) { .right { margin: 14px 16px 0; } }
+@media (max-width: 599px) { .slot { grid-template-columns: 48px minmax(0, 1fr) auto; grid-template-areas: "av who who" "av facts act" "av msg msg"; } .slot .av { width: 48px; height: 48px; } }
+@media (max-width: 360px) { .shapes { grid-template-columns: repeat(2, minmax(0, 1fr)); } .slot { grid-template-columns: 40px minmax(0, 1fr) auto; } .slot .av { width: 40px; height: 40px; } }
+@media (prefers-reduced-motion: reduce) { .slot { transition: none; } }
+</style>
+</head>
+<body class="screen">
+<main class="page">
+  <div class="banner" id="frozen" hidden></div>
+  <p class="zone" id="zone" hidden></p>
+  <div class="left">
+    <div class="topbar">
+      <div><div class="eyebrow" id="today-label">&nbsp;</div><h1 class="display title">Today's watering</h1></div>
+      <button class="btn btn-ghost addbtn" type="button" id="add-open" aria-expanded="false" aria-controls="add" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add a plant</button>
+    </div>
+    <div class="week" id="week" role="group" aria-label="Plants due in the next seven days"></div>
+    <div id="lead"><div class="sk sk-hero" aria-hidden="true"></div></div>
+    <section class="card addcard" id="add" aria-labelledby="add-h" hidden>
+      <h2 id="add-h">Add a plant</h2>
+      <p class="lead">Its name, where it lives and how often it needs water. It joins today's list until you tick it.</p>
+      <form id="add-form" novalidate>
+        <div class="field"><label for="f-name">Name</label>
+          <input type="text" id="f-name" name="name" autocomplete="off" aria-describedby="e-name" placeholder="Monstera">
+          <p class="ferr" id="e-name"></p></div>
+        <div class="field"><label for="f-room">Room <span class="muted">(optional)</span></label>
+          <input type="text" id="f-room" name="room" autocomplete="off" list="rooms" aria-describedby="e-room" placeholder="Lounge">
+          <datalist id="rooms"></datalist>
+          <p class="ferr" id="e-room"></p></div>
+        <div class="field"><label for="f-every">Water every</label>
+          <div class="every"><input type="text" inputmode="numeric" id="f-every" name="every_days" autocomplete="off" aria-describedby="e-every every-hint"><span class="unit">days</span>
+            <button type="button" class="chip" data-every="3" aria-pressed="false">3</button><button type="button" class="chip" data-every="7" aria-pressed="false">7</button><button type="button" class="chip" data-every="14" aria-pressed="false">14</button></div>
+          <p class="sr-only" id="every-hint">Choose 3, 7 or 14, or type any number of days from 1 to 60.</p>
+          <p class="ferr" id="e-every"></p></div>
+        <fieldset class="field" aria-describedby="e-kind"><legend>Looks most like</legend>
+          <div class="shapes" id="shapes"></div>
+          <p class="ferr" id="e-kind"></p></fieldset>
+        <p class="formmsg" id="add-msg" role="alert"></p>
+        <p class="formok" id="add-ok" role="status"></p>
+        <div class="formbar"><button class="btn btn-ink" type="submit" id="add-go">Add plant</button>
+          <button class="btn btn-ghost" type="button" id="add-close">Close</button></div>
+      </form>
+    </section>
+    <div id="left-extra"></div>
+  </div>
+  <div class="right" id="right">
+    <div class="card listcard" aria-hidden="true"><div class="section-h"><h2>&nbsp;</h2></div><div class="round"><div class="sk sk-row"></div><div class="sk sk-row"></div><div class="sk sk-row"></div></div></div>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite"></p>
+</main>
+<script src="kit/illustrations.js"></script>
+<script src="plant-art.js"></script>
+<script>
+'use strict';
+/* ---------- formats: Australian English, 24-hour, Brisbane; dates in the user's form "Tue 2 Mar" ---------- */
+const ZONE = 'Australia/Brisbane';
+const VIEWER_ZONE = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return ZONE; } })();
+const dayParts = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+const timeFmt = new Intl.DateTimeFormat('en-AU', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: ZONE });
+const isoDay = s => new Date(s + 'T00:00:00Z');
+function fmtDay(s) { const p = Object.fromEntries(dayParts.formatToParts(isoDay(s)).map(x => [x.type, x.value])); return `${p.weekday} ${p.day} ${p.month}`; }
+function fmtWeekday(s) { return fmtDay(s).split(' ')[0]; }
+function fmtTime(instant) { return timeFmt.format(new Date(instant)) + (VIEWER_ZONE !== ZONE ? ' Brisbane time' : ''); }
+const daysBetween = (a, b) => Math.round((isoDay(b) - isoDay(a)) / 86400000);
+function every(n) { return n === 1 ? 'every day' : n === 7 ? 'every week' : n % 7 === 0 ? `every ${n / 7} weeks` : `every ${n} days`; }
+function ago(n) { return n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`; }
+
+/* ---------- illustration style follows the direction (flat for Fresh Green and Mono Flood, clay elsewhere) ---------- */
+const FLAT = new Set(['fresh-green', 'mono-flood']);
+const WIDE = window.matchMedia('(min-width: 900px)');  // desktop: what is coming up sits under the round, the working list on the right
+const artStyle = () => FLAT.has(document.documentElement.dataset.dir) ? 'flat' : 'clay';
+const SHAPES = [['split', 'Split leaf', 'like Monstera'], ['fern', 'Fern', 'like Boston fern'], ['upright', 'Upright', 'like snake plant'], ['round', 'Coin leaf', 'like money plant'],
+  ['trailing', 'Trailing', 'like pothos'], ['tree', 'Tall leafy', 'like fiddle-leaf fig'], ['spiky', 'Spiky', 'like aloe'], ['flower', 'Flowering', 'like peace lily']];
+
+/* ---------- DOM helpers: text is always set as text ---------- */
+const $ = id => document.getElementById(id);
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (v == null || v === false) continue; if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v === true ? '' : v); }
+  for (const k of kids) if (k != null) e.append(k);
+  return e;
+}
+function art(html) { const t = document.createElement('template'); t.innerHTML = html; return t.content.firstChild; } // markup from plant-art.js only, never user text
+const ICON = {
+  drop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5c3 4.2 6 7.6 6 10.8a6 6 0 0 1-12 0c0-3.2 3-6.6 6-10.8Z"/></svg>',
+  undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7 4.5 11.5 9 16"/><path d="M5 11.5h9a5 5 0 0 1 0 10h-2"/></svg>',
+  next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M10.5 8.5 14 12l-3.5 3.5"/></svg>',
+  alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.8 17.5A2 2 0 0 0 4.5 20.5h15a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg>',
+};
+
+/* ---------- API: one place for timeouts and the error shape ---------- */
+async function api(method, path, body, key) {
+  const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 8000);
+  const headers = { Accept: 'application/json' };
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (key) headers['Idempotency-Key'] = key;
+  try {
+    const r = await fetch(path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), signal: ctrl.signal, cache: 'no-store' });
+    let data = null; try { data = await r.json(); } catch (e) { data = null; }
+    return { ok: r.ok, status: r.status, data, err: data && data.error ? data.error : null };
+  } catch (e) {
+    return { ok: false, status: 0, data: null, err: null, unanswered: true };
+  } finally { clearTimeout(timer); }
+}
+const newKey = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+
+/* ---------- state ---------- */
+
+const S = { phase: 'loading', today: null, counts: null, week: [], plants: [], frozen: false, now: null, order: [], busy: new Set(), msgs: {}, tint: null, loadErr: null, addKey: null };
+
+async function loadAll() {
+  const t = await api('GET', '/api/today');
+  if (!t.ok) return fail(t);
+  const plants = []; let after = null;
+  for (let i = 0; i < 20; i++) {
+    const r = await api('GET', '/api/plants?limit=200' + (after ? '&after=' + encodeURIComponent(after) : ''));
+    if (!r.ok) return fail(r);
+    plants.push(...r.data.plants); after = r.data.next; if (!after) break;
+  }
+  applyToday(t.data);
+  S.plants = plants; S.phase = plants.length ? 'ready' : 'empty'; S.loadErr = null;
+  S.order = dueSort(plants.filter(p => p.status === 'due' || p.status === 'overdue')).map(p => p.id);
+  render();
+  function fail(r) { S.phase = 'error'; S.loadErr = r.unanswered ? 'No answer from the plant server. Check it is running, then try again.' : (r.err ? r.err.message : 'The server sent something this page cannot read. Try again.'); render(); }
+}
+function applyToday(d) { S.today = d.today; S.counts = d.counts; S.week = d.week; S.frozen = d.frozen; S.now = d.now; }
+async function refreshToday() { const t = await api('GET', '/api/today'); if (t.ok) applyToday(t.data); }
+function dueSort(list) { return [...list].sort((a, b) => (b.days_overdue - a.days_overdue) || a.room.localeCompare(b.room, 'en-AU') || a.name.localeCompare(b.name, 'en-AU')); }
+function putPlant(p) { const i = S.plants.findIndex(x => x.id === p.id); if (i >= 0) S.plants[i] = p; else S.plants.push(p); }
+
+/* ---------- actions ---------- */
+async function water(id) {
+  if (S.busy.has(id)) return;
+  const p = S.plants.find(x => x.id === id); if (!p) return;
+  S.busy.add(id); delete S.msgs[id]; render();
+  const r = await api('POST', `/api/plants/${id}/waterings`, {}, newKey());
+  S.busy.delete(id);
+  if (r.ok) {
+    putPlant(r.data.plant); await refreshToday(); S.tint = id;
+    announce(`${p.name} watered at ${fmtTime(r.data.watering.watered_at)}. Next due ${fmtDay(r.data.plant.next_due)}.`);
+  } else if (r.unanswered) {
+    S.msgs[id] = `No answer, so it is not certain ${p.name} was recorded. Checking the list now.`; render();
+    await reread(id, 'water');
+    return;
+  } else {
+    S.msgs[id] = r.err ? r.err.message : 'The watering was not recorded. Try again.';
+    if (r.status === 409 || r.status === 404) await reread(id);
+  }
+  render();
+}
+async function undo(id) {
+  const p = S.plants.find(x => x.id === id); if (!p || !p.watering_today_id || S.busy.has(id)) return;
+  S.busy.add(id); delete S.msgs[id]; render();
+  const r = await api('DELETE', `/api/waterings/${p.watering_today_id}`);
+  S.busy.delete(id);
+  if (r.ok) { putPlant(r.data.plant); await refreshToday(); announce(`Undone. ${p.name} needs water today.`); }
+  else if (r.unanswered) { S.msgs[id] = 'No answer, so the undo is not confirmed. Checking the list now.'; render(); await reread(id); return; }
+  else { S.msgs[id] = r.err ? r.err.message : 'The undo did not go through. Try again.'; if (r.status === 404) await reread(id); }
+  render();
+}
+async function reread(id, after) {  // re-read the real state; never assume
+  const r = await api('GET', '/api/plants?limit=200');
+  if (r.ok) { const fresh = r.data.plants.find(x => x.id === id); if (fresh) putPlant(fresh); await refreshToday();
+    if (after === 'water' && fresh) S.msgs[id] = fresh.status === 'done' ? `It was recorded at ${fmtTime(fresh.last_watered_at)}.` : 'It was not recorded. Press Watered again.'; }
+  else if (after === 'water') S.msgs[id] = 'Still no answer from the plant server. Reload once it is running to see what was recorded.';
+  render();
+}
+
+/* ---------- render ---------- */
+function render() {
+  const fk = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.fk : null;
+  $('frozen').hidden = !S.frozen;
+  if (S.frozen && S.now) $('frozen').textContent = `Clock fixed at ${fmtDay(S.today)} ${fmtTime(S.now)} for testing. Waterings are dated by that clock.`;
+  $('zone').hidden = VIEWER_ZONE === ZONE; $('zone').textContent = 'Dates and times are Brisbane time.';
+  $('today-label').textContent = S.today ? fmtDay(S.today) : ' ';
+  $('add-open').hidden = S.phase !== 'ready';
+  renderWeek(); renderLead(); renderLists();
+  if (S.phase === 'empty' || S.phase === 'ready') renderShapes();
+  if (S.phase === 'empty') { $('add').hidden = false; $('add-close').hidden = true; }
+  else { $('add-close').hidden = false; }
+  if (S.phase === 'error' || S.phase === 'loading') $('add').hidden = true;
+  $('add-open').setAttribute('aria-expanded', String(!$('add').hidden));
+  const rooms = [...new Set(S.plants.map(p => p.room).filter(Boolean))].sort();
+  $('rooms').replaceChildren(...rooms.map(r => el('option', { value: r })));
+  if (fk) { const t = document.querySelector(`[data-fk="${CSS.escape(fk)}"]`); if (t) t.focus(); }
+  if (S.tint != null) { const row = document.querySelector(`[data-id="${S.tint}"]`); S.tint = null;
+    if (row) { row.classList.add('tint'); setTimeout(() => row.classList.remove('tint'), 600); } }
+}
+function renderWeek() {
+  const w = $('week');
+  w.hidden = S.phase !== 'ready';
+  if (w.hidden) return;
+  w.replaceChildren(...S.week.map((d, i) => el('div', { class: 'day' + (i === 0 ? ' is-on' : '') },
+    el('small', { text: i === 0 ? 'Today' : fmtWeekday(d.date) }), el('b', { text: String(isoDay(d.date).getUTCDate()) }), el('small', { text: d.due ? `${d.due} due` : 'none' }))));
+}
+function nextRound() {
+  const n = S.week.slice(1).find(d => d.due > 0);
+  return n ? `Next round ${fmtDay(n.date)}: ${n.due} ${n.due === 1 ? 'plant' : 'plants'}.` : 'Nothing due in the next six days.';
+}
+function renderLead() {
+  const lead = $('lead');
+  if (S.phase === 'loading') return;
+  if (S.phase === 'error') {
+    lead.replaceChildren(el('section', { class: 'card blank', 'aria-labelledby': 'err-h' }, art(plantScene('dry', { style: artStyle() })),
+      el('h2', { id: 'err-h', text: 'The plant list did not load' }), el('p', { text: S.loadErr + ' Nothing was changed.' }),
+      el('button', { class: 'btn btn-ink', type: 'button', id: 'retry', text: 'Try again' })));
+    $('retry').addEventListener('click', () => { S.phase = 'loading'; loadAll(); });
+    return;
+  }
+  if (S.phase === 'empty') {
+    lead.replaceChildren(el('section', { class: 'card blank', 'aria-labelledby': 'empty-h' }, art(plantScene('empty', { style: artStyle() })),
+      el('h2', { id: 'empty-h', text: 'No plants yet' }), el('p', { text: 'Add each plant once with how often it needs water. Every morning this page lists the ones due that day.' })));
+    return;
+  }
+  const { left, done } = S.counts, total = left + done;
+  const nextUp = S.order.map(id => S.plants.find(p => p.id === id)).find(p => p && (p.status === 'due' || p.status === 'overdue'))
+    || dueSort(S.plants.filter(p => p.status === 'due' || p.status === 'overdue'))[0];
+  const hero = el('section', { class: 'hero', 'aria-labelledby': 'hero-h' });
+  const top = el('div', { class: 'hero-top' });
+  const words = el('div');
+  if (left > 0) {
+    words.append(el('div', { class: 'eyebrow', id: 'hero-h', text: 'Still to water today' }), el('p', { class: 'hero-value', id: 'left', text: String(left) }),
+      el('div', { class: 'hero-meta', id: 'left-meta', text: `${left === 1 ? 'plant' : 'plants'} of ${total} due · ${done} watered` }));
+    top.append(words, el('div', { class: 'hero-avatar' }, art(plantArt(nextUp ? nextUp.kind : 'round', { style: artStyle(), bg: 'var(--surface)' }))));
+  } else {
+    words.append(el('div', { class: 'eyebrow', id: 'hero-h', text: total ? 'Today' : 'Nothing due today' }),
+      el('p', { class: 'display hero-value is-word', id: 'left', text: total ? 'All watered' : 'Rest day' }),
+      el('div', { class: 'hero-meta', id: 'left-meta', text: total ? `${done} of ${total} watered today` : `${S.counts.plants} ${S.counts.plants === 1 ? 'plant' : 'plants'} on the list` }));
+    top.append(words, art(plantScene(total ? 'done' : 'empty', { style: artStyle() })));
+  }
+  hero.append(top);
+  if (total) { const m = el('div', { class: 'meter', role: 'img', 'aria-label': `${done} of ${total} watered` }); m.append(el('i', { style: `width:${Math.round(done / total * 100)}%` })); hero.append(m); }
+  const note = el('div', { class: 'hero-note' });
+  if (left > 0 && nextUp) {
+    note.append(art(ICON.next), el('span', { id: 'next-up', text: `Next: ${nextUp.name}${nextUp.room ? ', ' + nextUp.room : ''}${nextUp.status === 'overdue' ? ` · ${nextUp.days_overdue} ${nextUp.days_overdue === 1 ? 'day' : 'days'} overdue` : nextUp.last_watered_on ? '' : ' · no watering logged yet'}` }));
+  } else note.append(art(ICON.next), el('span', { id: 'next-up', text: nextRound() }));
+  hero.append(note);
+  lead.replaceChildren(hero);
+}
+function statusTag(p) {
+  if (p.status === 'overdue') { const t = el('span', { class: 'tag tag-warn' }, art(ICON.alert)); t.append(`${p.days_overdue} ${p.days_overdue === 1 ? 'day' : 'days'} overdue`); return t; }
+  if (p.status === 'due') return el('span', { class: 'tag tag-soft', text: 'Due today' });
+  if (p.status === 'done') return el('span', { class: 'tag tag-ok', text: `Next due ${fmtDay(p.next_due)}` });
+  return el('span', { class: 'tag tag-soft', text: p.days_until === 1 ? `Due tomorrow, ${fmtDay(p.next_due)}` : `Due ${fmtDay(p.next_due)}` });
+}
+function lastLine(p) {
+  if (p.status === 'done') return `Watered today at ${fmtTime(p.last_watered_at)}`;
+  if (!p.last_watered_on) return 'No watering logged yet';
+  return `Last watered ${fmtDay(p.last_watered_on)}, ${ago(daysBetween(p.last_watered_on, S.today))}`;
+}
+function row(p) {
+  const busy = S.busy.has(p.id);
+  const li = el('li', { class: 'slot' + (p.status === 'overdue' ? ' is-alert' : '') + (p.status === 'done' ? ' is-done' : ''), 'data-id': p.id },
+    art(plantArt(p.kind, { style: artStyle(), bg: 'var(--surface-2)' })));
+  const who = el('div', { class: 'who' }, el('h4', { text: p.name }), el('p', { text: (p.room ? p.room + ' · ' : '') + every(p.every_days).replace(/^e/, p.room ? 'e' : 'E') }),
+    el('p', { class: 'last', text: lastLine(p) }));
+  li.append(who, el('div', { class: 'facts' }, statusTag(p)));
+  let b;
+  if (p.status === 'done') { b = el('button', { class: 'btn btn-ghost act', type: 'button', 'data-act': 'undo', 'data-fk': `${p.id}:act`, 'aria-label': `Undo watering ${p.name}` }, art(ICON.undo)); b.append('Undo'); }
+  else if (p.status === 'later') { b = el('button', { class: 'btn btn-ghost act', type: 'button', 'data-act': 'water', 'data-fk': `${p.id}:act`, 'aria-label': `Water ${p.name} early` }); b.append('Water early'); }
+  else { b = el('button', { class: 'btn btn-ink act', type: 'button', 'data-act': 'water', 'data-fk': `${p.id}:act`, 'aria-label': `Watered ${p.name}` }, art(ICON.drop)); b.append('Watered'); }
+  if (busy) b.setAttribute('aria-disabled', 'true');
+  li.append(b);
+  if (S.msgs[p.id]) li.append(el('p', { class: 'rowmsg', role: 'alert', text: S.msgs[p.id] }));
+  return li;
+}
+function listCard(id, title, plants, note, count = plants.length) {
+  const card = el('section', { class: 'card listcard', 'aria-labelledby': id + '-h', id });
+  card.append(el('div', { class: 'section-h' }, el('h2', { id: id + '-h', text: title }), el('span', { class: 'n', id: id + '-n', text: String(count) })));
+  if (note) card.append(el('p', { class: 'muted', style: 'margin:0 4px 10px;font-weight:600', text: note }));
+  if (plants.length) card.append(el('ul', { class: 'round' }, ...plants.map(row)));
+  return card;
+}
+function renderLists() {
+  const right = $('right');
+  if (S.phase !== 'ready') { if (S.phase !== 'loading') right.replaceChildren(); return; }
+  const byId = new Map(S.plants.map(p => [p.id, p]));
+  const sticky = S.order.map(id => byId.get(id)).filter(Boolean);   // rows ticked this visit stay where they were
+  const stickyIds = new Set(sticky.map(p => p.id));
+  const extra = dueSort(S.plants.filter(p => !stickyIds.has(p.id) && (p.status === 'due' || p.status === 'overdue')));
+  const due = [...sticky.filter(p => p.status !== 'later'), ...extra];
+  const dueIds = new Set(due.map(p => p.id));
+  const done = S.plants.filter(p => p.status === 'done' && !dueIds.has(p.id)).sort((a, b) => a.last_watered_at < b.last_watered_at ? 1 : -1);
+  const later = S.plants.filter(p => p.status === 'later' && !dueIds.has(p.id)).sort((a, b) => a.next_due < b.next_due ? -1 : a.next_due > b.next_due ? 1 : a.name.localeCompare(b.name, 'en-AU'));
+  const cards = [];
+  const stillDue = due.filter(p => p.status === 'due' || p.status === 'overdue').length;  // ticked rows stay in place but are not counted
+  cards.push(due.length ? listCard('needs', 'Needs water', due, stillDue ? null : 'All of these are watered.', stillDue) : listCard('needs', 'Needs water', [], 'Nothing else needs water today.', 0));
+  if (done.length) cards.push(listCard('watered', 'Watered today', done));
+  const laterCard = later.length ? listCard('later', 'Coming up', later) : null;
+  if (laterCard && WIDE.matches) $('left-extra').replaceChildren(laterCard); else { $('left-extra').replaceChildren(); if (laterCard) cards.push(laterCard); }
+  right.replaceChildren(...cards);
+}
+let shapesDrawn = null;
+function renderShapes() {
+  const style = artStyle(); if (shapesDrawn === style) return; shapesDrawn = style;
+  const checked = (document.querySelector('input[name=kind]:checked') || {}).value;
+  $('shapes').replaceChildren(...SHAPES.map(([k, t, s]) => el('div', { class: 'shape' },
+    el('input', { type: 'radio', name: 'kind', id: 'k-' + k, value: k, checked: k === checked }),
+    el('label', { for: 'k-' + k }, art(plantArt(k, { style })), el('b', { text: t }), el('small', { text: s })))));
+}
+function announce(t) { $('status').textContent = ''; setTimeout(() => { $('status').textContent = t; }, 30); }
+
+/* ---------- add a plant ---------- */
+const FIELD = { name: ['f-name', 'e-name'], room: ['f-room', 'e-room'], every_days: ['f-every', 'e-every'], kind: [null, 'e-kind'] };
+function clearErrors() { for (const [, [f, e]] of Object.entries(FIELD)) { $(e).textContent = ''; if (f) $(f).removeAttribute('aria-invalid'); } $('add-msg').textContent = ''; }
+async function addPlant(ev) {
+  ev.preventDefault();
+  const go = $('add-go'); if (go.getAttribute('aria-disabled') === 'true') return;
+  clearErrors(); $('add-ok').textContent = '';
+  const ev7 = $('f-every').value.trim();
+  const body = { name: $('f-name').value, room: $('f-room').value, every_days: /^\d{1,3}$/.test(ev7) ? Number(ev7) : ev7,
+    kind: (document.querySelector('input[name=kind]:checked') || {}).value || null };
+  const sig = JSON.stringify(body);
+  if (!S.addKey || S.addKey.sig !== sig) S.addKey = { sig, key: newKey() };   // same attempt, same key: a retry cannot add twice
+  go.setAttribute('aria-disabled', 'true');
+  const r = await api('POST', '/api/plants', body, S.addKey.key);
+  go.removeAttribute('aria-disabled');
+  if (r.ok) {
+    S.addKey = null; const p = r.data; putPlant(p);
+    if (!S.order.includes(p.id) && (p.status === 'due' || p.status === 'overdue')) S.order.push(p.id);
+    await refreshToday(); S.phase = 'ready'; S.tint = p.id;
+    $('f-name').value = ''; render(); $('f-name').focus();
+    $('add-ok').textContent = `Added ${p.name}. It is on today's list until you tick it.`;
+    return;
+  }
+  if (r.unanswered) { $('add-msg').textContent = 'No answer from the plant server, so it is not certain the plant was added. Press Add plant again: it will not be added twice.'; return; }
+  const e = r.err || { message: 'The plant was not added. Try again.', fields: {} };
+  $('add-msg').textContent = e.message;
+  let first = null;
+  for (const [k, reason] of Object.entries(e.fields || {})) {
+    const map = FIELD[k]; if (!map) continue;
+    const label = { name: 'Name', room: 'Room', every_days: 'Water every', kind: 'Looks most like' }[k];
+    $(map[1]).textContent = `${label} ${reason}.`;
+    if (map[0]) { $(map[0]).setAttribute('aria-invalid', 'true'); first = first || $(map[0]); }
+    else first = first || document.querySelector('input[name=kind]');
+  }
+  if (first) first.focus();
+}
+
+/* ---------- wiring ---------- */
+$('add-form').addEventListener('submit', addPlant);
+$('add-open').addEventListener('click', () => { $('add').hidden = false; $('add-open').setAttribute('aria-expanded', 'true'); renderShapes(); $('f-name').focus(); });
+$('add-close').addEventListener('click', () => { $('add').hidden = true; clearErrors(); $('add-ok').textContent = ''; $('add-open').setAttribute('aria-expanded', 'false'); $('add-open').focus(); });
+function syncEvery() { const v = $('f-every').value.trim(); document.querySelectorAll('[data-every]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.every === v))); }
+document.querySelectorAll('[data-every]').forEach(b => b.addEventListener('click', () => { $('f-every').value = b.dataset.every; syncEvery(); }));
+$('f-every').addEventListener('input', syncEvery);
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-id] button[data-act]'); if (!b) return;
+  if (b.getAttribute('aria-disabled') === 'true') return;
+  const id = Number(b.closest('[data-id]').dataset.id);
+  if (b.dataset.act === 'water') water(id); else undo(id);
+});
+WIDE.addEventListener('change', () => render());
+new MutationObserver(() => { shapesDrawn = null; render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-dir'] });
+loadAll();
+</script>
+</body>
+</html>

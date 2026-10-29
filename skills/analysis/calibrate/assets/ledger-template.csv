@@ -1,0 +1,2 @@
+id,date,statement,probability,resolve_by,outcome,domain,made_by
+P-001,2026-01-15,"The 2.0 release ships on or before 31 March 2026",0.70,2026-03-31,,delivery,user

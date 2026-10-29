@@ -1,0 +1,26 @@
+{
+ "quantity": "REPLACE: the quantity, worded so it could be counted",
+ "unit": "REPLACE: households, dollars, visits, ...",
+ "timeframe": "REPLACE: the period it covers",
+ "scope": "REPLACE: where, who, what is included and excluded",
+ "inputs": {
+  "a_looked_up_total": {
+   "dist": "fixed", "value": 26000, "as_of": "2026-01-31",
+   "source": "REPLACE: publisher, title, the sentence or table read, and where it was read"
+  },
+  "a_share_between_0_and_1": {
+   "dist": "lognormal", "low": 0.02, "high": 0.15, "kind": "probability",
+   "why": "REPLACE: why you would be surprised below low or above high (the 5th and 95th percentiles)"
+  },
+  "a_factor_with_only_bounds": {
+   "dist": "uniform", "low": 0.05, "high": 0.3, "kind": "probability",
+   "why": "REPLACE: where the hard bounds come from"
+  }
+ },
+ "formula": "a_looked_up_total * a_share_between_0_and_1 * a_factor_with_only_bounds",
+ "anchors": [
+  {"name": "REPLACE: a total the result cannot exceed", "max": 26000}
+ ],
+ "runs": 20000,
+ "seed": 1
+}

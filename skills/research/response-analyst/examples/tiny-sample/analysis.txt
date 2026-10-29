@@ -1,0 +1,55 @@
+analyse_responses: responses.csv  (Volunteer roster pulse check (SYNTHETIC data))
+WHO ANSWERED
+  Respondents (rows): 6. Questions: 5. Respondent ids: replaced by R01 to R06 in file order.
+  Invited: 9. Responded: 6 of 9 invited (67%). The other 3 are not described by anything below.
+  How they were reached: Asked in person by the roster coordinator at the end of a shift, during one week.
+  Who is missing: 3 of the 9 people on the roster were not on shift that week and were not asked. Answers were given face to face to the person who writes the roster, which may soften criticism.
+  Answered every closed question shown to them: 4 of 6 respondents (67%). Free-text questions are left out of this count.
+  Intervals are 95% Wilson score intervals. They show how far a proportion could move with this many answers; they do not correct for who was reached.
+QUESTIONS
+t1 [single] How long have you volunteered here?
+  shown to 6 of 6 respondents; answered 6; skipped 0
+    Under a year    2 of 6 who answered (33%, interval 10% to 70%)
+    A year or more  4 of 6 who answered (67%, interval 30% to 90%)
+t2 [scale] The new roster works for me
+  shown to 6 of 6 respondents; answered 5; skipped 1 = 17% of those shown (R06)
+    Strongly disagree  0 of 5 who answered (0%, interval 0% to 43%); 0 of 6 shown (0%)
+    Disagree           1 of 5 who answered (20%, interval 4% to 62%); 1 of 6 shown (17%)
+    Agree              3 of 5 who answered (60%, interval 23% to 88%); 3 of 6 shown (50%)
+    Strongly agree     1 of 5 who answered (20%, interval 4% to 62%); 1 of 6 shown (17%)
+    middle answer (median category): Agree
+t3 [single] Would you swap to a fixed weekly shift?
+  shown to 6 of 6 respondents; answered 6; skipped 0
+    Yes       4 of 6 who answered (67%, interval 30% to 90%)
+    No        2 of 6 who answered (33%, interval 10% to 70%)
+    Not sure  0 of 6 who answered (0%, interval 0% to 39%)
+t4 [multi] What makes a shift hard to attend? Choose any
+  shown to 6 of 6 respondents; answered 5; skipped 1 = 17% of those shown (R04)
+    Short notice        4 of 5 who answered (80%, interval 38% to 96%); 4 of 6 shown (67%)
+    Transport           1 of 5 who answered (20%, interval 4% to 62%); 1 of 6 shown (17%)
+    Work clashes        2 of 5 who answered (40%, interval 12% to 77%); 2 of 6 shown (33%)
+    Family commitments  1 of 5 who answered (20%, interval 4% to 62%); 1 of 6 shown (17%)
+    respondents could choose several, so these percentages add to more than 100
+t5 [text] One thing to change
+  shown to 6 of 6 respondents; answered 4; skipped 2 = 33% of those shown (R03, R06)
+    4 free-text answer(s). Use --coding-sheet to export them for theme coding
+COMBINED  t2 = Agree or Strongly agree: 4 of 5 who answered (80%, interval 38% to 96%); 4 of 6 shown (67%); 4 of 6 respondents (67%)
+CROSS-TAB t1 (rows) by t3 (columns)
+  6 of 6 respondents answered both. Left out: 0 (t1 unanswered or not shown: 0; t3 unanswered or not shown: 0; some may be both)
+  t1 = Under a year: 2 respondent(s)*; one respondent = 50 points
+      Yes       2 of 2 in this row (100%, interval 34% to 100%)
+      No        0 of 2 in this row (0%, interval 0% to 66%)
+      Not sure  0 of 2 in this row (0%, interval 0% to 66%)
+  t1 = A year or more: 4 respondent(s)*; one respondent = 25 points
+      Yes       2 of 4 in this row (50%, interval 15% to 85%)
+      No        2 of 4 in this row (50%, interval 15% to 85%)
+      Not sure  0 of 4 in this row (0%, interval 0% to 49%)
+  Percentages are of each row's respondents, not of everyone.
+  CAVEAT  rows marked * have 10 or fewer respondents, so one answer moves their percentages by 10 points or more. Read the counts; do not rank these rows on percentages.
+COMPARISON  t3 = Yes, by t1
+  t1 = Under a year: 2 of 2 who answered both (100%, interval 34% to 100%)
+  t1 = A year or more: 2 of 4 who answered both (50%, interval 15% to 85%)
+  Difference, Under a year minus A year or more: +50 points; 95% interval -24 to +85 points (Newcombe hybrid score interval (1998, method 10), from the two Wilson intervals)
+  The two groups' own intervals overlap for most of their width.
+  The interval for the difference includes zero: these responses do not show which group is higher. That is not evidence the groups are the same.
+RESULT: RAN. 0 errors, 0 advisory note(s). Counts describe the 6 respondents in this file.

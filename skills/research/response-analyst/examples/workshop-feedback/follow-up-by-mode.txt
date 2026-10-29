@@ -1,0 +1,19 @@
+analyse_responses: responses.csv  (Half-day workshop feedback (SYNTHETIC data))
+WHO ANSWERED
+  Respondents (rows): 23. Questions: 12. Respondent ids: replaced by R01 to R23 in file order.
+  Invited: 38. Responded: 23 of 38 invited (61%). The other 15 are not described by anything below.
+  How they were reached: Anonymous form link emailed to all 38 people who attended, with one reminder a week later.
+  Who is missing: 15 attendees did not respond and nothing is known about them. People who left early, and people with nothing to say either way, are probably under-represented.
+  Answered every closed question shown to them: 18 of 23 respondents (78%). Free-text questions are left out of this count.
+  Intervals are 95% Wilson score intervals. They show how far a proportion could move with this many answers; they do not correct for who was reached.
+QUESTIONS  (12; per-question counts left out of this text because --skip-questions was given)
+COMPARISON  q9 = Yes, by q1
+  q1 = In person: 9 of 13 who answered both (69%, interval 42% to 87%)
+  q1 = Online: 4 of 9 who answered both (44%, interval 19% to 73%)
+  Left out: 1 respondent(s) who did not answer both questions
+  Difference, In person minus Online: +25 points; 95% interval -15 to +56 points (Newcombe hybrid score interval (1998, method 10), from the two Wilson intervals)
+  The two groups' own intervals overlap for most of their width.
+  The interval for the difference includes zero: these responses do not show which group is higher. That is not evidence the groups are the same.
+NOTES
+  ADVISORY  1 free-text passage(s) contain what looks like contact details (R20/q12: email address). Remove or mask them before quoting. Names, workplaces and roles are not detected: read every quotation
+RESULT: RAN. 0 errors, 1 advisory note(s). Counts describe the 23 respondents in this file.

@@ -1,0 +1,12 @@
+interface:
+  display_name: interface architect
+  short_description: Check numbered GUI rules and command-line interfaces
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

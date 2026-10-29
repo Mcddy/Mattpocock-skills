@@ -1,0 +1,22 @@
+=== elicitor response ===
+instrument: workshop-feedback
+version: 1
+finished: 2026-10-08T20:47:18Z
+worthwhile = 3
+pace = "Too fast"
+rushed-part = "The second half of the worked example. I was still on step 3 when it moved to step 6."
+level = "Mostly new, and I got lost"
+level.note = "I had not met half the terms before."
+exercise = 4
+handout = 2
+handout.note = "It lists the steps but not why each one is done."
+most-useful = ["The hands-on exercise","The question time"]
+length = "Too short"
+follow = "Some trouble"
+follow.note = "Back row: the lower third of the screen was hidden by heads."
+use-soon = 5
+suggest = "Yes, if it changes"
+one-change = "Split it into two shorter sessions, with the exercise in the second."
+anything-else = "A one-page glossary would have saved me.\nHappy to try the next version."
+tally:rated-4-plus = [1,3]
+=== end elicitor response: 13 questions, 3 notes ===

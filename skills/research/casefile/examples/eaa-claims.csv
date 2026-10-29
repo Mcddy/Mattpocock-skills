@@ -1,0 +1,9 @@
+claim_id,question_id,statement,status,source_ids,locator,load_bearing,confidence,conflicts_with,conflict_class,resolution
+C1,Q1,"EN 301 549 V3.2.1 (2021-03) is the harmonised standard for websites and mobile applications under Directive (EU) 2016/2102, the Web Accessibility Directive.",FACT,S1,Title of the decision; annex entry for EN 301 549 V3.2.1 (2021-03),yes,,,,
+C2,Q2,"As of August 2026 no harmonised standard had been cited in the Official Journal in support of Directive (EU) 2019/882, the European Accessibility Act.",REPORTED,S3,Body of the article,yes,,C5,insufficient_evidence,C5 has no source. C2 stands as REPORTED until the Official Journal index is read (C7).
+C3,Q2,"EN 301 549 V4.1.1, which incorporates WCAG 2.2 Level A and AA, was published on 2 September 2026 under standardisation request M/587.",REPORTED,S4;S5,S4 body; S5 body,no,,,,
+C4,Q3,"WCAG 2.2 SC 2.5.8 Target Size (Minimum) is Level AA and has five exceptions: spacing, equivalent, inline, user agent control and essential.",FACT,S2,Success criterion text at the top of the page,yes,,,,
+C5,Q2,SC 2.5.8 has been legally required under the European Accessibility Act since June 2025.,MODEL_OUTPUT,,,no,,C2,insufficient_evidence,Inherited sentence of unknown origin from an earlier skill file. Not supported by anything opened. Not used.
+C6,Q4,"Do not describe SC 2.5.8, or any pixel size, as an EU legal requirement. Describe it as the WCAG 2.2 Level AA criterion.",ASSESSMENT,,,yes,moderate,,,
+C7,Q2,Whether the Official Journal now cites any standard under Directive (EU) 2019/882: the Official Journal index and the ETSI text were not read.,GAP,,,yes,,,,
+C8,Q2,Directive (EU) 2019/882 has applied since 28 June 2025.,REPORTED,S3;S4,S3 body; S4 body,no,,,,

@@ -1,0 +1,72 @@
+{
+ "audit_of": {
+  "title": "SYNTHETIC: Model V outperforms leading systems on contract clause questions",
+  "source": "The vendor of Model V (invented)",
+  "date": "2026-07-08",
+  "locator": "vendor-note.md in this folder",
+  "material": "full_text"
+ },
+ "claim": {
+  "quote": "Model V outperforms leading systems on CLAUSE-50 [...] up to 14 points better, with 36 percent fewer errors than System A. [...] Model V is the most accurate system available for contract review.",
+  "locator": "Headline; What this means for buyers"
+ },
+ "supporting_result": {
+  "quote": "Model V 41 of 50 (82%), System A 36 of 50 (72%), System B 34 of 50 (68%).",
+  "locator": "Table 1"
+ },
+ "design": {
+  "type": "vendor_report",
+  "locator": "What we tested; How we ran it",
+  "ceiling": "One run of three systems on 50 questions written and marked by the vendor can show how these answers were marked on these questions on that day. It cannot rank the systems in general, and it cannot separate the model from the prompt it was given."
+ },
+ "groups": [
+  {"name": "Model V", "n_start": {"value": 50, "locator": "What we tested"}, "n_analysed": {"value": 50, "locator": "Table 1"}},
+  {"name": "System A", "n_start": {"value": 50, "locator": "What we tested"}, "n_analysed": {"value": 50, "locator": "Table 1"}},
+  {"name": "System B", "n_start": {"value": 50, "locator": "What we tested"}, "n_analysed": {"value": 50, "locator": "Table 1"}}
+ ],
+ "outcomes": [
+  {
+   "name": "Correct answers on CLAUSE-50",
+   "definition": "An answer marked correct by two vendor staff who could see which system produced it",
+   "time_frame": "one run in June 2026",
+   "locator": "How we ran it; Table 1",
+   "status": "reported_primary",
+   "results": [
+    {"group": "Model V", "events": {"value": 41, "locator": "Table 1"}, "total": {"value": 50, "locator": "Table 1"}, "reported_percent": {"value": "82", "locator": "Table 1"}},
+    {"group": "System A", "events": {"value": 36, "locator": "Table 1"}, "total": {"value": 50, "locator": "Table 1"}, "reported_percent": {"value": "72", "locator": "Table 1"}},
+    {"group": "System B", "events": {"value": 34, "locator": "Table 1"}, "total": {"value": 50, "locator": "Table 1"}, "reported_percent": {"value": "68", "locator": "Table 1"}}
+   ]
+  },
+  {
+   "name": "Correct answers on the 12 hardest questions",
+   "definition": "The 12 questions most systems got wrong, chosen after scoring",
+   "time_frame": "one run in June 2026",
+   "locator": "Table 2, row 1",
+   "status": "post_hoc",
+   "results": [
+    {"group": "Model V", "events": {"value": 9, "locator": "Table 2, row 1"}, "total": {"value": 12, "locator": "Table 2, row 1"}, "reported_percent": {"value": "75", "locator": "Table 2, row 1"}},
+    {"group": "System A", "events": {"value": 5, "locator": "Table 2, row 1"}, "total": {"value": 12, "locator": "Table 2, row 1"}, "reported_percent": {"value": "42", "locator": "Table 2, row 1"}}
+   ]
+  }
+ ],
+ "other_percentages": [
+  {"label": "indemnity questions, Model V", "count": {"value": 17, "locator": "Table 2, row 2"}, "total": {"value": 20, "locator": "Table 2, row 2; What we tested"}, "reported_percent": {"value": "89", "locator": "Table 2, row 2"}},
+  {"label": "indemnity questions, System A", "count": {"value": 14, "locator": "Table 2, row 2"}, "total": {"value": 20, "locator": "Table 2, row 2; What we tested"}, "reported_percent": {"value": "70", "locator": "Table 2, row 2"}}
+ ],
+ "reporting": [
+  {"item": "what_was_run", "text": "Model V, System A and System B, each answering the 50 questions once. Versions of A and B are given only as those available in June.", "locator": "How we ran it"},
+  {"item": "test_set_origin", "text": "Written by the vendor's solutions team from the same library of 1,900 agreements used to prepare Model V's fine-tuning data.", "locator": "What we tested"},
+  {"item": "prompts_and_settings", "text": "Model V: the vendor's production prompt with three worked examples. Systems A and B: a one-line instruction. All at default settings, which are not listed.", "locator": "How we ran it"},
+  {"item": "number_of_runs", "text": "One run per system.", "locator": "How we ran it"},
+  {"item": "run_to_run_variation", "not_reported": true},
+  {"item": "contamination_check", "not_reported": true},
+  {"item": "baseline_tuning", "text": "None. Systems A and B were given a one-line instruction and no examples.", "locator": "How we ran it"},
+  {"item": "metric_definition", "text": "Correct or incorrect, marked by two vendor staff who could see which system produced each answer; disagreements settled by discussion.", "locator": "How we ran it"},
+  {"item": "funding", "text": "The note is published by the vendor of Model V about its own product.", "locator": "Title line"},
+  {"item": "author_affiliations", "text": "Vendor staff wrote the questions, ran the systems and marked the answers.", "locator": "What we tested; How we ran it"},
+  {"item": "data_availability", "text": "Questions and marked answers are available to customers under a confidentiality agreement, so not to the public.", "locator": "Availability"},
+  {"item": "replication", "not_reported": true},
+  {"item": "per_question_results", "not_reported": true},
+  {"item": "agreement_between_the_two_markers", "not_reported": true}
+ ]
+}

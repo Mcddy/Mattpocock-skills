@@ -1,0 +1,20 @@
+# Sample Picker result contract
+
+The four entry scripts retain their existing stdout, JSON fields and documented exits. Each adds one `RECEIPT {JSON}` line on stderr with tool/revision, phase, status, actual exit, reason and semantic coverage. There is no receipt-file option or new dependency. Preserve the native exit and read the category; an integer alone is not a quality gate.
+
+| Category | Bounded meaning |
+|---|---|
+| completed | The named operation and its applicable checks finished. Building is not driving the page; validating a session is not making a decision. |
+| partial | An intended check is missing, such as parsing without a source picker or a test run with no named results. Legacy exit 0 can accompany partial. |
+| not-applicable | A scoped subcheck genuinely does not apply, with a reason. Builder runtime judgement is not-applicable to the build operation; a missing browser for a requested browser test is runner-error. |
+| failed | A data/renderer/choice criterion or named behaviour test failed. A later runner/teardown interruption cannot erase that known failure. |
+| runner-error | Invalid/unreadable command or source input, unavailable execution capability or unexpected interruption prevented the operation. The receipt states which phase was reached. |
+
+Legacy exits remain 0 for normal success, 1 for a criterion refusal/test failure and 2 for invalid/unreadable command/input. Non-test unexpected exceptions retain Python's exit 1 while their receipt distinguishes runner-error from a criterion failure. `test_picker` execution-unavailable/explicit NOT RUN retains exit 3. If stderr itself cannot accept the receipt, retain a nonzero product exit or use exit 1 for an otherwise successful operation; no receipt delivery can then be claimed. If a criterion already failed, preserve failed and record any execution interruption separately.
+
+- `validate_picker.py` records picker identity, kind, actual option IDs, errors/advisories and computed contrast coverage. Two to eight options are allowed, preferably two to five. Seven/eight are advisory, not a refusal. Duplicate/placeholder checks do not establish the content's ownership or the alternatives' visual quality.
+- `build_picker.py` records the output identity, actual written byte count, expected platform text-newline bytes and equality of the strict embedded PICKER payload, including ID/version/options. The legacy stdout byte field is retained; receipt `written_bytes` reports actual readback bytes. The page was written/read back, not rendered. No runtime or usability result follows from a hash or successful build.
+- `parse_choice.py` validates a supplied source picker before checking the returned choice. Invalid source is runner-error with legacy input exit 2. Wrong picker/version/kind, unknown actual chosen ID, stale supplied name, contradictory selection or invalid tweak value is failed with exit 1. A null/omitted name is allowed; a supplied non-null name must match the current name for the actual chosen ID. Range values must align from min in steps, using exact decimal-string fractions and tolerance at most 1e-9 of one step for floating-point noise. Bounds and finite-number checks still apply. No recommendation is substituted. An unbound parse is partial; a valid bound in-progress session is parsed but has no final choice to apply. Returned facts are reported from that block, not remeasured.
+- `test_picker.py` records actual named results, failures and coverage, preserving any named criterion failure through a later interruption. It is an active browser/clipboard/temporary-cleanup suite and needs appropriate authority. NOT RUN is never partial success; no named tests is not a completed pass. The historical suite was not rerun for this offline-only revision.
+
+Keep source inspection, validation, written/read-back, browser-driven, visually inspected, host-verified and untested distinct. A technical pass does not establish that options differ meaningfully, fit the task or improve finished outputs. Report missing capability honestly; do not bypass host limits or invent acceptance.

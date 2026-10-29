@@ -1,0 +1,29 @@
+harvest run 1: job standards-pages, 13 source(s), offline fixtures: nothing was fetched from the network and waits were simulated
+  STORED    S1     https://standards.example/index.html
+            HTTP 200, 1,031 bytes, sha256 c1646d07d9b5bba2
+  STORED    S2     https://standards.example/standards/hl-101.html
+            HTTP 200, 939 bytes, sha256 51451043c1756b90
+  STORED    S3     https://standards.example/standards/hl-102.html
+            HTTP 200, 854 bytes, sha256 94785491fc07db50
+  STORED    S4     https://standards.example/standards/hl-103.html
+            HTTP 200, 787 bytes, sha256 12fa83f0b8639a2f
+  STORED    S5     https://standards.example/standards/hl-104.html
+            HTTP 200, 729 bytes, sha256 1dedf83620b876dd
+  STORED    S6     https://standards.example/committee/minutes-41.html
+            HTTP 200, 732 bytes, sha256 b1cfa3d81ca794c6
+  STORED    S7     https://standards.example/committee/minutes-42.html
+            HTTP 200, 740 bytes, sha256 8eba688d547d1b58
+  SKIPPED   S8     https://standards.example/drafts/hl-105-draft.html
+            robots: Disallow: /drafts/ (group *)
+  STORED    S9     https://standards.example/old/hl-100.html
+            HTTP 200, 648 bytes, sha256 8dade89f68ca060a, final address https://standards.example/standards/withdrawn/hl-100.html
+  STORED    S10    https://standards.example/consultations.html
+            HTTP 200, 624 bytes, sha256 0d83948cf1d321a2, waited 30 s as asked then retried once
+  ERROR     S11    https://standards.example/archive/2019-index.html
+            timed out after 20 s
+  STORED    S12    https://standards.example/feed.xml
+            HTTP 200, 786 bytes, sha256 880b13ac1812e9cf
+  STORED    S13    https://files.standards.example/hl-register.pdf
+            HTTP 200, 1,580 bytes, sha256 9e6a04e4885946ab
+  requests 16 of the cap of 60; bytes 9,539 of the cap of 20,000,000; waited 56 s in all (simulated)
+RESULT: 11 of 13 source(s) collected or still fresh (11 stored); 2 not collected (1 error, 1 skipped by robots). Fetched is not read.

@@ -1,0 +1,15 @@
+{
+ "questions": [
+  {"id": "Q1", "text": "Which standard is harmonised for websites and mobile applications under the Web Accessibility Directive?"},
+  {"id": "Q2", "text": "Has any harmonised standard been cited under the European Accessibility Act, and what is the status of EN 301 549?"},
+  {"id": "Q3", "text": "What does WCAG 2.2 success criterion 2.5.8 require?"},
+  {"id": "Q4", "text": "How should the target-size criterion be described in guidance?"}
+ ],
+ "assessments": [
+  {"id": "A1", "question_id": "Q4",
+   "judgement": "Describe SC 2.5.8 as the WCAG 2.2 Level AA criterion and not as an EU legal requirement. The only harmonised standard established in this ledger is EN 301 549 V3.2.1 under the Web Accessibility Directive, and no standard is reported as cited under the European Accessibility Act.",
+   "likelihood": "likely", "confidence": "moderate",
+   "confidence_reason": "It rests on one REPORTED claim (C2) from a secondary source whose address was not kept, and the Official Journal index was not read (C7).",
+   "claim_ids": ["C1", "C2", "C4"], "written": "2026-10-09"}
+ ]
+}

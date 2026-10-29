@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "status": "AGREES",
+  "model": "linear",
+  "implementation": "independent linear control",
+  "source": {
+    "locator": "synthetic equation y = 2x"
+  },
+  "output_dimension": "length",
+  "absolute_tolerance_canonical": 1e-12,
+  "relative_tolerance": 1e-10,
+  "normalisation": 1.0,
+  "rows": [
+    {
+      "id": "control",
+      "raw": {
+        "id": "control",
+        "x": 100,
+        "reported": 200,
+        "reported_unit": "cm"
+      },
+      "reproduced_canonical": 2.0,
+      "reported_canonical": 2.0,
+      "absolute_difference": 0.0,
+      "allowed_difference": 2.01e-10,
+      "agrees": true
+    }
+  ],
+  "execution_kind": "bundled reference kernel",
+  "limitation": "Numeric agreement does not validate the scientific model or provenance.",
+  "input_sha256": "0e4152d912d594f3be806d9651765c27d05fc5062aadbb1544f607d936d5ba4a",
+  "implementation_sha256": "e3b145057779fda796e06d962677d6bc9260941f3973959270cd7d061abbcc9b"
+}

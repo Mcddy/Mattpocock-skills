@@ -1,0 +1,32 @@
+{
+ "id": "ledger-theme-fixture",
+ "version": 2,
+ "title": "Theme for the allotment ledger (test fixture)",
+ "question": "Which colour theme should the allotment ledger use?",
+ "kind": "theme",
+ "recommended": {"id": "seed-packet", "reason": "it keeps the cream paper of the printed ledger it replaces."},
+ "options": [
+  {"id": "seed-packet", "name": "Seed packet", "note": "Cream paper with a leaf-green accent, close to the printed ledger.",
+   "tokens": {"bg": "#f7f2e6", "surface": "#fffbf2", "text": "#27231d", "muted": "#665c4f", "line": "#dbd0bc", "accent": "#2f6a3c", "on-accent": "#fbfff9", "danger": "#96291c", "ok": "#2b6447"}},
+  {"id": "potting-shed", "name": "Potting shed", "note": "Grey-brown page with a terracotta accent; darker and earthier.",
+   "tokens": {"bg": "#e9e4dc", "surface": "#f6f2ec", "text": "#2a2521", "muted": "#5c5248", "line": "#c9bfb2", "accent": "#8a3d1c", "on-accent": "#fff8f1", "danger": "#8c2318", "ok": "#28583f"}},
+  {"id": "night-frost", "name": "Night frost", "note": "Near-black page with pale text and a frost-blue accent, for checking the ledger after dark.",
+   "tokens": {"bg": "#14181b", "surface": "#1c2226", "text": "#e9eef0", "muted": "#a9b6bd", "line": "#3b474f", "accent": "#9ccbe6", "on-accent": "#11161a", "danger": "#ffb3a6", "ok": "#9dd8b8"}}
+ ],
+ "controls": [
+  {"id": "density", "label": "Density", "type": "choice", "options": ["compact", "comfortable", "roomy"], "default": "comfortable"},
+  {"id": "text-size", "label": "Text size", "type": "range", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16},
+  {"id": "radius", "label": "Corner radius", "type": "range", "min": 0, "max": 12, "step": 2, "unit": "px", "default": 6}
+ ],
+ "context": {
+  "title": "Plot 14: autumn sowing",
+  "status": "Saved just now",
+  "body": "Broad beans went in along the north fence on Saturday. The garlic bed still needs the old squash vines cleared before it can be planted.",
+  "link": "See last autumn's entry",
+  "field": {"label": "Bed", "value": "north fence, row 2", "error": "A bed name cannot contain a comma. Try north-fence-row-2."},
+  "columns": ["Crop", "Sown", "Rows"],
+  "rows": [["Broad bean, Aquadulce", "4 October", "2"], ["Garlic, Solent Wight", "not yet", "0"]],
+  "primary": "Save entry",
+  "secondary": "Cancel"
+ }
+}

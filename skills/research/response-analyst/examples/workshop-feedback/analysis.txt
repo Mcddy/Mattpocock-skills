@@ -1,0 +1,104 @@
+analyse_responses: responses.csv  (Half-day workshop feedback (SYNTHETIC data))
+WHO ANSWERED
+  Respondents (rows): 23. Questions: 12. Respondent ids: replaced by R01 to R23 in file order.
+  Invited: 38. Responded: 23 of 38 invited (61%). The other 15 are not described by anything below.
+  How they were reached: Anonymous form link emailed to all 38 people who attended, with one reminder a week later.
+  Who is missing: 15 attendees did not respond and nothing is known about them. People who left early, and people with nothing to say either way, are probably under-represented.
+  Answered every closed question shown to them: 18 of 23 respondents (78%). Free-text questions are left out of this count.
+  Intervals are 95% Wilson score intervals. They show how far a proportion could move with this many answers; they do not correct for who was reached.
+QUESTIONS
+q1 [single] How did you attend?  (section: About you)
+  shown to 23 of 23 respondents; answered 23; skipped 0
+    In person  14 of 23 who answered (61%, interval 41% to 78%)
+    Online     9 of 23 who answered (39%, interval 22% to 59%)
+q2 [single] Was this your first workshop in the series?  (section: About you)
+  shown to 23 of 23 respondents; answered 23; skipped 0
+    Yes  12 of 23 who answered (52%, interval 33% to 71%)
+    No   11 of 23 who answered (48%, interval 29% to 67%)
+q3 [scale] Overall, how useful was the workshop?  (section: The session)
+  shown to 23 of 23 respondents; answered 22; skipped 1 = 4% of those shown (R13)
+    Not useful       1 of 22 who answered (5%, interval 1% to 22%); 1 of 23 shown (4%)
+    Slightly useful  3 of 22 who answered (14%, interval 5% to 33%); 3 of 23 shown (13%)
+    Useful           11 of 22 who answered (50%, interval 31% to 69%); 11 of 23 shown (48%)
+    Very useful      7 of 22 who answered (32%, interval 16% to 53%); 7 of 23 shown (30%)
+    middle answer (median category): Useful
+q4 [scale] The pace was  (section: The session)
+  shown to 23 of 23 respondents; answered 23; skipped 0
+    Much too slow  0 of 23 who answered (0%, interval 0% to 14%)
+    A bit slow     2 of 23 who answered (9%, interval 2% to 27%)
+    About right    11 of 23 who answered (48%, interval 29% to 67%)
+    A bit fast     8 of 23 who answered (35%, interval 19% to 55%)
+    Much too fast  2 of 23 who answered (9%, interval 2% to 27%)
+    middle answer (median category): About right
+q4__note [text] note on q4  (section: The session)
+  optional note: 3 of 23 respondents shown q4 wrote one
+q5 [scale] I could follow the hands-on exercise  (section: The session)
+  shown to 23 of 23 respondents; answered 22; skipped 1 = 4% of those shown (R23)
+    Strongly disagree  0 of 22 who answered (0%, interval 0% to 15%); 0 of 23 shown (0%)
+    Disagree           3 of 22 who answered (14%, interval 5% to 33%); 3 of 23 shown (13%)
+    Agree              13 of 22 who answered (59%, interval 39% to 77%); 13 of 23 shown (57%)
+    Strongly agree     6 of 22 who answered (27%, interval 13% to 48%); 6 of 23 shown (26%)
+    middle answer (median category): Agree
+q6 [multi] Which parts were most valuable? Choose any  (section: The session)
+  shown to 23 of 23 respondents; answered 22; skipped 1 = 4% of those shown (R17)
+    Worked examples          13 of 22 who answered (59%, interval 39% to 77%); 13 of 23 shown (57%)
+    Hands-on exercise        8 of 22 who answered (36%, interval 20% to 57%); 8 of 23 shown (35%)
+    Q and A                  7 of 22 who answered (32%, interval 16% to 53%); 7 of 23 shown (30%)
+    Handout                  6 of 22 who answered (27%, interval 13% to 48%); 6 of 23 shown (26%)
+    Meeting other attendees  4 of 22 who answered (18%, interval 7% to 39%); 4 of 23 shown (17%)
+    respondents could choose several, so these percentages add to more than 100
+q7 [single] Did you have audio or connection problems?  (section: The session)
+  shown to 9 of 23 respondents (14 not shown; routing: shown when q1 is Online); answered 8; skipped 1 = 11% of those shown (R16)
+    Yes  5 of 8 who answered (63%, interval 31% to 86%); 5 of 9 shown (56%)
+    No   3 of 8 who answered (38%, interval 14% to 69%); 3 of 9 shown (33%)
+q8 [number] How many colleagues would you pass the handout to?  (section: Afterwards)
+  shown to 23 of 23 respondents; answered 21; skipped 2 = 9% of those shown (R09, R23)
+    n=21  min 0  median 2  max 6  mean 2.33
+q9 [single] Would you attend a follow-up session?  (section: Afterwards)
+  shown to 23 of 23 respondents; answered 22; skipped 1 = 4% of those shown (R17)
+    Yes    13 of 22 who answered (59%, interval 39% to 77%); 13 of 23 shown (57%)
+    Maybe  6 of 22 who answered (27%, interval 13% to 48%); 6 of 23 shown (26%)
+    No     3 of 22 who answered (14%, interval 5% to 33%); 3 of 23 shown (13%)
+q9__note [text] note on q9  (section: Afterwards)
+  optional note: 4 of 23 respondents shown q9 wrote one
+q10 [scale] How confident are you to apply this next week?  (section: Afterwards)
+  shown to 23 of 23 respondents; answered 23; skipped 0
+    Not at all  1 of 23 who answered (4%, interval 1% to 21%)
+    Slightly    5 of 23 who answered (22%, interval 10% to 42%)
+    Fairly      10 of 23 who answered (43%, interval 26% to 63%)
+    Very        7 of 23 who answered (30%, interval 16% to 51%)
+    middle answer (median category): Fairly
+q11 [text] What should we change?  (section: Comments)
+  shown to 23 of 23 respondents; answered 16; skipped 7 = 30% of those shown (R04, R09, R11, R15, R18, R22, R23)
+    16 free-text answer(s). Use --coding-sheet to export them for theme coding
+q12 [text] Anything else?  (section: Comments)
+  shown to 23 of 23 respondents; answered 6; skipped 17 = 74% of those shown (R01, R02, R05, R06, R07, R08, R09, R10, R12, R13, R14, R16 and 5 more)
+    6 free-text answer(s). Use --coding-sheet to export them for theme coding
+COMBINED  q3 = Useful or Very useful: 18 of 22 who answered (82%, interval 61% to 93%); 18 of 23 shown (78%); 18 of 23 respondents (78%)
+COMBINED  q4 = A bit fast or Much too fast: 10 of 23 who answered (43%, interval 26% to 63%); 10 of 23 shown (43%); 10 of 23 respondents (43%)
+CROSS-TAB q1 (rows) by q4 (columns)
+  23 of 23 respondents answered both. Left out: 0 (q1 unanswered or not shown: 0; q4 unanswered or not shown: 0; some may be both)
+  q1 = In person: 14 respondent(s); one respondent = 7 points
+      Much too slow  0 of 14 in this row (0%, interval 0% to 22%)
+      A bit slow     2 of 14 in this row (14%, interval 4% to 40%)
+      About right    9 of 14 in this row (64%, interval 39% to 84%)
+      A bit fast     3 of 14 in this row (21%, interval 8% to 48%)
+      Much too fast  0 of 14 in this row (0%, interval 0% to 22%)
+  q1 = Online: 9 respondent(s)*; one respondent = 11 points
+      Much too slow  0 of 9 in this row (0%, interval 0% to 30%)
+      A bit slow     0 of 9 in this row (0%, interval 0% to 30%)
+      About right    2 of 9 in this row (22%, interval 6% to 55%)
+      A bit fast     5 of 9 in this row (56%, interval 27% to 81%)
+      Much too fast  2 of 9 in this row (22%, interval 6% to 55%)
+  Percentages are of each row's respondents, not of everyone.
+  CAVEAT  rows marked * have 10 or fewer respondents, so one answer moves their percentages by 10 points or more. Read the counts; do not rank these rows on percentages.
+COMPARISON  q4 = A bit fast or Much too fast, by q1
+  q1 = In person: 3 of 14 who answered both (21%, interval 8% to 48%)
+  q1 = Online: 7 of 9 who answered both (78%, interval 45% to 94%)
+  Difference, In person minus Online: -56 points; 95% interval -77 to -15 points (Newcombe hybrid score interval (1998, method 10), from the two Wilson intervals)
+  The two groups' own intervals overlap in part.
+  The interval for the difference excludes zero. It describes these respondents; whether it carries to anyone else depends on how they were reached.
+CODING SHEET  wrote 29 passage(s) from 20 respondent(s) to coding-sheet.csv. Add theme codes in the themes column, separated by ';', then run again with --themes.
+NOTES
+  ADVISORY  1 free-text passage(s) contain what looks like contact details (R20/q12: email address). Remove or mask them before quoting. Names, workplaces and roles are not detected: read every quotation
+RESULT: RAN. 0 errors, 1 advisory note(s). Counts describe the 23 respondents in this file.

@@ -1,0 +1,33 @@
+# Primary journey for subnetting-quiz.html: one right, one wrong, ten skipped, then the score.
+expect:#main=One mark per item.
+click:#btn-start
+check:#in-mask-26-2
+click:#btn-next
+expect:#fb-mask-26=Correct.
+expect-focus:#fb-mask-26
+click:#btn-next
+check:#in-hosts-27-2
+click:#btn-next
+expect:#fb-hosts-27=Not correct.
+expect:#fb-hosts-27=14 is the usable count for a /28
+expect:#fb-hosts-27=62 is the usable count for a /26
+click:#btn-next
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-skip
+click:#btn-finish
+expect:#score-main=1 correct of 2 attempted
+expect:#score=1 of 12
+expect:#score=10 (not counted as wrong)
+expect:#missed-h=Missed: 1
+expect:#missed-list=32 is the total number of addresses in a /27
+expect:#export-text=Correct: 1
+expect:#export-text=Attempted: 2
+expect:#export-text=Skipped: 10
