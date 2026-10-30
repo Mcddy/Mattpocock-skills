@@ -1,6 +1,6 @@
 # Tasks for Codex
 
-Work queue for the Shaun skills repo. Read `AGENTS.md` first (it is `CLAUDE.md`). Do the tasks in order, one commit per task, and run `python scripts/skills.py sync` before each commit. Stop and report rather than guess when a task says to.
+Work queue for the Shaun skills repo. Read `AGENTS.md` first (it is `CLAUDE.md`). Do the open tasks in order, one commit per task, and run `python scripts/skills.py sync` before each commit. Stop and report rather than guess when a task says to.
 
 ## Rules
 
@@ -51,26 +51,12 @@ Matt-derived skills have `agents/openai.yaml` (`interface.display_name`, `interf
 
 Only if OpenAI's Codex documentation confirms a plugin manifest that can point at `skills/`. Write it from `scripts/skills.py manifests` so it stays generated. Otherwise write the gap into `hosts/codex/NOTES.md` and skip.
 
-## 6. Overlap report
+## Done (by Claude, 2026-10-30)
 
-Write `docs/agents/overlaps.md`: pairs or groups of skills that cover the same situation, with the trigger that should pick each. Start from these and find more by reading `REGISTRY.md`:
-
-- `handoff` and `rebrief`
-- `skill-creator` and `skill-audit` and `rosetta`
-- `research` (engineering) and `deep-research-orchestrator` and `research-agency`
-- `code-review` (engineering) and `referee-panel`
-- `grill-me`, `grill-with-docs` and `elicitor`
-- `orchestrator`, `taskforce` and `mandate`
-
-Recommendation only. Do not edit the skills.
-
-## 7. Lint debt
-
-`python scripts/skill_lint.py --root skills/<bucket>` reports 79 descriptions without a "Use when" clause and several bodies over 500 lines. Report counts per bucket in `docs/agents/lint-debt.md` with the worst offenders. Fix nothing in this task.
-
-## 8. Host-specific content
-
-`skills/ai-ops/agent-hub` is bound to a Windows path on Shaun's desktop. Move the path-specific material to `skills/ai-ops/agent-hub/hosts/windows/NOTES.md` and make `SKILL.md` refer to a configurable workspace folder. This changes the description, so write 5 routing test prompts (3 should trigger, 2 should not) in `skills/ai-ops/agent-hub/evals/routing.md` and say which would trigger it.
+- 6. Overlap report: `docs/agents/overlaps.md`. Description sharpening for groups 1 to 4 and 8 awaits Shaun's approval.
+- 7. Lint debt: `docs/agents/lint-debt.md`.
+- 8. agent-hub: Windows specifics moved to `skills/ai-ops/agent-hub/hosts/windows/NOTES.md`; routing cases in `evals/routing.md`.
+- Also done: 15 first-generation skills rewritten to `.agents/rewrite-standard.md` (decisions in `docs/agents/rewrite-decisions.md`), and `import` made lock-aware (`skills.lock.json`).
 
 ## Proposals
 

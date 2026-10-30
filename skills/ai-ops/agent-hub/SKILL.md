@@ -1,26 +1,32 @@
 ---
 name: "agent-hub"
-description: "Work Shaun's agent coordination workspace at C:\\Users\\Shaun\\Desktop\\07_🗺️_SYSTEM\\_AGENT_WORKSPACE. Use when he says triage my inbox, what's in my task queue, add a task, which agent should do this, or points an agent at the agent hub / workspace."
+description: "Work Shaun's agent coordination workspace, the shared folder between the AI systems he runs. Use when he says triage my inbox, what's in my task queue, add a task, which agent should do this, or points an agent at the agent hub / workspace. Not for general task lists (use the host's task tools) or scheduling a recurring job (use schedule)."
 ---
 
 # Agent hub
 
-Shaun's agent coordination workspace lives at:
+Shaun's agent coordination workspace is the shared filesystem layer between the many AI systems he runs, none of which share memory.
 
-`C:\Users\Shaun\Desktop\07_🗺️_SYSTEM\_AGENT_WORKSPACE`
+## Finding the workspace folder
 
-It is the shared filesystem layer between the many AI systems he runs, none of which share memory.
+The workspace is a folder, not a fixed path. Find it in this order:
+
+1. If he named a folder in the request, use it.
+2. Otherwise read the path from `hosts/<host>/NOTES.md` in this skill's folder for the current host (for example `hosts/windows/NOTES.md`).
+3. If there is no notes file for this host, ask him for the path and do not guess.
+
+Everything below is relative to that folder.
 
 ## Always do this first
 
-1. Read `AGENTS.md` at the root of that folder. It holds the capability table and routing rules.
-2. Read `CONTEXT/MACHINES.md`. It holds the durable facts about S1, S2, his network, and a
+1. Read `AGENTS.md` at the root of the workspace. It holds the capability table and routing rules.
+2. Read `CONTEXT/MACHINES.md`. It holds the durable facts about his machines and network, and a
    "Not established" list of open questions. Never re-investigate something on that list and then state
    a confident conclusion. Never ask him something the file already answers.
 
 ## Hard rule
 
-Do not move, rename or delete anything in that workspace that you did not create. Other agents are
+Do not move, rename or delete anything in the workspace that you did not create. Other agents are
 pointed at existing paths. Additive changes only.
 
 ## Triaging the inbox
@@ -29,10 +35,10 @@ When he asks you to triage, or process the inbox:
 
 1. List `INBOX/`, ignoring `README.md`.
 2. For each item, work out what the task actually is and what it structurally requires: a command on
-   Windows/S1, a command on Linux/S2, file synthesis, a coding run, or web research.
+   one of his machines, file synthesis, a coding run, or web research.
 3. Match that requirement against the capability table in `AGENTS.md` and pick the agent. The
-   constraint that cannot be worked around wins. Cowork cannot execute on S1 or S2, so anything needing
-   a real command on his machines is never a Cowork task no matter how well it understands the problem.
+   constraint that cannot be worked around wins. An agent that cannot execute commands on his machines
+   is never the pick for a task that needs one, no matter how well it understands the problem.
 4. Write `TASKS/<short-kebab-name>.md` in the same shape as the existing task files:
 
 ```
@@ -70,8 +76,9 @@ the reason in one line. Do not create a task file unless he asks for one.
 
 ## Logging
 
-If you did real work on his machines or changed files, append a report to
-`ChatGPT/Projects/codex-agent-registry/README.md`, using the template at the top of that file.
+If you did real work on his machines or changed files, append a report to the agent registry log
+(path in `hosts/<host>/NOTES.md`; default `ChatGPT/Projects/codex-agent-registry/README.md` inside the
+workspace), using the template at the top of that file.
 Append only, never edit an earlier entry. Never write secrets, use `[REDACTED: type]`. Write
 `UNVERIFIED` rather than guessing.
 
@@ -79,4 +86,3 @@ Append only, never edit an earlier entry. Never write secrets, use `[REDACTED: t
 
 Nothing polls. No agent watches the inbox and no task starts on its own. It only moves when he opens an
 agent and points it here. Do not imply otherwise.
-
