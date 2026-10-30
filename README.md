@@ -37,7 +37,7 @@ python scripts/skills.py install          # Claude Code (~/.claude/skills) and C
 ## Keep it in sync
 
 ```bash
-python scripts/skills.py import --source <folder of skill folders> [--dry-run]   # bring in skills built inside a host
+python scripts/skills.py import --source <folder of skill folders> [--dry-run]   # bring in host changes; repo edits are never overwritten (skills.lock.json)
 python scripts/skills.py sync                                                     # registry + manifests + lint
 git add -A && git commit
 ```

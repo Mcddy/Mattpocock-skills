@@ -11,11 +11,12 @@
 
 The repo is the canonical source. Edit here, then run `install` on each machine.
 """
-import argparse, filecmp, json, os, re, shutil, subprocess, sys, zipfile
+import argparse, hashlib, json, os, re, shutil, subprocess, sys, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
+LOCK = ROOT / "skills.lock.json"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import skill_lint  # noqa: E402
 
@@ -212,11 +213,25 @@ def cmd_install(a):
 
 
 # ---------------------------------------------------------------- import
-def same_tree(a, b):
-    c = filecmp.dircmp(a, b)
-    if c.left_only or c.right_only or c.diff_files or c.funny_files:
-        return False
-    return all(same_tree(a / d, b / d) for d in c.common_dirs)
+# skills.lock.json records, per imported skill, the hash of the host copy and of the repo copy at the
+# last import. That separates "the host changed it" from "the repo changed it":
+#   host unchanged                 -> skip (repo edits win)
+#   host changed, repo unchanged   -> update
+#   host changed, repo changed     -> conflict, skipped unless --force
+#   host equals repo               -> in sync, lock refreshed
+def tree_hash(path):
+    h = hashlib.sha256()
+    for f in sorted(p for p in Path(path).rglob("*") if p.is_file() and "__pycache__" not in p.parts and p.name != ".DS_Store"):
+        h.update(f.relative_to(path).as_posix().encode() + b"\0" + f.read_bytes() + b"\0")
+    return h.hexdigest()
+
+
+def load_lock():
+    return json.loads(LOCK.read_text()) if LOCK.exists() else {}
+
+
+def save_lock(lock):
+    LOCK.write_text(json.dumps(dict(sorted(lock.items())), indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
 def own_plugin_skills(plugins):
@@ -231,32 +246,54 @@ def own_plugin_skills(plugins):
     return found
 
 
+def copy_skill(src, dest):
+    if dest.exists():
+        shutil.rmtree(dest)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(src, dest, ignore=shutil.ignore_patterns("__pycache__", ".DS_Store"))
+
+
 def cmd_import(a):
     cands = {d.name: d for d in sorted(a.source.iterdir()) if (d / "SKILL.md").exists()}
     if a.plugins:
         for n, d in own_plugin_skills(a.plugins).items():
             cands.setdefault(n, d)
     existing = {n: p for b, n, p in all_skills()}
-    added = updated = unchanged = 0
+    lock = load_lock()
+    count = dict(added=0, updated=0, unchanged=0, kept=0, conflict=0)
     for name, src in cands.items():
         if name in EXCLUDE:
-            print(f"skip    {name} (not vendored)")
             continue
-        cur = existing.get(name)
-        if cur and same_tree(src, cur):
-            unchanged += 1
+        cur, src_h = existing.get(name), tree_hash(src)
+        entry = lock.get(name)
+        if cur is None:
+            dest = SKILLS / BUCKET_OF.get(name, "inbox") / name
+            print(f"add      {name} -> {dest.relative_to(ROOT).as_posix()}")
+            if not a.dry_run:
+                copy_skill(src, dest)
+                lock[name] = {"source": src_h, "repo": src_h}
+            count["added"] += 1
             continue
-        dest = cur or SKILLS / BUCKET_OF.get(name, "inbox") / name
-        print(f"{'update' if cur else 'add':7} {name} -> {dest.relative_to(ROOT).as_posix()}")
-        if not a.dry_run:
-            if dest.exists():
-                shutil.rmtree(dest)
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copytree(src, dest, ignore=shutil.ignore_patterns("__pycache__", ".DS_Store"))
-        updated += bool(cur)
-        added += not cur
-    print(f"{added} added, {updated} updated, {unchanged} unchanged" + (" (dry run)" if a.dry_run else ""))
-    if not a.dry_run and (added or updated):
+        repo_h = tree_hash(cur)
+        if src_h == repo_h:
+            lock[name] = {"source": src_h, "repo": repo_h}
+            count["unchanged"] += 1
+        elif entry and src_h == entry["source"]:
+            count["kept"] += 1  # host untouched since last import; repo edits win
+        elif entry and repo_h == entry["repo"] or a.force:
+            print(f"update   {name}" + (" (forced)" if a.force and not (entry and repo_h == entry["repo"]) else ""))
+            if not a.dry_run:
+                copy_skill(src, cur)
+                lock[name] = {"source": src_h, "repo": src_h}
+            count["updated"] += 1
+        else:
+            why = "changed in both the host and the repo" if entry else "differs and was never imported"
+            print(f"CONFLICT {name}: {why}; skipped (diff it, then re-run with --force to take the host copy)")
+            count["conflict"] += 1
+    if not a.dry_run:
+        save_lock(lock)
+    print(", ".join(f"{v} {k}" for k, v in count.items()) + (" (dry run)" if a.dry_run else ""))
+    if not a.dry_run and (count["added"] or count["updated"]):
         print("Now run: python scripts/skills.py sync")
 
 
@@ -300,6 +337,7 @@ def main():
     p.add_argument("--source", required=True, type=Path, help="folder whose children are skill folders")
     p.add_argument("--plugins", type=Path, help="Claude synced plugins folder (own uploads only)")
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--force", action="store_true", help="take the host copy on conflicts")
     p.set_defaults(fn=cmd_import)
     p = sub.add_parser("package")
     p.add_argument("--out", default="dist")
