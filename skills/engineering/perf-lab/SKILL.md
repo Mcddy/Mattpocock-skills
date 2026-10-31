@@ -1,6 +1,6 @@
 ---
 name: perf-lab
-description: Diagnose and improve measured software performance using controlled paired benchmarks, correctness checks, scaling experiments, call counts and allocation traces. Use for reproducible latency and resource experiments; never infer hardware bottlenecks or production speedups from synthetic timings.
+description: Diagnose and improve measured software performance using controlled paired benchmarks, correctness checks, scaling experiments, call counts and allocation traces. Use when the user wants to benchmark, compare two implementations' timings, profile allocations, or check how speed scales. Not for finding why something is broken or merely feels slow (diagnosing-bugs); never infer hardware bottlenecks or production speedups from synthetic timings.
 ---
 
 # Perf Lab

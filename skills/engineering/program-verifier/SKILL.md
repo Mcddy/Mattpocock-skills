@@ -1,6 +1,6 @@
 ---
 name: program-verifier
-description: Derive executable contracts, generate semantic and metamorphic cases, compare implementations with an independent oracle, and shrink failures into a regression corpus. Use for bounded component correctness and observed parser or validator defects; passing finite tests is not arbitrary-program certification.
+description: Derive executable contracts, generate semantic and metamorphic cases, compare implementations with an independent oracle, and shrink failures into a regression corpus. Use when the user asks "is this function correct", wants property-based or differential tests, fuzzing, or a parser or validator checked for wrongly accepted or rejected input. Not for finding the cause of a known bug (diagnosing-bugs) or building a feature test-first (tdd); passing finite tests is not arbitrary-program certification.
 ---
 
 # Program Verifier

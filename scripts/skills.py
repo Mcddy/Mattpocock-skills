@@ -70,10 +70,17 @@ def frontmatter(path):
 
 
 def short_description(fm):
+    """First sentence, plus the "Not for ..." clause when there is one: that clause is what tells
+    two similar skills apart, so the registry must not drop it."""
     d = re.sub(r"^[>|][-+]?\s*", "", fm.get("description", "")).strip()
     d = re.sub(r"\s+", " ", d)
     first = re.split(r"(?<=[.!?])\s", d, maxsplit=1)[0]
-    first = first if len(first) <= 160 else first[:157].rstrip() + "..."
+    first = first if len(first) <= 200 else first[:197].rstrip() + "..."
+    m = re.search(r"(?:^|(?<=[.!?;] ))(Not for [^.]*\.?)", d)
+    if m and m.group(1) not in first:
+        nf = m.group(1).rstrip(".")
+        nf = nf if len(nf) <= 220 else nf[:217].rstrip() + "..."
+        first = f"{first} {nf}."
     return first.replace("|", "\\|")
 
 
