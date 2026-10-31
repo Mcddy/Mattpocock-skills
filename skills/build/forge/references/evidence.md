@@ -1,0 +1,5 @@
+# Evidence behind this version
+
+Background only. The fuller record is provenance.md.
+
+Version 3 came from a QA build made with version 2, a review of what deslop and showpiece could add, and a second build of the same app. Version 3.1 replaced the quiet default look with the visual kit, the directions and the options board after the user judged v3's output too plain against reference app designs, and a test build of a new app by an agent following 3.1 alone. Version 3.2 set the flow from the user's answers: automated with two stops, tiers from a one-file demo to a Windows EXE, a design pack with diagrams and learning notes, and sixteen directions with three recommended. Version 3.3 came from a review of finished outputs rather than skill text: requirement tags before architecture, words bounded by evidence, origin kept through fallbacks, keyboard checks, one result contract for the checks, a board that opens offline as one file, and a current-look check from the user's rejection of two dated screens. Small samples, not clean comparisons: the record and its limits are in `references/provenance.md` where that file is present.

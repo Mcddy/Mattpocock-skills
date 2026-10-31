@@ -1,0 +1,5 @@
+# Step 4b: reference analog
+
+Read before step 4b. The mechanisms per work surface are in reference-method.md.
+
+Before markup, write the structure contract (`assets/design-template.md`): the task, its main object, the device (with its requirement tag) and the first meaningful action. Then choose one primary and at most two supporting references by work surface, platform, density and interaction, not colour or brand: the user's reference pack if they supplied one, otherwise the mechanisms in `references/reference-method.md`. Note each reference's exact state and evidence type (exercised, official demo, marketing still). Take the mechanisms that transfer: hierarchy, navigation, action placement, disclosure, density, feedback. Never copy logos, artwork, marketing frames or whole layouts. Depart where this product's data or workflow differs, and say why. Composition comes from the task and the analog; the look (picked on the board, assigned, or the user's brand) sets colour, type and shape only.
